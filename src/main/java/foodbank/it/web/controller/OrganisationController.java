@@ -2,6 +2,7 @@ package foodbank.it.web.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Arrays;
 
 import javax.transaction.Transactional;
@@ -45,12 +46,26 @@ public class OrganisationController {
     
     @CrossOrigin
     @GetMapping("organisations/")
-    public Collection<OrganisationDto> find( @RequestParam(required = false) Short lienBanque) {
+    public Collection<OrganisationDto> find( @RequestParam(required = false) Short lienBanque ,@RequestParam(required = false) String idDis) {
         Iterable<Organisation> selectedOrganisations = null;
-        if (lienBanque == null) selectedOrganisations = this.OrganisationService.findAll();
-        else selectedOrganisations = this.OrganisationService.findByLienBanque(lienBanque);
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
-        selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
+        if (lienBanque == null) {
+        	if (idDis == null) {
+        		selectedOrganisations = this.OrganisationService.findAll();
+        		selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
+        	}
+        	else {
+        		Optional<Organisation> myOrganisation = this.OrganisationService.findByIdDis(Integer.parseInt(idDis));
+        		myOrganisation.ifPresent(org-> OrganisationDtos.add(convertToDto( org)));
+        	}
+        	
+        }
+        else {
+        	selectedOrganisations = this.OrganisationService.findByLienBanque(lienBanque);
+        	selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
+        }
+        
+        
         return OrganisationDtos;
     }
     @CrossOrigin

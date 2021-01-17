@@ -41,6 +41,12 @@ public class BanqueServiceImpl implements IBanqueService{
         BanqueRepository.deleteByBankId(bankId);
         
     }
+
+	@Override
+	public Optional<Banque> findByBankShortName(String bankShortName) {
+		// TODO Auto-generated method stub
+		return BanqueRepository.findByBankShortName(bankShortName);
+	}
     
 
 }

@@ -8,6 +8,7 @@ import foodbank.it.persistence.model.Banque;
 
 public interface IBanqueRepository extends CrudRepository<Banque, Integer>{
     Optional<Banque> findByBankId(int bankId);
+    Optional<Banque> findByBankShortName(String bankShortName );
     void deleteByBankId(int bankId);
 
 }

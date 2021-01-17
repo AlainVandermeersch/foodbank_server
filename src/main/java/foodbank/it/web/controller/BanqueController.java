@@ -3,9 +3,6 @@ package foodbank.it.web.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Arrays;
-
-import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -16,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import foodbank.it.persistence.model.Banque;
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueDto;
+
 
 @RestController
 
@@ -40,6 +36,13 @@ public class BanqueController {
     @GetMapping("banque/{bankId}")
     public BanqueDto findOne(@PathVariable Integer bankId) {
         Banque entity = BanqueService.findByBankId(bankId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return convertToDto(entity);
+    }
+    @CrossOrigin
+    @GetMapping(value = "banque/getByShortName/{bankShortName}")
+    public BanqueDto findOne(@PathVariable String bankShortName) {
+        Banque entity = BanqueService.findByBankShortName(bankShortName)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return convertToDto(entity);
     }
