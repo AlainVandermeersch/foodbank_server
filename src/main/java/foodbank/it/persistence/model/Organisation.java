@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -31,7 +33,7 @@ public class Organisation implements Serializable {
     private int idDis;
     @Column(name="ref_int", length=15)
     private String refInt;
-    @Column(name="lien_banque", nullable=false, precision=3)
+    @Column(name="lien_banque", nullable=false, insertable = false, updatable = false, precision=3)
     private short lienBanque;
     @Column(name="BirbCode", length=10)
     private String birbCode;
@@ -247,8 +249,20 @@ public class Organisation implements Serializable {
     private String lupdUserName;
     @Column(name="LUPD_TS")
     private LocalDateTime lupdTs;
+    
+    @ManyToOne
+    @JoinColumn(name="lien_banque")
+    private Banque banqueObject;
 
-    /** Default constructor. */
+    public Banque getBanqueObject() {
+		return banqueObject;
+	}
+
+	public void setBanqueObject(Banque banqueObject) {
+		this.banqueObject = banqueObject;
+	}
+
+	/** Default constructor. */
     protected Organisation() {
         super();
     }

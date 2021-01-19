@@ -108,7 +108,7 @@ public class OrganisationController {
 				entity.getTourneeMois(), entity.getDistrListPdt(), entity.getDistrListVp(), entity.getDistrListSec(), entity.getDistrListTres(),
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), entity.getFeadN(),
 				entity.getRemLivr(), entity.getCotAnnuelle(), entity.getCotMonths(), entity.getCotSup(), entity.getCotMonthsSup(), entity.getDepotram(),
-				entity.getLupdUserName(), entity.getLupdTs());       
+				entity.getLupdUserName(), entity.getLupdTs(),entity.getBanqueObject().getBankShortName(),entity.getBanqueObject().getBankName()  );    
         return dto;
     }
 

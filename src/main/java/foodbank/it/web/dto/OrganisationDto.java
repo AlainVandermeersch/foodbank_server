@@ -231,6 +231,26 @@ public class OrganisationDto {
 	   
 	    private LocalDateTime lupdTs;
 	    
+	    private String bankName;
+	    private String bankShortName;
+	    public String getBankName() {
+			return bankName;
+		}
+
+		public void setBankName(String bankName) {
+			this.bankName = bankName;
+		}
+
+		public String getBankShortName() {
+			return bankShortName;
+		}
+
+		public void setBankShortName(String bankShortName) {
+			this.bankShortName = bankShortName;
+		}
+
+		
+	    
 	    protected OrganisationDto() {
 	    	
 	    }
@@ -253,7 +273,7 @@ public class OrganisationDto {
 				short tourneeMois, short distrListPdt, short distrListVp, short distrListSec, short distrListTres,
 				String adresse2, String cp2, String localite2, short pays2, String dateReg, String fax, short feadN,
 				String remLivr, short cotAnnuelle, int cotMonths, int cotSup, int cotMonthsSup, int depotram,
-				String lupdUserName, LocalDateTime lupdTs) {
+				String lupdUserName, LocalDateTime lupdTs, String bankShortName,String bankName ) {
 			super();
 			this.idDis = idDis;
 			this.refInt = refInt;
@@ -369,6 +389,8 @@ public class OrganisationDto {
 			this.depotram = depotram;
 			this.lupdUserName = lupdUserName;
 			this.lupdTs = lupdTs;
+			this.bankShortName = bankShortName;
+			this.bankName = bankName;
 		}
 
 		public int getIdDis() {
