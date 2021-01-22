@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.Organisation;
+import foodbank.it.service.IBanqueService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.web.dto.OrganisationDto;
 
@@ -31,10 +33,11 @@ import foodbank.it.web.dto.OrganisationDto;
 public class OrganisationController {
 	
 	private IOrganisationService OrganisationService;
+	private IBanqueService BanqueService;
     
-    public OrganisationController(IOrganisationService OrganisationService) {
+    public OrganisationController(IOrganisationService OrganisationService, IBanqueService BanqueService) {
         this.OrganisationService = OrganisationService;
-       
+        this.BanqueService = BanqueService;
     }
     @CrossOrigin
     @GetMapping("organisation/{idDis}")
@@ -91,9 +94,9 @@ public class OrganisationController {
         return this.convertToDto(Organisation);
     }
     protected OrganisationDto convertToDto(Organisation entity) {
-        OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
+        OrganisationDto dto = new OrganisationDto(entity.getIdDis(),entity.getLienBanque(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
-				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(), 
+				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(),entity.getBanque(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), entity.getActif(), entity.getCivilite(), entity.getNom(),
 				entity.getPrenom(), entity.getCiviliteVp(), entity.getPrenomVp(), entity.getNomVp(), entity.getTelVp(), entity.getGsmVp(),
 				entity.getCiviliteSec(), entity.getPrenomSec(), entity.getNomSec(), entity.getTelSec(), entity.getGsmSec(), entity.getCiviliteTres(),
@@ -114,9 +117,11 @@ public class OrganisationController {
     }
 
     protected Organisation convertToEntity(OrganisationDto dto) {
-        Organisation organisation = new Organisation( dto.getIdDis(), dto.getRefInt(), dto.getBirbCode(), dto.getLienDepot(),
+    	Banque banqueObject = this.BanqueService.findByBankId(dto.getLienBanque()).get();
+    	    
+    	Organisation myOrganisation = new Organisation( dto.getIdDis(),dto.getLienBanque(), dto.getRefInt(), dto.getBirbCode(), dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
-				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), 
+				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), dto.getBanque(),
 				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), dto.getActif(), dto.getCivilite(), dto.getNom(),
 				dto.getPrenom(), dto.getCiviliteVp(), dto.getPrenomVp(), dto.getNomVp(), dto.getTelVp(), dto.getGsmVp(),
 				dto.getCiviliteSec(), dto.getPrenomSec(), dto.getNomSec(), dto.getTelSec(), dto.getGsmSec(), dto.getCiviliteTres(),
@@ -132,11 +137,11 @@ public class OrganisationController {
 				dto.getTourneeMois(), dto.getDistrListPdt(), dto.getDistrListVp(), dto.getDistrListSec(), dto.getDistrListTres(),
 				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), dto.getFeadN(),
 				dto.getRemLivr(), dto.getCotAnnuelle(), dto.getCotMonths(), dto.getCotSup(), dto.getCotMonthsSup(), dto.getDepotram(),
-				dto.getLupdUserName(), dto.getLupdTs());       
+				dto.getLupdUserName(), dto.getLupdTs(),banqueObject);       
         if (!StringUtils.isEmpty(dto.getIdDis())) {
-            organisation.setIdDis(dto.getIdDis());
+            myOrganisation.setIdDis(dto.getIdDis());
         }
-        return organisation;
+        return myOrganisation;
     }
 
 

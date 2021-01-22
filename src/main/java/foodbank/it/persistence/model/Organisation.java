@@ -60,6 +60,7 @@ public class Organisation implements Serializable {
     private String gsm;
     @Column(precision=5)
     private short daten;
+    private String banque;
     @Column(precision=3)
     private short region;
     private String iban;
@@ -246,27 +247,38 @@ public class Organisation implements Serializable {
     private String lupdUserName;
     @Column(name="LUPD_TS")
     private LocalDateTime lupdTs;
+    @Column(name="lien_banque", nullable=false, insertable = false, updatable = false, precision=3)
+    private short lienBanque;
     
-    @ManyToOne
+    public short getLienBanque() {
+		return lienBanque;
+	}
+
+	public void setLienBanque(short lienBanque) {
+		this.lienBanque = lienBanque;
+	}
+
+	@ManyToOne
     @JoinColumn(name="lien_banque")
     private Banque banqueObject;
     
 
 	/** Default constructor. */
-    protected Organisation() {
+    public Organisation() {
         super();
     }
 
-    public Organisation(int idDis, String refInt, String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, short pays, String tva, String website, String tel,
-        String gsm, short daten, short region, String iban, String classique, String bic, short actif, short civilite, String nom, String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, short civiliteSec,
+    public Organisation(int idDis,short lienBanQue, String refInt, String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, short pays, String tva, String website, String tel,
+        String gsm, short daten, String banque, short region, String iban, String classique, String bic, short actif, short civilite, String nom, String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, short civiliteSec,
         String prenomSec, String nomSec, String telSec, String gsmSec, short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
         String disprog, String afsca, boolean webauthority, short langue, LocalDateTime lastvisit, int nbrefix, short cpasyN, short lienCpas, short birbyN, short depyN, short logBirb, short actComp1, short actComp2, short actComp3, short actComp4,
         short actComp5, short actComp6, String actComp7, short nrTournee, short susp, String stopSusp, String rem, short msonac, short classeFbba1, short classeFbba2, short classeFbba3, int nFam, int nPers, int nNour, int nBebe, int nEnf, int nAdo,
         BigDecimal nEq, int nSen, short depPrinc, short gestBen, short tourneeJour, short tourneeSem, short coldis, short lienGd, short lienGs, BigDecimal montCot, int antenne, String afsca1, String afsca2, String afsca3, int nrFead, short tourneeMois,
         short distrListPdt, short distrListVp, short distrListSec, short distrListTres, String adresse2, String cp2, String localite2, short pays2, String dateReg, String fax, short feadN, String remLivr, short cotAnnuelle, int cotMonths, int cotSup,
-        int cotMonthsSup, int depotram, String lupdUserName, LocalDateTime lupdTs) {
+        int cotMonthsSup, int depotram, String lupdUserName, LocalDateTime lupdTs,Banque banqueObject) {
         super();
         this.idDis = idDis;
+        this.lienBanque = lienBanque;
         this.refInt = refInt;
         this.birbCode = birbCode;
         this.lienDepot = lienDepot;
@@ -282,6 +294,7 @@ public class Organisation implements Serializable {
         this.tel = tel;
         this.gsm = gsm;
         this.daten = daten;
+        this.banque = banque;
         this.region = region;
         this.iban = iban;
         this.classique = classique;
@@ -378,6 +391,7 @@ public class Organisation implements Serializable {
         this.depotram = depotram;
         this.lupdUserName = lupdUserName;
         this.lupdTs = lupdTs;
+        this.banqueObject = banqueObject;
     }
 
     /**
@@ -670,7 +684,15 @@ public class Organisation implements Serializable {
     }
 
     
-    /**
+    public String getBanque() {
+		return banque;
+	}
+
+	public void setBanque(String banque) {
+		this.banque = banque;
+	}
+
+	/**
      * Access method for region.
      *
      * @return the current value of region

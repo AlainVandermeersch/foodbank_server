@@ -102,7 +102,7 @@ public class Banque implements Serializable {
     
 
     /** Default constructor. */
-    protected Banque() {
+    public Banque() {
         super();
     }
 

@@ -38,6 +38,7 @@ public class OrganisationDto {
 	    private String gsm;
 
 	    private short daten; 
+	    private String banque;
 	   
 	    private short region;
 	    private String iban;
@@ -227,7 +228,17 @@ public class OrganisationDto {
 	   
 	    private LocalDateTime lupdTs;
 	    
-	    private String bankName;
+	    private short lienBanque;
+	    
+	    public short getLienBanque() {
+			return lienBanque;
+		}
+
+		public void setLienBanque(short lienBanque) {
+			this.lienBanque = lienBanque;
+		}
+
+		private String bankName;
 	    private String bankShortName;
 	    public String getBankName() {
 			return bankName;
@@ -251,9 +262,9 @@ public class OrganisationDto {
 	    	
 	    }
 
-		public OrganisationDto(int idDis, String refInt, String birbCode, int lienDepot,
+		public OrganisationDto(int idDis, short lienBanque, String refInt, String birbCode, int lienDepot,
 				String societe, String adresse, String statut, String email, String cp, String localite,
-				short pays, String tva, String website, String tel, String gsm, short daten, 
+				short pays, String tva, String website, String tel, String gsm, short daten, String banque,
 				short region, String iban, String classique, String bic, short actif, short civilite, String nom,
 				String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp,
 				short civiliteSec, String prenomSec, String nomSec, String telSec, String gsmSec, short civiliteTres,
@@ -272,6 +283,7 @@ public class OrganisationDto {
 				String lupdUserName, LocalDateTime lupdTs, String bankShortName,String bankName ) {
 			super();
 			this.idDis = idDis;
+			this.lienBanque = lienBanque;
 			this.refInt = refInt;
 			this.birbCode = birbCode;
 			this.lienDepot = lienDepot;
@@ -287,6 +299,7 @@ public class OrganisationDto {
 			this.tel = tel;
 			this.gsm = gsm;
 			this.daten = daten;
+			this.banque = banque;
 			this.region = region;
 			this.iban = iban;
 			this.classique = classique;
@@ -517,7 +530,15 @@ public class OrganisationDto {
 			this.daten = daten;
 		}
 
-	    public short getRegion() {
+	    public String getBanque() {
+			return banque;
+		}
+
+		public void setBanque(String banque) {
+			this.banque = banque;
+		}
+
+		public short getRegion() {
 			return region;
 		}
 
