@@ -12,8 +12,6 @@ public class OrganisationDto {
 	     
 	    private String refInt;
 	     
-	    private short lienBanque;
-	    
 	    private String birbCode;
 	    
 	    private int lienDepot;
@@ -39,9 +37,7 @@ public class OrganisationDto {
 	   
 	    private String gsm;
 
-	    private short daten;
-	    
-	    private String banque;
+	    private short daten; 
 	   
 	    private short region;
 	    private String iban;
@@ -255,9 +251,9 @@ public class OrganisationDto {
 	    	
 	    }
 
-		public OrganisationDto(int idDis, String refInt, short lienBanque, String birbCode, int lienDepot,
+		public OrganisationDto(int idDis, String refInt, String birbCode, int lienDepot,
 				String societe, String adresse, String statut, String email, String cp, String localite,
-				short pays, String tva, String website, String tel, String gsm, short daten, String banque,
+				short pays, String tva, String website, String tel, String gsm, short daten, 
 				short region, String iban, String classique, String bic, short actif, short civilite, String nom,
 				String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp,
 				short civiliteSec, String prenomSec, String nomSec, String telSec, String gsmSec, short civiliteTres,
@@ -277,7 +273,6 @@ public class OrganisationDto {
 			super();
 			this.idDis = idDis;
 			this.refInt = refInt;
-			this.lienBanque = lienBanque;
 			this.birbCode = birbCode;
 			this.lienDepot = lienDepot;
 			this.societe = societe;
@@ -292,7 +287,6 @@ public class OrganisationDto {
 			this.tel = tel;
 			this.gsm = gsm;
 			this.daten = daten;
-			this.banque = banque;
 			this.region = region;
 			this.iban = iban;
 			this.classique = classique;
@@ -409,13 +403,7 @@ public class OrganisationDto {
 			this.refInt = refInt;
 		}
 
-		public short getLienBanque() {
-			return lienBanque;
-		}
-
-		public void setLienBanque(short lienBanque) {
-			this.lienBanque = lienBanque;
-		}
+		
 
 		public String getBirbCode() {
 			return birbCode;
@@ -529,15 +517,7 @@ public class OrganisationDto {
 			this.daten = daten;
 		}
 
-		public String getBanque() {
-			return banque;
-		}
-
-		public void setBanque(String banque) {
-			this.banque = banque;
-		}
-
-		public short getRegion() {
+	    public short getRegion() {
 			return region;
 		}
 

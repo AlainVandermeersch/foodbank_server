@@ -7,7 +7,7 @@ import foodbank.it.persistence.model.Organisation;
 public interface IOrganisationService {
 	Optional<Organisation> findByIdDis(int idDis);
 	
-	Iterable<Organisation> findByLienBanque(short lienBanque);
+	Iterable<Organisation> findByBanqueObjectBankShortName( String bankShortName);
 
     Organisation save(Organisation Organisation);
 

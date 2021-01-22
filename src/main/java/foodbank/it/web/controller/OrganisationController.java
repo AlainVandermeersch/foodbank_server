@@ -46,10 +46,10 @@ public class OrganisationController {
     
     @CrossOrigin
     @GetMapping("organisations/")
-    public Collection<OrganisationDto> find( @RequestParam(required = false) Short lienBanque ,@RequestParam(required = false) String idDis) {
+    public Collection<OrganisationDto> find( @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String idDis) {
         Iterable<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
-        if (lienBanque == null) {
+        if (bankShortName == null) {
         	if (idDis == null) {
         		selectedOrganisations = this.OrganisationService.findAll();
         		selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
@@ -61,7 +61,8 @@ public class OrganisationController {
         	
         }
         else {
-        	selectedOrganisations = this.OrganisationService.findByLienBanque(lienBanque);
+        	selectedOrganisations = this.OrganisationService.findByBanqueObjectBankShortName(bankShortName);
+        	// selectedOrganisations = this.OrganisationService.findAll();
         	selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
         }
         
@@ -90,9 +91,9 @@ public class OrganisationController {
         return this.convertToDto(Organisation);
     }
     protected OrganisationDto convertToDto(Organisation entity) {
-        OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getLienBanque(), entity.getBirbCode(), entity.getLienDepot(),
+        OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
-				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(), entity.getBanque(),
+				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), entity.getActif(), entity.getCivilite(), entity.getNom(),
 				entity.getPrenom(), entity.getCiviliteVp(), entity.getPrenomVp(), entity.getNomVp(), entity.getTelVp(), entity.getGsmVp(),
 				entity.getCiviliteSec(), entity.getPrenomSec(), entity.getNomSec(), entity.getTelSec(), entity.getGsmSec(), entity.getCiviliteTres(),
@@ -113,9 +114,9 @@ public class OrganisationController {
     }
 
     protected Organisation convertToEntity(OrganisationDto dto) {
-        Organisation organisation = new Organisation( dto.getIdDis(), dto.getRefInt(), dto.getLienBanque(), dto.getBirbCode(), dto.getLienDepot(),
+        Organisation organisation = new Organisation( dto.getIdDis(), dto.getRefInt(), dto.getBirbCode(), dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
-				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), dto.getBanque(),
+				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), 
 				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), dto.getActif(), dto.getCivilite(), dto.getNom(),
 				dto.getPrenom(), dto.getCiviliteVp(), dto.getPrenomVp(), dto.getNomVp(), dto.getTelVp(), dto.getGsmVp(),
 				dto.getCiviliteSec(), dto.getPrenomSec(), dto.getNomSec(), dto.getTelSec(), dto.getGsmSec(), dto.getCiviliteTres(),

@@ -32,9 +32,7 @@ public class Organisation implements Serializable {
     @Column(name="id_dis", unique=true, nullable=false, precision=10)
     private int idDis;
     @Column(name="ref_int", length=15)
-    private String refInt;
-    @Column(name="lien_banque", nullable=false, insertable = false, updatable = false, precision=3)
-    private short lienBanque;
+    private String refInt;   
     @Column(name="BirbCode", length=10)
     private String birbCode;
     @Column(name="lien_depot", nullable=false, precision=10)
@@ -62,7 +60,6 @@ public class Organisation implements Serializable {
     private String gsm;
     @Column(precision=5)
     private short daten;
-    private String banque;
     @Column(precision=3)
     private short region;
     private String iban;
@@ -253,22 +250,15 @@ public class Organisation implements Serializable {
     @ManyToOne
     @JoinColumn(name="lien_banque")
     private Banque banqueObject;
-
-    public Banque getBanqueObject() {
-		return banqueObject;
-	}
-
-	public void setBanqueObject(Banque banqueObject) {
-		this.banqueObject = banqueObject;
-	}
+    
 
 	/** Default constructor. */
     protected Organisation() {
         super();
     }
 
-    public Organisation(int idDis, String refInt, short lienBanque, String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, short pays, String tva, String website, String tel,
-        String gsm, short daten, String banque, short region, String iban, String classique, String bic, short actif, short civilite, String nom, String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, short civiliteSec,
+    public Organisation(int idDis, String refInt, String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, short pays, String tva, String website, String tel,
+        String gsm, short daten, short region, String iban, String classique, String bic, short actif, short civilite, String nom, String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, short civiliteSec,
         String prenomSec, String nomSec, String telSec, String gsmSec, short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
         String disprog, String afsca, boolean webauthority, short langue, LocalDateTime lastvisit, int nbrefix, short cpasyN, short lienCpas, short birbyN, short depyN, short logBirb, short actComp1, short actComp2, short actComp3, short actComp4,
         short actComp5, short actComp6, String actComp7, short nrTournee, short susp, String stopSusp, String rem, short msonac, short classeFbba1, short classeFbba2, short classeFbba3, int nFam, int nPers, int nNour, int nBebe, int nEnf, int nAdo,
@@ -278,7 +268,6 @@ public class Organisation implements Serializable {
         super();
         this.idDis = idDis;
         this.refInt = refInt;
-        this.lienBanque = lienBanque;
         this.birbCode = birbCode;
         this.lienDepot = lienDepot;
         this.societe = societe;
@@ -293,7 +282,6 @@ public class Organisation implements Serializable {
         this.tel = tel;
         this.gsm = gsm;
         this.daten = daten;
-        this.banque = banque;
         this.region = region;
         this.iban = iban;
         this.classique = classique;
@@ -426,24 +414,6 @@ public class Organisation implements Serializable {
      */
     public void setRefInt(String aRefInt) {
         refInt = aRefInt;
-    }
-
-    /**
-     * Access method for lienBanque.
-     *
-     * @return the current value of lienBanque
-     */
-    public short getLienBanque() {
-        return lienBanque;
-    }
-
-    /**
-     * Setter method for lienBanque.
-     *
-     * @param aLienBanque the new value for lienBanque
-     */
-    public void setLienBanque(short aLienBanque) {
-        lienBanque = aLienBanque;
     }
 
     /**
@@ -699,24 +669,7 @@ public class Organisation implements Serializable {
         daten = aDaten;
     }
 
-    /**
-     * Access method for banque.
-     *
-     * @return the current value of banque
-     */
-    public String getBanque() {
-        return banque;
-    }
-
-    /**
-     * Setter method for banque.
-     *
-     * @param aBanque the new value for banque
-     */
-    public void setBanque(String aBanque) {
-        banque = aBanque;
-    }
-
+    
     /**
      * Access method for region.
      *
@@ -2444,7 +2397,14 @@ public class Organisation implements Serializable {
     public void setLupdTs(LocalDateTime aLupdTs) {
         lupdTs = aLupdTs;
     }
+    public Banque getBanqueObject() {
+		return banqueObject;
+	}
 
+	public void setBanqueObject(Banque banqueObject) {
+		this.banqueObject = banqueObject;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -2464,7 +2424,6 @@ public class Organisation implements Serializable {
 		result = prime * result + ((afsca2 == null) ? 0 : afsca2.hashCode());
 		result = prime * result + ((afsca3 == null) ? 0 : afsca3.hashCode());
 		result = prime * result + antenne;
-		result = prime * result + ((banque == null) ? 0 : banque.hashCode());
 		result = prime * result + ((bic == null) ? 0 : bic.hashCode());
 		result = prime * result + ((birbCode == null) ? 0 : birbCode.hashCode());
 		result = prime * result + birbyN;
@@ -2511,7 +2470,6 @@ public class Organisation implements Serializable {
 		result = prime * result + idDis;
 		result = prime * result + langue;
 		result = prime * result + ((lastvisit == null) ? 0 : lastvisit.hashCode());
-		result = prime * result + lienBanque;
 		result = prime * result + lienCpas;
 		result = prime * result + lienDepot;
 		result = prime * result + lienGd;
@@ -2625,11 +2583,6 @@ public class Organisation implements Serializable {
 		} else if (!afsca3.equals(other.afsca3))
 			return false;
 		if (antenne != other.antenne)
-			return false;
-		if (banque == null) {
-			if (other.banque != null)
-				return false;
-		} else if (!banque.equals(other.banque))
 			return false;
 		if (bic == null) {
 			if (other.bic != null)
@@ -2782,8 +2735,6 @@ public class Organisation implements Serializable {
 			if (other.lastvisit != null)
 				return false;
 		} else if (!lastvisit.equals(other.lastvisit))
-			return false;
-		if (lienBanque != other.lienBanque)
 			return false;
 		if (lienCpas != other.lienCpas)
 			return false;
@@ -2973,11 +2924,11 @@ public class Organisation implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Organisation [idDis=" + idDis + ", refInt=" + refInt + ", lienBanque=" + lienBanque + ", birbCode="
+		return "Organisation [idDis=" + idDis + ", refInt=" + refInt + ",  birbCode="
 				+ birbCode + ", lienDepot=" + lienDepot + ", societe=" + societe + ", adresse=" + adresse + ", statut="
 				+ statut + ", email=" + email + ", cp=" + cp + ", localite=" + localite
 				+ ", pays=" + pays + ", tva=" + tva + ", website=" + website + ", tel=" + tel + ", gsm=" + gsm
-				+ ", daten=" + daten + ", banque=" + banque + ", region=" + region + ", iban=" + iban + ", classique="
+				+ ", daten=" + daten + ", region=" + region + ", iban=" + iban + ", classique="
 				+ classique + ", bic=" + bic + ", actif=" + actif + ", civilite=" + civilite + ", nom=" + nom
 				+ ", prenom=" + prenom + ", civiliteVp=" + civiliteVp + ", prenomVp=" + prenomVp + ", nomVp=" + nomVp
 				+ ", telVp=" + telVp + ", gsmVp=" + gsmVp + ", civiliteSec=" + civiliteSec + ", prenomSec=" + prenomSec

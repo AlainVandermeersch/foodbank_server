@@ -38,10 +38,13 @@ public class OrganisationServiceImpl implements IOrganisationService{
         OrganisationRepository.deleteByIdDis(idDis);
         
     }
+   
 	@Override
-	public Iterable<Organisation> findByLienBanque(short lienBanque) {
-		return OrganisationRepository.findByLienBanque(lienBanque);
+	public Iterable<Organisation> findByBanqueObjectBankShortName( String bankShortName) {
+		return OrganisationRepository.findByBanqueObjectBankShortName( bankShortName);
 	}
+	
+	
 
 
 	

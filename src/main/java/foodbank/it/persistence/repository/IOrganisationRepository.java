@@ -10,5 +10,5 @@ import foodbank.it.persistence.model.Organisation;
 public interface IOrganisationRepository extends CrudRepository<Organisation, Integer>{
     Optional<Organisation> findByIdDis(int idDis);
     void deleteByIdDis(int idDis);
-    Iterable<Organisation> findByLienBanque(short lienBanque);
+    Iterable<Organisation> findByBanqueObjectBankShortName( String bankShortName);
 }
