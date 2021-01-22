@@ -10,6 +10,7 @@ public interface IBanqueService {
     Banque save(Banque Banque);
 
     Iterable<Banque> findAll();
+    Iterable<Banque> findByActif(short actif);
 
     void delete(int bankId);
 }

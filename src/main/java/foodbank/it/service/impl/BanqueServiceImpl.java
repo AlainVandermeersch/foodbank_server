@@ -31,10 +31,12 @@ public class BanqueServiceImpl implements IBanqueService{
 
     @Override
     public Iterable<Banque> findAll() {
-        // TODO Auto-generated method stub
         return BanqueRepository.findAll();
     }
-
+    @Override
+    public Iterable<Banque> findByActif(short actif) {
+        return BanqueRepository.findByActif(actif);
+    }
     @Override
     @Transactional
     public void delete(int bankId) {

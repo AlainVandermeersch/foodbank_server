@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -49,10 +50,16 @@ public class BanqueController {
     
     @CrossOrigin
     @GetMapping("banques/")
-    public Collection<BanqueDto> findAll() {
-        Iterable<Banque> allBanques = this.BanqueService.findAll();
+    public Collection<BanqueDto> find( @RequestParam(required = false) String actif) {
+        Iterable<Banque> selectedBanques = null;
+        if (actif == null) {	
+        	selectedBanques = this.BanqueService.findAll();
+        }
+        else {
+        	selectedBanques = this.BanqueService.findByActif(Short.parseShort(actif));
+        }
         List<BanqueDto> BanqueDtos = new ArrayList<>();
-        allBanques.forEach(p -> BanqueDtos.add(convertToDto(p)));
+        selectedBanques.forEach(p -> BanqueDtos.add(convertToDto(p)));
         return BanqueDtos;
     }
     @CrossOrigin
