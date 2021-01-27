@@ -2,8 +2,6 @@ package foodbank.it.web.dto;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-
 public class BanqueDto {
     private int bankId;
    
