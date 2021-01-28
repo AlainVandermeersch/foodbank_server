@@ -50,26 +50,24 @@ public class ClientController {
     
     @CrossOrigin
     @GetMapping("beneficiaires/")
-    public Collection<ClientDto> find( @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String idClient) {
+    public Collection<ClientDto> find( @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
         Iterable<Client> selectedClients = null;
         List<ClientDto> ClientDtos = new ArrayList<>();
         if (bankShortName == null) {
-        	if (idClient == null) {
+        	if (lienDis == null) {
         		selectedClients = this.ClientService.findAll();
         		selectedClients.forEach(p -> ClientDtos.add(convertToDto(p)));
         	}
         	else {
-        		Optional<Client> myClient = this.ClientService.findByIdClient(Integer.parseInt(idClient));
-        		myClient.ifPresent(org-> ClientDtos.add(convertToDto( org)));
+        		selectedClients = this.ClientService.findByLienDis(Integer.parseInt(lienDis));
         	}
         	
         }
         else {
-        	selectedClients = this.ClientService.findByBanqueObjectBankShortName(bankShortName);
-        	// selectedClients = this.ClientService.findAll();
-        	selectedClients.forEach(p -> ClientDtos.add(convertToDto(p)));
+        	selectedClients = this.ClientService.findByBanqueObjectBankShortName(bankShortName);        	
+        	
         }
-        
+        selectedClients.forEach(p -> ClientDtos.add(convertToDto(p)));
         
         return ClientDtos;
     }

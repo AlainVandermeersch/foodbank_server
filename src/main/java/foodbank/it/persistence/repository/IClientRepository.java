@@ -10,4 +10,5 @@ public interface IClientRepository extends CrudRepository<Client, Integer>{
     Optional<Client> findByIdClient(int idClient);
     void deleteByIdClient(int idClient);
     Iterable<Client> findByBanqueObjectBankShortName( String bankShortName);
+    Iterable<Client> findByLienDis(int lienDis);
 }

@@ -43,4 +43,9 @@ public class ClientServiceImpl implements IClientService{
 	public Iterable<Client> findByBanqueObjectBankShortName( String bankShortName) {
 		return ClientRepository.findByBanqueObjectBankShortName( bankShortName);
 	}
+	@Override
+	public Iterable<Client> findByLienDis(int lienDis) {
+		
+		return ClientRepository.findByLienDis(lienDis);
+	}
 }

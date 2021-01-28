@@ -15,4 +15,6 @@ public interface IClientService {
 
     void delete(int idClient);
 
+	Iterable<Client> findByLienDis(int parseInt);
+
 }
