@@ -56,10 +56,11 @@ public class Cpas implements Serializable {
      super();
  }
 
- public Cpas(String cpasZip, String cpasName, String cpasMail, String cpasStreet, String cpasTel, String cpasGsm,
+ public Cpas(int cpasId, String cpasZip, String cpasName, String cpasMail, String cpasStreet, String cpasTel, String cpasGsm,
 		String cpasContactName, String cpasContactSurname, short civilite, String rem, String password, short lBanque,
 		short langue) {
 	super();
+	this.cpasId = cpasId;
 	this.cpasZip = cpasZip;
 	this.cpasName = cpasName;
 	this.cpasMail = cpasMail;

@@ -106,11 +106,12 @@ public class Banque implements Serializable {
         super();
     }
 
-    public Banque(String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short nomPres, short nomVp, short nomSec, short nomTres, short nomIt, short nomLog, short nomRh,
+    public Banque(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short nomPres, short nomVp, short nomSec, short nomTres, short nomIt, short nomLog, short nomRh,
         short nomSh, short nomPp, short nomAsso, short nomAppro, short nomPubrel, int nomCeo, int nomFead, String adresse, String cp, String localite, String bankTel, String bankGsm, String adresseDepotPrinc, String cpDepotPrinc, String cityDepotPrinc,
         String depPrincTel, String ssAdresse, String ssCp, String ssCity, String ssTel, int regio, String website, String bank) {
               
-        this.bankShortName = bankShortName;
+        this.bankId = bankId;
+    	this.bankShortName = bankShortName;
         this.bankName = bankName;
         this.nrEntr = nrEntr;
         this.bankMail = bankMail;

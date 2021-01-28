@@ -82,7 +82,7 @@ public class CpasController {
     }
 
     protected Cpas convertToEntity(CpasDto dto) {
-        Cpas cpas = new Cpas( dto.getCpasZip(), dto.getCpasName(), dto.getCpasMail(), dto.getCpasStreet(), dto.getCpasTel(), dto.getCpasTel(), dto.getCpasGsm(), dto.getCpasContactName(), dto.getCivilite(), dto.getRem(), dto.getPassword(), dto.getLBanque(), dto.getLangue());       
+        Cpas cpas = new Cpas( dto.getCpasId(),dto.getCpasZip(), dto.getCpasName(), dto.getCpasMail(), dto.getCpasStreet(), dto.getCpasTel(), dto.getCpasTel(), dto.getCpasGsm(), dto.getCpasContactName(), dto.getCivilite(), dto.getRem(), dto.getPassword(), dto.getLBanque(), dto.getLangue());       
         if (!StringUtils.isEmpty(dto.getCpasId())) {
             cpas.setCpasId(dto.getCpasId());
         }

@@ -91,7 +91,7 @@ public class BanqueController {
     }
 
     protected Banque convertToEntity(BanqueDto dto) {
-        Banque banque = new Banque( dto.getBankShortName(), dto.getBankName(), dto.getNrEntr(), dto.getBankMail(), dto.getActif(), dto.getComGest(), dto.getLastvisit(), dto.getNomPres(), dto.getNomVp(), dto.getNomSec(), dto.getNomTres(), dto.getNomIt(), dto.getNomLog(), dto.getNomRh(),
+        Banque banque = new Banque( dto.getBankId(),dto.getBankShortName(), dto.getBankName(), dto.getNrEntr(), dto.getBankMail(), dto.getActif(), dto.getComGest(), dto.getLastvisit(), dto.getNomPres(), dto.getNomVp(), dto.getNomSec(), dto.getNomTres(), dto.getNomIt(), dto.getNomLog(), dto.getNomRh(),
             dto.getNomSh(), dto.getNomPp(), dto.getNomAsso(), dto.getNomAppro(), dto.getNomPubrel(), dto.getNomCeo(), dto.getNomFead(), dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getBankTel(), dto.getBankGsm(), dto.getAdresseDepotPrinc(), dto.getCpDepotPrinc(), dto.getCityDepotPrinc(),
             dto.getDepPrincTel(), dto.getSsAdresse(), dto.getSsCp(), dto.getSsCity(), dto.getSsTel(), dto.getRegio(), dto.getWebsite(), dto.getBank());       
         if (!StringUtils.isEmpty(dto.getBankId())) {
