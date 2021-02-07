@@ -12,6 +12,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,28 +56,38 @@ public class MembreController {
     
     @CrossOrigin
     @GetMapping("membres/")
-    public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
+    public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, 
+    		@RequestParam String sortField, @RequestParam String sortOrder, 
+    		@RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
         int pageSize = intRows;
+        Pageable pageRequest = null;
+        if (sortOrder.equals("1")) {
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).ascending());
+        }
+        else {
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
+        }
+        
         Page<Membre> selectedMembres = null;
         List<MembreDto> MembreDtos = new ArrayList<>();
         if (bankShortName == null) {
         	if (lienDis == null) {
-        		selectedMembres = this.MembreService.findAll(PageRequest.of(pageNumber, pageSize));
+        		selectedMembres = this.MembreService.findAll(pageRequest);
         		long totalRecords = selectedMembres.getTotalElements();
         		selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
         	}
         	else {
-        		selectedMembres = this.MembreService.findByLienDis(lienDis, PageRequest.of(pageNumber, pageSize));
+        		selectedMembres = this.MembreService.findByLienDis(lienDis, pageRequest);
         		long totalRecords = selectedMembres.getTotalElements();
         		selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
         	}
         	
         }
         else {
-        	selectedMembres = this.MembreService.findByBanqueObjectBankShortName(bankShortName,PageRequest.of(pageNumber, pageSize));
+        	selectedMembres = this.MembreService.findByBanqueObjectBankShortName(bankShortName,pageRequest);
         	long totalRecords = selectedMembres.getTotalElements();
         	selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
         }
