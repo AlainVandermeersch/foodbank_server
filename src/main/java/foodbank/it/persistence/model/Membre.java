@@ -30,9 +30,9 @@ public class Membre implements Serializable {
  @Id
  @GeneratedValue(strategy=GenerationType.IDENTITY)
  @Column(name="bat_ID", unique=true, nullable=false, precision=10)
- private int batId;
+ private Integer batId;
  @Column(name="lien_dis", precision=10)
- private int lienDis;
+ private Integer lienDis;
  @Column(nullable=false, length=50)
  private String nom;
  @Column(nullable=false, length=40)
@@ -56,40 +56,40 @@ public class Membre implements Serializable {
  @Column(name="veh_imm", length=30)
  private String vehImm;
  @Column(precision=10)
- private int fonction;
+ private Integer fonction;
  @Column(precision=3)
- private short ca;
+ private Short ca;
  @Column(precision=3)
- private short ag;
+ private Short ag;
  @Column(precision=3)
- private short cg;
+ private Short cg;
  @Column(precision=3)
- private short civilite;
+ private Short civilite;
  @Column(precision=3)
- private short pays;
+ private Short pays;
  @Column(nullable=false, precision=3)
- private short actif;
+ private Short actif;
  @Column(nullable=false, precision=3)
- private short authority;
+ private Short authority;
  private LocalDate datmand;
  private String rem;
  @Column(name="last_visit", nullable=false)
  private LocalDateTime lastVisit;
  @Column(nullable=false, precision=3)
- private short ben;
+ private Short ben;
  @Column(name="code_acces", precision=5)
- private short codeAcces;
+ private Short codeAcces;
  @Column(name="nr_code_acces", precision=5)
- private short nrCodeAcces;
+ private Short nrCodeAcces;
  @Column(precision=5)
- private short langue;
+ private Short langue;
  private String datedeb;
  @Column(name="date_fin")
  private String dateFin;
  @Column(precision=3)
- private short deleted;
+ private Short deleted;
  @Column(name="typ_emploi", precision=3)
- private short typEmploi;
+ private Short typEmploi;
  @Column(name="date_naissance")
  private String dateNaissance;
  @Column(length=20)
@@ -97,7 +97,7 @@ public class Membre implements Serializable {
  @Column(name="date_contrat")
  private String dateContrat;
  @Column(name="l_dep", precision=10)
- private int lDep;
+ private Integer lDep;
  @ManyToOne
  @JoinColumn(name="lien_banque")
  private Banque banqueObject;
@@ -107,12 +107,12 @@ public class Membre implements Serializable {
      super();
  }
 
- public Membre(int batId, int lienDis, String nom, String prenom, String address, String city,
-		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, int fonction,
-		short ca, short ag, short cg, short civilite, short pays, short actif, short authority, LocalDate datmand,
-		String rem, LocalDateTime lastVisit, short ben, short codeAcces, short nrCodeAcces, short langue,
-		String datedeb, String dateFin, short deleted, short typEmploi, String dateNaissance, String nnat,
-		String dateContrat, int lDep, Banque banqueObject) {
+ public Membre(Integer batId, Integer lienDis, String nom, String prenom, String address, String city,
+		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction,
+		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, LocalDate datmand,
+		String rem, LocalDateTime lastVisit, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
+		String datedeb, String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat,
+		String dateContrat, Integer lDep, Banque banqueObject) {
 	super();
 	this.batId = batId;
 	this.lienDis = lienDis;
@@ -158,7 +158,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of batId
   */
- public int getBatId() {
+ public Integer getBatId() {
      return batId;
  }
 
@@ -167,7 +167,7 @@ public class Membre implements Serializable {
   *
   * @param aBatId the new value for batId
   */
- public void setBatId(int aBatId) {
+ public void setBatId(Integer aBatId) {
      batId = aBatId;
  }
 
@@ -177,7 +177,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of lienDis
   */
- public int getLienDis() {
+ public Integer getLienDis() {
      return lienDis;
  }
 
@@ -186,7 +186,7 @@ public class Membre implements Serializable {
   *
   * @param aLienDis the new value for lienDis
   */
- public void setLienDis(int aLienDis) {
+ public void setLienDis(Integer aLienDis) {
      lienDis = aLienDis;
  }
 
@@ -393,7 +393,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of fonction
   */
- public int getFonction() {
+ public Integer getFonction() {
      return fonction;
  }
 
@@ -402,7 +402,7 @@ public class Membre implements Serializable {
   *
   * @param aFonction the new value for fonction
   */
- public void setFonction(int aFonction) {
+ public void setFonction(Integer aFonction) {
      fonction = aFonction;
  }
 
@@ -411,7 +411,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of ca
   */
- public short getCa() {
+ public Short getCa() {
      return ca;
  }
 
@@ -420,7 +420,7 @@ public class Membre implements Serializable {
   *
   * @param aCa the new value for ca
   */
- public void setCa(short aCa) {
+ public void setCa(Short aCa) {
      ca = aCa;
  }
 
@@ -429,7 +429,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of ag
   */
- public short getAg() {
+ public Short getAg() {
      return ag;
  }
 
@@ -438,7 +438,7 @@ public class Membre implements Serializable {
   *
   * @param aAg the new value for ag
   */
- public void setAg(short aAg) {
+ public void setAg(Short aAg) {
      ag = aAg;
  }
 
@@ -447,7 +447,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of cg
   */
- public short getCg() {
+ public Short getCg() {
      return cg;
  }
 
@@ -456,7 +456,7 @@ public class Membre implements Serializable {
   *
   * @param aCg the new value for cg
   */
- public void setCg(short aCg) {
+ public void setCg(Short aCg) {
      cg = aCg;
  }
 
@@ -465,7 +465,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of civilite
   */
- public short getCivilite() {
+ public Short getCivilite() {
      return civilite;
  }
 
@@ -474,7 +474,7 @@ public class Membre implements Serializable {
   *
   * @param aCivilite the new value for civilite
   */
- public void setCivilite(short aCivilite) {
+ public void setCivilite(Short aCivilite) {
      civilite = aCivilite;
  }
 
@@ -483,7 +483,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of pays
   */
- public short getPays() {
+ public Short getPays() {
      return pays;
  }
 
@@ -492,7 +492,7 @@ public class Membre implements Serializable {
   *
   * @param aPays the new value for pays
   */
- public void setPays(short aPays) {
+ public void setPays(Short aPays) {
      pays = aPays;
  }
 
@@ -501,7 +501,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of actif
   */
- public short getActif() {
+ public Short getActif() {
      return actif;
  }
 
@@ -510,7 +510,7 @@ public class Membre implements Serializable {
   *
   * @param aActif the new value for actif
   */
- public void setActif(short aActif) {
+ public void setActif(Short aActif) {
      actif = aActif;
  }
 
@@ -519,7 +519,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of authority
   */
- public short getAuthority() {
+ public Short getAuthority() {
      return authority;
  }
 
@@ -528,7 +528,7 @@ public class Membre implements Serializable {
   *
   * @param aAuthority the new value for authority
   */
- public void setAuthority(short aAuthority) {
+ public void setAuthority(Short aAuthority) {
      authority = aAuthority;
  }
 
@@ -591,7 +591,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of ben
   */
- public short getBen() {
+ public Short getBen() {
      return ben;
  }
 
@@ -600,7 +600,7 @@ public class Membre implements Serializable {
   *
   * @param aBen the new value for ben
   */
- public void setBen(short aBen) {
+ public void setBen(Short aBen) {
      ben = aBen;
  }
 
@@ -609,7 +609,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of codeAcces
   */
- public short getCodeAcces() {
+ public Short getCodeAcces() {
      return codeAcces;
  }
 
@@ -618,7 +618,7 @@ public class Membre implements Serializable {
   *
   * @param aCodeAcces the new value for codeAcces
   */
- public void setCodeAcces(short aCodeAcces) {
+ public void setCodeAcces(Short aCodeAcces) {
      codeAcces = aCodeAcces;
  }
 
@@ -627,7 +627,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of nrCodeAcces
   */
- public short getNrCodeAcces() {
+ public Short getNrCodeAcces() {
      return nrCodeAcces;
  }
 
@@ -636,7 +636,7 @@ public class Membre implements Serializable {
   *
   * @param aNrCodeAcces the new value for nrCodeAcces
   */
- public void setNrCodeAcces(short aNrCodeAcces) {
+ public void setNrCodeAcces(Short aNrCodeAcces) {
      nrCodeAcces = aNrCodeAcces;
  }
 
@@ -645,7 +645,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of langue
   */
- public short getLangue() {
+ public Short getLangue() {
      return langue;
  }
 
@@ -654,7 +654,7 @@ public class Membre implements Serializable {
   *
   * @param aLangue the new value for langue
   */
- public void setLangue(short aLangue) {
+ public void setLangue(Short aLangue) {
      langue = aLangue;
  }
 
@@ -699,7 +699,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of deleted
   */
- public short getDeleted() {
+ public Short getDeleted() {
      return deleted;
  }
 
@@ -708,7 +708,7 @@ public class Membre implements Serializable {
   *
   * @param aDeleted the new value for deleted
   */
- public void setDeleted(short aDeleted) {
+ public void setDeleted(Short aDeleted) {
      deleted = aDeleted;
  }
 
@@ -717,7 +717,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of typEmploi
   */
- public short getTypEmploi() {
+ public Short getTypEmploi() {
      return typEmploi;
  }
 
@@ -726,7 +726,7 @@ public class Membre implements Serializable {
   *
   * @param aTypEmploi the new value for typEmploi
   */
- public void setTypEmploi(short aTypEmploi) {
+ public void setTypEmploi(Short aTypEmploi) {
      typEmploi = aTypEmploi;
  }
 
@@ -789,7 +789,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of lDep
   */
- public int getLDep() {
+ public Integer getLDep() {
      return lDep;
  }
 
@@ -798,7 +798,7 @@ public class Membre implements Serializable {
   *
   * @param aLDep the new value for lDep
   */
- public void setLDep(int aLDep) {
+ public void setLDep(Integer aLDep) {
      lDep = aLDep;
  }
  

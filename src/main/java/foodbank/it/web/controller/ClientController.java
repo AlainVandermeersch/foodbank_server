@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Arrays;
+import static java.util.Objects.isNull;
 
 import javax.transaction.Transactional;
 
@@ -93,12 +94,20 @@ public class ClientController {
         return this.convertToDto(Client);
     }
     protected ClientDto convertToDto(Client entity) {
+    	String bankShortName = "";
+    	String bankName = "";
+    	Banque banqueObject = entity.getBanqueObject();
+    	if ( ! isNull(banqueObject)) {
+    		bankShortName = banqueObject.getBankShortName();
+    		bankName = banqueObject.getBankName();
+    	} 
+    	
         ClientDto dto = new ClientDto(entity.getIdClient(),entity.getIdInt(), entity.getLienDis(), entity.getNom(), entity.getPrenom(),
 				entity.getNomconj(), entity.getPrenomconj(), entity.getCivilite(), entity.getDaten(),  entity.getDatenConj(), entity.getCiviliteconj(),
 				entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getPays(), entity.getEmail(), entity.getTel(),entity.getGsm(), 
 				entity.getConnu(), entity.getGenre(), entity.getActif(), entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
 				entity.getLCpas(), entity.getDatUpdBirb(), entity.getCritBirb(), entity.getCoeff(), entity.getNomsav(), entity.getPrenomsav(),
-				entity.getGenreconj(), entity.getLbanque(), entity.getBanqueObject().getBankShortName(),entity.getBanqueObject().getBankName() );    
+				entity.getGenreconj(), entity.getLbanque(), bankShortName,bankName );    
         return dto;
     }
 

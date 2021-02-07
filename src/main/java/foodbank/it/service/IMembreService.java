@@ -12,6 +12,7 @@ public interface IMembreService {
 	Optional<Membre> findByBatId(int batId);
 	
 	Page<Membre> findByBanqueObjectBankShortName( String bankShortName, Pageable pageable);
+	Page<Membre> findByLienDis( String lienDis, Pageable pageable);
 
     Membre save(Membre membre);
 

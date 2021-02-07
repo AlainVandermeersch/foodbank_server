@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 
 public class MembreDto {
-	 private int batId;
+	 private Integer batId;
 	 
-	 private int lienDis;
+	 private Integer lienDis;
 	
 	 private String nom;
 	
@@ -32,40 +32,40 @@ public class MembreDto {
 	 
 	 private String vehImm;
 	 
-	 private int fonction;
+	 private Integer fonction;
 	 
-	 private short ca;
+	 private Short ca;
 	 
-	 private short ag;
+	 private Short ag;
 	 
-	 private short cg;
+	 private Short cg;
 	 
-	 private short civilite;
+	 private Short civilite;
 	 
-	 private short pays;
+	 private Short pays;
 	
-	 private short actif;
+	 private Short actif;
 	 
-	 private short authority;
+	 private Short authority;
 	 private LocalDate datmand;
 	 private String rem;
 	
 	 private LocalDateTime lastVisit;
 	
-	 private short ben;
+	 private Short ben;
 	 
-	 private short codeAcces;
+	 private Short codeAcces;
 	 
-	 private short nrCodeAcces;
+	 private Short nrCodeAcces;
 	
-	 private short langue;
+	 private Short langue;
 	 private String datedeb;
 	 
 	 private String dateFin;
 	
-	 private short deleted;
+	 private Short deleted;
 	 
-	 private short typEmploi;
+	 private Short typEmploi;
 	
 	 private String dateNaissance;
 	
@@ -73,21 +73,22 @@ public class MembreDto {
 	 
 	 private String dateContrat;
 	
-	 private int lDep;
+	 private Integer lDep;
 	 private String bankName;
 	 private String bankShortName;
+	 private Long  totalRecords;
 	 
 	public MembreDto() {
 		super();
 		
 	}
 
-	public MembreDto(int batId, int lienDis, String nom, String prenom, String address, String city, String zip,
-			String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, int fonction, short ca,
-			short ag, short cg, short civilite, short pays, short actif, short authority, LocalDate datmand, String rem,
-			LocalDateTime lastVisit, short ben, short codeAcces, short nrCodeAcces, short langue, String datedeb,
-			String dateFin, short deleted, short typEmploi, String dateNaissance, String nnat, String dateContrat,
-			int lDep, String bankName, String bankShortName) {
+	public MembreDto(Integer batId, Integer lienDis, String nom, String prenom, String address, String city, String zip,
+			String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction, Short ca,
+			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, LocalDate datmand, String rem,
+			LocalDateTime lastVisit, Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
+			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
+			Integer lDep, String bankName, String bankShortName,Long  totalRecords) {
 		super();
 		this.batId = batId;
 		this.lienDis = lienDis;
@@ -127,21 +128,22 @@ public class MembreDto {
 		this.lDep = lDep;
 		this.bankName = bankName;
 		this.bankShortName = bankShortName;
+		this.totalRecords = totalRecords;
 	}
 
-	public int getBatId() {
+	public Integer getBatId() {
 		return batId;
 	}
 
-	public void setBatId(int batId) {
+	public void setBatId(Integer batId) {
 		this.batId = batId;
 	}
 
-	public int getLienDis() {
+	public Integer getLienDis() {
 		return lienDis;
 	}
 
-	public void setLienDis(int lienDis) {
+	public void setLienDis(Integer lienDis) {
 		this.lienDis = lienDis;
 	}
 
@@ -233,67 +235,67 @@ public class MembreDto {
 		this.vehImm = vehImm;
 	}
 
-	public int getFonction() {
+	public Integer getFonction() {
 		return fonction;
 	}
 
-	public void setFonction(int fonction) {
+	public void setFonction(Integer fonction) {
 		this.fonction = fonction;
 	}
 
-	public short getCa() {
+	public Short getCa() {
 		return ca;
 	}
 
-	public void setCa(short ca) {
+	public void setCa(Short ca) {
 		this.ca = ca;
 	}
 
-	public short getAg() {
+	public Short getAg() {
 		return ag;
 	}
 
-	public void setAg(short ag) {
+	public void setAg(Short ag) {
 		this.ag = ag;
 	}
 
-	public short getCg() {
+	public Short getCg() {
 		return cg;
 	}
 
-	public void setCg(short cg) {
+	public void setCg(Short cg) {
 		this.cg = cg;
 	}
 
-	public short getCivilite() {
+	public Short getCivilite() {
 		return civilite;
 	}
 
-	public void setCivilite(short civilite) {
+	public void setCivilite(Short civilite) {
 		this.civilite = civilite;
 	}
 
-	public short getPays() {
+	public Short getPays() {
 		return pays;
 	}
 
-	public void setPays(short pays) {
+	public void setPays(Short pays) {
 		this.pays = pays;
 	}
 
-	public short getActif() {
+	public Short getActif() {
 		return actif;
 	}
 
-	public void setActif(short actif) {
+	public void setActif(Short actif) {
 		this.actif = actif;
 	}
 
-	public short getAuthority() {
+	public Short getAuthority() {
 		return authority;
 	}
 
-	public void setAuthority(short authority) {
+	public void setAuthority(Short authority) {
 		this.authority = authority;
 	}
 
@@ -321,35 +323,35 @@ public class MembreDto {
 		this.lastVisit = lastVisit;
 	}
 
-	public short getBen() {
+	public Short getBen() {
 		return ben;
 	}
 
-	public void setBen(short ben) {
+	public void setBen(Short ben) {
 		this.ben = ben;
 	}
 
-	public short getCodeAcces() {
+	public Short getCodeAcces() {
 		return codeAcces;
 	}
 
-	public void setCodeAcces(short codeAcces) {
+	public void setCodeAcces(Short codeAcces) {
 		this.codeAcces = codeAcces;
 	}
 
-	public short getNrCodeAcces() {
+	public Short getNrCodeAcces() {
 		return nrCodeAcces;
 	}
 
-	public void setNrCodeAcces(short nrCodeAcces) {
+	public void setNrCodeAcces(Short nrCodeAcces) {
 		this.nrCodeAcces = nrCodeAcces;
 	}
 
-	public short getLangue() {
+	public Short getLangue() {
 		return langue;
 	}
 
-	public void setLangue(short langue) {
+	public void setLangue(Short langue) {
 		this.langue = langue;
 	}
 
@@ -369,19 +371,19 @@ public class MembreDto {
 		this.dateFin = dateFin;
 	}
 
-	public short getDeleted() {
+	public Short getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(short deleted) {
+	public void setDeleted(Short deleted) {
 		this.deleted = deleted;
 	}
 
-	public short getTypEmploi() {
+	public Short getTypEmploi() {
 		return typEmploi;
 	}
 
-	public void setTypEmploi(short typEmploi) {
+	public void setTypEmploi(Short typEmploi) {
 		this.typEmploi = typEmploi;
 	}
 
@@ -409,11 +411,11 @@ public class MembreDto {
 		this.dateContrat = dateContrat;
 	}
 
-	public int getLDep() {
+	public Integer getLDep() {
 		return lDep;
 	}
 
-	public void setLDep(int lDep) {
+	public void setLDep(Integer lDep) {
 		this.lDep = lDep;
 	}
 
@@ -431,6 +433,14 @@ public class MembreDto {
 
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
+	}
+
+	public Long  getTotalRecords() {
+		return totalRecords;
+	}
+
+	public void setTotalRecords(Long  totalRecords) {
+		this.totalRecords = totalRecords;
 	}
 
 	

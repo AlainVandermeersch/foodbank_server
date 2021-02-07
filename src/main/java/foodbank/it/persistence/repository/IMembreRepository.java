@@ -12,4 +12,5 @@ public interface IMembreRepository  extends PagingAndSortingRepository<Membre, I
 	Optional<Membre> findByBatId(int batId);
     void deleteByBatId(int batId);
     Page<Membre> findByBanqueObjectBankShortName( String bankShortName,Pageable pageable);
+    Page<Membre> findByLienDis( String lienDis,Pageable pageable);
 }

@@ -47,5 +47,9 @@ public class MembreServiceImpl implements IMembreService{
 		return MembreRepository.findByBanqueObjectBankShortName( bankShortName, pageable);
 	
 	}
+	@Override
+	public Page<Membre> findByLienDis(String lienDis, Pageable pageable) {
+		return MembreRepository.findByLienDis(lienDis, pageable);
+	}
 }
 	

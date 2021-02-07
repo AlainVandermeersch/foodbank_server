@@ -1,5 +1,7 @@
 package foodbank.it.web.controller;
 
+import static java.util.Objects.isNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Arrays;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -46,31 +49,35 @@ public class MembreController {
     public MembreDto findOne(@PathVariable Integer batId) {
         Membre entity = MembreService.findByBatId(batId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return convertToDto(entity);
+        return convertToDto(entity,1);
     }
     
     @CrossOrigin
     @GetMapping("membres/")
-    public Collection<MembreDto> find( @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String batId) {
-    	int pageNumber=0;
-        int pageSize = 10;
-        Iterable<Membre> selectedMembres = null;
+    public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
+    	int intOffset = Integer.parseInt(offset);
+    	int intRows = Integer.parseInt(rows);
+    	int pageNumber=intOffset/intRows; // Java throws away remainder of division
+        int pageSize = intRows;
+        Page<Membre> selectedMembres = null;
         List<MembreDto> MembreDtos = new ArrayList<>();
         if (bankShortName == null) {
-        	if (batId == null) {
+        	if (lienDis == null) {
         		selectedMembres = this.MembreService.findAll(PageRequest.of(pageNumber, pageSize));
-        		selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p)));
+        		long totalRecords = selectedMembres.getTotalElements();
+        		selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
         	}
         	else {
-        		Optional<Membre> myMembre = this.MembreService.findByBatId(Integer.parseInt(batId));
-        		myMembre.ifPresent(org-> MembreDtos.add(convertToDto( org)));
+        		selectedMembres = this.MembreService.findByLienDis(lienDis, PageRequest.of(pageNumber, pageSize));
+        		long totalRecords = selectedMembres.getTotalElements();
+        		selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
         	}
         	
         }
         else {
         	selectedMembres = this.MembreService.findByBanqueObjectBankShortName(bankShortName,PageRequest.of(pageNumber, pageSize));
-        	// selectedMembres = this.MembreService.findAll();
-        	selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p)));
+        	long totalRecords = selectedMembres.getTotalElements();
+        	selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
         }
         
         
@@ -80,7 +87,7 @@ public class MembreController {
     @PutMapping("membre/{batId}")
     public MembreDto updateMembre(@PathVariable("batId") Integer batId, @RequestBody MembreDto updatedMembre) {
         Membre MembreEntity = convertToEntity(updatedMembre);
-        return this.convertToDto(this.MembreService.save(MembreEntity));
+        return this.convertToDto(this.MembreService.save(MembreEntity),1);
     }
     @CrossOrigin
     @DeleteMapping("membre/{batId}")
@@ -95,15 +102,22 @@ public class MembreController {
         Membre entity = convertToEntity(newMembre);
         // Alain todo later entity.setDateCreated(LocalDate.now());
         Membre Membre = this.MembreService.save(entity);        
-        return this.convertToDto(Membre);
+        return this.convertToDto(Membre,1);
     }
-    protected MembreDto convertToDto(Membre entity) {
+    protected MembreDto convertToDto(Membre entity,long totalRecords) {
+    	String bankShortName = "";
+    	String bankName = "";
+    	Banque banqueObject = entity.getBanqueObject();
+    	if ( ! isNull(banqueObject)) {
+    		bankShortName = banqueObject.getBankShortName();
+    		bankName = banqueObject.getBankName();
+    	} 
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
 				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(), entity.getLastVisit(), entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
-				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(), entity.getBanqueObject().getBankShortName(),entity.getBanqueObject().getBankName()  );    
+				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(), bankShortName,bankName,totalRecords  );    
         return dto;
     }
 
