@@ -74,7 +74,7 @@ public class MembreController {
         
         Page<Membre> selectedMembres = null;
         List<MembreDto> MembreDtos = new ArrayList<>();
-        
+        if (searchField == null) searchField = "";
         switch(searchField) {
        
         	case "nom":
