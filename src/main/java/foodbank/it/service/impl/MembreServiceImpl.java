@@ -51,5 +51,75 @@ public class MembreServiceImpl implements IMembreService{
 	public Page<Membre> findByLienDis(String lienDis, Pageable pageable) {
 		return MembreRepository.findByLienDis(lienDis, pageable);
 	}
+	@Override
+	public Page<Membre> findByNomContaining(String search, Pageable pageRequest) {
+			return MembreRepository.findByNomContaining(search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByLienDisAndNomContaining(String lienDis, String search, Pageable pageRequest) {
+		return MembreRepository.findByLienDisAndNomContaining(lienDis, search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByBanqueObjectBankShortNameAndNomContaining(String bankShortName, String search,
+			Pageable pageRequest) {
+		return MembreRepository.findByBanqueObjectBankShortNameAndNomContaining( bankShortName,search,
+			pageRequest);
+	}
+	@Override
+	public Page<Membre> findByPrenomContaining(String search, Pageable pageRequest) {
+			return MembreRepository.findByPrenomContaining(search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByLienDisAndPrenomContaining(String lienDis, String search, Pageable pageRequest) {
+		return MembreRepository.findByLienDisAndPrenomContaining(lienDis, search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByBanqueObjectBankShortNameAndPrenomContaining(String bankShortName, String search,
+			Pageable pageRequest) {
+		return MembreRepository.findByBanqueObjectBankShortNameAndPrenomContaining( bankShortName,search,
+			pageRequest);
+	}
+	@Override
+	public Page<Membre> findByAddressContaining(String search, Pageable pageRequest) {
+			return MembreRepository.findByAddressContaining(search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByLienDisAndAddressContaining(String lienDis, String search, Pageable pageRequest) {
+		return MembreRepository.findByLienDisAndAddressContaining(lienDis, search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByBanqueObjectBankShortNameAndAddressContaining(String bankShortName, String search,
+			Pageable pageRequest) {
+		return MembreRepository.findByBanqueObjectBankShortNameAndAddressContaining( bankShortName,search,
+			pageRequest);
+	}
+	@Override
+	public Page<Membre> findByZipContaining(String search, Pageable pageRequest) {
+			return MembreRepository.findByZipContaining(search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByLienDisAndZipContaining(String lienDis, String search, Pageable pageRequest) {
+		return MembreRepository.findByLienDisAndZipContaining(lienDis, search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByBanqueObjectBankShortNameAndZipContaining(String bankShortName, String search,
+			Pageable pageRequest) {
+		return MembreRepository.findByBanqueObjectBankShortNameAndZipContaining( bankShortName,search,
+			pageRequest);
+	}
+	@Override
+	public Page<Membre> findByCityContaining(String search, Pageable pageRequest) {
+			return MembreRepository.findByCityContaining(search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByLienDisAndCityContaining(String lienDis, String search, Pageable pageRequest) {
+		return MembreRepository.findByLienDisAndCityContaining(lienDis, search, pageRequest);
+	}
+	@Override
+	public Page<Membre> findByBanqueObjectBankShortNameAndCityContaining(String bankShortName, String search,
+			Pageable pageRequest) {
+		return MembreRepository.findByBanqueObjectBankShortNameAndCityContaining( bankShortName,search,
+			pageRequest);
+	}
 }
 	

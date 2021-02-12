@@ -19,4 +19,36 @@ public interface IMembreService {
     Page<Membre> findAll(Pageable pageable);
 
     void delete(int batId);
+
+	Page<Membre> findByNomContaining(String search, Pageable pageRequest);
+
+	Page<Membre> findByLienDisAndNomContaining(String lienDis, String search, Pageable pageRequest);
+
+	Page<Membre> findByBanqueObjectBankShortNameAndNomContaining(String bankShortName, String search,
+			Pageable pageRequest);
+	
+	Page<Membre> findByPrenomContaining(String search, Pageable pageRequest);
+
+	Page<Membre> findByLienDisAndPrenomContaining(String lienDis, String search, Pageable pageRequest);
+
+	Page<Membre> findByBanqueObjectBankShortNameAndPrenomContaining(String bankShortName, String search,
+			Pageable pageRequest);
+	Page<Membre> findByAddressContaining(String search, Pageable pageRequest);
+
+	Page<Membre> findByLienDisAndAddressContaining(String lienDis, String search, Pageable pageRequest);
+
+	Page<Membre> findByBanqueObjectBankShortNameAndAddressContaining(String bankShortName, String search,
+			Pageable pageRequest);
+	Page<Membre> findByZipContaining(String search, Pageable pageRequest);
+
+	Page<Membre> findByLienDisAndZipContaining(String lienDis, String search, Pageable pageRequest);
+
+	Page<Membre> findByBanqueObjectBankShortNameAndZipContaining(String bankShortName, String search,
+			Pageable pageRequest);
+	Page<Membre> findByCityContaining(String search, Pageable pageRequest);
+
+	Page<Membre> findByLienDisAndCityContaining(String lienDis, String search, Pageable pageRequest);
+
+	Page<Membre> findByBanqueObjectBankShortNameAndCityContaining(String bankShortName, String search,
+			Pageable pageRequest);
 }

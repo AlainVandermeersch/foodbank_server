@@ -58,6 +58,7 @@ public class MembreController {
     @GetMapping("membres/")
     public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
+    		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue,
     		@RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -73,25 +74,121 @@ public class MembreController {
         
         Page<Membre> selectedMembres = null;
         List<MembreDto> MembreDtos = new ArrayList<>();
-        if (bankShortName == null) {
-        	if (lienDis == null) {
-        		selectedMembres = this.MembreService.findAll(pageRequest);
-        		long totalRecords = selectedMembres.getTotalElements();
-        		selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
-        	}
-        	else {
-        		selectedMembres = this.MembreService.findByLienDis(lienDis, pageRequest);
-        		long totalRecords = selectedMembres.getTotalElements();
-        		selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
-        	}
-        	
-        }
-        else {
-        	selectedMembres = this.MembreService.findByBanqueObjectBankShortName(bankShortName,pageRequest);
-        	long totalRecords = selectedMembres.getTotalElements();
-        	selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p,totalRecords)));
-        }
         
+        switch(searchField) {
+       
+        	case "nom":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedMembres = this.MembreService.findByNomContaining(searchValue,pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedMembres = this.MembreService.findByLienDisAndNomContaining(lienDis,searchValue, pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndNomContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedMembres.getTotalElements();
+    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "prenom":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedMembres = this.MembreService.findByPrenomContaining(searchValue,pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedMembres = this.MembreService.findByLienDisAndPrenomContaining(lienDis,searchValue, pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndPrenomContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedMembres.getTotalElements();
+    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "address":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedMembres = this.MembreService.findByAddressContaining(searchValue,pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedMembres = this.MembreService.findByLienDisAndAddressContaining(lienDis,searchValue, pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndAddressContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedMembres.getTotalElements();
+    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "zip":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedMembres = this.MembreService.findByZipContaining(searchValue,pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedMembres = this.MembreService.findByLienDisAndZipContaining(lienDis,searchValue, pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndZipContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedMembres.getTotalElements();
+    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "city":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedMembres = this.MembreService.findByCityContaining(searchValue,pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedMembres = this.MembreService.findByLienDisAndCityContaining(lienDis,searchValue, pageRequest);
+    					long totalRecords = selectedMembres.getTotalElements();
+    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndCityContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedMembres.getTotalElements();
+    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        		
+        	default:
+        	
+        		if (bankShortName == null) {
+				if (lienDis == null) {
+					selectedMembres = this.MembreService.findAll(pageRequest);
+					long totalRecords = selectedMembres.getTotalElements();
+					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+				} else {
+					selectedMembres = this.MembreService.findByLienDis(lienDis, pageRequest);
+					long totalRecords = selectedMembres.getTotalElements();
+					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+				}
+
+			} else {
+				selectedMembres = this.MembreService.findByBanqueObjectBankShortName(bankShortName, pageRequest);
+				long totalRecords = selectedMembres.getTotalElements();
+				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
+			}
+        }
+       
+   
         
         return MembreDtos;
     }
