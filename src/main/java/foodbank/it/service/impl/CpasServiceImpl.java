@@ -1,6 +1,9 @@
 package foodbank.it.service.impl;
 
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Cpas;
@@ -21,25 +24,31 @@ public class CpasServiceImpl implements ICpasService{
 	}
 
 	@Override
-	public Iterable<Cpas> findByCpasZip(String cpasZip) {
-		return CpasRepository.findByCpasZip(cpasZip);
-	}
-
-	@Override
 	public Cpas save(Cpas Cpas) {
 		return CpasRepository.save(Cpas);
 		
 	}
-
-	@Override
-	public Iterable<Cpas> findAll() {
-		return CpasRepository.findAll();
-	}
+	
 
 	@Override
 	public void delete(int cpasId) {
 		CpasRepository.deleteByCpasId(cpasId);
 		
+	}
+
+	@Override
+	public Page<Cpas> findAll(Pageable pageable) {
+		return CpasRepository.findAll(pageable);
+	}
+
+	@Override
+	public Page<Cpas> findByCpasNameContaining(String search, Pageable pageRequest) {
+		return CpasRepository.findByCpasNameContaining(search, pageRequest);
+	}
+
+	@Override
+	public Page<Cpas> findByCpasZipContaining(String search, Pageable pageRequest) {
+		return CpasRepository.findByCpasZipContaining(search, pageRequest);
 	}
 
 }
