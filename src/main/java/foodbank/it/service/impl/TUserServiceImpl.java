@@ -1,12 +1,10 @@
 package foodbank.it.service.impl;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.persistence.repository.ITUserRepository;

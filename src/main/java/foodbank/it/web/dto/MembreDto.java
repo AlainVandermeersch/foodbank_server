@@ -3,8 +3,6 @@ package foodbank.it.web.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-
 public class MembreDto {
 	 private Integer batId;
 	 

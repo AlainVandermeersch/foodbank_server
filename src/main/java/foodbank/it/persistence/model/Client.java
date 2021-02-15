@@ -15,12 +15,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Version;
 
 @Entity(name="clients")
 public class Client implements Serializable {
 
- /** Primary key. */
+ /**
+	 * 
+	 */
+private static final long serialVersionUID = -8518218294613491486L;
+
+
+/**
+	 * 
+	 */
+
+
+
+/** Primary key. */
  protected static final String PK = "idClient";
 
  

@@ -12,12 +12,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Version;
 
 @Entity(name="banques")
 public class Banque implements Serializable {
 
-    /** Primary key. */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -585268270165829786L;
+
+
+	/** Primary key. */
     protected static final String PK = "bankId";
 
    

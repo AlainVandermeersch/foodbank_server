@@ -5,25 +5,25 @@ package foodbank.it.persistence.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Version;
 
 @Entity(name="organisations")
 public class Organisation implements Serializable {
 
-    /** Primary key. */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8424510676206873844L;
+
+
+	/** Primary key. */
     protected static final String PK = "idDis";
 
     

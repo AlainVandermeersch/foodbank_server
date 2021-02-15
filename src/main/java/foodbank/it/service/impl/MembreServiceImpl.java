@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.repository.IMembreRepository;
 import foodbank.it.service.IMembreService;
-import org.springframework.data.domain.Pageable;
+
 @Service
 public class MembreServiceImpl implements IMembreService{
 

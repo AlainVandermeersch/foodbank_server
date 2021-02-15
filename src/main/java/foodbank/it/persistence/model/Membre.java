@@ -17,13 +17,18 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 @Entity
 @Table(name="bat", indexes={@Index(name="batName", columnList="nom,prenom")})
 public class Membre implements Serializable {
 
- /** Primary key. */
+ /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8583967731561881562L;
+
+
+/** Primary key. */
  protected static final String PK = "batId";
 
  

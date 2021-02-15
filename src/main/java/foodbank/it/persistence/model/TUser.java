@@ -3,20 +3,22 @@
 package foodbank.it.persistence.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Version;
 
 @Entity(name="t_user")
 public class TUser implements Serializable {
 
-    /** Primary key. */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5478532363583734690L;
+
+	/** Primary key. */
     protected static final String PK = "idUser";
     
     @Id

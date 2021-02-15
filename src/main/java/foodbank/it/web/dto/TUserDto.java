@@ -1,6 +1,5 @@
 package foodbank.it.web.dto;
 
-import java.time.LocalDateTime;
 
 public class TUserDto {
     private String idUser;
