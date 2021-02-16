@@ -2,19 +2,20 @@ package foodbank.it.persistence.repository;
 
 import java.util.Optional;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import foodbank.it.persistence.model.TUser;
 
 
 
-public interface ITUserRepository extends CrudRepository<TUser, Integer>{
+public interface ITUserRepository extends PagingAndSortingRepository<TUser, Integer>{
 
     void deleteByIdUser(String idUser);
-
     Optional<TUser> findByIdUser(String idUser);
+    Page<TUser> findByIdCompany(String idCompany, Pageable pageRequest);
+    Page<TUser> findByIdOrg(int idOrg, Pageable pageRequest);
 
-	Iterable<TUser> findByIdCompany(String idCompany);
 	
-	Iterable<TUser> findByIdOrg(int idOrg);	
 }

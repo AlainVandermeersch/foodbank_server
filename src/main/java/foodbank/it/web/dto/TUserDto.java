@@ -43,6 +43,8 @@ public class TUserDto {
     private int lienBanque;
      
     private int lienCpas;
+    
+    private Long  totalRecords;
      
     
 
@@ -51,7 +53,7 @@ public class TUserDto {
       
     }
     public TUserDto(String idUser, String userName, String idCompany, int idOrg, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead, int gestAsso,
-        int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas) {
+        int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas,Long  totalRecords) {
         super();
         this.idUser = idUser;
         this.userName = userName;
@@ -74,6 +76,7 @@ public class TUserDto {
         this.gestDon = gestDon;
         this.lienBanque = lienBanque;
         this.lienCpas = lienCpas;
+        this.totalRecords = totalRecords;
         
     }
 
@@ -245,7 +248,13 @@ public class TUserDto {
         this.lienCpas = lienCpas;
     }
    
+    public Long  getTotalRecords() {
+		return totalRecords;
+	}
 
+	public void setTotalRecords(Long  totalRecords) {
+		this.totalRecords = totalRecords;
+	}
    
     
 

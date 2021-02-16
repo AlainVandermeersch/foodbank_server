@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,22 +42,49 @@ public class TUserController {
     public TUserDto findOne(@PathVariable String idUser) {
         TUser entity = TUserService.findByIdUser(idUser)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return convertToDto(entity);
+        return convertToDto(entity,(long) 1);
     }
    
    
 
     @CrossOrigin
     @GetMapping("users/")     
-    public Collection<TUserDto> find( @RequestParam(required = false) String idCompany,@RequestParam(required = false) String idOrg )  {
-        Iterable<TUser> selectedTUsers = null;
-        if (idCompany == null) {
-        	if (idOrg == null) selectedTUsers = this.TUserService.findAll();
-        	else selectedTUsers = this.TUserService.findByIdOrg(Integer.parseInt(idOrg));
+    public Collection<TUserDto> find( @RequestParam String offset, @RequestParam String rows, 
+    		@RequestParam String sortField, @RequestParam String sortOrder, 
+    		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue, 
+    		@RequestParam(required = false) String idCompany,@RequestParam(required = false) String idOrg )  {
+    	int intOffset = Integer.parseInt(offset);
+    	int intRows = Integer.parseInt(rows);
+    	int pageNumber=intOffset/intRows; // Java throws away remainder of division
+        int pageSize = intRows;
+        Pageable pageRequest = null;
+        if (sortOrder.equals("1")) {
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).ascending());
         }
-        else selectedTUsers = this.TUserService.findByIdCompany(idCompany);
+        else {
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
+        }   
         List<TUserDto> TUserDtos = new ArrayList<>();
-        selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p)));
+        Page<TUser> selectedTUsers = null;
+        if (idCompany == null) {
+        	if (idOrg == null) { 
+        		selectedTUsers = this.TUserService.findAll(pageRequest);
+        		long totalRecords = selectedTUsers.getTotalElements();
+        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
+        	}
+        	else { 
+        		selectedTUsers = this.TUserService.findByIdOrg(Integer.parseInt(idOrg),pageRequest);
+        		long totalRecordsOrg = selectedTUsers.getTotalElements();
+        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
+        	}
+        }
+        else {
+        	selectedTUsers = this.TUserService.findByIdCompany(idCompany,pageRequest);
+        	long totalRecordsBanque = selectedTUsers.getTotalElements();
+    		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
+        }
+       
+       
         return TUserDtos;
     }
     
@@ -61,7 +92,7 @@ public class TUserController {
     @PutMapping("user/{idUser}")
     public TUserDto updateTUser(@PathVariable("idUser") String idUser, @RequestBody TUserDto updatedTUser) {
         TUser TUserEntity = convertToEntity(updatedTUser);
-        return this.convertToDto(this.TUserService.save(TUserEntity));
+        return this.convertToDto(this.TUserService.save(TUserEntity),(long) 1);
     }
     @CrossOrigin
     @DeleteMapping("user/{idUser}")
@@ -76,13 +107,13 @@ public class TUserController {
         TUser entity = convertToEntity(newTUser);
         // Alain todo later entity.setDateCreated(LocalDate.now());
         TUser TUser = this.TUserService.save(entity);        
-        return this.convertToDto(TUser);
+        return this.convertToDto(TUser, (long) 1);
     }
 
 
-    protected TUserDto convertToDto(TUser entity) {
+    protected TUserDto convertToDto(TUser entity,Long  totalRecords) {
         TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), entity.getActif(), entity.getRights(), entity.getPassword(), entity.getDepot(), entity.getDroit1(), entity.getEmail(), entity.getGestBen(), entity.getGestInv(), entity.getGestFead(), entity.getGestAsso(),
-            entity.getGestCpas(), entity.getGestMemb(), entity.getGestDon(), entity.getLienBanque(), entity.getLienCpas());       
+            entity.getGestCpas(), entity.getGestMemb(), entity.getGestDon(), entity.getLienBanque(), entity.getLienCpas(),totalRecords);       
         return dto;
     }
 

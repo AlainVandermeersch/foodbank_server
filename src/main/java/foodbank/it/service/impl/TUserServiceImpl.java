@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.TUser;
@@ -34,27 +36,31 @@ public class TUserServiceImpl implements ITUserService {
     }
 
     @Override
-    public Iterable<TUser> findAll() {
-        return TUserRepository.findAll();
-    }
-
-    @Override
     @Transactional
     public void delete(String idUser) {
         TUserRepository.deleteByIdUser(idUser);
     }
+
+
+	@Override
+	public Page<TUser> findAll(Pageable pageRequest) {
+		return TUserRepository.findAll(pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdCompany(String idCompany, Pageable pageRequest) {
+		return TUserRepository.findByIdCompany(idCompany, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdOrg(int idOrg, Pageable pageRequest) {
+		return TUserRepository.findByIdOrg(idOrg, pageRequest);
+	}
     
 	
-	@Override
-	public Iterable<TUser> findByIdCompany(String idCompany) {
-		return  TUserRepository.findByIdCompany(idCompany);
-	}
-
-
-	@Override
-	public Iterable<TUser> findByIdOrg(int idOrg) {
-		return  TUserRepository.findByIdOrg(idOrg);
-	}
+	
 
     
 
