@@ -90,7 +90,7 @@ public class OrganisationController {
         return this.convertToDto(Organisation);
     }
     protected OrganisationDto convertToDto(Organisation entity) {
-        OrganisationDto dto = new OrganisationDto(entity.getIdDis(),entity.getLienBanque(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
+        OrganisationDto dto = new OrganisationDto(entity.getIdDis(),entity.getLienBanque(), entity.getRefInt(),  entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(),entity.getBanque(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), entity.getActif(), entity.getCivilite(), entity.getNom(),
@@ -99,7 +99,7 @@ public class OrganisationController {
 				entity.getPrenomTres(), entity.getNomTres(), entity.getTelTres(), entity.getGsmTres(), entity.getEmailPres(), entity.getEmailVp(),
 				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
 				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(), entity.getCpasyN(), entity.getLienCpas(),
-				entity.getBirbyN(), entity.getDepyN(), entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
+				entity.getDepyN(), entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
 				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), entity.getSusp(),
 				entity.getStopSusp(), entity.getRem(), entity.getMsonac(), entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
 				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getNEq(), entity.getNSen(), entity.getDepPrinc(),
@@ -115,7 +115,7 @@ public class OrganisationController {
     protected Organisation convertToEntity(OrganisationDto dto) {
     	Banque banqueObject = this.BanqueService.findByBankId(dto.getLienBanque()).get();
     	    
-    	Organisation myOrganisation = new Organisation( dto.getIdDis(),dto.getLienBanque(), dto.getRefInt(), dto.getBirbCode(), dto.getLienDepot(),
+    	Organisation myOrganisation = new Organisation( dto.getIdDis(),dto.getLienBanque(), dto.getRefInt(),  dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
 				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), dto.getBanque(),
 				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), dto.getActif(), dto.getCivilite(), dto.getNom(),
@@ -124,7 +124,7 @@ public class OrganisationController {
 				dto.getPrenomTres(), dto.getNomTres(), dto.getTelTres(), dto.getGsmTres(), dto.getEmailPres(), dto.getEmailVp(),
 				dto.getEmailSec(), dto.getEmailTres(), dto.getTelPres(), dto.getGsmPres(), dto.getDisprog(), dto.getAfsca(),
 				dto.isWebauthority(), dto.getLangue(), dto.getLastvisit(), dto.getNbrefix(), dto.getCpasyN(), dto.getLienCpas(),
-				dto.getBirbyN(), dto.getDepyN(), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
+				dto.getDepyN(), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
 				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), dto.getSusp(),
 				dto.getStopSusp(), dto.getRem(), dto.getMsonac(), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
 				dto.getnFam(), dto.getnPers(), dto.getnNour(), dto.getnBebe(), dto.getnEnf(), dto.getnAdo(), dto.getnEq(), dto.getnSen(), dto.getDepPrinc(),

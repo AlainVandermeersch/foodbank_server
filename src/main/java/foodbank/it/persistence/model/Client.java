@@ -515,6 +515,7 @@ private static final long serialVersionUID = -8518218294613491486L;
   * @return the current value of genre
   */
  public int getGenre() {
+	 if (genre == null ) return 0;
      return genre;
  }
 
@@ -623,6 +624,7 @@ private static final long serialVersionUID = -8518218294613491486L;
   * @return the current value of lCpas
   */
  public short getLCpas() {
+	 if (lCpas == null ) return 0;
      return lCpas;
  }
 
@@ -731,6 +733,7 @@ private static final long serialVersionUID = -8518218294613491486L;
   * @return the current value of genreconj
   */
  public int getGenreconj() {
+	 if (genreconj == null ) return 0;
      return genreconj;
  }
 

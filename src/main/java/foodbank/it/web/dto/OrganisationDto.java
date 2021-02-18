@@ -9,8 +9,6 @@ public class OrganisationDto {
 	     
 	    private String refInt;
 	     
-	    private String birbCode;
-	    
 	    private int lienDepot;
 	     
 	    private String societe;
@@ -25,7 +23,7 @@ public class OrganisationDto {
 	     
 	    private String localite;
 	    
-	    private short pays;
+	    private Short pays;
 	   
 	    private String tva;
 	    private String website;
@@ -34,23 +32,23 @@ public class OrganisationDto {
 	   
 	    private String gsm;
 
-	    private short daten; 
+	    private Short daten; 
 	    private String banque;
 	   
-	    private short region;
+	    private Short region;
 	    private String iban;
 	    private String classique;
 	    private String bic;
 	  
-	    private short actif;
+	    private Short actif;
 	    
-	    private short civilite;
+	    private Short civilite;
 	  
 	    private String nom;
 	   
 	    private String prenom;
 	   
-	    private short civiliteVp;
+	    private Short civiliteVp;
 	    
 	    private String prenomVp;
 	    
@@ -60,7 +58,7 @@ public class OrganisationDto {
 	    
 	    private String gsmVp;
 	   
-	    private short civiliteSec;
+	    private Short civiliteSec;
 	   
 	    private String prenomSec;
 	    
@@ -70,7 +68,7 @@ public class OrganisationDto {
 	   
 	    private String gsmSec;
 	    
-	    private short civiliteTres;
+	    private Short civiliteTres;
 	    
 	    private String prenomTres;
 	   
@@ -98,84 +96,82 @@ public class OrganisationDto {
 	    
 	    private boolean webauthority;
 	    
-	    private short langue;
+	    private Short langue;
 	    private LocalDateTime lastvisit;
 	   
-	    private int nbrefix;
+	    private Integer  nbrefix;
 	    
-	    private short cpasyN;
+	    private Short cpasyN;
 	   
-	    private short lienCpas;
-	    
-	    private short birbyN;
-	    
-	    private short depyN;
+	    private Short lienCpas;
+	      
+	    private Short depyN;
 	  
-	    private short logBirb;
+	    private Short logBirb;
 	   
-	    private short actComp1;
+	    private Short actComp1;
 	    
-	    private short actComp2;
+	    private Short actComp2;
 	    
-	    private short actComp3;
+	    private Short actComp3;
 	   
-	    private short actComp4;
+	    private Short actComp4;
 	   
-	    private short actComp5;
+	    private Short actComp5;
 	   
-	    private short actComp6;
+	    private Short actComp6;
 	   
 	    private String actComp7;
 	    
-	    private short nrTournee;
+	    private Short nrTournee;
 	   
-	    private short susp;
+	    private Short susp;
 	    
 	    private String stopSusp;
 	    
 	    private String rem;
 	    
-	    private short msonac;
+	    private Short msonac;
 	    
-	    private short classeFbba1;
+	    private Short classeFbba1;
 	   
-	    private short classeFbba2;
+	    private Short classeFbba2;
 	    
-	    private short classeFbba3;
+	    private Short classeFbba3;
 	   
-	    private int nFam;
+	    private Integer  nFam;
 	   
-	    private int nPers;
+	    private Integer  nPers;
 	   
-	    private int nNour;
+	    private Integer  nNour;
 	    
-	    private int nBebe;
+	    private Integer  nBebe;
 	   
-	    private int nEnf;
+	    private Integer  nEnf;
 	   
-	    private int nAdo;
+	    private Integer  nAdo;
 	   
 	    private BigDecimal nEq;
 	    
-	    private int nSen;
+	    private Integer  nSen;
 	   
-	    private short depPrinc;
+	    private Short depPrinc;
 	   
-	    private short gestBen;
+	    private Short gestBen;
 	   
-	    private short tourneeJour;
+	    private Short tourneeJour;
 	   
-	    private short tourneeSem;
+	    private Short tourneeSem;
 	    
-	    private short coldis;
+	    private Short coldis;
 	    
-	    private short lienGd;
+	    private Short lienGd;
 	    
-	    private short lienGs;
+	    private Short lienGs;
 	    
 	    private BigDecimal montCot;
 	   
-	    private int antenne;
+	    private Integer  antenne;
 	    
 	    private String afsca1;
 	   
@@ -183,17 +179,17 @@ public class OrganisationDto {
 	    
 	    private String afsca3;
 	   
-	    private int nrFead;
+	    private Integer  nrFead;
 	   
-	    private short tourneeMois;
+	    private Short tourneeMois;
 	   
-	    private short distrListPdt;
+	    private Short distrListPdt;
 	  
-	    private short distrListVp;
+	    private Short distrListVp;
 	    
-	    private short distrListSec;
+	    private Short distrListSec;
 	   
-	    private short distrListTres;
+	    private Short distrListTres;
 	    
 	    private String adresse2;
 	    
@@ -201,37 +197,37 @@ public class OrganisationDto {
 	   
 	    private String localite2;
 	    
-	    private short pays2;
+	    private Short pays2;
 	  
 	    private String dateReg;
 	  
 	    private String fax;
 	   
-	    private short feadN;
+	    private Short feadN;
 	    
 	    private String remLivr;
 	    
-	    private short cotAnnuelle;
+	    private Short cotAnnuelle;
 	   
-	    private int cotMonths;
+	    private Integer  cotMonths;
 	    
-	    private int cotSup;
+	    private Integer cotSup;
 	   
-	    private int cotMonthsSup;
+	    private Integer  cotMonthsSup;
 	    
-	    private int depotram;
+	    private Integer  depotram;
 	    
 	    private String lupdUserName;
 	   
 	    private LocalDateTime lupdTs;
 	    
-	    private short lienBanque;
+	    private Short lienBanque;
 	    
-	    public short getLienBanque() {
+	    public Short getLienBanque() {
 			return lienBanque;
 		}
 
-		public void setLienBanque(short lienBanque) {
+		public void setLienBanque(Short lienBanque) {
 			this.lienBanque = lienBanque;
 		}
 
@@ -259,30 +255,29 @@ public class OrganisationDto {
 	    	
 	    }
 
-		public OrganisationDto(int idDis, short lienBanque, String refInt, String birbCode, int lienDepot,
+		public OrganisationDto(int idDis, Short lienBanque, String refInt,  int lienDepot,
 				String societe, String adresse, String statut, String email, String cp, String localite,
-				short pays, String tva, String website, String tel, String gsm, short daten, String banque,
-				short region, String iban, String classique, String bic, short actif, short civilite, String nom,
-				String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp,
-				short civiliteSec, String prenomSec, String nomSec, String telSec, String gsmSec, short civiliteTres,
+				Short pays, String tva, String website, String tel, String gsm, Short daten, String banque,
+				Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom,
+				String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp,
+				Short civiliteSec, String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres,
 				String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp,
 				String emailSec, String emailTres, String telPres, String gsmPres, String disprog, String afsca,
-				boolean webauthority, short langue, LocalDateTime lastvisit, int nbrefix, short cpasyN, short lienCpas,
-				short birbyN, short depyN, short logBirb, short actComp1, short actComp2, short actComp3,
-				short actComp4, short actComp5, short actComp6, String actComp7, short nrTournee, short susp,
-				String stopSusp, String rem, short msonac, short classeFbba1, short classeFbba2, short classeFbba3,
-				int nFam, int nPers, int nNour, int nBebe, int nEnf, int nAdo, BigDecimal nEq, int nSen, short depPrinc,
-				short gestBen, short tourneeJour, short tourneeSem, short coldis, short lienGd, short lienGs,
-				BigDecimal montCot, int antenne, String afsca1, String afsca2, String afsca3, int nrFead,
-				short tourneeMois, short distrListPdt, short distrListVp, short distrListSec, short distrListTres,
-				String adresse2, String cp2, String localite2, short pays2, String dateReg, String fax, short feadN,
-				String remLivr, short cotAnnuelle, int cotMonths, int cotSup, int cotMonthsSup, int depotram,
+				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, Short cpasyN, Short lienCpas,
+				Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
+				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp,
+				String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
+				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo, BigDecimal nEq, Integer  nSen, Short depPrinc,
+				Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs,
+				BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead,
+				Short tourneeMois, Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres,
+				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN,
+				String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup, Integer  cotMonthsSup, Integer  depotram,
 				String lupdUserName, LocalDateTime lupdTs, String bankShortName,String bankName ) {
 			super();
 			this.idDis = idDis;
 			this.lienBanque = lienBanque;
 			this.refInt = refInt;
-			this.birbCode = birbCode;
 			this.lienDepot = lienDepot;
 			this.societe = societe;
 			this.adresse = adresse;
@@ -334,7 +329,6 @@ public class OrganisationDto {
 			this.nbrefix = nbrefix;
 			this.cpasyN = cpasyN;
 			this.lienCpas = lienCpas;
-			this.birbyN = birbyN;
 			this.depyN = depyN;
 			this.logBirb = logBirb;
 			this.actComp1 = actComp1;
@@ -413,16 +407,6 @@ public class OrganisationDto {
 			this.refInt = refInt;
 		}
 
-		
-
-		public String getBirbCode() {
-			return birbCode;
-		}
-
-		public void setBirbCode(String birbCode) {
-			this.birbCode = birbCode;
-		}
-
 		public int getLienDepot() {
 			return lienDepot;
 		}
@@ -479,11 +463,11 @@ public class OrganisationDto {
 			this.localite = localite;
 		}
 
-		public short getPays() {
+		public Short getPays() {
 			return pays;
 		}
 
-		public void setPays(short pays) {
+		public void setPays(Short pays) {
 			this.pays = pays;
 		}
 
@@ -519,11 +503,11 @@ public class OrganisationDto {
 			this.gsm = gsm;
 		}
 
-		public short getDaten() {
+		public Short getDaten() {
 			return daten;
 		}
 
-		public void setDaten(short daten) {
+		public void setDaten(Short daten) {
 			this.daten = daten;
 		}
 
@@ -535,11 +519,11 @@ public class OrganisationDto {
 			this.banque = banque;
 		}
 
-		public short getRegion() {
+		public Short getRegion() {
 			return region;
 		}
 
-		public void setRegion(short region) {
+		public void setRegion(Short region) {
 			this.region = region;
 		}
 
@@ -567,19 +551,19 @@ public class OrganisationDto {
 			this.bic = bic;
 		}
 
-		public short getActif() {
+		public Short getActif() {
 			return actif;
 		}
 
-		public void setActif(short actif) {
+		public void setActif(Short actif) {
 			this.actif = actif;
 		}
 
-		public short getCivilite() {
+		public Short getCivilite() {
 			return civilite;
 		}
 
-		public void setCivilite(short civilite) {
+		public void setCivilite(Short civilite) {
 			this.civilite = civilite;
 		}
 
@@ -599,11 +583,11 @@ public class OrganisationDto {
 			this.prenom = prenom;
 		}
 
-		public short getCiviliteVp() {
+		public Short getCiviliteVp() {
 			return civiliteVp;
 		}
 
-		public void setCiviliteVp(short civiliteVp) {
+		public void setCiviliteVp(Short civiliteVp) {
 			this.civiliteVp = civiliteVp;
 		}
 
@@ -639,11 +623,11 @@ public class OrganisationDto {
 			this.gsmVp = gsmVp;
 		}
 
-		public short getCiviliteSec() {
+		public Short getCiviliteSec() {
 			return civiliteSec;
 		}
 
-		public void setCiviliteSec(short civiliteSec) {
+		public void setCiviliteSec(Short civiliteSec) {
 			this.civiliteSec = civiliteSec;
 		}
 
@@ -679,11 +663,11 @@ public class OrganisationDto {
 			this.gsmSec = gsmSec;
 		}
 
-		public short getCiviliteTres() {
+		public Short getCiviliteTres() {
 			return civiliteTres;
 		}
 
-		public void setCiviliteTres(short civiliteTres) {
+		public void setCiviliteTres(Short civiliteTres) {
 			this.civiliteTres = civiliteTres;
 		}
 
@@ -791,11 +775,11 @@ public class OrganisationDto {
 			this.webauthority = webauthority;
 		}
 
-		public short getLangue() {
+		public Short getLangue() {
 			return langue;
 		}
 
-		public void setLangue(short langue) {
+		public void setLangue(Short langue) {
 			this.langue = langue;
 		}
 
@@ -807,99 +791,92 @@ public class OrganisationDto {
 			this.lastvisit = lastvisit;
 		}
 
-		public int getNbrefix() {
+		public Integer  getNbrefix() {
 			return nbrefix;
 		}
 
-		public void setNbrefix(int nbrefix) {
+		public void setNbrefix(Integer  nbrefix) {
 			this.nbrefix = nbrefix;
 		}
 
-		public short getCpasyN() {
+		public Short getCpasyN() {
 			return cpasyN;
 		}
 
-		public void setCpasyN(short cpasyN) {
+		public void setCpasyN(Short cpasyN) {
 			this.cpasyN = cpasyN;
 		}
 
-		public short getLienCpas() {
+		public Short getLienCpas() {
 			return lienCpas;
 		}
 
-		public void setLienCpas(short lienCpas) {
+		public void setLienCpas(Short lienCpas) {
 			this.lienCpas = lienCpas;
 		}
 
-		public short getBirbyN() {
-			return birbyN;
-		}
-
-		public void setBirbyN(short birbyN) {
-			this.birbyN = birbyN;
-		}
-
-		public short getDepyN() {
+		
+		public Short getDepyN() {
 			return depyN;
 		}
 
-		public void setDepyN(short depyN) {
+		public void setDepyN(Short depyN) {
 			this.depyN = depyN;
 		}
 
-		public short getLogBirb() {
+		public Short getLogBirb() {
 			return logBirb;
 		}
 
-		public void setLogBirb(short logBirb) {
+		public void setLogBirb(Short logBirb) {
 			this.logBirb = logBirb;
 		}
 
-		public short getActComp1() {
+		public Short getActComp1() {
 			return actComp1;
 		}
 
-		public void setActComp1(short actComp1) {
+		public void setActComp1(Short actComp1) {
 			this.actComp1 = actComp1;
 		}
 
-		public short getActComp2() {
+		public Short getActComp2() {
 			return actComp2;
 		}
 
-		public void setActComp2(short actComp2) {
+		public void setActComp2(Short actComp2) {
 			this.actComp2 = actComp2;
 		}
 
-		public short getActComp3() {
+		public Short getActComp3() {
 			return actComp3;
 		}
 
-		public void setActComp3(short actComp3) {
+		public void setActComp3(Short actComp3) {
 			this.actComp3 = actComp3;
 		}
 
-		public short getActComp4() {
+		public Short getActComp4() {
 			return actComp4;
 		}
 
-		public void setActComp4(short actComp4) {
+		public void setActComp4(Short actComp4) {
 			this.actComp4 = actComp4;
 		}
 
-		public short getActComp5() {
+		public Short getActComp5() {
 			return actComp5;
 		}
 
-		public void setActComp5(short actComp5) {
+		public void setActComp5(Short actComp5) {
 			this.actComp5 = actComp5;
 		}
 
-		public short getActComp6() {
+		public Short getActComp6() {
 			return actComp6;
 		}
 
-		public void setActComp6(short actComp6) {
+		public void setActComp6(Short actComp6) {
 			this.actComp6 = actComp6;
 		}
 
@@ -911,19 +888,19 @@ public class OrganisationDto {
 			this.actComp7 = actComp7;
 		}
 
-		public short getNrTournee() {
+		public Short getNrTournee() {
 			return nrTournee;
 		}
 
-		public void setNrTournee(short nrTournee) {
+		public void setNrTournee(Short nrTournee) {
 			this.nrTournee = nrTournee;
 		}
 
-		public short getSusp() {
+		public Short getSusp() {
 			return susp;
 		}
 
-		public void setSusp(short susp) {
+		public void setSusp(Short susp) {
 			this.susp = susp;
 		}
 
@@ -943,83 +920,83 @@ public class OrganisationDto {
 			this.rem = rem;
 		}
 
-		public short getMsonac() {
+		public Short getMsonac() {
 			return msonac;
 		}
 
-		public void setMsonac(short msonac) {
+		public void setMsonac(Short msonac) {
 			this.msonac = msonac;
 		}
 
-		public short getClasseFbba1() {
+		public Short getClasseFbba1() {
 			return classeFbba1;
 		}
 
-		public void setClasseFbba1(short classeFbba1) {
+		public void setClasseFbba1(Short classeFbba1) {
 			this.classeFbba1 = classeFbba1;
 		}
 
-		public short getClasseFbba2() {
+		public Short getClasseFbba2() {
 			return classeFbba2;
 		}
 
-		public void setClasseFbba2(short classeFbba2) {
+		public void setClasseFbba2(Short classeFbba2) {
 			this.classeFbba2 = classeFbba2;
 		}
 
-		public short getClasseFbba3() {
+		public Short getClasseFbba3() {
 			return classeFbba3;
 		}
 
-		public void setClasseFbba3(short classeFbba3) {
+		public void setClasseFbba3(Short classeFbba3) {
 			this.classeFbba3 = classeFbba3;
 		}
 
-		public int getnFam() {
+		public Integer  getnFam() {
 			return nFam;
 		}
 
-		public void setnFam(int nFam) {
+		public void setnFam(Integer  nFam) {
 			this.nFam = nFam;
 		}
 
-		public int getnPers() {
+		public Integer  getnPers() {
 			return nPers;
 		}
 
-		public void setnPers(int nPers) {
+		public void setnPers(Integer  nPers) {
 			this.nPers = nPers;
 		}
 
-		public int getnNour() {
+		public Integer  getnNour() {
 			return nNour;
 		}
 
-		public void setnNour(int nNour) {
+		public void setnNour(Integer  nNour) {
 			this.nNour = nNour;
 		}
 
-		public int getnBebe() {
+		public Integer  getnBebe() {
 			return nBebe;
 		}
 
-		public void setnBebe(int nBebe) {
+		public void setnBebe(Integer  nBebe) {
 			this.nBebe = nBebe;
 		}
 
-		public int getnEnf() {
+		public Integer  getnEnf() {
 			return nEnf;
 		}
 
-		public void setnEnf(int nEnf) {
+		public void setnEnf(Integer  nEnf) {
 			this.nEnf = nEnf;
 		}
 
-		public int getnAdo() {
+		public Integer  getnAdo() {
 			return nAdo;
 		}
 
-		public void setnAdo(int nAdo) {
+		public void setnAdo(Integer  nAdo) {
 			this.nAdo = nAdo;
 		}
 
@@ -1031,67 +1008,67 @@ public class OrganisationDto {
 			this.nEq = nEq;
 		}
 
-		public int getnSen() {
+		public Integer  getnSen() {
 			return nSen;
 		}
 
-		public void setnSen(int nSen) {
+		public void setnSen(Integer  nSen) {
 			this.nSen = nSen;
 		}
 
-		public short getDepPrinc() {
+		public Short getDepPrinc() {
 			return depPrinc;
 		}
 
-		public void setDepPrinc(short depPrinc) {
+		public void setDepPrinc(Short depPrinc) {
 			this.depPrinc = depPrinc;
 		}
 
-		public short getGestBen() {
+		public Short getGestBen() {
 			return gestBen;
 		}
 
-		public void setGestBen(short gestBen) {
+		public void setGestBen(Short gestBen) {
 			this.gestBen = gestBen;
 		}
 
-		public short getTourneeJour() {
+		public Short getTourneeJour() {
 			return tourneeJour;
 		}
 
-		public void setTourneeJour(short tourneeJour) {
+		public void setTourneeJour(Short tourneeJour) {
 			this.tourneeJour = tourneeJour;
 		}
 
-		public short getTourneeSem() {
+		public Short getTourneeSem() {
 			return tourneeSem;
 		}
 
-		public void setTourneeSem(short tourneeSem) {
+		public void setTourneeSem(Short tourneeSem) {
 			this.tourneeSem = tourneeSem;
 		}
 
-		public short getColdis() {
+		public Short getColdis() {
 			return coldis;
 		}
 
-		public void setColdis(short coldis) {
+		public void setColdis(Short coldis) {
 			this.coldis = coldis;
 		}
 
-		public short getLienGd() {
+		public Short getLienGd() {
 			return lienGd;
 		}
 
-		public void setLienGd(short lienGd) {
+		public void setLienGd(Short lienGd) {
 			this.lienGd = lienGd;
 		}
 
-		public short getLienGs() {
+		public Short getLienGs() {
 			return lienGs;
 		}
 
-		public void setLienGs(short lienGs) {
+		public void setLienGs(Short lienGs) {
 			this.lienGs = lienGs;
 		}
 
@@ -1103,11 +1080,11 @@ public class OrganisationDto {
 			this.montCot = montCot;
 		}
 
-		public int getAntenne() {
+		public Integer  getAntenne() {
 			return antenne;
 		}
 
-		public void setAntenne(int antenne) {
+		public void setAntenne(Integer  antenne) {
 			this.antenne = antenne;
 		}
 
@@ -1135,51 +1112,51 @@ public class OrganisationDto {
 			this.afsca3 = afsca3;
 		}
 
-		public int getNrFead() {
+		public Integer  getNrFead() {
 			return nrFead;
 		}
 
-		public void setNrFead(int nrFead) {
+		public void setNrFead(Integer  nrFead) {
 			this.nrFead = nrFead;
 		}
 
-		public short getTourneeMois() {
+		public Short getTourneeMois() {
 			return tourneeMois;
 		}
 
-		public void setTourneeMois(short tourneeMois) {
+		public void setTourneeMois(Short tourneeMois) {
 			this.tourneeMois = tourneeMois;
 		}
 
-		public short getDistrListPdt() {
+		public Short getDistrListPdt() {
 			return distrListPdt;
 		}
 
-		public void setDistrListPdt(short distrListPdt) {
+		public void setDistrListPdt(Short distrListPdt) {
 			this.distrListPdt = distrListPdt;
 		}
 
-		public short getDistrListVp() {
+		public Short getDistrListVp() {
 			return distrListVp;
 		}
 
-		public void setDistrListVp(short distrListVp) {
+		public void setDistrListVp(Short distrListVp) {
 			this.distrListVp = distrListVp;
 		}
 
-		public short getDistrListSec() {
+		public Short getDistrListSec() {
 			return distrListSec;
 		}
 
-		public void setDistrListSec(short distrListSec) {
+		public void setDistrListSec(Short distrListSec) {
 			this.distrListSec = distrListSec;
 		}
 
-		public short getDistrListTres() {
+		public Short getDistrListTres() {
 			return distrListTres;
 		}
 
-		public void setDistrListTres(short distrListTres) {
+		public void setDistrListTres(Short distrListTres) {
 			this.distrListTres = distrListTres;
 		}
 
@@ -1207,11 +1184,11 @@ public class OrganisationDto {
 			this.localite2 = localite2;
 		}
 
-		public short getPays2() {
+		public Short getPays2() {
 			return pays2;
 		}
 
-		public void setPays2(short pays2) {
+		public void setPays2(Short pays2) {
 			this.pays2 = pays2;
 		}
 
@@ -1231,11 +1208,11 @@ public class OrganisationDto {
 			this.fax = fax;
 		}
 
-		public short getFeadN() {
+		public Short getFeadN() {
 			return feadN;
 		}
 
-		public void setFeadN(short feadN) {
+		public void setFeadN(Short feadN) {
 			this.feadN = feadN;
 		}
 
@@ -1247,43 +1224,43 @@ public class OrganisationDto {
 			this.remLivr = remLivr;
 		}
 
-		public short getCotAnnuelle() {
+		public Short getCotAnnuelle() {
 			return cotAnnuelle;
 		}
 
-		public void setCotAnnuelle(short cotAnnuelle) {
+		public void setCotAnnuelle(Short cotAnnuelle) {
 			this.cotAnnuelle = cotAnnuelle;
 		}
 
-		public int getCotMonths() {
+		public Integer  getCotMonths() {
 			return cotMonths;
 		}
 
-		public void setCotMonths(int cotMonths) {
+		public void setCotMonths(Integer  cotMonths) {
 			this.cotMonths = cotMonths;
 		}
 
-		public int getCotSup() {
+		public Integer getCotSup() {
 			return cotSup;
 		}
 
-		public void setCotSup(int cotSup) {
+		public void setCotSup(Integer cotSup) {
 			this.cotSup = cotSup;
 		}
 
-		public int getCotMonthsSup() {
+		public Integer  getCotMonthsSup() {
 			return cotMonthsSup;
 		}
 
-		public void setCotMonthsSup(int cotMonthsSup) {
+		public void setCotMonthsSup(Integer  cotMonthsSup) {
 			this.cotMonthsSup = cotMonthsSup;
 		}
 
-		public int getDepotram() {
+		public Integer  getDepotram() {
 			return depotram;
 		}
 
-		public void setDepotram(int depotram) {
+		public void setDepotram(Integer  depotram) {
 			this.depotram = depotram;
 		}
 

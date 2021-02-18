@@ -33,8 +33,6 @@ public class Organisation implements Serializable {
     private int idDis;
     @Column(name="ref_int", length=15)
     private String refInt;   
-    @Column(name="BirbCode", length=10)
-    private String birbCode;
     @Column(name="lien_depot", nullable=false, precision=10)
     private int lienDepot;
     @Column(nullable=false, length=100)
@@ -50,7 +48,7 @@ public class Organisation implements Serializable {
     @Column(length=50)
     private String localite;
     @Column(nullable=false, precision=5)
-    private short pays;
+    private Short pays;
     @Column(length=50)
     private String tva;
     private String website;
@@ -59,23 +57,23 @@ public class Organisation implements Serializable {
     @Column(length=50)
     private String gsm;
     @Column(precision=5)
-    private short daten;
+    private Short daten;
     private String banque;
     @Column(precision=3)
-    private short region;
+    private Short region;
     private String iban;
     private String classique;
     private String bic;
     @Column(nullable=false, precision=3)
-    private short actif;
+    private Short actif;
     @Column(precision=3)
-    private short civilite;
+    private Short civilite;
     @Column(length=50)
     private String nom;
     @Column(length=50)
     private String prenom;
     @Column(name="civiliteVP", precision=5)
-    private short civiliteVp;
+    private Short civiliteVp;
     @Column(name="prenomVP", length=20)
     private String prenomVp;
     @Column(name="nomVP", length=30)
@@ -85,7 +83,7 @@ public class Organisation implements Serializable {
     @Column(name="gsmVP", length=20)
     private String gsmVp;
     @Column(name="civiliteSEC", precision=5)
-    private short civiliteSec;
+    private Short civiliteSec;
     @Column(name="prenomSEC", length=20)
     private String prenomSec;
     @Column(name="nomSEC", length=30)
@@ -95,7 +93,7 @@ public class Organisation implements Serializable {
     @Column(name="gsmSEC", length=20)
     private String gsmSec;
     @Column(name="civiliteTRES", precision=5)
-    private short civiliteTres;
+    private Short civiliteTres;
     @Column(name="prenomTRES", length=20)
     private String prenomTres;
     @Column(name="nomTRES", length=30)
@@ -122,83 +120,81 @@ public class Organisation implements Serializable {
     @Column(length=3)
     private boolean webauthority;
     @Column(precision=3)
-    private short langue;
+    private Short langue;
     private LocalDateTime lastvisit;
     @Column(precision=10)
-    private int nbrefix;
+    private Integer  nbrefix;
     @Column(name="cpasy_n", precision=3)
-    private short cpasyN;
+    private Short cpasyN;
     @Column(name="lien_cpas", precision=5)
-    private short lienCpas;
-    @Column(name="birby_n", precision=3)
-    private short birbyN;
+    private Short lienCpas;
     @Column(name="depy_n", precision=3)
-    private short depyN;
+    private Short depyN;
     @Column(name="log_birb", precision=3)
-    private short logBirb;
+    private Short logBirb;
     @Column(name="act_comp_1", precision=3)
-    private short actComp1;
+    private Short actComp1;
     @Column(name="act_comp_2", precision=3)
-    private short actComp2;
+    private Short actComp2;
     @Column(name="act_comp_3", precision=3)
-    private short actComp3;
+    private Short actComp3;
     @Column(name="act_comp_4", precision=3)
-    private short actComp4;
+    private Short actComp4;
     @Column(name="act_comp_5", precision=3)
-    private short actComp5;
+    private Short actComp5;
     @Column(name="act_comp_6", precision=3)
-    private short actComp6;
+    private Short actComp6;
     @Column(name="act_comp_7", length=100)
     private String actComp7;
     @Column(name="nr_tournee", precision=3)
-    private short nrTournee;
+    private Short nrTournee;
     @Column(nullable=false, precision=3)
-    private short susp;
+    private Short susp;
     @Column(name="stop_susp")
     private String stopSusp;
     private String rem;
     @Column(precision=3)
-    private short msonac;
+    private Short msonac;
     @Column(name="classe_fbba1", precision=3)
-    private short classeFbba1;
+    private Short classeFbba1;
     @Column(name="classe_fbba2", precision=3)
-    private short classeFbba2;
+    private Short classeFbba2;
     @Column(name="classe_fbba3", precision=3)
-    private short classeFbba3;
+    private Short classeFbba3;
     @Column(name="n_fam", precision=10)
-    private int nFam;
+    private Integer  nFam;
     @Column(name="n_pers", precision=10)
-    private int nPers;
+    private Integer  nPers;
     @Column(name="n_nour", precision=10)
-    private int nNour;
+    private Integer  nNour;
     @Column(name="n_bebe", precision=10)
-    private int nBebe;
+    private Integer  nBebe;
     @Column(name="n_enf", precision=10)
-    private int nEnf;
+    private Integer  nEnf;
     @Column(name="n_ado", precision=10)
-    private int nAdo;
+    private Integer  nAdo;
     @Column(name="n_eq", precision=10)
     private BigDecimal nEq;
     @Column(name="n_sen", precision=10)
-    private int nSen;
+    private Integer  nSen;
     @Column(name="dep_princ", precision=3)
-    private short depPrinc;
+    private Short depPrinc;
     @Column(name="gest_ben", precision=3)
-    private short gestBen;
+    private Short gestBen;
     @Column(name="tournee_jour", precision=3)
-    private short tourneeJour;
+    private Short tourneeJour;
     @Column(name="tournee_sem", precision=3)
-    private short tourneeSem;
+    private Short tourneeSem;
     @Column(precision=3)
-    private short coldis;
+    private Short coldis;
     @Column(name="lien_gd", precision=3)
-    private short lienGd;
+    private Short lienGd;
     @Column(name="lien_gs", precision=3)
-    private short lienGs;
+    private Short lienGs;
     @Column(name="mont_cot", precision=10)
     private BigDecimal montCot;
     @Column(precision=10)
-    private int antenne;
+    private Integer  antenne;
     @Column(length=15)
     private String afsca1;
     @Column(nullable=false, length=15)
@@ -206,17 +202,17 @@ public class Organisation implements Serializable {
     @Column(length=15)
     private String afsca3;
     @Column(name="nr_fead", precision=10)
-    private int nrFead;
+    private Integer  nrFead;
     @Column(name="tournee_mois", precision=3)
-    private short tourneeMois;
+    private Short tourneeMois;
     @Column(name="distr_list_pdt", precision=3)
-    private short distrListPdt;
+    private Short distrListPdt;
     @Column(name="distr_list_vp", precision=3)
-    private short distrListVp;
+    private Short distrListVp;
     @Column(name="distr_list_sec", precision=3)
-    private short distrListSec;
+    private Short distrListSec;
     @Column(name="distr_list_tres", precision=3)
-    private short distrListTres;
+    private Short distrListTres;
     @Column(length=100)
     private String adresse2;
     @Column(length=6)
@@ -224,37 +220,37 @@ public class Organisation implements Serializable {
     @Column(length=100)
     private String localite2;
     @Column(precision=3)
-    private short pays2;
+    private Short pays2;
     @Column(name="date_reg", length=10)
     private String dateReg;
     @Column(length=15)
     private String fax;
     @Column(name="fead_n", precision=3)
-    private short feadN;
+    private Short feadN;
     @Column(name="rem_livr")
     private String remLivr;
     @Column(name="cot_annuelle", precision=3)
-    private short cotAnnuelle;
+    private Short cotAnnuelle;
     @Column(name="cot_months", precision=10)
-    private int cotMonths;
+    private Integer  cotMonths;
     @Column(name="cot_sup", precision=10)
-    private int cotSup;
+    private Integer cotSup;
     @Column(name="cot_months_sup", precision=10)
-    private int cotMonthsSup;
+    private Integer  cotMonthsSup;
     @Column(precision=10)
-    private int depotram;
+    private Integer  depotram;
     @Column(name="LUPD_USER_NAME", length=45)
     private String lupdUserName;
     @Column(name="LUPD_TS")
     private LocalDateTime lupdTs;
     @Column(name="lien_banque", nullable=false, insertable = false, updatable = false, precision=3)
-    private short lienBanque;
+    private Short lienBanque;
     
-    public short getLienBanque() {
+    public Short getLienBanque() {
 		return lienBanque;
 	}
 
-	public void setLienBanque(short lienBanque) {
+	public void setLienBanque(Short lienBanque) {
 		this.lienBanque = lienBanque;
 	}
 
@@ -268,19 +264,18 @@ public class Organisation implements Serializable {
         super();
     }
 
-    public Organisation(int idDis,short lienBanQue, String refInt, String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, short pays, String tva, String website, String tel,
-        String gsm, short daten, String banque, short region, String iban, String classique, String bic, short actif, short civilite, String nom, String prenom, short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, short civiliteSec,
-        String prenomSec, String nomSec, String telSec, String gsmSec, short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
-        String disprog, String afsca, boolean webauthority, short langue, LocalDateTime lastvisit, int nbrefix, short cpasyN, short lienCpas, short birbyN, short depyN, short logBirb, short actComp1, short actComp2, short actComp3, short actComp4,
-        short actComp5, short actComp6, String actComp7, short nrTournee, short susp, String stopSusp, String rem, short msonac, short classeFbba1, short classeFbba2, short classeFbba3, int nFam, int nPers, int nNour, int nBebe, int nEnf, int nAdo,
-        BigDecimal nEq, int nSen, short depPrinc, short gestBen, short tourneeJour, short tourneeSem, short coldis, short lienGd, short lienGs, BigDecimal montCot, int antenne, String afsca1, String afsca2, String afsca3, int nrFead, short tourneeMois,
-        short distrListPdt, short distrListVp, short distrListSec, short distrListTres, String adresse2, String cp2, String localite2, short pays2, String dateReg, String fax, short feadN, String remLivr, short cotAnnuelle, int cotMonths, int cotSup,
-        int cotMonthsSup, int depotram, String lupdUserName, LocalDateTime lupdTs,Banque banqueObject) {
+    public Organisation(int idDis,Short lienBanQue, String refInt, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
+        String gsm, Short daten, String banque, Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom, String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, Short civiliteSec,
+        String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
+        String disprog, String afsca, boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, Short cpasyN, Short lienCpas, Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
+        Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp, String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3, Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,
+        BigDecimal nEq, Integer  nSen, Short depPrinc, Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs, BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead, Short tourneeMois,
+        Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres, String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN, String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup,
+        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, LocalDateTime lupdTs,Banque banqueObject) {
         super();
         this.idDis = idDis;
         this.lienBanque = lienBanque;
         this.refInt = refInt;
-        this.birbCode = birbCode;
         this.lienDepot = lienDepot;
         this.societe = societe;
         this.adresse = adresse;
@@ -332,7 +327,6 @@ public class Organisation implements Serializable {
         this.nbrefix = nbrefix;
         this.cpasyN = cpasyN;
         this.lienCpas = lienCpas;
-        this.birbyN = birbyN;
         this.depyN = depyN;
         this.logBirb = logBirb;
         this.actComp1 = actComp1;
@@ -430,25 +424,7 @@ public class Organisation implements Serializable {
         refInt = aRefInt;
     }
 
-    /**
-     * Access method for birbCode.
-     *
-     * @return the current value of birbCode
-     */
-    public String getBirbCode() {
-        return birbCode;
-    }
-
-    /**
-     * Setter method for birbCode.
-     *
-     * @param aBirbCode the new value for birbCode
-     */
-    public void setBirbCode(String aBirbCode) {
-        birbCode = aBirbCode;
-    }
-
-    /**
+   /**
      * Access method for lienDepot.
      *
      * @return the current value of lienDepot
@@ -580,7 +556,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of pays
      */
-    public short getPays() {
+    public Short getPays() {
         return pays;
     }
 
@@ -589,7 +565,7 @@ public class Organisation implements Serializable {
      *
      * @param aPays the new value for pays
      */
-    public void setPays(short aPays) {
+    public void setPays(Short aPays) {
         pays = aPays;
     }
 
@@ -670,7 +646,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of daten
      */
-    public short getDaten() {
+    public Short getDaten() {
         return daten;
     }
 
@@ -679,7 +655,7 @@ public class Organisation implements Serializable {
      *
      * @param aDaten the new value for daten
      */
-    public void setDaten(short aDaten) {
+    public void setDaten(Short aDaten) {
         daten = aDaten;
     }
 
@@ -697,7 +673,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of region
      */
-    public short getRegion() {
+    public Short getRegion() {
         return region;
     }
 
@@ -706,7 +682,7 @@ public class Organisation implements Serializable {
      *
      * @param aRegion the new value for region
      */
-    public void setRegion(short aRegion) {
+    public void setRegion(Short aRegion) {
         region = aRegion;
     }
 
@@ -769,7 +745,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of actif
      */
-    public short getActif() {
+    public Short getActif() {
         return actif;
     }
 
@@ -778,7 +754,7 @@ public class Organisation implements Serializable {
      *
      * @param aActif the new value for actif
      */
-    public void setActif(short aActif) {
+    public void setActif(Short aActif) {
         actif = aActif;
     }
 
@@ -787,7 +763,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of civilite
      */
-    public short getCivilite() {
+    public Short getCivilite() {
         return civilite;
     }
 
@@ -796,7 +772,7 @@ public class Organisation implements Serializable {
      *
      * @param aCivilite the new value for civilite
      */
-    public void setCivilite(short aCivilite) {
+    public void setCivilite(Short aCivilite) {
         civilite = aCivilite;
     }
 
@@ -841,7 +817,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of civiliteVp
      */
-    public short getCiviliteVp() {
+    public Short getCiviliteVp() {
         return civiliteVp;
     }
 
@@ -850,7 +826,7 @@ public class Organisation implements Serializable {
      *
      * @param aCiviliteVp the new value for civiliteVp
      */
-    public void setCiviliteVp(short aCiviliteVp) {
+    public void setCiviliteVp(Short aCiviliteVp) {
         civiliteVp = aCiviliteVp;
     }
 
@@ -931,7 +907,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of civiliteSec
      */
-    public short getCiviliteSec() {
+    public Short getCiviliteSec() {
         return civiliteSec;
     }
 
@@ -940,7 +916,7 @@ public class Organisation implements Serializable {
      *
      * @param aCiviliteSec the new value for civiliteSec
      */
-    public void setCiviliteSec(short aCiviliteSec) {
+    public void setCiviliteSec(Short aCiviliteSec) {
         civiliteSec = aCiviliteSec;
     }
 
@@ -1021,7 +997,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of civiliteTres
      */
-    public short getCiviliteTres() {
+    public Short getCiviliteTres() {
         return civiliteTres;
     }
 
@@ -1030,7 +1006,7 @@ public class Organisation implements Serializable {
      *
      * @param aCiviliteTres the new value for civiliteTres
      */
-    public void setCiviliteTres(short aCiviliteTres) {
+    public void setCiviliteTres(Short aCiviliteTres) {
         civiliteTres = aCiviliteTres;
     }
 
@@ -1273,7 +1249,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of langue
      */
-    public short getLangue() {
+    public Short getLangue() {
         return langue;
     }
 
@@ -1282,7 +1258,7 @@ public class Organisation implements Serializable {
      *
      * @param aLangue the new value for langue
      */
-    public void setLangue(short aLangue) {
+    public void setLangue(Short aLangue) {
         langue = aLangue;
     }
 
@@ -1309,7 +1285,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nbrefix
      */
-    public int getNbrefix() {
+    public Integer  getNbrefix() {
         return nbrefix;
     }
 
@@ -1318,7 +1294,7 @@ public class Organisation implements Serializable {
      *
      * @param aNbrefix the new value for nbrefix
      */
-    public void setNbrefix(int aNbrefix) {
+    public void setNbrefix(Integer  aNbrefix) {
         nbrefix = aNbrefix;
     }
 
@@ -1327,7 +1303,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of cpasyN
      */
-    public short getCpasyN() {
+    public Short getCpasyN() {
         return cpasyN;
     }
 
@@ -1336,7 +1312,7 @@ public class Organisation implements Serializable {
      *
      * @param aCpasyN the new value for cpasyN
      */
-    public void setCpasyN(short aCpasyN) {
+    public void setCpasyN(Short aCpasyN) {
         cpasyN = aCpasyN;
     }
 
@@ -1345,7 +1321,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of lienCpas
      */
-    public short getLienCpas() {
+    public Short getLienCpas() {
         return lienCpas;
     }
 
@@ -1354,34 +1330,17 @@ public class Organisation implements Serializable {
      *
      * @param aLienCpas the new value for lienCpas
      */
-    public void setLienCpas(short aLienCpas) {
+    public void setLienCpas(Short aLienCpas) {
         lienCpas = aLienCpas;
     }
 
-    /**
-     * Access method for birbyN.
-     *
-     * @return the current value of birbyN
-     */
-    public short getBirbyN() {
-        return birbyN;
-    }
-
-    /**
-     * Setter method for birbyN.
-     *
-     * @param aBirbyN the new value for birbyN
-     */
-    public void setBirbyN(short aBirbyN) {
-        birbyN = aBirbyN;
-    }
-
+   
     /**
      * Access method for depyN.
      *
      * @return the current value of depyN
      */
-    public short getDepyN() {
+    public Short getDepyN() {
         return depyN;
     }
 
@@ -1390,7 +1349,7 @@ public class Organisation implements Serializable {
      *
      * @param aDepyN the new value for depyN
      */
-    public void setDepyN(short aDepyN) {
+    public void setDepyN(Short aDepyN) {
         depyN = aDepyN;
     }
 
@@ -1399,7 +1358,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of logBirb
      */
-    public short getLogBirb() {
+    public Short getLogBirb() {
         return logBirb;
     }
 
@@ -1408,7 +1367,7 @@ public class Organisation implements Serializable {
      *
      * @param aLogBirb the new value for logBirb
      */
-    public void setLogBirb(short aLogBirb) {
+    public void setLogBirb(Short aLogBirb) {
         logBirb = aLogBirb;
     }
 
@@ -1417,7 +1376,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of actComp1
      */
-    public short getActComp1() {
+    public Short getActComp1() {
         return actComp1;
     }
 
@@ -1426,7 +1385,7 @@ public class Organisation implements Serializable {
      *
      * @param aActComp1 the new value for actComp1
      */
-    public void setActComp1(short aActComp1) {
+    public void setActComp1(Short aActComp1) {
         actComp1 = aActComp1;
     }
 
@@ -1435,7 +1394,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of actComp2
      */
-    public short getActComp2() {
+    public Short getActComp2() {
         return actComp2;
     }
 
@@ -1444,7 +1403,7 @@ public class Organisation implements Serializable {
      *
      * @param aActComp2 the new value for actComp2
      */
-    public void setActComp2(short aActComp2) {
+    public void setActComp2(Short aActComp2) {
         actComp2 = aActComp2;
     }
 
@@ -1453,7 +1412,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of actComp3
      */
-    public short getActComp3() {
+    public Short getActComp3() {
         return actComp3;
     }
 
@@ -1462,7 +1421,7 @@ public class Organisation implements Serializable {
      *
      * @param aActComp3 the new value for actComp3
      */
-    public void setActComp3(short aActComp3) {
+    public void setActComp3(Short aActComp3) {
         actComp3 = aActComp3;
     }
 
@@ -1471,7 +1430,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of actComp4
      */
-    public short getActComp4() {
+    public Short getActComp4() {
         return actComp4;
     }
 
@@ -1480,7 +1439,7 @@ public class Organisation implements Serializable {
      *
      * @param aActComp4 the new value for actComp4
      */
-    public void setActComp4(short aActComp4) {
+    public void setActComp4(Short aActComp4) {
         actComp4 = aActComp4;
     }
 
@@ -1489,7 +1448,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of actComp5
      */
-    public short getActComp5() {
+    public Short getActComp5() {
         return actComp5;
     }
 
@@ -1498,7 +1457,7 @@ public class Organisation implements Serializable {
      *
      * @param aActComp5 the new value for actComp5
      */
-    public void setActComp5(short aActComp5) {
+    public void setActComp5(Short aActComp5) {
         actComp5 = aActComp5;
     }
 
@@ -1507,7 +1466,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of actComp6
      */
-    public short getActComp6() {
+    public Short getActComp6() {
         return actComp6;
     }
 
@@ -1516,7 +1475,7 @@ public class Organisation implements Serializable {
      *
      * @param aActComp6 the new value for actComp6
      */
-    public void setActComp6(short aActComp6) {
+    public void setActComp6(Short aActComp6) {
         actComp6 = aActComp6;
     }
 
@@ -1543,7 +1502,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nrTournee
      */
-    public short getNrTournee() {
+    public Short getNrTournee() {
         return nrTournee;
     }
 
@@ -1552,7 +1511,7 @@ public class Organisation implements Serializable {
      *
      * @param aNrTournee the new value for nrTournee
      */
-    public void setNrTournee(short aNrTournee) {
+    public void setNrTournee(Short aNrTournee) {
         nrTournee = aNrTournee;
     }
 
@@ -1561,7 +1520,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of susp
      */
-    public short getSusp() {
+    public Short getSusp() {
         return susp;
     }
 
@@ -1570,7 +1529,7 @@ public class Organisation implements Serializable {
      *
      * @param aSusp the new value for susp
      */
-    public void setSusp(short aSusp) {
+    public void setSusp(Short aSusp) {
         susp = aSusp;
     }
 
@@ -1615,7 +1574,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of msonac
      */
-    public short getMsonac() {
+    public Short getMsonac() {
         return msonac;
     }
 
@@ -1624,7 +1583,7 @@ public class Organisation implements Serializable {
      *
      * @param aMsonac the new value for msonac
      */
-    public void setMsonac(short aMsonac) {
+    public void setMsonac(Short aMsonac) {
         msonac = aMsonac;
     }
 
@@ -1633,7 +1592,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of classeFbba1
      */
-    public short getClasseFbba1() {
+    public Short getClasseFbba1() {
         return classeFbba1;
     }
 
@@ -1642,7 +1601,7 @@ public class Organisation implements Serializable {
      *
      * @param aClasseFbba1 the new value for classeFbba1
      */
-    public void setClasseFbba1(short aClasseFbba1) {
+    public void setClasseFbba1(Short aClasseFbba1) {
         classeFbba1 = aClasseFbba1;
     }
 
@@ -1651,7 +1610,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of classeFbba2
      */
-    public short getClasseFbba2() {
+    public Short getClasseFbba2() {
         return classeFbba2;
     }
 
@@ -1660,7 +1619,7 @@ public class Organisation implements Serializable {
      *
      * @param aClasseFbba2 the new value for classeFbba2
      */
-    public void setClasseFbba2(short aClasseFbba2) {
+    public void setClasseFbba2(Short aClasseFbba2) {
         classeFbba2 = aClasseFbba2;
     }
 
@@ -1669,7 +1628,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of classeFbba3
      */
-    public short getClasseFbba3() {
+    public Short getClasseFbba3() {
         return classeFbba3;
     }
 
@@ -1678,7 +1637,7 @@ public class Organisation implements Serializable {
      *
      * @param aClasseFbba3 the new value for classeFbba3
      */
-    public void setClasseFbba3(short aClasseFbba3) {
+    public void setClasseFbba3(Short aClasseFbba3) {
         classeFbba3 = aClasseFbba3;
     }
 
@@ -1687,7 +1646,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nFam
      */
-    public int getNFam() {
+    public Integer  getNFam() {
         return nFam;
     }
 
@@ -1696,7 +1655,7 @@ public class Organisation implements Serializable {
      *
      * @param aNFam the new value for nFam
      */
-    public void setNFam(int aNFam) {
+    public void setNFam(Integer  aNFam) {
         nFam = aNFam;
     }
 
@@ -1705,7 +1664,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nPers
      */
-    public int getNPers() {
+    public Integer  getNPers() {
         return nPers;
     }
 
@@ -1714,7 +1673,7 @@ public class Organisation implements Serializable {
      *
      * @param aNPers the new value for nPers
      */
-    public void setNPers(int aNPers) {
+    public void setNPers(Integer  aNPers) {
         nPers = aNPers;
     }
 
@@ -1723,7 +1682,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nNour
      */
-    public int getNNour() {
+    public Integer  getNNour() {
         return nNour;
     }
 
@@ -1732,7 +1691,7 @@ public class Organisation implements Serializable {
      *
      * @param aNNour the new value for nNour
      */
-    public void setNNour(int aNNour) {
+    public void setNNour(Integer  aNNour) {
         nNour = aNNour;
     }
 
@@ -1741,7 +1700,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nBebe
      */
-    public int getNBebe() {
+    public Integer  getNBebe() {
         return nBebe;
     }
 
@@ -1750,7 +1709,7 @@ public class Organisation implements Serializable {
      *
      * @param aNBebe the new value for nBebe
      */
-    public void setNBebe(int aNBebe) {
+    public void setNBebe(Integer  aNBebe) {
         nBebe = aNBebe;
     }
 
@@ -1759,7 +1718,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nEnf
      */
-    public int getNEnf() {
+    public Integer  getNEnf() {
         return nEnf;
     }
 
@@ -1768,7 +1727,7 @@ public class Organisation implements Serializable {
      *
      * @param aNEnf the new value for nEnf
      */
-    public void setNEnf(int aNEnf) {
+    public void setNEnf(Integer  aNEnf) {
         nEnf = aNEnf;
     }
 
@@ -1777,7 +1736,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nAdo
      */
-    public int getNAdo() {
+    public Integer  getNAdo() {
         return nAdo;
     }
 
@@ -1786,7 +1745,7 @@ public class Organisation implements Serializable {
      *
      * @param aNAdo the new value for nAdo
      */
-    public void setNAdo(int aNAdo) {
+    public void setNAdo(Integer  aNAdo) {
         nAdo = aNAdo;
     }
 
@@ -1813,7 +1772,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nSen
      */
-    public int getNSen() {
+    public Integer  getNSen() {
         return nSen;
     }
 
@@ -1822,7 +1781,7 @@ public class Organisation implements Serializable {
      *
      * @param aNSen the new value for nSen
      */
-    public void setNSen(int aNSen) {
+    public void setNSen(Integer  aNSen) {
         nSen = aNSen;
     }
 
@@ -1831,7 +1790,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of depPrinc
      */
-    public short getDepPrinc() {
+    public Short getDepPrinc() {
         return depPrinc;
     }
 
@@ -1840,7 +1799,7 @@ public class Organisation implements Serializable {
      *
      * @param aDepPrinc the new value for depPrinc
      */
-    public void setDepPrinc(short aDepPrinc) {
+    public void setDepPrinc(Short aDepPrinc) {
         depPrinc = aDepPrinc;
     }
 
@@ -1849,7 +1808,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of gestBen
      */
-    public short getGestBen() {
+    public Short getGestBen() {
         return gestBen;
     }
 
@@ -1858,7 +1817,7 @@ public class Organisation implements Serializable {
      *
      * @param aGestBen the new value for gestBen
      */
-    public void setGestBen(short aGestBen) {
+    public void setGestBen(Short aGestBen) {
         gestBen = aGestBen;
     }
 
@@ -1867,7 +1826,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of tourneeJour
      */
-    public short getTourneeJour() {
+    public Short getTourneeJour() {
         return tourneeJour;
     }
 
@@ -1876,7 +1835,7 @@ public class Organisation implements Serializable {
      *
      * @param aTourneeJour the new value for tourneeJour
      */
-    public void setTourneeJour(short aTourneeJour) {
+    public void setTourneeJour(Short aTourneeJour) {
         tourneeJour = aTourneeJour;
     }
 
@@ -1885,7 +1844,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of tourneeSem
      */
-    public short getTourneeSem() {
+    public Short getTourneeSem() {
         return tourneeSem;
     }
 
@@ -1894,7 +1853,7 @@ public class Organisation implements Serializable {
      *
      * @param aTourneeSem the new value for tourneeSem
      */
-    public void setTourneeSem(short aTourneeSem) {
+    public void setTourneeSem(Short aTourneeSem) {
         tourneeSem = aTourneeSem;
     }
 
@@ -1903,7 +1862,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of coldis
      */
-    public short getColdis() {
+    public Short getColdis() {
         return coldis;
     }
 
@@ -1912,7 +1871,7 @@ public class Organisation implements Serializable {
      *
      * @param aColdis the new value for coldis
      */
-    public void setColdis(short aColdis) {
+    public void setColdis(Short aColdis) {
         coldis = aColdis;
     }
 
@@ -1921,7 +1880,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of lienGd
      */
-    public short getLienGd() {
+    public Short getLienGd() {
         return lienGd;
     }
 
@@ -1930,7 +1889,7 @@ public class Organisation implements Serializable {
      *
      * @param aLienGd the new value for lienGd
      */
-    public void setLienGd(short aLienGd) {
+    public void setLienGd(Short aLienGd) {
         lienGd = aLienGd;
     }
 
@@ -1939,7 +1898,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of lienGs
      */
-    public short getLienGs() {
+    public Short getLienGs() {
         return lienGs;
     }
 
@@ -1948,7 +1907,7 @@ public class Organisation implements Serializable {
      *
      * @param aLienGs the new value for lienGs
      */
-    public void setLienGs(short aLienGs) {
+    public void setLienGs(Short aLienGs) {
         lienGs = aLienGs;
     }
 
@@ -1975,7 +1934,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of antenne
      */
-    public int getAntenne() {
+    public Integer  getAntenne() {
         return antenne;
     }
 
@@ -1984,7 +1943,7 @@ public class Organisation implements Serializable {
      *
      * @param aAntenne the new value for antenne
      */
-    public void setAntenne(int aAntenne) {
+    public void setAntenne(Integer  aAntenne) {
         antenne = aAntenne;
     }
 
@@ -2047,7 +2006,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of nrFead
      */
-    public int getNrFead() {
+    public Integer  getNrFead() {
         return nrFead;
     }
 
@@ -2056,7 +2015,7 @@ public class Organisation implements Serializable {
      *
      * @param aNrFead the new value for nrFead
      */
-    public void setNrFead(int aNrFead) {
+    public void setNrFead(Integer  aNrFead) {
         nrFead = aNrFead;
     }
 
@@ -2065,7 +2024,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of tourneeMois
      */
-    public short getTourneeMois() {
+    public Short getTourneeMois() {
         return tourneeMois;
     }
 
@@ -2074,7 +2033,7 @@ public class Organisation implements Serializable {
      *
      * @param aTourneeMois the new value for tourneeMois
      */
-    public void setTourneeMois(short aTourneeMois) {
+    public void setTourneeMois(Short aTourneeMois) {
         tourneeMois = aTourneeMois;
     }
 
@@ -2083,7 +2042,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of distrListPdt
      */
-    public short getDistrListPdt() {
+    public Short getDistrListPdt() {
         return distrListPdt;
     }
 
@@ -2092,7 +2051,7 @@ public class Organisation implements Serializable {
      *
      * @param aDistrListPdt the new value for distrListPdt
      */
-    public void setDistrListPdt(short aDistrListPdt) {
+    public void setDistrListPdt(Short aDistrListPdt) {
         distrListPdt = aDistrListPdt;
     }
 
@@ -2101,7 +2060,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of distrListVp
      */
-    public short getDistrListVp() {
+    public Short getDistrListVp() {
         return distrListVp;
     }
 
@@ -2110,7 +2069,7 @@ public class Organisation implements Serializable {
      *
      * @param aDistrListVp the new value for distrListVp
      */
-    public void setDistrListVp(short aDistrListVp) {
+    public void setDistrListVp(Short aDistrListVp) {
         distrListVp = aDistrListVp;
     }
 
@@ -2119,7 +2078,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of distrListSec
      */
-    public short getDistrListSec() {
+    public Short getDistrListSec() {
         return distrListSec;
     }
 
@@ -2128,7 +2087,7 @@ public class Organisation implements Serializable {
      *
      * @param aDistrListSec the new value for distrListSec
      */
-    public void setDistrListSec(short aDistrListSec) {
+    public void setDistrListSec(Short aDistrListSec) {
         distrListSec = aDistrListSec;
     }
 
@@ -2137,7 +2096,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of distrListTres
      */
-    public short getDistrListTres() {
+    public Short getDistrListTres() {
         return distrListTres;
     }
 
@@ -2146,7 +2105,7 @@ public class Organisation implements Serializable {
      *
      * @param aDistrListTres the new value for distrListTres
      */
-    public void setDistrListTres(short aDistrListTres) {
+    public void setDistrListTres(Short aDistrListTres) {
         distrListTres = aDistrListTres;
     }
 
@@ -2209,7 +2168,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of pays2
      */
-    public short getPays2() {
+    public Short getPays2() {
         return pays2;
     }
 
@@ -2218,7 +2177,7 @@ public class Organisation implements Serializable {
      *
      * @param aPays2 the new value for pays2
      */
-    public void setPays2(short aPays2) {
+    public void setPays2(Short aPays2) {
         pays2 = aPays2;
     }
 
@@ -2263,7 +2222,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of feadN
      */
-    public short getFeadN() {
+    public Short getFeadN() {
         return feadN;
     }
 
@@ -2272,7 +2231,7 @@ public class Organisation implements Serializable {
      *
      * @param aFeadN the new value for feadN
      */
-    public void setFeadN(short aFeadN) {
+    public void setFeadN(Short aFeadN) {
         feadN = aFeadN;
     }
 
@@ -2299,7 +2258,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of cotAnnuelle
      */
-    public short getCotAnnuelle() {
+    public Short getCotAnnuelle() {
         return cotAnnuelle;
     }
 
@@ -2308,7 +2267,7 @@ public class Organisation implements Serializable {
      *
      * @param aCotAnnuelle the new value for cotAnnuelle
      */
-    public void setCotAnnuelle(short aCotAnnuelle) {
+    public void setCotAnnuelle(Short aCotAnnuelle) {
         cotAnnuelle = aCotAnnuelle;
     }
 
@@ -2317,7 +2276,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of cotMonths
      */
-    public int getCotMonths() {
+    public Integer  getCotMonths() {
         return cotMonths;
     }
 
@@ -2326,7 +2285,7 @@ public class Organisation implements Serializable {
      *
      * @param aCotMonths the new value for cotMonths
      */
-    public void setCotMonths(int aCotMonths) {
+    public void setCotMonths(Integer  aCotMonths) {
         cotMonths = aCotMonths;
     }
 
@@ -2335,7 +2294,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of cotSup
      */
-    public int getCotSup() {
+    public Integer getCotSup() {
         return cotSup;
     }
 
@@ -2344,7 +2303,7 @@ public class Organisation implements Serializable {
      *
      * @param aCotSup the new value for cotSup
      */
-    public void setCotSup(int aCotSup) {
+    public void setCotSup(Integer aCotSup) {
         cotSup = aCotSup;
     }
 
@@ -2353,7 +2312,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of cotMonthsSup
      */
-    public int getCotMonthsSup() {
+    public Integer  getCotMonthsSup() {
         return cotMonthsSup;
     }
 
@@ -2362,7 +2321,7 @@ public class Organisation implements Serializable {
      *
      * @param aCotMonthsSup the new value for cotMonthsSup
      */
-    public void setCotMonthsSup(int aCotMonthsSup) {
+    public void setCotMonthsSup(Integer  aCotMonthsSup) {
         cotMonthsSup = aCotMonthsSup;
     }
 
@@ -2371,7 +2330,7 @@ public class Organisation implements Serializable {
      *
      * @return the current value of depotram
      */
-    public int getDepotram() {
+    public Integer  getDepotram() {
         return depotram;
     }
 
@@ -2380,7 +2339,7 @@ public class Organisation implements Serializable {
      *
      * @param aDepotram the new value for depotram
      */
-    public void setDepotram(int aDepotram) {
+    public void setDepotram(Integer  aDepotram) {
         depotram = aDepotram;
     }
 
@@ -2447,8 +2406,6 @@ public class Organisation implements Serializable {
 		result = prime * result + ((afsca3 == null) ? 0 : afsca3.hashCode());
 		result = prime * result + antenne;
 		result = prime * result + ((bic == null) ? 0 : bic.hashCode());
-		result = prime * result + ((birbCode == null) ? 0 : birbCode.hashCode());
-		result = prime * result + birbyN;
 		result = prime * result + civilite;
 		result = prime * result + civiliteSec;
 		result = prime * result + civiliteTres;
@@ -2610,13 +2567,6 @@ public class Organisation implements Serializable {
 			if (other.bic != null)
 				return false;
 		} else if (!bic.equals(other.bic))
-			return false;
-		if (birbCode == null) {
-			if (other.birbCode != null)
-				return false;
-		} else if (!birbCode.equals(other.birbCode))
-			return false;
-		if (birbyN != other.birbyN)
 			return false;
 		if (civilite != other.civilite)
 			return false;
@@ -2946,8 +2896,7 @@ public class Organisation implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Organisation [idDis=" + idDis + ", refInt=" + refInt + ",  birbCode="
-				+ birbCode + ", lienDepot=" + lienDepot + ", societe=" + societe + ", adresse=" + adresse + ", statut="
+		return "Organisation [idDis=" + idDis + ", refInt=" + refInt + ",  lienDepot=" + lienDepot + ", societe=" + societe + ", adresse=" + adresse + ", statut="
 				+ statut + ", email=" + email + ", cp=" + cp + ", localite=" + localite
 				+ ", pays=" + pays + ", tva=" + tva + ", website=" + website + ", tel=" + tel + ", gsm=" + gsm
 				+ ", daten=" + daten + ", region=" + region + ", iban=" + iban + ", classique="
@@ -2959,8 +2908,7 @@ public class Organisation implements Serializable {
 				+ gsmTres + ", emailPres=" + emailPres + ", emailVp=" + emailVp + ", emailSec=" + emailSec
 				+ ", emailTres=" + emailTres + ", telPres=" + telPres + ", gsmPres=" + gsmPres + ", disprog=" + disprog
 				+ ", afsca=" + afsca + ", webauthority=" + webauthority + ", langue=" + langue + ", lastvisit="
-				+ lastvisit + ", nbrefix=" + nbrefix + ", cpasyN=" + cpasyN + ", lienCpas=" + lienCpas + ", birbyN="
-				+ birbyN + ", depyN=" + depyN + ", logBirb=" + logBirb + ", actComp1=" + actComp1 + ", actComp2="
+				+ lastvisit + ", nbrefix=" + nbrefix + ", cpasyN=" + cpasyN + ", lienCpas=" + lienCpas + ", depyN=" + depyN + ", logBirb=" + logBirb + ", actComp1=" + actComp1 + ", actComp2="
 				+ actComp2 + ", actComp3=" + actComp3 + ", actComp4=" + actComp4 + ", actComp5=" + actComp5
 				+ ", actComp6=" + actComp6 + ", actComp7=" + actComp7 + ", nrTournee=" + nrTournee + ", susp=" + susp
 				+ ", stopSusp=" + stopSusp + ", rem=" + rem + ", msonac=" + msonac + ", classeFbba1=" + classeFbba1
