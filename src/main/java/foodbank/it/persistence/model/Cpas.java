@@ -46,15 +46,15 @@ public class Cpas implements Serializable {
  @Column(name="cpas_contact_surname", nullable=false, length=50)
  private String cpasContactSurname;
  @Column(nullable=false, precision=3)
- private short civilite;
+ private Short civilite;
  @Column(nullable=false)
  private String rem;
  @Column(nullable=false, length=12)
  private String password;
  @Column(name="l_banque", nullable=false, precision=3)
- private short lBanque;
+ private Short lBanque;
  @Column(precision=3)
- private short langue;
+ private Short langue;
 
  /** Default constructor. */
  public Cpas() {
@@ -62,8 +62,8 @@ public class Cpas implements Serializable {
  }
 
  public Cpas(int cpasId, String cpasZip, String cpasName, String cpasMail, String cpasStreet, String cpasTel, String cpasGsm,
-		String cpasContactName, String cpasContactSurname, short civilite, String rem, String password, short lBanque,
-		short langue) {
+		String cpasContactName, String cpasContactSurname, Short civilite, String rem, String password, Short lBanque,
+		Short langue) {
 	super();
 	this.cpasId = cpasId;
 	this.cpasZip = cpasZip;
@@ -248,7 +248,7 @@ public class Cpas implements Serializable {
   *
   * @return the current value of civilite
   */
- public short getCivilite() {
+ public Short getCivilite() {
      return civilite;
  }
 
@@ -257,7 +257,7 @@ public class Cpas implements Serializable {
   *
   * @param aCivilite the new value for civilite
   */
- public void setCivilite(short aCivilite) {
+ public void setCivilite(Short aCivilite) {
      civilite = aCivilite;
  }
 
@@ -302,7 +302,7 @@ public class Cpas implements Serializable {
   *
   * @return the current value of lBanque
   */
- public short getLBanque() {
+ public Short getLBanque() {
      return lBanque;
  }
 
@@ -311,7 +311,7 @@ public class Cpas implements Serializable {
   *
   * @param aLBanque the new value for lBanque
   */
- public void setLBanque(short aLBanque) {
+ public void setLBanque(Short aLBanque) {
      lBanque = aLBanque;
  }
 
@@ -320,7 +320,7 @@ public class Cpas implements Serializable {
   *
   * @return the current value of langue
   */
- public short getLangue() {
+ public Short getLangue() {
      return langue;
  }
 
@@ -329,7 +329,7 @@ public class Cpas implements Serializable {
   *
   * @param aLangue the new value for langue
   */
- public void setLangue(short aLangue) {
+ public void setLangue(Short aLangue) {
      langue = aLangue;
  }
 

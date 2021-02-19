@@ -11,6 +11,6 @@ public interface ICpasService {
     Cpas save(Cpas Cpas);
     Page<Cpas> findAll(Pageable pageable);
     Page<Cpas> findByCpasNameContaining(String search, Pageable pageRequest);
-    Page<Cpas> findByCpasZipContaining(String search, Pageable pageRequest);
+    Page<Cpas> findByCpasZipStartsWith(String search, Pageable pageRequest);
     void delete(int cpasId);	
 }

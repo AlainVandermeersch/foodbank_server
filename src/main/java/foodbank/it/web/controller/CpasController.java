@@ -73,7 +73,7 @@ public class CpasController {
 				selectedCpass.forEach(p -> CpasDtos.add(convertToDto(p, totalRecordsName)));
         		break;
         	case "cpasZip":
-        		selectedCpass = this.CpasService.findByCpasZipContaining(searchValue,pageRequest);
+        		selectedCpass = this.CpasService.findByCpasZipStartsWith(searchValue,pageRequest);
 				long totalRecordsZip = selectedCpass.getTotalElements();
 				selectedCpass.forEach(p -> CpasDtos.add(convertToDto(p, totalRecordsZip)));
         		break;

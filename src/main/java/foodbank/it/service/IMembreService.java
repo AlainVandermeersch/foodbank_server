@@ -39,11 +39,11 @@ public interface IMembreService {
 
 	Page<Membre> findByBanqueObjectBankShortNameAndAddressContaining(String bankShortName, String search,
 			Pageable pageRequest);
-	Page<Membre> findByZipContaining(String search, Pageable pageRequest);
+	Page<Membre> findByZipStartsWith(String search, Pageable pageRequest);
 
-	Page<Membre> findByLienDisAndZipContaining(String lienDis, String search, Pageable pageRequest);
+	Page<Membre> findByLienDisAndZipStartsWith(String lienDis, String search, Pageable pageRequest);
 
-	Page<Membre> findByBanqueObjectBankShortNameAndZipContaining(String bankShortName, String search,
+	Page<Membre> findByBanqueObjectBankShortNameAndZipStartsWith(String bankShortName, String search,
 			Pageable pageRequest);
 	Page<Membre> findByCityContaining(String search, Pageable pageRequest);
 

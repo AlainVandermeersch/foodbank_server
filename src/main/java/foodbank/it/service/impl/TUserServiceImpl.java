@@ -58,6 +58,78 @@ public class TUserServiceImpl implements ITUserService {
 	public Page<TUser> findByIdOrg(int idOrg, Pageable pageRequest) {
 		return TUserRepository.findByIdOrg(idOrg, pageRequest);
 	}
+
+
+	@Override
+	public Page<TUser> findByUserNameContaining(String search, Pageable pageRequest) {
+		return TUserRepository.findByUserNameContaining(search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdCompanyAndUserNameContaining(String idCompany, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdCompanyAndUserNameContaining(idCompany, search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdOrgAndUserNameContaining(int idOrg, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdOrgAndUserNameContaining(idOrg, search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdLanguageStartsWith(String search, Pageable pageRequest) {
+		return TUserRepository.findByIdLanguageStartsWith(search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdCompanyAndIdLanguageStartsWith(String idCompany, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdCompanyAndIdLanguageStartsWith(idCompany, search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdOrgAndIdLanguageStartsWith(int idOrg, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdOrgAndIdLanguageStartsWith(idOrg, search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByEmailContaining(String search, Pageable pageRequest) {
+		return TUserRepository.findByEmailContaining(search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdCompanyAndEmailContaining(String idCompany, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdCompanyAndEmailContaining(idCompany, search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdOrgAndEmailContaining(int idOrg, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdOrgAndEmailContaining(idOrg, search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByRightsContaining(String search, Pageable pageRequest) {
+		return TUserRepository.findByRightsContaining(search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdCompanyAndRightsContaining(String idCompany, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdCompanyAndRightsContaining(idCompany, search, pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdOrgAndRightsContaining(int idOrg, String search, Pageable pageRequest) {
+		return TUserRepository.findByIdOrgAndRightsContaining(idOrg, search, pageRequest);
+	}
     
 	
 	

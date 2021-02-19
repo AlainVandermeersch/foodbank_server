@@ -129,17 +129,17 @@ public class MembreController {
         	case "zip":
         		if (bankShortName == null) {
     				if (lienDis == null) {
-    					selectedMembres = this.MembreService.findByZipContaining(searchValue,pageRequest);
+    					selectedMembres = this.MembreService.findByZipStartsWith(searchValue,pageRequest);
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndZipContaining(lienDis,searchValue, pageRequest);
+    					selectedMembres = this.MembreService.findByLienDisAndZipStartsWith(lienDis,searchValue, pageRequest);
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				}
 
     			} else {
-    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndZipContaining(bankShortName, searchValue, pageRequest);
+    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndZipStartsWith(bankShortName, searchValue, pageRequest);
     				long totalRecords = selectedMembres.getTotalElements();
     				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     			}

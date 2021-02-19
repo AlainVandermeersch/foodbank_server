@@ -94,17 +94,17 @@ public class MembreServiceImpl implements IMembreService{
 			pageRequest);
 	}
 	@Override
-	public Page<Membre> findByZipContaining(String search, Pageable pageRequest) {
-			return MembreRepository.findByZipContaining(search, pageRequest);
+	public Page<Membre> findByZipStartsWith(String search, Pageable pageRequest) {
+			return MembreRepository.findByZipStartsWith(search, pageRequest);
 	}
 	@Override
-	public Page<Membre> findByLienDisAndZipContaining(String lienDis, String search, Pageable pageRequest) {
-		return MembreRepository.findByLienDisAndZipContaining(lienDis, search, pageRequest);
+	public Page<Membre> findByLienDisAndZipStartsWith(String lienDis, String search, Pageable pageRequest) {
+		return MembreRepository.findByLienDisAndZipStartsWith(lienDis, search, pageRequest);
 	}
 	@Override
-	public Page<Membre> findByBanqueObjectBankShortNameAndZipContaining(String bankShortName, String search,
+	public Page<Membre> findByBanqueObjectBankShortNameAndZipStartsWith(String bankShortName, String search,
 			Pageable pageRequest) {
-		return MembreRepository.findByBanqueObjectBankShortNameAndZipContaining( bankShortName,search,
+		return MembreRepository.findByBanqueObjectBankShortNameAndZipStartsWith( bankShortName,search,
 			pageRequest);
 	}
 	@Override

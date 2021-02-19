@@ -66,6 +66,87 @@ public class TUserController {
         }   
         List<TUserDto> TUserDtos = new ArrayList<>();
         Page<TUser> selectedTUsers = null;
+        if (searchField == null) searchField = "";
+        switch(searchField) {
+       
+        	case "userName":
+        		 if (idCompany == null) {
+        	        	if (idOrg == null) { 
+        	        		selectedTUsers = this.TUserService.findByUserNameContaining(searchValue,pageRequest);
+        	        		long totalRecords = selectedTUsers.getTotalElements();
+        	        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
+        	        	}
+        	        	else { 
+        	        		selectedTUsers = this.TUserService.findByIdOrgAndUserNameContaining(Integer.parseInt(idOrg),searchValue,pageRequest);
+        	        		long totalRecordsOrg = selectedTUsers.getTotalElements();
+        	        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
+        	        	}
+        	        }
+        	        else {
+        	        	selectedTUsers = this.TUserService.findByIdCompanyAndUserNameContaining(idCompany,searchValue,pageRequest);
+        	        	long totalRecordsBanque = selectedTUsers.getTotalElements();
+        	    		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
+        	        }
+        		break;
+        	case "idLanguage":
+        		if (idCompany == null) {
+                	if (idOrg == null) { 
+                		selectedTUsers = this.TUserService.findByIdLanguageStartsWith(searchValue,pageRequest);
+                		long totalRecords = selectedTUsers.getTotalElements();
+                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
+                	}
+                	else { 
+                		selectedTUsers = this.TUserService.findByIdOrgAndIdLanguageStartsWith(Integer.parseInt(idOrg),searchValue,pageRequest);
+                		long totalRecordsOrg = selectedTUsers.getTotalElements();
+                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
+                	}
+                }
+                else {
+                	selectedTUsers = this.TUserService.findByIdCompanyAndIdLanguageStartsWith(idCompany,searchValue,pageRequest);
+                	long totalRecordsBanque = selectedTUsers.getTotalElements();
+            		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
+                }
+        		break;
+        	case "email":
+        		if (idCompany == null) {
+                	if (idOrg == null) { 
+                		selectedTUsers = this.TUserService.findByEmailContaining(searchValue,pageRequest);
+                		long totalRecords = selectedTUsers.getTotalElements();
+                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
+                	}
+                	else { 
+                		selectedTUsers = this.TUserService.findByIdOrgAndEmailContaining(Integer.parseInt(idOrg),searchValue,pageRequest);
+                		long totalRecordsOrg = selectedTUsers.getTotalElements();
+                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
+                	}
+                }
+                else {
+                	selectedTUsers = this.TUserService.findByIdCompanyAndEmailContaining(idCompany,searchValue,pageRequest);
+                	long totalRecordsBanque = selectedTUsers.getTotalElements();
+            		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
+                }
+        		break;
+        	
+        	case "rights":
+        		if (idCompany == null) {
+                	if (idOrg == null) { 
+                		selectedTUsers = this.TUserService.findByRightsContaining(searchValue,pageRequest);
+                		long totalRecords = selectedTUsers.getTotalElements();
+                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
+                	}
+                	else { 
+                		selectedTUsers = this.TUserService.findByIdOrgAndRightsContaining(Integer.parseInt(idOrg),searchValue,pageRequest);
+                		long totalRecordsOrg = selectedTUsers.getTotalElements();
+                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
+                	}
+                }
+                else {
+                	selectedTUsers = this.TUserService.findByIdCompanyAndRightsContaining(idCompany,searchValue,pageRequest);
+                	long totalRecordsBanque = selectedTUsers.getTotalElements();
+            		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
+                }
+        		break;
+        		default:
         if (idCompany == null) {
         	if (idOrg == null) { 
         		selectedTUsers = this.TUserService.findAll(pageRequest);
@@ -84,7 +165,7 @@ public class TUserController {
     		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
         }
        
-       
+        }
         return TUserDtos;
     }
     

@@ -47,8 +47,8 @@ public class CpasServiceImpl implements ICpasService{
 	}
 
 	@Override
-	public Page<Cpas> findByCpasZipContaining(String search, Pageable pageRequest) {
-		return CpasRepository.findByCpasZipContaining(search, pageRequest);
+	public Page<Cpas> findByCpasZipStartsWith(String search, Pageable pageRequest) {
+		return CpasRepository.findByCpasZipStartsWith(search, pageRequest);
 	}
 
 }

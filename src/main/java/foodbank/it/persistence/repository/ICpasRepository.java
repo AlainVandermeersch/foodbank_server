@@ -12,7 +12,7 @@ import foodbank.it.persistence.model.Membre;
 public interface ICpasRepository extends PagingAndSortingRepository<Cpas, Integer>{
     Optional<Cpas> findByCpasId(int cpasId);
     Page<Cpas> findByCpasNameContaining(String search, Pageable pageRequest);
-    Page<Cpas> findByCpasZipContaining(String search, Pageable pageRequest);
+    Page<Cpas> findByCpasZipStartsWith(String search, Pageable pageRequest);
     void deleteByCpasId(int cpasId);
 
 }
