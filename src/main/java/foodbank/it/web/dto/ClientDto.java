@@ -7,7 +7,7 @@ public class ClientDto {
 	
 	 private String idInt;
 	
-	 private int lienDis;
+	 private Integer lienDis;
 	 
 	 private String nom;
 	
@@ -63,6 +63,8 @@ public class ClientDto {
 	 private short lbanque;
 	 private String bankName;
 	 private String bankShortName;
+	 private Long  totalRecords;
+	 
 	public int getIdClient() {
 		return idClient;
 	}
@@ -75,10 +77,10 @@ public class ClientDto {
 	public void setIdInt(String idInt) {
 		this.idInt = idInt;
 	}
-	public int getLienDis() {
+	public Integer getLienDis() {
 		return lienDis;
 	}
-	public void setLienDis(int lienDis) {
+	public void setLienDis(Integer lienDis) {
 		this.lienDis = lienDis;
 	}
 	public String getNom() {
@@ -273,16 +275,23 @@ public class ClientDto {
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
 	}
+	
+	public Long getTotalRecords() {
+		return totalRecords;
+	}
+	public void setTotalRecords(Long totalRecords) {
+		this.totalRecords = totalRecords;
+	}
 	protected ClientDto() {
 		super();
 		
 	}
-	public ClientDto(int idClient, String idInt, int lienDis, String nom, String prenom, String nomconj,
+	public ClientDto(int idClient, String idInt, Integer lienDis, String nom, String prenom, String nomconj,
 			String prenomconj, short civilite, String daten, String datenConj, short civiliteconj, String adresse,
 			String cp, String localite, String pays, String email, String tel, String gsm, String connu, int genre,
 			short actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
 			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, String bankName,
-			String bankShortName) {
+			String bankShortName,Long  totalRecords) {
 		super();
 		this.idClient = idClient;
 		this.idInt = idInt;
@@ -319,6 +328,7 @@ public class ClientDto {
 		this.lbanque = lbanque;
 		this.bankName = bankName;
 		this.bankShortName = bankShortName;
+		this.totalRecords = totalRecords;
 	}
 	
 	 

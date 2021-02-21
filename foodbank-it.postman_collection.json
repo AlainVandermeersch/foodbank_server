@@ -46,7 +46,7 @@
 			"response": []
 		},
 		{
-			"name": "GET BANK BY ID",
+			"name": "GET BANQUE BY ID",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -127,7 +127,7 @@
 			"response": []
 		},
 		{
-			"name": "GET PAGED USERS",
+			"name": "GET USERS PAGED",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -165,7 +165,7 @@
 			"response": []
 		},
 		{
-			"name": "GET PAGED MEMBRES",
+			"name": "GET MEMBRES BANQUES PAGED",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -207,12 +207,12 @@
 			"response": []
 		},
 		{
-			"name": "GET PAGED MEMBRES Filtered",
+			"name": "GET MEMBRES ORGANISATION PAGED",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8081/api/membres/?offset=0&rows=10&sortField=nom&sortOrder=2&bankShortName=BAT&search=y",
+					"raw": "localhost:8081/api/membres/?offset=0&rows=10&sortField=nom&sortOrder=2&lienDis=21",
 					"host": [
 						"localhost"
 					],
@@ -240,12 +240,108 @@
 							"value": "2"
 						},
 						{
+							"key": "lienDis",
+							"value": "21"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET  MEMBRES  PAGED FILTERED",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/api/membres/?offset=0&rows=10&sortField=nom&sortOrder=1&bankShortName=BAT&searchField=nom&searchValue=Van",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"membres",
+						""
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "rows",
+							"value": "10"
+						},
+						{
+							"key": "sortField",
+							"value": "nom"
+						},
+						{
+							"key": "sortOrder",
+							"value": "1"
+						},
+						{
 							"key": "bankShortName",
 							"value": "BAT"
 						},
 						{
-							"key": "search",
-							"value": "y"
+							"key": "searchField",
+							"value": "nom"
+						},
+						{
+							"key": "searchValue",
+							"value": "Van"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET  BENEFICIAIRES  PAGED FILTERED",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/api/beneficiaires/?offset=0&rows=10&sortField=nom&sortOrder=1&bankShortName=BAT&searchField=nom&searchValue=Van",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"beneficiaires",
+						""
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "rows",
+							"value": "10"
+						},
+						{
+							"key": "sortField",
+							"value": "nom"
+						},
+						{
+							"key": "sortOrder",
+							"value": "1"
+						},
+						{
+							"key": "bankShortName",
+							"value": "BAT"
+						},
+						{
+							"key": "searchField",
+							"value": "nom"
+						},
+						{
+							"key": "searchValue",
+							"value": "Van"
 						}
 					]
 				}
@@ -258,7 +354,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8081/api/users/?idCompany=BAT",
+					"raw": "localhost:8081/api/users/?offset=0&rows=10&sortField=userName&sortOrder=1&idCompany=BAT",
 					"host": [
 						"localhost"
 					],
@@ -269,6 +365,22 @@
 						""
 					],
 					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "rows",
+							"value": "10"
+						},
+						{
+							"key": "sortField",
+							"value": "userName"
+						},
+						{
+							"key": "sortOrder",
+							"value": "1"
+						},
 						{
 							"key": "idCompany",
 							"value": "BAT"
@@ -284,7 +396,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8081/api/users/?idOrg=21",
+					"raw": "localhost:8081/api/users/?offset=0&rows=10&sortField=userName&sortOrder=1&idOrg=63",
 					"host": [
 						"localhost"
 					],
@@ -296,8 +408,24 @@
 					],
 					"query": [
 						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "rows",
+							"value": "10"
+						},
+						{
+							"key": "sortField",
+							"value": "userName"
+						},
+						{
+							"key": "sortOrder",
+							"value": "1"
+						},
+						{
 							"key": "idOrg",
-							"value": "21"
+							"value": "63"
 						}
 					]
 				}
@@ -481,12 +609,12 @@
 			"response": []
 		},
 		{
-			"name": "GET BANQUE BENEFICIAIRES",
+			"name": "GET BENEFICIAIRES BANQUE PAGED",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8081/api/beneficiaires/?bankShortName=BAB",
+					"raw": "localhost:8081/api/beneficiaires/?offset=0&rows=10&sortField=nom&sortOrder=2&bankShortName=BAT",
 					"host": [
 						"localhost"
 					],
@@ -498,8 +626,24 @@
 					],
 					"query": [
 						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "rows",
+							"value": "10"
+						},
+						{
+							"key": "sortField",
+							"value": "nom"
+						},
+						{
+							"key": "sortOrder",
+							"value": "2"
+						},
+						{
 							"key": "bankShortName",
-							"value": "BAB"
+							"value": "BAT"
 						}
 					]
 				}
@@ -507,7 +651,7 @@
 			"response": []
 		},
 		{
-			"name": "GET ORGANISATION BENEFICIAIRES",
+			"name": "GET BENEFICIAIRES  ORGANISATION PAGED",
 			"request": {
 				"method": "GET",
 				"header": [],

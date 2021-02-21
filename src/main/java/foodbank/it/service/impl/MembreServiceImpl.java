@@ -48,7 +48,7 @@ public class MembreServiceImpl implements IMembreService{
 	
 	}
 	@Override
-	public Page<Membre> findByLienDis(String lienDis, Pageable pageable) {
+	public Page<Membre> findByLienDis(Integer lienDis, Pageable pageable) {
 		return MembreRepository.findByLienDis(lienDis, pageable);
 	}
 	@Override
@@ -56,7 +56,7 @@ public class MembreServiceImpl implements IMembreService{
 			return MembreRepository.findByNomContaining(search, pageRequest);
 	}
 	@Override
-	public Page<Membre> findByLienDisAndNomContaining(String lienDis, String search, Pageable pageRequest) {
+	public Page<Membre> findByLienDisAndNomContaining(Integer lienDis, String search, Pageable pageRequest) {
 		return MembreRepository.findByLienDisAndNomContaining(lienDis, search, pageRequest);
 	}
 	@Override
@@ -70,7 +70,7 @@ public class MembreServiceImpl implements IMembreService{
 			return MembreRepository.findByPrenomContaining(search, pageRequest);
 	}
 	@Override
-	public Page<Membre> findByLienDisAndPrenomContaining(String lienDis, String search, Pageable pageRequest) {
+	public Page<Membre> findByLienDisAndPrenomContaining(Integer lienDis, String search, Pageable pageRequest) {
 		return MembreRepository.findByLienDisAndPrenomContaining(lienDis, search, pageRequest);
 	}
 	@Override
@@ -84,7 +84,7 @@ public class MembreServiceImpl implements IMembreService{
 			return MembreRepository.findByAddressContaining(search, pageRequest);
 	}
 	@Override
-	public Page<Membre> findByLienDisAndAddressContaining(String lienDis, String search, Pageable pageRequest) {
+	public Page<Membre> findByLienDisAndAddressContaining(Integer lienDis, String search, Pageable pageRequest) {
 		return MembreRepository.findByLienDisAndAddressContaining(lienDis, search, pageRequest);
 	}
 	@Override
@@ -98,7 +98,7 @@ public class MembreServiceImpl implements IMembreService{
 			return MembreRepository.findByZipStartsWith(search, pageRequest);
 	}
 	@Override
-	public Page<Membre> findByLienDisAndZipStartsWith(String lienDis, String search, Pageable pageRequest) {
+	public Page<Membre> findByLienDisAndZipStartsWith(Integer lienDis, String search, Pageable pageRequest) {
 		return MembreRepository.findByLienDisAndZipStartsWith(lienDis, search, pageRequest);
 	}
 	@Override
@@ -112,7 +112,7 @@ public class MembreServiceImpl implements IMembreService{
 			return MembreRepository.findByCityContaining(search, pageRequest);
 	}
 	@Override
-	public Page<Membre> findByLienDisAndCityContaining(String lienDis, String search, Pageable pageRequest) {
+	public Page<Membre> findByLienDisAndCityContaining(Integer lienDis, String search, Pageable pageRequest) {
 		return MembreRepository.findByLienDisAndCityContaining(lienDis, search, pageRequest);
 	}
 	@Override

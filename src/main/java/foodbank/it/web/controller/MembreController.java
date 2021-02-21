@@ -79,7 +79,7 @@ public class MembreController {
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndNomContaining(lienDis,searchValue, pageRequest);
+    					selectedMembres = this.MembreService.findByLienDisAndNomContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				}
@@ -97,7 +97,7 @@ public class MembreController {
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndPrenomContaining(lienDis,searchValue, pageRequest);
+    					selectedMembres = this.MembreService.findByLienDisAndPrenomContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				}
@@ -115,7 +115,7 @@ public class MembreController {
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndAddressContaining(lienDis,searchValue, pageRequest);
+    					selectedMembres = this.MembreService.findByLienDisAndAddressContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				}
@@ -133,7 +133,7 @@ public class MembreController {
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndZipStartsWith(lienDis,searchValue, pageRequest);
+    					selectedMembres = this.MembreService.findByLienDisAndZipStartsWith(Integer.parseInt(lienDis),searchValue, pageRequest);
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				}
@@ -151,7 +151,7 @@ public class MembreController {
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndCityContaining(lienDis,searchValue, pageRequest);
+    					selectedMembres = this.MembreService.findByLienDisAndCityContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
     					long totalRecords = selectedMembres.getTotalElements();
     					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
     				}
@@ -171,7 +171,7 @@ public class MembreController {
 					long totalRecords = selectedMembres.getTotalElements();
 					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
 				} else {
-					selectedMembres = this.MembreService.findByLienDis(lienDis, pageRequest);
+					selectedMembres = this.MembreService.findByLienDis(Integer.parseInt(lienDis), pageRequest);
 					long totalRecords = selectedMembres.getTotalElements();
 					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
 				}

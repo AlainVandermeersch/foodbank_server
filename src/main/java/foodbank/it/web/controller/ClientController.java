@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,37 +46,149 @@ public class ClientController {
     public ClientDto findOne(@PathVariable Integer idClient) {
         Client entity = ClientService.findByIdClient(idClient)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return convertToDto(entity);
+        return convertToDto(entity,1);
     }
     
     @CrossOrigin
     @GetMapping("beneficiaires/")
-    public Collection<ClientDto> find( @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
-        Iterable<Client> selectedClients = null;
-        List<ClientDto> ClientDtos = new ArrayList<>();
-        if (bankShortName == null) {
-        	if (lienDis == null) {
-        		selectedClients = this.ClientService.findAll();
-        		selectedClients.forEach(p -> ClientDtos.add(convertToDto(p)));
-        	}
-        	else {
-        		selectedClients = this.ClientService.findByLienDis(Integer.parseInt(lienDis));
-        	}
-        	
+	public Collection<ClientDto> find(@RequestParam String offset, @RequestParam String rows, 
+    		@RequestParam String sortField, @RequestParam String sortOrder, 
+    		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue,
+    		@RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
+    	int intOffset = Integer.parseInt(offset);
+    	int intRows = Integer.parseInt(rows);
+    	int pageNumber=intOffset/intRows; // Java throws away remainder of division
+        int pageSize = intRows;
+        Pageable pageRequest = null;
+        if (sortOrder.equals("1")) {
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).ascending());
         }
         else {
-        	selectedClients = this.ClientService.findByBanqueObjectBankShortName(bankShortName);        	
-        	
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
-        selectedClients.forEach(p -> ClientDtos.add(convertToDto(p)));
         
-        return ClientDtos;
+        Page<Client> selectedClients = null;
+        List<ClientDto> ClientDtos = new ArrayList<>();
+        if (searchField == null) searchField = "";
+        switch(searchField) {
+       
+        	case "nom":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedClients = this.ClientService.findByNomContaining(searchValue,pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedClients = this.ClientService.findByLienDisAndNomContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedClients = this.ClientService.findByBanqueObjectBankShortNameAndNomContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedClients.getTotalElements();
+    				selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "prenom":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedClients = this.ClientService.findByPrenomContaining(searchValue,pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedClients = this.ClientService.findByLienDisAndPrenomContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedClients = this.ClientService.findByBanqueObjectBankShortNameAndPrenomContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedClients.getTotalElements();
+    				selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "address":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedClients = this.ClientService.findByAdresseContaining(searchValue,pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedClients = this.ClientService.findByLienDisAndAdresseContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedClients = this.ClientService.findByBanqueObjectBankShortNameAndAdresseContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedClients.getTotalElements();
+    				selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "cp":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedClients = this.ClientService.findByCpStartsWith(searchValue,pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedClients = this.ClientService.findByLienDisAndCpStartsWith(Integer.parseInt(lienDis),searchValue, pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedClients = this.ClientService.findByBanqueObjectBankShortNameAndCpStartsWith(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedClients.getTotalElements();
+    				selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        	case "localite":
+        		if (bankShortName == null) {
+    				if (lienDis == null) {
+    					selectedClients = this.ClientService.findByLocaliteContaining(searchValue,pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				} else {
+    					selectedClients = this.ClientService.findByLienDisAndLocaliteContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
+    					long totalRecords = selectedClients.getTotalElements();
+    					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    				}
+
+    			} else {
+    				selectedClients = this.ClientService.findByBanqueObjectBankShortNameAndLocaliteContaining(bankShortName, searchValue, pageRequest);
+    				long totalRecords = selectedClients.getTotalElements();
+    				selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+    			}
+        		break;
+        		
+        	default:
+        	
+        		if (bankShortName == null) {
+				if (lienDis == null) {
+					selectedClients = this.ClientService.findAll(pageRequest);
+					long totalRecords = selectedClients.getTotalElements();
+					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+				} else {
+					selectedClients = this.ClientService.findByLienDis(Integer.parseInt(lienDis), pageRequest);
+					long totalRecords = selectedClients.getTotalElements();
+					selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+				}
+
+			} else {
+				selectedClients = this.ClientService.findByBanqueObjectBankShortName(bankShortName, pageRequest);
+				long totalRecords = selectedClients.getTotalElements();
+				selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
+			}
+        }
+       return ClientDtos;
     }
     @CrossOrigin
     @PutMapping("beneficiaire/{idClient}")
     public ClientDto updateClient(@PathVariable("idClient") Integer idClient, @RequestBody ClientDto updatedClient) {
         Client ClientEntity = convertToEntity(updatedClient);
-        return this.convertToDto(this.ClientService.save(ClientEntity));
+        return this.convertToDto(this.ClientService.save(ClientEntity),1);
     }
     @CrossOrigin
     @DeleteMapping("beneficiaire/{idClient}")
@@ -87,9 +203,9 @@ public class ClientController {
         Client entity = convertToEntity(newClient);
         // Alain todo later entity.setDateCreated(LocalDate.now());
         Client Client = this.ClientService.save(entity);        
-        return this.convertToDto(Client);
+        return this.convertToDto(Client,1);
     }
-    protected ClientDto convertToDto(Client entity) {
+    protected ClientDto convertToDto(Client entity,long totalRecords) {
     	String bankShortName = "";
     	String bankName = "";
     	Banque banqueObject = entity.getBanqueObject();
@@ -103,7 +219,7 @@ public class ClientController {
 				entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getPays(), entity.getEmail(), entity.getTel(),entity.getGsm(), 
 				entity.getConnu(), entity.getGenre(), entity.getActif(), entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
 				entity.getLCpas(), entity.getDatUpdBirb(), entity.getCritBirb(), entity.getCoeff(), entity.getNomsav(), entity.getPrenomsav(),
-				entity.getGenreconj(), entity.getLbanque(), bankShortName,bankName );    
+				entity.getGenreconj(), entity.getLbanque(), bankShortName,bankName,totalRecords );    
         return dto;
     }
 

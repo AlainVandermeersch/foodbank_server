@@ -42,7 +42,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  @Column(name="id_int", length=7)
  private String idInt;
  @Column(name="lien_dis", nullable=false, precision=10)
- private int lienDis;
+ private Integer lienDis;
   @Column(nullable=false, length=50)
  private String nom;
  @Column(nullable=false, length=50)
@@ -106,7 +106,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  }
  
 
- public Client(int idClient,String idInt, int lienDis, short lbanque, String nom, String prenom, String nomconj, String prenomconj,
+ public Client(int idClient,String idInt, Integer lienDis, short lbanque, String nom, String prenom, String nomconj, String prenomconj,
 		short civilite, String daten, String datenConj, short civiliteconj, String adresse, String cp, String localite,
 		String pays, String email, String tel, String gsm, String connu, int genre, short actif, short birb,
 		String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb, short critBirb, short coeff,
@@ -190,7 +190,7 @@ private static final long serialVersionUID = -8518218294613491486L;
   *
   * @return the current value of lienDis
   */
- public int getLienDis() {
+ public Integer getLienDis() {
      return lienDis;
  }
 
@@ -199,7 +199,7 @@ private static final long serialVersionUID = -8518218294613491486L;
   *
   * @param aLienDis the new value for lienDis
   */
- public void setLienDis(int aLienDis) {
+ public void setLienDis(Integer aLienDis) {
      lienDis = aLienDis;
  }
 
