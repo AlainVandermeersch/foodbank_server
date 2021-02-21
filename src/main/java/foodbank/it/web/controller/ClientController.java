@@ -108,7 +108,7 @@ public class ClientController {
     				selectedClients.forEach(p -> ClientDtos.add(convertToDto(p, totalRecords)));
     			}
         		break;
-        	case "address":
+        	case "adresse":
         		if (bankShortName == null) {
     				if (lienDis == null) {
     					selectedClients = this.ClientService.findByAdresseContaining(searchValue,pageRequest);
