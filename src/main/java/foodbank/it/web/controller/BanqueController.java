@@ -3,6 +3,7 @@ package foodbank.it.web.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import foodbank.it.persistence.model.Banque;
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueDto;
@@ -50,16 +50,18 @@ public class BanqueController {
     
     @CrossOrigin
     @GetMapping("banques/")
-    public Collection<BanqueDto> find( @RequestParam(required = false) String actif) {
-        Iterable<Banque> selectedBanques = null;
-        if (actif == null) {	
-        	selectedBanques = this.BanqueService.findAll();
+    public Collection<BanqueDto> find( @RequestParam(required = false) String bankShortName) {       
+        List<BanqueDto> BanqueDtos = new ArrayList<>();
+        if (bankShortName == null) {	
+        	Iterable<Banque> selectedBanques = this.BanqueService.findAll();
+        	selectedBanques.forEach(p -> BanqueDtos.add(convertToDto(p)));
         }
         else {
-        	selectedBanques = this.BanqueService.findByActif(Short.parseShort(actif));
+        	Optional<Banque> myBanque = this.BanqueService.findByBankShortName(bankShortName);
+    		myBanque.ifPresent(org-> BanqueDtos.add(convertToDto( org)));
         }
-        List<BanqueDto> BanqueDtos = new ArrayList<>();
-        selectedBanques.forEach(p -> BanqueDtos.add(convertToDto(p)));
+        
+       
         return BanqueDtos;
     }
     @CrossOrigin

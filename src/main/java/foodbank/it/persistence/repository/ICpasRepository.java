@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import foodbank.it.persistence.model.Cpas;
-import foodbank.it.persistence.model.Membre;
 
 public interface ICpasRepository extends PagingAndSortingRepository<Cpas, Integer>{
     Optional<Cpas> findByCpasId(int cpasId);

@@ -37,7 +37,7 @@ public class DepotDto {
 
 	public DepotDto(String idDepot, String nom, String adresse, String adresse2, String cp, String ville,
 			String telephone, String contact, String email, String memo, Short depPrinc, Short actif, Short depFead,
-			String bankName, String bankShortName) {
+			String bankShortName,String bankName) {
 		super();
 		this.idDepot = idDepot;
 		this.nom = nom;

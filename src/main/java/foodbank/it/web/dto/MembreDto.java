@@ -86,7 +86,7 @@ public class MembreDto {
 			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, LocalDate datmand, String rem,
 			LocalDateTime lastVisit, Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
-			Integer lDep, String bankName, String bankShortName,Long  totalRecords) {
+			Integer lDep, String bankShortName,String bankName, Long  totalRecords) {
 		super();
 		this.batId = batId;
 		this.lienDis = lienDis;
