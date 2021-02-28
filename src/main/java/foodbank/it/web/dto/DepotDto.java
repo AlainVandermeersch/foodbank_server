@@ -21,11 +21,12 @@ public class DepotDto {
 	 
 	 private String memo;
 	
-	 private Short depPrinc;
+	 private boolean depPrinc;
 	
-	 private Short actif;
+	 private boolean actif;
 	
-	 private Short depFead;
+	 private boolean depFead;
+	 
 	 private String bankName;
 	 private String bankShortName;
 	
@@ -36,7 +37,7 @@ public class DepotDto {
 	}
 
 	public DepotDto(String idDepot, String nom, String adresse, String adresse2, String cp, String ville,
-			String telephone, String contact, String email, String memo, Short depPrinc, Short actif, Short depFead,
+			String telephone, String contact, String email, String memo, boolean depPrinc, boolean actif, boolean depFead,
 			String bankShortName,String bankName) {
 		super();
 		this.idDepot = idDepot;
@@ -50,7 +51,7 @@ public class DepotDto {
 		this.email = email;
 		this.memo = memo;
 		this.depPrinc = depPrinc;
-		this.actif = actif;
+		this.actif = actif ;
 		this.depFead = depFead;
 		this.bankName = bankName;
 		this.bankShortName = bankShortName;
@@ -137,27 +138,27 @@ public class DepotDto {
 		this.memo = memo;
 	}
 
-	public Short getDepPrinc() {
+	public boolean getDepPrinc() {
 		return depPrinc;
 	}
 
-	public void setDepPrinc(Short depPrinc) {
+	public void setDepPrinc(boolean  depPrinc) {
 		this.depPrinc = depPrinc;
 	}
 
-	public Short getActif() {
+	public boolean getActif() {
 		return actif;
 	}
 
-	public void setActif(Short actif) {
+	public void setActif(boolean actif) {
 		this.actif = actif;
 	}
 
-	public Short getDepFead() {
+	public boolean getDepFead() {
 		return depFead;
 	}
 
-	public void setDepFead(Short depFead) {
+	public void setDepFead(boolean depFead) {
 		this.depFead = depFead;
 	}
 

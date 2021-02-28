@@ -89,10 +89,13 @@ public class DepotController {
     	if ( ! isNull(banqueObject)) {
     		bankShortName = banqueObject.getBankShortName();
     		bankName = banqueObject.getBankName();
-    	} 
+    	}
+    	boolean booDepPrinc= entity.getDepPrinc() == 1;
+    	boolean booActif= entity.getActif() == 1;
+    	boolean booDepFead= entity.getDepFead() == 1;
     	
         DepotDto dto = new DepotDto(entity.getIdDepot(), entity.getNom(), entity.getAdresse(), entity.getAdresse2(), entity.getCp(), entity.getVille(),
-    			entity.getTelephone(), entity.getContact(), entity.getEmail(), entity.getMemo(), entity.getDepPrinc(), entity.getActif(), entity.getDepFead(),
+    			entity.getTelephone(), entity.getContact(), entity.getEmail(), entity.getMemo(), booDepPrinc, booActif, booDepFead,
     			bankShortName,bankName );    
         return dto;
     }
@@ -101,7 +104,9 @@ public class DepotController {
     	Banque banqueObject = this.BanqueService.findByBankShortName(dto.getBankShortName()).get();
     	    
     	Depot myDepot = new Depot( dto.getIdDepot(), dto.getNom(), dto.getAdresse(), dto.getAdresse2(), dto.getCp(), dto.getVille(),
-    			dto.getTelephone(), dto.getContact(), dto.getEmail(), dto.getMemo(), dto.getDepPrinc(), dto.getActif(), dto.getDepFead(),banqueObject);       
+    			dto.getTelephone(), dto.getContact(), dto.getEmail(), dto.getMemo(), 
+    			(short) (dto.getDepPrinc() ? 1 : 0), (short) (dto.getActif() ? 1 : 0) , (short) (dto.getDepFead() ? 1 : 0),banqueObject);  
+    	
         if (!StringUtils.isEmpty(dto.getIdDepot())) {
             myDepot.setIdDepot(dto.getIdDepot());
         }

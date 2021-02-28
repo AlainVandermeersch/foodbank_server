@@ -47,11 +47,11 @@ public class Depot implements Serializable {
  @Column(name="MEMO")
  private String memo;
  @Column(name="DEP_PRINC", precision=3)
- private Short depPrinc;
+ private short depPrinc;
  @Column(precision=3)
- private Short actif;
+ private short actif;
  @Column(name="DEP_FEAD", precision=3)
- private Short depFead;
+ private short depFead;
  @ManyToOne
  @JoinColumn(name="lien_banque")
  private Banque banqueObject;
@@ -64,7 +64,7 @@ public class Depot implements Serializable {
 
  
  public Depot(String idDepot, String nom, String adresse, String adresse2, String cp, String ville, String telephone,
-		String contact, String email, String memo, Short depPrinc, Short actif, Short depFead, Banque banqueObject) {
+		String contact, String email, String memo, short depPrinc, short actif, short depFead, Banque banqueObject) {
 	super();
 	this.idDepot = idDepot;
 	this.nom = nom;
