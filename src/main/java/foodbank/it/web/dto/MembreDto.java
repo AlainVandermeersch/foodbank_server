@@ -45,7 +45,7 @@ public class MembreDto {
 	 private Short actif;
 	 
 	 private Short authority;
-	 private LocalDate datmand;
+	 private String datmand;
 	 private String rem;
 	
 	 private LocalDateTime lastVisit;
@@ -83,7 +83,7 @@ public class MembreDto {
 
 	public MembreDto(Integer batId, Integer lienDis, String nom, String prenom, String address, String city, String zip,
 			String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction, Short ca,
-			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, LocalDate datmand, String rem,
+			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand, String rem,
 			LocalDateTime lastVisit, Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
 			Integer lDep, String bankShortName,String bankName, Long  totalRecords) {
@@ -297,11 +297,11 @@ public class MembreDto {
 		this.authority = authority;
 	}
 
-	public LocalDate getDatmand() {
+	public String getDatmand() {
 		return datmand;
 	}
 
-	public void setDatmand(LocalDate datmand) {
+	public void setDatmand(String datmand) {
 		this.datmand = datmand;
 	}
 

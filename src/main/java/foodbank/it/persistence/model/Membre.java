@@ -76,7 +76,7 @@ public class Membre implements Serializable {
  private Short actif;
  @Column(nullable=false, precision=3)
  private Short authority;
- private LocalDate datmand;
+ private String datmand;
  private String rem;
  @Column(name="last_visit", nullable=false)
  private LocalDateTime lastVisit;
@@ -114,7 +114,7 @@ public class Membre implements Serializable {
 
  public Membre(Integer batId, Integer lienDis, String nom, String prenom, String address, String city,
 		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction,
-		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, LocalDate datmand,
+		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand,
 		String rem, LocalDateTime lastVisit, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
 		String datedeb, String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat,
 		String dateContrat, Integer lDep, Banque banqueObject) {
@@ -542,7 +542,7 @@ public class Membre implements Serializable {
   *
   * @return the current value of datmand
   */
- public LocalDate getDatmand() {
+ public String getDatmand() {
      return datmand;
  }
 
@@ -551,7 +551,7 @@ public class Membre implements Serializable {
   *
   * @param aDatmand the new value for datmand
   */
- public void setDatmand(LocalDate aDatmand) {
+ public void setDatmand(String aDatmand) {
      datmand = aDatmand;
  }
 
