@@ -45,33 +45,35 @@ public class Banque implements Serializable {
     @Column(nullable=false)
     private LocalDateTime lastvisit;
     @Column(name="nomPRES", nullable=false, precision=5)
-    private short nomPres;
+    private short idMemberPres;
     @Column(name="nomVP", nullable=false, precision=5)
-    private short nomVp;
+    private short idMemberVp;
     @Column(name="nomSEC", nullable=false, precision=5)
-    private short nomSec;
+    private short idMemberSec;
     @Column(name="nomTRES", nullable=false, precision=5)
-    private short nomTres;
+    private short idMemberTres;
     @Column(name="nomIT", nullable=false, precision=5)
-    private short nomIt;
+    private short idMemberIt;
     @Column(name="nomLOG", nullable=false, precision=5)
-    private short nomLog;
+    private short idMemberLog;
     @Column(name="nomRH", nullable=false, precision=5)
-    private short nomRh;
+    private short idMemberRh;
     @Column(name="nomSH", nullable=false, precision=5)
-    private short nomSh;
+    private short idMemberSh;
     @Column(name="nomPP", nullable=false, precision=5)
-    private short nomPp;
+    private short idMemberPp;
     @Column(name="nomASSO", nullable=false, precision=5)
-    private short nomAsso;
+    private short idMemberAsso;
     @Column(name="nomAPPRO", nullable=false, precision=5)
-    private short nomAppro;
+    private short idMemberAppro;
     @Column(name="nomPUBREL", nullable=false, precision=5)
-    private short nomPubrel;
+    private short idMemberPubrel;
     @Column(name="nomCEO", nullable=false, precision=10)
-    private int nomCeo;
+    private int idMemberCeo;
     @Column(name="nomFEAD", nullable=false, precision=10)
-    private int nomFead;
+    private int idMemberFead;
+    @Column(name="nomQUAL", nullable=true, precision=5)
+    private Short idMemberQual;
     @Column(nullable=false, length=50)
     private String adresse;
     @Column(nullable=false, length=10)
@@ -111,8 +113,8 @@ public class Banque implements Serializable {
         super();
     }
 
-    public Banque(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short nomPres, short nomVp, short nomSec, short nomTres, short nomIt, short nomLog, short nomRh,
-        short nomSh, short nomPp, short nomAsso, short nomAppro, short nomPubrel, int nomCeo, int nomFead, String adresse, String cp, String localite, String bankTel, String bankGsm, String adresseDepotPrinc, String cpDepotPrinc, String cityDepotPrinc,
+    public Banque(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short idMemberPres, short idMemberVp, short idMemberSec, short idMemberTres, short idMemberIt, short idMemberLog, short idMemberRh,
+        short idMemberSh, short idMemberPp, short idMemberAsso, short idMemberAppro, short idMemberPubrel, int idMemberCeo, int idMemberFead,Short idMemberQual, String adresse, String cp, String localite, String bankTel, String bankGsm, String adresseDepotPrinc, String cpDepotPrinc, String cityDepotPrinc,
         String depPrincTel, String ssAdresse, String ssCp, String ssCity, String ssTel, int regio, String website, String bank) {
               
         this.bankId = bankId;
@@ -123,20 +125,22 @@ public class Banque implements Serializable {
         this.actif = actif;
         this.comGest = comGest;
         this.lastvisit = lastvisit;
-        this.nomPres = nomPres;
-        this.nomVp = nomVp;
-        this.nomSec = nomSec;
-        this.nomTres = nomTres;
-        this.nomIt = nomIt;
-        this.nomLog = nomLog;
-        this.nomRh = nomRh;
-        this.nomSh = nomSh;
-        this.nomPp = nomPp;
-        this.nomAsso = nomAsso;
-        this.nomAppro = nomAppro;
-        this.nomPubrel = nomPubrel;
-        this.nomCeo = nomCeo;
-        this.nomFead = nomFead;
+        this.idMemberPres = idMemberPres;
+        this.idMemberVp = idMemberVp;
+        this.idMemberSec = idMemberSec;
+        this.idMemberTres = idMemberTres;
+        this.idMemberIt = idMemberIt;
+        this.idMemberLog = idMemberLog;
+        this.idMemberRh =idMemberRh;
+        this.idMemberSh = idMemberSh;
+        this.idMemberPp = idMemberPp;
+        
+        this.idMemberAsso = idMemberAsso;
+        this.idMemberAppro = idMemberAppro;
+        this.idMemberPubrel = idMemberPubrel;
+        this.idMemberCeo = idMemberCeo;
+        this.idMemberFead = idMemberFead;
+        this.idMemberQual = idMemberQual;
         this.adresse = adresse;
         this.cp = cp;
         this.localite = localite;
@@ -300,259 +304,130 @@ public class Banque implements Serializable {
         lastvisit = aLastvisit;
     }
 
-    /**
-     * Access method for nomPres.
-     *
-     * @return the current value of nomPres
-     */
-    public short getNomPres() {
-        return nomPres;
-    }
 
-    /**
-     * Setter method for nomPres.
-     *
-     * @param aNomPres the new value for nomPres
-     */
-    public void setNomPres(short aNomPres) {
-        nomPres = aNomPres;
-    }
+    public short getIdMemberPres() {
+		return idMemberPres;
+	}
 
-    /**
-     * Access method for nomVp.
-     *
-     * @return the current value of nomVp
-     */
-    public short getNomVp() {
-        return nomVp;
-    }
+	public void setIdMemberPres(short idMemberPres) {
+		this.idMemberPres = idMemberPres;
+	}
 
-    /**
-     * Setter method for nomVp.
-     *
-     * @param aNomVp the new value for nomVp
-     */
-    public void setNomVp(short aNomVp) {
-        nomVp = aNomVp;
-    }
+	public short getIdMemberVp() {
+		return idMemberVp;
+	}
 
-    /**
-     * Access method for nomSec.
-     *
-     * @return the current value of nomSec
-     */
-    public short getNomSec() {
-        return nomSec;
-    }
+	public void setIdMemberVp(short idMemberVp) {
+		this.idMemberVp = idMemberVp;
+	}
 
-    /**
-     * Setter method for nomSec.
-     *
-     * @param aNomSec the new value for nomSec
-     */
-    public void setNomSec(short aNomSec) {
-        nomSec = aNomSec;
-    }
+	public short getIdMemberSec() {
+		return idMemberSec;
+	}
 
-    /**
-     * Access method for nomTres.
-     *
-     * @return the current value of nomTres
-     */
-    public short getNomTres() {
-        return nomTres;
-    }
+	public void setIdMemberSec(short idMemberSec) {
+		this.idMemberSec = idMemberSec;
+	}
 
-    /**
-     * Setter method for nomTres.
-     *
-     * @param aNomTres the new value for nomTres
-     */
-    public void setNomTres(short aNomTres) {
-        nomTres = aNomTres;
-    }
+	public short getIdMemberTres() {
+		return idMemberTres;
+	}
 
-    /**
-     * Access method for nomIt.
-     *
-     * @return the current value of nomIt
-     */
-    public short getNomIt() {
-        return nomIt;
-    }
+	public void setIdMemberTres(short idMemberTres) {
+		this.idMemberTres = idMemberTres;
+	}
 
-    /**
-     * Setter method for nomIt.
-     *
-     * @param aNomIt the new value for nomIt
-     */
-    public void setNomIt(short aNomIt) {
-        nomIt = aNomIt;
-    }
+	public short getIdMemberIt() {
+		return idMemberIt;
+	}
 
-    /**
-     * Access method for nomLog.
-     *
-     * @return the current value of nomLog
-     */
-    public short getNomLog() {
-        return nomLog;
-    }
+	public void setIdMemberIt(short idMemberIt) {
+		this.idMemberIt = idMemberIt;
+	}
 
-    /**
-     * Setter method for nomLog.
-     *
-     * @param aNomLog the new value for nomLog
-     */
-    public void setNomLog(short aNomLog) {
-        nomLog = aNomLog;
-    }
+	public short getIdMemberLog() {
+		return idMemberLog;
+	}
 
-    /**
-     * Access method for nomRh.
-     *
-     * @return the current value of nomRh
-     */
-    public short getNomRh() {
-        return nomRh;
-    }
+	public void setIdMemberLog(short idMemberLog) {
+		this.idMemberLog = idMemberLog;
+	}
 
-    /**
-     * Setter method for nomRh.
-     *
-     * @param aNomRh the new value for nomRh
-     */
-    public void setNomRh(short aNomRh) {
-        nomRh = aNomRh;
-    }
+	public short getIdMemberRh() {
+		return idMemberRh;
+	}
 
-    /**
-     * Access method for nomSh.
-     *
-     * @return the current value of nomSh
-     */
-    public short getNomSh() {
-        return nomSh;
-    }
+	public void setIdMemberRh(short idMemberRh) {
+		this.idMemberRh = idMemberRh;
+	}
 
-    /**
-     * Setter method for nomSh.
-     *
-     * @param aNomSh the new value for nomSh
-     */
-    public void setNomSh(short aNomSh) {
-        nomSh = aNomSh;
-    }
+	public short getIdMemberSh() {
+		return idMemberSh;
+	}
 
-    /**
-     * Access method for nomPp.
-     *
-     * @return the current value of nomPp
-     */
-    public short getNomPp() {
-        return nomPp;
-    }
+	public void setIdMemberSh(short idMemberSh) {
+		this.idMemberSh = idMemberSh;
+	}
 
-    /**
-     * Setter method for nomPp.
-     *
-     * @param aNomPp the new value for nomPp
-     */
-    public void setNomPp(short aNomPp) {
-        nomPp = aNomPp;
-    }
+	public short getIdMemberPp() {
+		return idMemberPp;
+	}
 
-    /**
-     * Access method for nomAsso.
-     *
-     * @return the current value of nomAsso
-     */
-    public short getNomAsso() {
-        return nomAsso;
-    }
+	public void setIdMemberPp(short idMemberPp) {
+		this.idMemberPp = idMemberPp;
+	}
 
-    /**
-     * Setter method for nomAsso.
-     *
-     * @param aNomAsso the new value for nomAsso
-     */
-    public void setNomAsso(short aNomAsso) {
-        nomAsso = aNomAsso;
-    }
+	public short getIdMemberAsso() {
+		return idMemberAsso;
+	}
 
-    /**
-     * Access method for nomAppro.
-     *
-     * @return the current value of nomAppro
-     */
-    public short getNomAppro() {
-        return nomAppro;
-    }
+	public void setIdMemberAsso(short idMemberAsso) {
+		this.idMemberAsso = idMemberAsso;
+	}
 
-    /**
-     * Setter method for nomAppro.
-     *
-     * @param aNomAppro the new value for nomAppro
-     */
-    public void setNomAppro(short aNomAppro) {
-        nomAppro = aNomAppro;
-    }
+	public short getIdMemberAppro() {
+		return idMemberAppro;
+	}
 
-    /**
-     * Access method for nomPubrel.
-     *
-     * @return the current value of nomPubrel
-     */
-    public short getNomPubrel() {
-        return nomPubrel;
-    }
+	public void setIdMemberAppro(short idMemberAppro) {
+		this.idMemberAppro = idMemberAppro;
+	}
 
-    /**
-     * Setter method for nomPubrel.
-     *
-     * @param aNomPubrel the new value for nomPubrel
-     */
-    public void setNomPubrel(short aNomPubrel) {
-        nomPubrel = aNomPubrel;
-    }
+	public short getIdMemberPubrel() {
+		return idMemberPubrel;
+	}
 
-    /**
-     * Access method for nomCeo.
-     *
-     * @return the current value of nomCeo
-     */
-    public int getNomCeo() {
-        return nomCeo;
-    }
+	public void setIdMemberPubrel(short idMemberPubrel) {
+		this.idMemberPubrel = idMemberPubrel;
+	}
 
-    /**
-     * Setter method for nomCeo.
-     *
-     * @param aNomCeo the new value for nomCeo
-     */
-    public void setNomCeo(int aNomCeo) {
-        nomCeo = aNomCeo;
-    }
+	public int getIdMemberCeo() {
+		return idMemberCeo;
+	}
 
-    /**
-     * Access method for nomFead.
-     *
-     * @return the current value of nomFead
-     */
-    public int getNomFead() {
-        return nomFead;
-    }
+	public void setIdMemberCeo(int idMemberCeo) {
+		this.idMemberCeo = idMemberCeo;
+	}
 
-    /**
-     * Setter method for nomFead.
-     *
-     * @param aNomFead the new value for nomFead
-     */
-    public void setNomFead(int aNomFead) {
-        nomFead = aNomFead;
-    }
+	public int getIdMemberFead() {
+		return idMemberFead;
+	}
 
-    /**
+	public void setIdMemberFead(int idMemberFead) {
+		this.idMemberFead = idMemberFead;
+	}
+	
+	
+
+	public Short getIdMemberQual() {
+		return idMemberQual;
+	}
+
+	public void setIdMemberQual(Short idMemberQual) {
+		this.idMemberQual = idMemberQual;
+	}
+
+	/**
      * Access method for adresse.
      *
      * @return the current value of adresse

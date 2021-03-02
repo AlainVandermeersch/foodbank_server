@@ -86,15 +86,19 @@ public class BanqueController {
         return this.convertToDto(Banque);
     }
     protected BanqueDto convertToDto(Banque entity) {
-        BanqueDto dto = new BanqueDto(entity.getBankId(), entity.getBankShortName(), entity.getBankName(), entity.getNrEntr(), entity.getBankMail(), entity.getActif(), entity.getComGest(), entity.getLastvisit(), entity.getNomPres(), entity.getNomVp(), entity.getNomSec(), entity.getNomTres(), entity.getNomIt(), entity.getNomLog(), entity.getNomRh(),
-            entity.getNomSh(), entity.getNomPp(), entity.getNomAsso(), entity.getNomAppro(), entity.getNomPubrel(), entity.getNomCeo(), entity.getNomFead(), entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getBankTel(), entity.getBankGsm(), entity.getAdresseDepotPrinc(), entity.getCpDepotPrinc(), entity.getCityDepotPrinc(),
+        BanqueDto dto = new BanqueDto(entity.getBankId(), entity.getBankShortName(), entity.getBankName(), entity.getNrEntr(), entity.getBankMail(), entity.getActif(), entity.getComGest(), entity.getLastvisit(), entity.getIdMemberPres(), entity.getIdMemberVp(), entity.getIdMemberSec(), entity.getIdMemberTres(), entity.getIdMemberIt(), entity.getIdMemberLog(), entity.getIdMemberRh(),
+            entity.getIdMemberSh(), entity.getIdMemberPp(), entity.getIdMemberAsso(), entity.getIdMemberAppro(), 
+            entity.getIdMemberPubrel(), entity.getIdMemberCeo(), entity.getIdMemberFead(),entity.getIdMemberQual() ,
+            entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getBankTel(), entity.getBankGsm(), entity.getAdresseDepotPrinc(), entity.getCpDepotPrinc(), entity.getCityDepotPrinc(),
             entity.getDepPrincTel(), entity.getSsAdresse(), entity.getSsCp(), entity.getSsCity(), entity.getSsTel(), entity.getRegio(), entity.getWebsite(), entity.getBank());       
         return dto;
     }
 
     protected Banque convertToEntity(BanqueDto dto) {
-        Banque banque = new Banque( dto.getBankId(),dto.getBankShortName(), dto.getBankName(), dto.getNrEntr(), dto.getBankMail(), dto.getActif(), dto.getComGest(), dto.getLastvisit(), dto.getNomPres(), dto.getNomVp(), dto.getNomSec(), dto.getNomTres(), dto.getNomIt(), dto.getNomLog(), dto.getNomRh(),
-            dto.getNomSh(), dto.getNomPp(), dto.getNomAsso(), dto.getNomAppro(), dto.getNomPubrel(), dto.getNomCeo(), dto.getNomFead(), dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getBankTel(), dto.getBankGsm(), dto.getAdresseDepotPrinc(), dto.getCpDepotPrinc(), dto.getCityDepotPrinc(),
+        Banque banque = new Banque( dto.getBankId(),dto.getBankShortName(), dto.getBankName(), dto.getNrEntr(), dto.getBankMail(), dto.getActif(), dto.getComGest(), dto.getLastvisit(), dto.getIdMemberPres(), dto.getIdMemberVp(), dto.getIdMemberSec(), dto.getIdMemberTres(), dto.getIdMemberIt(), dto.getIdMemberLog(), dto.getIdMemberRh(),
+            dto.getIdMemberSh(), dto.getIdMemberPp(), dto.getIdMemberAsso(), dto.getIdMemberAppro(),
+            dto.getIdMemberPubrel(), dto.getIdMemberCeo(), dto.getIdMemberFead(), dto.getIdMemberQual(),
+            dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getBankTel(), dto.getBankGsm(), dto.getAdresseDepotPrinc(), dto.getCpDepotPrinc(), dto.getCityDepotPrinc(),
             dto.getDepPrincTel(), dto.getSsAdresse(), dto.getSsCp(), dto.getSsCity(), dto.getSsTel(), dto.getRegio(), dto.getWebsite(), dto.getBank());       
         if (!StringUtils.isEmpty(dto.getBankId())) {
             banque.setBankId(dto.getBankId());

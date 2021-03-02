@@ -19,33 +19,35 @@ public class BanqueDto {
    
     private LocalDateTime lastvisit;
     
-    private short nomPres;
+    private short idMemberPres;
    
-    private short nomVp;
+    private short idMemberVp;
    
-    private short nomSec;
+    private short idMemberSec;
    
-    private short nomTres;
+    private short idMemberTres;
     
-    private short nomIt;
+    private short idMemberIt;
     
-    private short nomLog;
+    private short idMemberLog;
     
-    private short nomRh;
+    private short idMemberRh;
     
-    private short nomSh;
-    
-    private short nomPp;
+    private short idMemberSh;
+        
+    private short idMemberPp;
    
-    private short nomAsso;
+    private short idMemberAsso;
    
-    private short nomAppro;
+    private short idMemberAppro;
     
-    private short nomPubrel;
+    private short idMemberPubrel;
     
-    private int nomCeo;
+    private int idMemberCeo;
    
-    private int nomFead;
+    private int idMemberFead;
+    
+    private Short idMemberQual;
    
     private String adresse;
    
@@ -85,8 +87,8 @@ public class BanqueDto {
         
     }
 
-    public BanqueDto(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short nomPres, short nomVp, short nomSec, short nomTres, short nomIt, short nomLog, short nomRh,
-        short nomSh, short nomPp, short nomAsso, short nomAppro, short nomPubrel, int nomCeo, int nomFead, String adresse, String cp, String localite, String bankTel, String bankGsm, String adresseDepotPrinc, String cpDepotPrinc, String cityDepotPrinc,
+    public BanqueDto(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short idMemberPres, short idMemberVp, short idMemberSec, short idMemberTres, short idMemberIt, short idMemberLog, short idMemberRh,
+        short idMemberSh, short idMemberPp, short idMemberAsso, short idMemberAppro, short idMemberPubrel, int idMemberCeo, int idMemberFead, Short idMemberQual, String adresse, String cp, String localite, String bankTel, String bankGsm, String adresseDepotPrinc, String cpDepotPrinc, String cityDepotPrinc,
         String depPrincTel, String ssAdresse, String ssCp, String ssCity, String ssTel, int regio, String website, String bank) {
         super();
         this.bankId = bankId;
@@ -97,20 +99,21 @@ public class BanqueDto {
         this.actif = actif;
         this.comGest = comGest;
         this.lastvisit = lastvisit;
-        this.nomPres = nomPres;
-        this.nomVp = nomVp;
-        this.nomSec = nomSec;
-        this.nomTres = nomTres;
-        this.nomIt = nomIt;
-        this.nomLog = nomLog;
-        this.nomRh = nomRh;
-        this.nomSh = nomSh;
-        this.nomPp = nomPp;
-        this.nomAsso = nomAsso;
-        this.nomAppro = nomAppro;
-        this.nomPubrel = nomPubrel;
-        this.nomCeo = nomCeo;
-        this.nomFead = nomFead;
+        this.idMemberPres = idMemberPres;
+        this.idMemberVp = idMemberVp;
+        this.idMemberSec = idMemberSec;
+        this.idMemberTres = idMemberTres;
+        this.idMemberIt = idMemberIt;
+        this.idMemberLog = idMemberLog;
+        this.idMemberRh = idMemberRh;
+        this.idMemberSh = idMemberSh;
+        this.idMemberPp = idMemberPp;
+        this.idMemberAsso = idMemberAsso;
+        this.idMemberAppro = idMemberAppro;
+        this.idMemberPubrel = idMemberPubrel;
+        this.idMemberCeo = idMemberCeo;
+        this.idMemberFead = idMemberFead;
+        this.idMemberQual = idMemberQual;
         this.adresse = adresse;
         this.cp = cp;
         this.localite = localite;
@@ -194,119 +197,130 @@ public class BanqueDto {
         this.lastvisit = lastvisit;
     }
 
-    public short getNomPres() {
-        return nomPres;
-    }
+   
+    public short getIdMemberPres() {
+		return idMemberPres;
+	}
 
-    public void setNomPres(short nomPres) {
-        this.nomPres = nomPres;
-    }
+	public void setIdMemberPres(short idMemberPres) {
+		this.idMemberPres = idMemberPres;
+	}
 
-    public short getNomVp() {
-        return nomVp;
-    }
+	public short getIdMemberVp() {
+		return idMemberVp;
+	}
 
-    public void setNomVp(short nomVp) {
-        this.nomVp = nomVp;
-    }
+	public void setIdMemberVp(short idMemberVp) {
+		this.idMemberVp = idMemberVp;
+	}
 
-    public short getNomSec() {
-        return nomSec;
-    }
+	public short getIdMemberSec() {
+		return idMemberSec;
+	}
 
-    public void setNomSec(short nomSec) {
-        this.nomSec = nomSec;
-    }
+	public void setIdMemberSec(short idMemberSec) {
+		this.idMemberSec = idMemberSec;
+	}
 
-    public short getNomTres() {
-        return nomTres;
-    }
+	public short getIdMemberTres() {
+		return idMemberTres;
+	}
 
-    public void setNomTres(short nomTres) {
-        this.nomTres = nomTres;
-    }
+	public void setIdMemberTres(short idMemberTres) {
+		this.idMemberTres = idMemberTres;
+	}
 
-    public short getNomIt() {
-        return nomIt;
-    }
+	public short getIdMemberIt() {
+		return idMemberIt;
+	}
 
-    public void setNomIt(short nomIt) {
-        this.nomIt = nomIt;
-    }
+	public void setIdMemberIt(short idMemberIt) {
+		this.idMemberIt = idMemberIt;
+	}
 
-    public short getNomLog() {
-        return nomLog;
-    }
+	public short getIdMemberLog() {
+		return idMemberLog;
+	}
 
-    public void setNomLog(short nomLog) {
-        this.nomLog = nomLog;
-    }
+	public void setIdMemberLog(short idMemberLog) {
+		this.idMemberLog = idMemberLog;
+	}
 
-    public short getNomRh() {
-        return nomRh;
-    }
+	public short getIdMemberRh() {
+		return idMemberRh;
+	}
 
-    public void setNomRh(short nomRh) {
-        this.nomRh = nomRh;
-    }
+	public void setIdMemberRh(short idMemberRh) {
+		this.idMemberRh = idMemberRh;
+	}
 
-    public short getNomSh() {
-        return nomSh;
-    }
+	public short getIdMemberSh() {
+		return idMemberSh;
+	}
 
-    public void setNomSh(short nomSh) {
-        this.nomSh = nomSh;
-    }
+	public void setIdMemberSh(short idMemberSh) {
+		this.idMemberSh = idMemberSh;
+	}
 
-    public short getNomPp() {
-        return nomPp;
-    }
+	public short getIdMemberPp() {
+		return idMemberPp;
+	}
 
-    public void setNomPp(short nomPp) {
-        this.nomPp = nomPp;
-    }
+	public void setIdMemberPp(short idMemberPp) {
+		this.idMemberPp = idMemberPp;
+	}
 
-    public short getNomAsso() {
-        return nomAsso;
-    }
+	public short getIdMemberAsso() {
+		return idMemberAsso;
+	}
 
-    public void setNomAsso(short nomAsso) {
-        this.nomAsso = nomAsso;
-    }
+	public void setIdMemberAsso(short idMemberAsso) {
+		this.idMemberAsso = idMemberAsso;
+	}
 
-    public short getNomAppro() {
-        return nomAppro;
-    }
+	public short getIdMemberAppro() {
+		return idMemberAppro;
+	}
 
-    public void setNomAppro(short nomAppro) {
-        this.nomAppro = nomAppro;
-    }
+	public void setIdMemberAppro(short idMemberAppro) {
+		this.idMemberAppro = idMemberAppro;
+	}
 
-    public short getNomPubrel() {
-        return nomPubrel;
-    }
+	public short getIdMemberPubrel() {
+		return idMemberPubrel;
+	}
 
-    public void setNomPubrel(short nomPubrel) {
-        this.nomPubrel = nomPubrel;
-    }
+	public void setIdMemberPubrel(short idMemberPubrel) {
+		this.idMemberPubrel = idMemberPubrel;
+	}
 
-    public int getNomCeo() {
-        return nomCeo;
-    }
+	public int getIdMemberCeo() {
+		return idMemberCeo;
+	}
 
-    public void setNomCeo(int nomCeo) {
-        this.nomCeo = nomCeo;
-    }
+	public void setIdMemberCeo(int idMemberCeo) {
+		this.idMemberCeo = idMemberCeo;
+	}
 
-    public int getNomFead() {
-        return nomFead;
-    }
+	public int getIdMemberFead() {
+		return idMemberFead;
+	}
 
-    public void setNomFead(int nomFead) {
-        this.nomFead = nomFead;
-    }
+	public void setIdMemberFead(int idMemberFead) {
+		this.idMemberFead = idMemberFead;
+	}
+	
+	
 
-    public String getAdresse() {
+	public Short getIdMemberQual() {
+		return idMemberQual;
+	}
+
+	public void setIdMemberQual(Short idMemberQual) {
+		this.idMemberQual = idMemberQual;
+	}
+
+	public String getAdresse() {
         return adresse;
     }
 
