@@ -242,17 +242,8 @@ public class Organisation implements Serializable {
     @Column(name="LUPD_USER_NAME", length=45)
     private String lupdUserName;
     @Column(name="LUPD_TS")
-    private LocalDateTime lupdTs;
-    @Column(name="lien_banque", nullable=false, insertable = false, updatable = false, precision=3)
-    private Short lienBanque;
+    private LocalDateTime lupdTs;  
     
-    public Short getLienBanque() {
-		return lienBanque;
-	}
-
-	public void setLienBanque(Short lienBanque) {
-		this.lienBanque = lienBanque;
-	}
 
 	@ManyToOne
     @JoinColumn(name="lien_banque")
@@ -264,7 +255,7 @@ public class Organisation implements Serializable {
         super();
     }
 
-    public Organisation(int idDis,Short lienBanQue, String refInt, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
+    public Organisation(int idDis, String refInt, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
         String gsm, Short daten, String banque, Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom, String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, Short civiliteSec,
         String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
         String disprog, String afsca, boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, Short cpasyN, Short lienCpas, Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
@@ -274,7 +265,6 @@ public class Organisation implements Serializable {
         Integer  cotMonthsSup, Integer  depotram, String lupdUserName, LocalDateTime lupdTs,Banque banqueObject) {
         super();
         this.idDis = idDis;
-        this.lienBanque = lienBanque;
         this.refInt = refInt;
         this.lienDepot = lienDepot;
         this.societe = societe;

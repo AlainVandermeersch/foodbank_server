@@ -221,17 +221,7 @@ public class OrganisationDto {
 	   
 	    private LocalDateTime lupdTs;
 	    
-	    private Short lienBanque;
-	    
-	    public Short getLienBanque() {
-			return lienBanque;
-		}
-
-		public void setLienBanque(Short lienBanque) {
-			this.lienBanque = lienBanque;
-		}
-
-		private String bankName;
+	    private String bankName;
 	    private String bankShortName;
 	    public String getBankName() {
 			return bankName;
@@ -255,7 +245,7 @@ public class OrganisationDto {
 	    	
 	    }
 
-		public OrganisationDto(int idDis, Short lienBanque, String refInt,  int lienDepot,
+		public OrganisationDto(int idDis, String refInt,  int lienDepot,
 				String societe, String adresse, String statut, String email, String cp, String localite,
 				Short pays, String tva, String website, String tel, String gsm, Short daten, String banque,
 				Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom,
@@ -276,7 +266,6 @@ public class OrganisationDto {
 				String lupdUserName, LocalDateTime lupdTs, String bankShortName,String bankName ) {
 			super();
 			this.idDis = idDis;
-			this.lienBanque = lienBanque;
 			this.refInt = refInt;
 			this.lienDepot = lienDepot;
 			this.societe = societe;

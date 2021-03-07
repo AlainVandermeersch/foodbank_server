@@ -90,7 +90,7 @@ public class OrganisationController {
         return this.convertToDto(Organisation);
     }
     protected OrganisationDto convertToDto(Organisation entity) {
-        OrganisationDto dto = new OrganisationDto(entity.getIdDis(),entity.getLienBanque(), entity.getRefInt(),  entity.getLienDepot(),
+        OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(),  entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(),entity.getBanque(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), entity.getActif(), entity.getCivilite(), entity.getNom(),
@@ -113,9 +113,9 @@ public class OrganisationController {
     }
 
     protected Organisation convertToEntity(OrganisationDto dto) {
-    	Banque banqueObject = this.BanqueService.findByBankId(dto.getLienBanque()).get();
+    	Banque banqueObject = this.BanqueService.findByBankShortName(dto.getBankShortName()).get();
     	    
-    	Organisation myOrganisation = new Organisation( dto.getIdDis(),dto.getLienBanque(), dto.getRefInt(),  dto.getLienDepot(),
+    	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
 				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), dto.getBanque(),
 				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), dto.getActif(), dto.getCivilite(), dto.getNom(),
