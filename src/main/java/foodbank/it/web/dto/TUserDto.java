@@ -14,7 +14,7 @@ public class TUserDto {
      
     private int lienBat;
     
-    private int actif;
+    private boolean actif;
      
     private String rights;
     
@@ -22,23 +22,23 @@ public class TUserDto {
      
     private String depot;
      
-    private int droit1;
+    private boolean droit1;
      
     private String email;
     
-    private int gestBen;
+    private boolean gestBen;
     
-    private int gestInv;
+    private boolean gestInv;
      
-    private int gestFead;
+    private boolean gestFead;
      
-    private int gestAsso;
+    private boolean gestAsso;
      
-    private int gestCpas;
+    private boolean gestCpas;
      
-    private int gestMemb;
+    private boolean gestMemb;
      
-    private int gestDon;
+    private boolean gestDon;
      
     private int lienBanque;
      
@@ -52,8 +52,9 @@ public class TUserDto {
     protected TUserDto() {
       
     }
-    public TUserDto(String idUser, String userName, String idCompany, int idOrg, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead, int gestAsso,
-        int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas,Long  totalRecords) {
+    public TUserDto(String idUser, String userName, String idCompany, int idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String depot, 
+    		boolean droit1, String email, boolean gestBen, boolean gestInv, boolean gestFead, boolean gestAsso,
+        boolean gestCpas, boolean gestMemb, boolean gestDon, int lienBanque, int lienCpas,Long  totalRecords) {
         super();
         this.idUser = idUser;
         this.userName = userName;
@@ -128,11 +129,11 @@ public class TUserDto {
         this.lienBat = lienBat;
     }
 
-    public int getActif() {
+    public boolean getActif() {
         return actif;
     }
 
-    public void setActif(int actif) {
+    public void setActif(boolean actif) {
         this.actif = actif;
     }
 
@@ -160,11 +161,11 @@ public class TUserDto {
         this.depot = depot;
     }
 
-    public int getDroit1() {
+    public boolean getDroit1() {
         return droit1;
     }
 
-    public void setDroit1(int droit1) {
+    public void setDroit1(boolean droit1) {
         this.droit1 = droit1;
     }
 
@@ -176,59 +177,59 @@ public class TUserDto {
         this.email = email;
     }
 
-    public int getGestBen() {
+    public boolean getGestBen() {
         return gestBen;
     }
 
-    public void setGestBen(int gestBen) {
+    public void setGestBen(boolean gestBen) {
         this.gestBen = gestBen;
     }
 
-    public int getGestInv() {
+    public boolean getGestInv() {
         return gestInv;
     }
 
-    public void setGestInv(int gestInv) {
+    public void setGestInv(boolean gestInv) {
         this.gestInv = gestInv;
     }
 
-    public int getGestFead() {
+    public boolean getGestFead() {
         return gestFead;
     }
 
-    public void setGestFead(int gestFead) {
+    public void setGestFead(boolean gestFead) {
         this.gestFead = gestFead;
     }
 
-    public int getGestAsso() {
+    public boolean getGestAsso() {
         return gestAsso;
     }
 
-    public void setGestAsso(int gestAsso) {
+    public void setGestAsso(boolean gestAsso) {
         this.gestAsso = gestAsso;
     }
 
-    public int getGestCpas() {
+    public boolean getGestCpas() {
         return gestCpas;
     }
 
-    public void setGestCpas(int gestCpas) {
+    public void setGestCpas(boolean gestCpas) {
         this.gestCpas = gestCpas;
     }
 
-    public int getGestMemb() {
+    public boolean getGestMemb() {
         return gestMemb;
     }
 
-    public void setGestMemb(int gestMemb) {
+    public void setGestMemb(boolean gestMemb) {
         this.gestMemb = gestMemb;
     }
 
-    public int getGestDon() {
+    public boolean getGestDon() {
         return gestDon;
     }
 
-    public void setGestDon(int gestDon) {
+    public void setGestDon(boolean gestDon) {
         this.gestDon = gestDon;
     }
 

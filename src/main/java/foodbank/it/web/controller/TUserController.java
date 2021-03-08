@@ -193,14 +193,27 @@ public class TUserController {
 
 
     protected TUserDto convertToDto(TUser entity,Long  totalRecords) {
-        TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), entity.getActif(), entity.getRights(), entity.getPassword(), entity.getDepot(), entity.getDroit1(), entity.getEmail(), entity.getGestBen(), entity.getGestInv(), entity.getGestFead(), entity.getGestAsso(),
-            entity.getGestCpas(), entity.getGestMemb(), entity.getGestDon(), entity.getLienBanque(), entity.getLienCpas(),totalRecords);       
+    	
+    	boolean booActif= entity.getActif() == 1;
+    	boolean booDroit1= entity.getDroit1() == 1;
+    	boolean booGestBen = entity.getGestBen() == 1;
+    	boolean booGestInv = entity.getGestInv() == 1;
+    	boolean booGestFead = entity.getGestFead() == 1;
+    	boolean booGestAsso = entity.getGestAsso() == 1;
+    	boolean booGestCpas = entity.getGestCpas() == 1;
+    	boolean booGestMemb = entity.getGestMemb() == 1;
+    	boolean booGestDon = entity.getGestDon() == 1;
+        TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), booActif, entity.getRights(), entity.getPassword(), entity.getDepot(), booDroit1, entity.getEmail(), 
+        		booGestBen, booGestInv, booGestFead, booGestAsso,
+        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),totalRecords);       
         return dto;
     }
 
     protected TUser convertToEntity(TUserDto dto) {
-        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(), dto.getIdLanguage(), dto.getLienBat(), dto.getActif(), dto.getRights(), dto.getPassword(), dto.getDepot(), dto.getDroit1(), dto.getEmail(), dto.getGestBen(), dto.getGestInv(), dto.getGestFead(), dto.getGestAsso(),
-            dto.getGestCpas(), dto.getGestMemb(), dto.getGestDon(), dto.getLienBanque(), dto.getLienCpas());
+        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(), dto.getIdLanguage(), dto.getLienBat(), 
+        		(short) (dto.getActif() ? 1 : 0) , dto.getRights(), dto.getPassword(), dto.getDepot(), (short) (dto.getDroit1() ? 1 : 0) , dto.getEmail(), 
+        		(short) (dto.getGestBen() ? 1 : 0) , (short) (dto.getGestInv() ? 1 : 0) , (short) (dto.getGestFead() ? 1 : 0) , (short) (dto.getGestAsso() ? 1 : 0) ,
+        		(short) (dto.getGestCpas() ? 1 : 0) , (short) (dto.getGestMemb() ? 1 : 0) ,(short) (dto.getGestDon() ? 1 : 0) , dto.getLienBanque(), dto.getLienCpas());
        
         return tUser;
     }
