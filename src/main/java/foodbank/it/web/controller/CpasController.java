@@ -106,13 +106,14 @@ public class CpasController {
         return this.convertToDto(Cpas,1);
     }
     protected CpasDto convertToDto(Cpas entity,long totalRecords) {
-        CpasDto dto = new CpasDto(entity.getCpasId(),entity.getCpasZip(),  entity.getCpasName(), entity.getCpasMail(), entity.getCpasStreet(), entity.getCpasTel(), entity.getCpasTel(), entity.getCpasGsm(), entity.getCpasContactName(), entity.getCivilite(), 
+        CpasDto dto = new CpasDto(entity.getCpasId(),entity.getCpasZip(),  entity.getCpasName(), entity.getCpasMail(), entity.getCpasStreet(),  entity.getCpasTel(), entity.getCpasGsm(), entity.getCpasContactName(), entity.getCpasContactSurname(),entity.getCivilite(), 
         		entity.getRem(), entity.getPassword(), entity.getLBanque(), entity.getLangue(), totalRecords);       
         return dto;
     }
 
     protected Cpas convertToEntity(CpasDto dto) {
-        Cpas cpas = new Cpas( dto.getCpasId(),dto.getCpasZip(), dto.getCpasName(), dto.getCpasMail(), dto.getCpasStreet(), dto.getCpasTel(), dto.getCpasTel(), dto.getCpasGsm(), dto.getCpasContactName(), dto.getCivilite(), dto.getRem(), dto.getPassword(), dto.getLBanque(), dto.getLangue());       
+        Cpas cpas = new Cpas( dto.getCpasId(),dto.getCpasZip(), dto.getCpasName(), dto.getCpasMail(), dto.getCpasStreet(), dto.getCpasTel(),  dto.getCpasGsm(), dto.getCpasContactName(),dto.getCpasContactSurname(),  dto.getCivilite(), 
+        		dto.getRem(), dto.getPassword(), dto.getLBanque(), dto.getLangue());       
         if (!StringUtils.isEmpty(dto.getCpasId())) {
             cpas.setCpasId(dto.getCpasId());
         }

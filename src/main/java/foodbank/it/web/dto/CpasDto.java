@@ -47,12 +47,27 @@ public class CpasDto {
 		this.cpasTel = cpasTel;
 		this.cpasGsm = cpasGsm;
 		this.cpasContactName = cpasContactName;
-		this.cpasContactSurname = cpasContactSurname;
-		this.civilite = civilite;
+		this.cpasContactSurname = cpasContactSurname;	
 		this.rem = rem;
 		this.password = password;
-		this.lBanque = lBanque;
-		this.langue = langue;
+		if (lBanque != null) {
+			this.lBanque = lBanque;
+		}
+		else {
+			this.lBanque = 0;
+		}
+		if (langue != null) {
+			this.langue = langue;
+		}
+		else {
+			this.langue = 0;
+		}
+		if (civilite != null) {
+			this.civilite = civilite;
+		}
+		else {
+			this.civilite = 0;
+		}
 		this.totalRecords = totalRecords;
 	}
 
