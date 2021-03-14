@@ -2,14 +2,18 @@ package foodbank.it.service;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import foodbank.it.persistence.model.Client;
 
+import javax.persistence.criteria.CriteriaQuery;
+
 public interface IClientService {
 	Optional<Client> findByIdClient(int idClient);
 	
+	Page<Client> findAll(SearchClientCriteria searchCriteria, Pageable pageable);
 	Page<Client> findAll(Pageable pageable);
 	Page<Client> findByBanqueObjectBankShortName( String bankShortName,Pageable pageable);
     Page<Client> findByLienDis(Integer lienDis,Pageable pageable);
