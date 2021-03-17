@@ -1,7 +1,8 @@
 package foodbank.it.web.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class MembreDto {
 	 private Integer batId;
@@ -47,8 +48,8 @@ public class MembreDto {
 	 private Short authority;
 	 private String datmand;
 	 private String rem;
-	
-	 private LocalDateTime lastVisit;
+	// @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
+	// private LocalDateTime lastVisit;
 	
 	 private Short ben;
 	 
@@ -84,7 +85,7 @@ public class MembreDto {
 	public MembreDto(Integer batId, Integer lienDis, String nom, String prenom, String address, String city, String zip,
 			String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction, Short ca,
 			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand, String rem,
-			LocalDateTime lastVisit, Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
+			Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
 			Integer lDep, String bankShortName,String bankName, Long  totalRecords) {
 		super();
@@ -111,7 +112,7 @@ public class MembreDto {
 		this.authority = authority;
 		this.datmand = datmand;
 		this.rem = rem;
-		this.lastVisit = lastVisit;
+		// this.lastVisit = lastVisit;
 		this.ben = ben;
 		this.codeAcces = codeAcces;
 		this.nrCodeAcces = nrCodeAcces;
@@ -312,7 +313,7 @@ public class MembreDto {
 	public void setRem(String rem) {
 		this.rem = rem;
 	}
-
+/*
 	public LocalDateTime getLastVisit() {
 		return lastVisit;
 	}
@@ -320,7 +321,7 @@ public class MembreDto {
 	public void setLastVisit(LocalDateTime lastVisit) {
 		this.lastVisit = lastVisit;
 	}
-
+*/
 	public Short getBen() {
 		return ben;
 	}

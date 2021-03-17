@@ -3,7 +3,6 @@
 package foodbank.it.persistence.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,6 +16,12 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+
 
 @Entity
 @Table(name="bat", indexes={@Index(name="batName", columnList="nom,prenom")})
@@ -78,8 +83,9 @@ public class Membre implements Serializable {
  private Short authority;
  private String datmand;
  private String rem;
- @Column(name="last_visit", nullable=false)
- private LocalDateTime lastVisit;
+ // @Column(name="last_visit", nullable=false)
+ // @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
+ // private LocalDateTime lastVisit;
  @Column(nullable=false, precision=3)
  private Short ben;
  @Column(name="code_acces", precision=5)
@@ -115,7 +121,7 @@ public class Membre implements Serializable {
  public Membre(Integer batId, Integer lienDis, String nom, String prenom, String address, String city,
 		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction,
 		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand,
-		String rem, LocalDateTime lastVisit, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
+		String rem, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
 		String datedeb, String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat,
 		String dateContrat, Integer lDep, Banque banqueObject) {
 	super();
@@ -142,7 +148,7 @@ public class Membre implements Serializable {
 	this.authority = authority;
 	this.datmand = datmand;
 	this.rem = rem;
-	this.lastVisit = lastVisit;
+	// this.lastVisit = lastVisit;
 	this.ben = ben;
 	this.codeAcces = codeAcces;
 	this.nrCodeAcces = nrCodeAcces;
@@ -577,19 +583,21 @@ public class Membre implements Serializable {
   * Access method for lastVisit.
   *
   * @return the current value of lastVisit
-  */
+  
  public LocalDateTime getLastVisit() {
      return lastVisit;
  }
+ */
 
  /**
   * Setter method for lastVisit.
   *
   * @param aLastVisit the new value for lastVisit
-  */
+ 
  public void setLastVisit(LocalDateTime aLastVisit) {
      lastVisit = aLastVisit;
  }
+  */
 
  /**
   * Access method for ben.

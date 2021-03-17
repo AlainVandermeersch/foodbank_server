@@ -219,7 +219,7 @@ public class MembreController {
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
-				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(), entity.getLastVisit(), entity.getBen(),
+				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
 				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(), bankShortName,bankName,totalRecords  );    
         return dto;
@@ -231,7 +231,7 @@ public class MembreController {
     	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
 				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), dto.getCa(), dto.getAg(), dto.getCg(),dto.getCivilite(), 
-				dto.getPays(), dto.getActif(), dto.getAuthority(), dto.getDatmand(), dto.getRem(), dto.getLastVisit(), dto.getBen(),
+				dto.getPays(), dto.getActif(), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  dto.getBen(),
 				dto.getCodeAcces(), dto.getNrCodeAcces(), dto.getLangue(), dto.getDatedeb(), dto.getDateFin(), dto.getDeleted(),
 				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLDep(),banqueObject);       
         if (!StringUtils.isEmpty(dto.getBatId())) {
