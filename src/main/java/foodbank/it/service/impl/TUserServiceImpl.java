@@ -59,7 +59,23 @@ public class TUserServiceImpl implements ITUserService {
 		return TUserRepository.findByIdOrg(idOrg, pageRequest);
 	}
 
+	@Override
+	public Page<TUser> findByIdUserContaining(String searchValue, Pageable pageRequest) {
+		return TUserRepository.findByIdUserContaining(searchValue,pageRequest);
+	}
 
+
+	@Override
+	public Page<TUser> findByIdOrgAndIdUserContaining(int parseInt, String searchValue, Pageable pageRequest) {
+		return TUserRepository.findByIdOrgAndIdUserContaining(parseInt,searchValue,pageRequest);
+	}
+
+
+	@Override
+	public Page<TUser> findByIdCompanyAndIdUserContaining(String idCompany, String searchValue, Pageable pageRequest) {
+		return TUserRepository.findByIdCompanyAndIdUserContaining(idCompany,searchValue, pageRequest);
+	}
+    
 	@Override
 	public Page<TUser> findByUserNameContaining(String search, Pageable pageRequest) {
 		return TUserRepository.findByUserNameContaining(search, pageRequest);
@@ -130,7 +146,9 @@ public class TUserServiceImpl implements ITUserService {
 	public Page<TUser> findByIdOrgAndRightsContaining(int idOrg, String search, Pageable pageRequest) {
 		return TUserRepository.findByIdOrgAndRightsContaining(idOrg, search, pageRequest);
 	}
-    
+
+
+
 	
 	
 

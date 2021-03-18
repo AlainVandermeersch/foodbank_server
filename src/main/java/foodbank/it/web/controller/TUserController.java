@@ -68,7 +68,27 @@ public class TUserController {
         Page<TUser> selectedTUsers = null;
         if (searchField == null) searchField = "";
         switch(searchField) {
-       
+        
+		case "idUser":
+			if (idCompany == null) {
+				if (idOrg == null) {
+					selectedTUsers = this.TUserService.findByIdUserContaining(searchValue, pageRequest);
+					long totalRecords = selectedTUsers.getTotalElements();
+					selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
+				} else {
+					selectedTUsers = this.TUserService.findByIdOrgAndIdUserContaining(Integer.parseInt(idOrg),
+							searchValue, pageRequest);
+					long totalRecordsOrg = selectedTUsers.getTotalElements();
+					selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
+				}
+			} else {
+				selectedTUsers = this.TUserService.findByIdCompanyAndIdUserContaining(idCompany, searchValue,
+						pageRequest);
+				long totalRecordsBanque = selectedTUsers.getTotalElements();
+				selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
+			}
+			break;
+        	
         	case "userName":
         		 if (idCompany == null) {
         	        	if (idOrg == null) { 

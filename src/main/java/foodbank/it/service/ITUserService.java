@@ -11,6 +11,9 @@ public interface ITUserService {
     Page<TUser> findAll(Pageable pageRequest);
     Page<TUser> findByIdCompany(String idCompany, Pageable pageRequest);
     Page<TUser> findByIdOrg(int idOrg, Pageable pageRequest);
+    Page<TUser> findByIdUserContaining(String searchValue, Pageable pageRequest);
+	Page<TUser> findByIdOrgAndIdUserContaining(int parseInt, String searchValue, Pageable pageRequest);
+	Page<TUser> findByIdCompanyAndIdUserContaining(String idCompany, String searchValue, Pageable pageRequest);
     Page<TUser> findByUserNameContaining(String search, Pageable pageRequest);	
    	Page<TUser> findByIdCompanyAndUserNameContaining(String idCompany, String search,
    			Pageable pageRequest);
@@ -31,6 +34,7 @@ public interface ITUserService {
     TUser save(TUser TUser);
    
     void delete(String idUser);
+	
 
    
 

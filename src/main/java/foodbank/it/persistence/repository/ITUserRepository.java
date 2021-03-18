@@ -16,6 +16,9 @@ public interface ITUserRepository extends PagingAndSortingRepository<TUser, Inte
     Optional<TUser> findByIdUser(String idUser);
     Page<TUser> findByIdCompany(String idCompany, Pageable pageRequest);
     Page<TUser> findByIdOrg(int idOrg, Pageable pageRequest);
+    Page<TUser> findByIdUserContaining(String searchValue, Pageable pageRequest);
+	Page<TUser> findByIdOrgAndIdUserContaining(int parseInt, String searchValue, Pageable pageRequest);
+	Page<TUser> findByIdCompanyAndIdUserContaining(String idCompany, String searchValue, Pageable pageRequest);
     Page<TUser> findByUserNameContaining(String search, Pageable pageRequest);	
 	Page<TUser> findByIdCompanyAndUserNameContaining(String idCompany, String search,
 			Pageable pageRequest);
@@ -32,6 +35,7 @@ public interface ITUserRepository extends PagingAndSortingRepository<TUser, Inte
 	Page<TUser> findByIdCompanyAndRightsContaining(String idCompany, String search,
 			Pageable pageRequest);
 	Page<TUser> findByIdOrgAndRightsContaining(int idOrg, String search, Pageable pageRequest);
+	
 
 	
 }
