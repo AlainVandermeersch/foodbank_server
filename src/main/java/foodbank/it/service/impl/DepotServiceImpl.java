@@ -40,8 +40,8 @@ public class DepotServiceImpl implements IDepotService{
     }
    
 	@Override
-	public Iterable<Depot> findByBanqueObjectBankShortName( String bankShortName) {
-		return DepotRepository.findByBanqueObjectBankShortName( bankShortName);
+	public Iterable<Depot> findByNomContaining( String nom) {
+		return DepotRepository.findByNomContaining( nom);
 	}
 	
 	

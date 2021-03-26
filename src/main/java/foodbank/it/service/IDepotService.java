@@ -7,7 +7,7 @@ import foodbank.it.persistence.model.Depot;
 public interface IDepotService {
 	Optional<Depot> findByIdDepot(String idDepot);
 	
-	Iterable<Depot> findByBanqueObjectBankShortName( String bankShortName);
+	Iterable<Depot> findByNomContaining( String nom);
 
     Depot save(Depot Depot);
 

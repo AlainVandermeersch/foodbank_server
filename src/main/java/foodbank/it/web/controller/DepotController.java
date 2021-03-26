@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.Depot;
-import foodbank.it.service.IBanqueService;
 import foodbank.it.service.IDepotService;
 import foodbank.it.web.dto.DepotDto;
 
@@ -30,11 +28,9 @@ import foodbank.it.web.dto.DepotDto;
 public class DepotController {
 	
 	private IDepotService DepotService;
-	private IBanqueService BanqueService;
-	    
-    public DepotController(IDepotService DepotService, IBanqueService BanqueService) {
-        this.DepotService = DepotService;
-        this.BanqueService = BanqueService;
+		    
+    public DepotController(IDepotService DepotService) {
+        this.DepotService = DepotService;      
     }
     @CrossOrigin
     @GetMapping("depot/{idDepot}")
@@ -46,17 +42,16 @@ public class DepotController {
     
     @CrossOrigin
     @GetMapping("depots/")
-    public Collection<DepotDto> find( @RequestParam(required = false) String bankShortName) {
+    public Collection<DepotDto> find( @RequestParam(required = false) String searchValue) {
         Iterable<Depot> selectedDepots = null;
         List<DepotDto> DepotDtos = new ArrayList<>();
-        if (bankShortName == null) {
-        		selectedDepots = this.DepotService.findAll();
-        		selectedDepots.forEach(p -> DepotDtos.add(convertToDto(p)));
+        if (searchValue == null) {
+        	selectedDepots = this.DepotService.findAll();
         }
         else {
-        	selectedDepots = this.DepotService.findByBanqueObjectBankShortName(bankShortName);
-        	selectedDepots.forEach(p -> DepotDtos.add(convertToDto(p)));
+        	selectedDepots = this.DepotService.findByNomContaining(searchValue);
         }
+       	selectedDepots.forEach(p -> DepotDtos.add(convertToDto(p)));
         
         
         return DepotDtos;
@@ -83,29 +78,22 @@ public class DepotController {
         return this.convertToDto(Depot);
     }
     protected DepotDto convertToDto(Depot entity) {
-    	String bankShortName = "";
-    	String bankName = "";
-    	Banque banqueObject = entity.getBanqueObject();
-    	if ( ! isNull(banqueObject)) {
-    		bankShortName = banqueObject.getBankShortName();
-    		bankName = banqueObject.getBankName();
-    	}
+    	
     	boolean booDepPrinc= entity.getDepPrinc() == 1;
     	boolean booActif= entity.getActif() == 1;
     	boolean booDepFead= entity.getDepFead() == 1;
     	
         DepotDto dto = new DepotDto(entity.getIdDepot(), entity.getNom(), entity.getAdresse(), entity.getAdresse2(), entity.getCp(), entity.getVille(),
     			entity.getTelephone(), entity.getContact(), entity.getEmail(), entity.getMemo(), booDepPrinc, booActif, booDepFead,
-    			bankShortName,bankName );    
+    			entity.getLienBanque() );    
         return dto;
     }
 
     protected Depot convertToEntity(DepotDto dto) {
-    	Banque banqueObject = this.BanqueService.findByBankShortName(dto.getBankShortName()).get();
-    	    
+    	    	    
     	Depot myDepot = new Depot( dto.getIdDepot(), dto.getNom(), dto.getAdresse(), dto.getAdresse2(), dto.getCp(), dto.getVille(),
     			dto.getTelephone(), dto.getContact(), dto.getEmail(), dto.getMemo(), 
-    			(short) (dto.getDepPrinc() ? 1 : 0), (short) (dto.getActif() ? 1 : 0) , (short) (dto.getDepFead() ? 1 : 0),banqueObject);  
+    			(short) (dto.getDepPrinc() ? 1 : 0), (short) (dto.getActif() ? 1 : 0) , (short) (dto.getDepFead() ? 1 : 0),dto.getLienBanque());  
     	
         if (!StringUtils.isEmpty(dto.getIdDepot())) {
             myDepot.setIdDepot(dto.getIdDepot());

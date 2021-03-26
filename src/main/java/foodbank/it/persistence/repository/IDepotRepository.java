@@ -9,5 +9,5 @@ import foodbank.it.persistence.model.Depot;
 public interface IDepotRepository extends CrudRepository<Depot, Integer>{
     Optional<Depot> findByIdDepot(String idDepot);
     void deleteByIdDepot(String idDepot);
-    Iterable<Depot> findByBanqueObjectBankShortName( String bankShortName);
+    Iterable<Depot> findByNomContaining( String nom);
 }

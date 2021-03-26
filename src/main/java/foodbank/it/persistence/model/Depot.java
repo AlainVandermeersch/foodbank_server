@@ -52,9 +52,8 @@ public class Depot implements Serializable {
  private short actif;
  @Column(name="DEP_FEAD", precision=3)
  private short depFead;
- @ManyToOne
- @JoinColumn(name="lien_banque")
- private Banque banqueObject;
+ @Column(name="lien_banque")
+ private Integer lienBanque;
  
  
  /** Default constructor. */
@@ -64,7 +63,7 @@ public class Depot implements Serializable {
 
  
  public Depot(String idDepot, String nom, String adresse, String adresse2, String cp, String ville, String telephone,
-		String contact, String email, String memo, short depPrinc, short actif, short depFead, Banque banqueObject) {
+		String contact, String email, String memo, short depPrinc, short actif, short depFead, Integer lienBanque) {
 	super();
 	this.idDepot = idDepot;
 	this.nom = nom;
@@ -79,7 +78,7 @@ public class Depot implements Serializable {
 	this.depPrinc = depPrinc;
 	this.actif = actif;
 	this.depFead = depFead;
-	this.banqueObject = banqueObject;
+	this.lienBanque = lienBanque;
 }
 
 
@@ -317,14 +316,18 @@ public class Depot implements Serializable {
      depFead = aDepFead;
  }
 
- public Banque getBanqueObject() {
-		return banqueObject;
-	}
+ 
+ public Integer getLienBanque() {
+	return lienBanque;
+}
 
- public void setBanqueObject(Banque banqueObject) {
-		this.banqueObject = banqueObject;
-	}
- /**
+
+public void setLienBanque(Integer lienBanque) {
+	this.lienBanque = lienBanque;
+}
+
+
+/**
   * Compares the key for this instance with another Depot.
   *
   * @param other The object to compare to

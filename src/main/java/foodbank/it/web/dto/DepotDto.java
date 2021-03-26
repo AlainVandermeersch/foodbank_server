@@ -27,8 +27,8 @@ public class DepotDto {
 	
 	 private boolean depFead;
 	 
-	 private String bankName;
-	 private String bankShortName;
+	 private Integer lienBanque;
+	 
 	
 	 
 	public DepotDto() {
@@ -38,7 +38,7 @@ public class DepotDto {
 
 	public DepotDto(String idDepot, String nom, String adresse, String adresse2, String cp, String ville,
 			String telephone, String contact, String email, String memo, boolean depPrinc, boolean actif, boolean depFead,
-			String bankShortName,String bankName) {
+			Integer lienBanque) {
 		super();
 		this.idDepot = idDepot;
 		this.nom = nom;
@@ -53,8 +53,7 @@ public class DepotDto {
 		this.depPrinc = depPrinc;
 		this.actif = actif ;
 		this.depFead = depFead;
-		this.bankName = bankName;
-		this.bankShortName = bankShortName;
+		this.lienBanque = lienBanque;	
 		
 	}
 
@@ -162,21 +161,15 @@ public class DepotDto {
 		this.depFead = depFead;
 	}
 
-	public String getBankName() {
-		return bankName;
+	public Integer getLienBanque() {
+		return lienBanque;
 	}
 
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
+	public void setLienBanque(Integer lienBanque) {
+		this.lienBanque = lienBanque;
 	}
 
-	public String getBankShortName() {
-		return bankShortName;
-	}
-
-	public void setBankShortName(String bankShortName) {
-		this.bankShortName = bankShortName;
-	}
+	
 
 	
 	
