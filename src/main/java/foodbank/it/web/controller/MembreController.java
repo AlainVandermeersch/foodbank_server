@@ -221,7 +221,7 @@ public class MembreController {
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
 				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
-				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(), bankShortName,bankName,totalRecords  );    
+				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(), bankShortName,bankName,totalRecords  );    
         return dto;
     }
 
@@ -236,7 +236,7 @@ public class MembreController {
 				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLDep(),banqueObject);       
         if (!StringUtils.isEmpty(dto.getBatId())) {
             myMembre.setBatId(dto.getBatId());
-        }
+        } 
         return myMembre;
     }
 

@@ -83,9 +83,7 @@ public class Membre implements Serializable {
  private Short authority;
  private String datmand;
  private String rem;
- // @Column(name="last_visit", nullable=false)
- // @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
- // private LocalDateTime lastVisit;
+ private LocalDateTime lastVisit;
  @Column(nullable=false, precision=3)
  private Short ben;
  @Column(name="code_acces", precision=5)
@@ -148,7 +146,6 @@ public class Membre implements Serializable {
 	this.authority = authority;
 	this.datmand = datmand;
 	this.rem = rem;
-	// this.lastVisit = lastVisit;
 	this.ben = ben;
 	this.codeAcces = codeAcces;
 	this.nrCodeAcces = nrCodeAcces;
@@ -161,6 +158,7 @@ public class Membre implements Serializable {
 	this.nnat = nnat;
 	this.dateContrat = dateContrat;
 	this.lDep = lDep;
+	this.lastVisit = LocalDateTime.now(); // do not use lastVisit from DTO we need to update the time
 	this.banqueObject = banqueObject;
 }
 
@@ -815,7 +813,15 @@ public class Membre implements Serializable {
      lDep = aLDep;
  }
  
- public Banque getBanqueObject() {
+ public LocalDateTime getLastVisit() {
+	return lastVisit;
+}
+
+public void setLastVisit(LocalDateTime lastVisit) {
+	this.lastVisit = lastVisit;
+}
+
+public Banque getBanqueObject() {
 		return banqueObject;
 	}
 
