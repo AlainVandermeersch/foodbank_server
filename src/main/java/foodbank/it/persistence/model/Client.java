@@ -109,7 +109,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  public Client(int idClient,String idInt, Integer lienDis, short lbanque, String nom, String prenom, String nomconj, String prenomconj,
 		short civilite, String daten, String datenConj, short civiliteconj, String adresse, String cp, String localite,
 		String pays, String email, String tel, String gsm, String connu, int genre, short actif, short birb,
-		String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb, short critBirb, short coeff,
+		String natnr, String regio, short lCpas, String datUpdBirb, short critBirb, short coeff,
 		String nomsav, String prenomsav, int genreconj,Banque banqueObject) {
 	super();
 	this.idClient = idClient;
@@ -136,7 +136,7 @@ private static final long serialVersionUID = -8518218294613491486L;
 	this.actif = actif;
 	this.birb = birb;
 	this.natnr = natnr;
-	this.dateUpd = dateUpd;
+	this.dateUpd = LocalDateTime.now(); // do not use dateUpd from DTO we need to update the time
 	this.regio = regio;
 	this.lCpas = lCpas;
 	this.datUpdBirb = datUpdBirb;

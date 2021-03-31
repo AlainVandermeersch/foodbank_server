@@ -2,6 +2,7 @@ package foodbank.it.web.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class OrganisationDto {
 	 
@@ -97,7 +98,7 @@ public class OrganisationDto {
 	    private boolean webauthority;
 	    
 	    private Short langue;
-	    private LocalDateTime lastvisit;
+	    private String lastvisit;
 	   
 	    private Integer  nbrefix;
 	    
@@ -219,7 +220,7 @@ public class OrganisationDto {
 	    
 	    private String lupdUserName;
 	   
-	    private LocalDateTime lupdTs;
+	    private String lupdTs;
 	    
 	    private String bankName;
 	    private String bankShortName;
@@ -265,6 +266,7 @@ public class OrganisationDto {
 				String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup, Integer  cotMonthsSup, Integer  depotram,
 				String lupdUserName, LocalDateTime lupdTs, String bankShortName,String bankName ) {
 			super();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 			this.idDis = idDis;
 			this.refInt = refInt;
 			this.lienDepot = lienDepot;
@@ -314,7 +316,12 @@ public class OrganisationDto {
 			this.afsca = afsca;
 			this.webauthority = webauthority;
 			this.langue = langue;
-			this.lastvisit = lastvisit;
+			if (lastvisit == null) {
+				this.lastvisit = "";
+			}
+			else {				
+				this.lastvisit = lastvisit.format(formatter);
+			}
 			this.nbrefix = nbrefix;
 			this.cpasyN = cpasyN;
 			this.lienCpas = lienCpas;
@@ -375,7 +382,12 @@ public class OrganisationDto {
 			this.cotMonthsSup = cotMonthsSup;
 			this.depotram = depotram;
 			this.lupdUserName = lupdUserName;
-			this.lupdTs = lupdTs;
+			if (lupdTs == null) {
+				this.lupdTs = "";
+			}
+			else {				
+				this.lupdTs = lupdTs.format(formatter);
+			}
 			this.bankShortName = bankShortName;
 			this.bankName = bankName;
 		}
@@ -772,11 +784,11 @@ public class OrganisationDto {
 			this.langue = langue;
 		}
 
-		public LocalDateTime getLastvisit() {
+		public String getLastvisit() {
 			return lastvisit;
 		}
 
-		public void setLastvisit(LocalDateTime lastvisit) {
+		public void setLastvisit(String lastvisit) {
 			this.lastvisit = lastvisit;
 		}
 
@@ -1261,11 +1273,11 @@ public class OrganisationDto {
 			this.lupdUserName = lupdUserName;
 		}
 
-		public LocalDateTime getLupdTs() {
+		public String getLupdTs() {
 			return lupdTs;
 		}
 
-		public void setLupdTs(LocalDateTime lupdTs) {
+		public void setLupdTs(String lupdTs) {
 			this.lupdTs = lupdTs;
 		}
 	    

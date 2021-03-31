@@ -112,8 +112,13 @@ public class MembreDto {
 		this.authority = authority;
 		this.datmand = datmand;
 		this.rem = rem;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		this.lastVisit = lastVisit.format(formatter);
+		if (lastVisit == null) {
+			this.lastVisit = "";
+		}
+		else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			this.lastVisit = lastVisit.format(formatter);
+		}
 		this.ben = ben; 
 		this.codeAcces = codeAcces;
 		this.nrCodeAcces = nrCodeAcces;

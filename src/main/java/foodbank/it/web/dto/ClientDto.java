@@ -1,6 +1,7 @@
 package foodbank.it.web.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ClientDto {
 	 private int idClient;
@@ -42,7 +43,7 @@ public class ClientDto {
 	
 	 private String natnr;
 	
-	 private LocalDateTime dateUpd;
+	 private String dateUpd;
 	
 	 private String regio;
 	 
@@ -203,10 +204,10 @@ public class ClientDto {
 	public void setNatnr(String natnr) {
 		this.natnr = natnr;
 	}
-	public LocalDateTime getDateUpd() {
+	public String getDateUpd() {
 		return dateUpd;
 	}
-	public void setDateUpd(LocalDateTime dateUpd) {
+	public void setDateUpd(String dateUpd) {
 		this.dateUpd = dateUpd;
 	}
 	public String getRegio() {
@@ -316,7 +317,13 @@ public class ClientDto {
 		this.actif = actif;
 		this.birb = birb;
 		this.natnr = natnr;
-		this.dateUpd = dateUpd;
+		if (dateUpd == null) {
+			this.dateUpd = "";
+		}
+		else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			this.dateUpd = dateUpd.format(formatter);
+		}
 		this.regio = regio;
 		this.lCpas = lCpas;
 		this.datUpdBirb = datUpdBirb;

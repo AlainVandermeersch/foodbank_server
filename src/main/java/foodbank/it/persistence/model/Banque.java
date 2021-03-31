@@ -113,7 +113,7 @@ public class Banque implements Serializable {
         super();
     }
 
-    public Banque(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short idMemberPres, short idMemberVp, short idMemberSec, short idMemberTres, short idMemberIt, short idMemberLog, short idMemberRh,
+    public Banque(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest,  short idMemberPres, short idMemberVp, short idMemberSec, short idMemberTres, short idMemberIt, short idMemberLog, short idMemberRh,
         short idMemberSh, short idMemberPp, short idMemberAsso, short idMemberAppro, short idMemberPubrel, int idMemberCeo, int idMemberFead,Short idMemberQual, String adresse, String cp, String localite, String bankTel, String bankGsm, String adresseDepotPrinc, String cpDepotPrinc, String cityDepotPrinc,
         String depPrincTel, String ssAdresse, String ssCp, String ssCity, String ssTel, int regio, String website, String bank) {
               
@@ -124,7 +124,7 @@ public class Banque implements Serializable {
         this.bankMail = bankMail;
         this.actif = actif;
         this.comGest = comGest;
-        this.lastvisit = lastvisit;
+        this.lastvisit = LocalDateTime.now(); // do not use lastvisit from DTO we need to update the time;
         this.idMemberPres = idMemberPres;
         this.idMemberVp = idMemberVp;
         this.idMemberSec = idMemberSec;

@@ -1,6 +1,7 @@
 package foodbank.it.web.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BanqueDto {
     private int bankId;
@@ -17,7 +18,7 @@ public class BanqueDto {
    
     private int comGest;
    
-    private LocalDateTime lastvisit;
+    private String lastvisit;
     
     private short idMemberPres;
    
@@ -98,7 +99,13 @@ public class BanqueDto {
         this.bankMail = bankMail;
         this.actif = actif;
         this.comGest = comGest;
-        this.lastvisit = lastvisit;
+        if (lastvisit == null) {
+			this.lastvisit = "";
+		}
+		else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			this.lastvisit = lastvisit.format(formatter);
+		}
         this.idMemberPres = idMemberPres;
         this.idMemberVp = idMemberVp;
         this.idMemberSec = idMemberSec;
@@ -189,11 +196,11 @@ public class BanqueDto {
         this.comGest = comGest;
     }
 
-    public LocalDateTime getLastvisit() {
+    public String getLastvisit() {
         return lastvisit;
     }
 
-    public void setLastvisit(LocalDateTime lastvisit) {
+    public void setLastvisit(String lastvisit) {
         this.lastvisit = lastvisit;
     }
 

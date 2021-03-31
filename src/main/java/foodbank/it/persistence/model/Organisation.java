@@ -258,11 +258,11 @@ public class Organisation implements Serializable {
     public Organisation(int idDis, String refInt, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
         String gsm, Short daten, String banque, Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom, String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, Short civiliteSec,
         String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
-        String disprog, String afsca, boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, Short cpasyN, Short lienCpas, Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
+        String disprog, String afsca, boolean webauthority, Short langue, Integer  nbrefix, Short cpasyN, Short lienCpas, Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
         Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp, String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3, Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,
         BigDecimal nEq, Integer  nSen, Short depPrinc, Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs, BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead, Short tourneeMois,
         Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres, String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN, String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup,
-        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, LocalDateTime lupdTs,Banque banqueObject) {
+        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, Banque banqueObject) {
         super();
         this.idDis = idDis;
         this.refInt = refInt;
@@ -313,7 +313,7 @@ public class Organisation implements Serializable {
         this.afsca = afsca;
         this.webauthority = webauthority;
         this.langue = langue;
-        this.lastvisit = lastvisit;
+        this.lastvisit = LocalDateTime.now(); // do not use lupdTs from DTO we need to update the time;
         this.nbrefix = nbrefix;
         this.cpasyN = cpasyN;
         this.lienCpas = lienCpas;
@@ -374,7 +374,7 @@ public class Organisation implements Serializable {
         this.cotMonthsSup = cotMonthsSup;
         this.depotram = depotram;
         this.lupdUserName = lupdUserName;
-        this.lupdTs = lupdTs;
+        this.lupdTs =  LocalDateTime.now(); // do not use lupdTs from DTO we need to update the time
         this.banqueObject = banqueObject;
     }
 

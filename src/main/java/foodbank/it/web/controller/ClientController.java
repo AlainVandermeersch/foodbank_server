@@ -119,7 +119,7 @@ public class ClientController {
 		Client myClient = new Client(dto.getIdClient(), dto.getIdInt(), dto.getLienDis(), dto.getLbanque(), dto.getNom(), dto.getPrenom(),
 				dto.getNomconj(), dto.getPrenomconj(), dto.getCivilite(), dto.getDaten(), dto.getDatenConj(), dto.getCiviliteconj(),
 				dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getPays(), dto.getEmail(), dto.getTel(), dto.getGsm(),
-				dto.getConnu(), dto.getGenre(), dto.getActif(), dto.getBirb(), dto.getNatnr(), dto.getDateUpd(), dto.getRegio(),
+				dto.getConnu(), dto.getGenre(), dto.getActif(), dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
 				dto.getLCpas(), dto.getDatUpdBirb(), dto.getCritBirb(), dto.getCoeff(), dto.getNomsav(), dto.getPrenomsav(),
 				dto.getGenreconj(), banqueObject);
 		if (!StringUtils.isEmpty(dto.getIdClient())) {

@@ -577,26 +577,7 @@ public class Membre implements Serializable {
      rem = aRem;
  }
 
- /**
-  * Access method for lastVisit.
-  *
-  * @return the current value of lastVisit
-  
- public LocalDateTime getLastVisit() {
-     return lastVisit;
- }
- */
-
- /**
-  * Setter method for lastVisit.
-  *
-  * @param aLastVisit the new value for lastVisit
  
- public void setLastVisit(LocalDateTime aLastVisit) {
-     lastVisit = aLastVisit;
- }
-  */
-
  /**
   * Access method for ben.
   *

@@ -123,7 +123,7 @@ public class OrganisationController {
 				dto.getCiviliteSec(), dto.getPrenomSec(), dto.getNomSec(), dto.getTelSec(), dto.getGsmSec(), dto.getCiviliteTres(),
 				dto.getPrenomTres(), dto.getNomTres(), dto.getTelTres(), dto.getGsmTres(), dto.getEmailPres(), dto.getEmailVp(),
 				dto.getEmailSec(), dto.getEmailTres(), dto.getTelPres(), dto.getGsmPres(), dto.getDisprog(), dto.getAfsca(),
-				dto.isWebauthority(), dto.getLangue(), dto.getLastvisit(), dto.getNbrefix(), dto.getCpasyN(), dto.getLienCpas(),
+				dto.isWebauthority(), dto.getLangue(),  dto.getNbrefix(), dto.getCpasyN(), dto.getLienCpas(),
 				dto.getDepyN(), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
 				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), dto.getSusp(),
 				dto.getStopSusp(), dto.getRem(), dto.getMsonac(), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
@@ -133,7 +133,7 @@ public class OrganisationController {
 				dto.getTourneeMois(), dto.getDistrListPdt(), dto.getDistrListVp(), dto.getDistrListSec(), dto.getDistrListTres(),
 				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), dto.getFeadN(),
 				dto.getRemLivr(), dto.getCotAnnuelle(), dto.getCotMonths(), dto.getCotSup(), dto.getCotMonthsSup(), dto.getDepotram(),
-				dto.getLupdUserName(), dto.getLupdTs(),banqueObject);       
+				dto.getLupdUserName(),banqueObject);       
         if (!StringUtils.isEmpty(dto.getIdDis())) {
             myOrganisation.setIdDis(dto.getIdDis());
         }
