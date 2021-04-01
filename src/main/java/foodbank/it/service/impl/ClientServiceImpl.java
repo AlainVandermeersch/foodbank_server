@@ -14,11 +14,13 @@ import foodbank.it.service.SearchClientCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Client;
 import foodbank.it.persistence.repository.IClientRepository;
 import foodbank.it.service.IClientService;
+
 @Service
 public class ClientServiceImpl implements IClientService{
 
@@ -69,6 +71,7 @@ public class ClientServiceImpl implements IClientService{
 		}
 
 		clientQuery.where(predicates.stream().toArray(Predicate[]::new));
+		clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
 
 		TypedQuery<Client> query = entityManager.createQuery(clientQuery);
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
