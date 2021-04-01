@@ -8,8 +8,12 @@ import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @ConfigurationProperties
+@EnableScheduling
+@EnableAsync
 public class FoodBankAppConfig {
 
     private static final String dateFormat = "dd/MM/yyyy";
