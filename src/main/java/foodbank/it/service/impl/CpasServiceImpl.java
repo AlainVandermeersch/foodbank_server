@@ -2,6 +2,8 @@ package foodbank.it.service.impl;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class CpasServiceImpl implements ICpasService{
 	
 
 	@Override
+	@Transactional
 	public void delete(int cpasId) {
 		CpasRepository.deleteByCpasId(cpasId);
 		
