@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>accessing-data-mysql</artifactId>
-        <groupId>com.example</groupId>
+        <artifactId>parent</artifactId>
+        <groupId>foodbank.it</groupId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -19,7 +19,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>foodbank.it</groupId>
             <artifactId>foodbank-rest-api</artifactId>
         </dependency>
 
