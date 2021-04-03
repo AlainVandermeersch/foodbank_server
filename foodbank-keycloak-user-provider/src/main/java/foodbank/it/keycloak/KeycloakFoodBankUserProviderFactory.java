@@ -1,4 +1,4 @@
-package foodbank.it;
+package foodbank.it.keycloak;
 
 import org.keycloak.component.ComponentModel;
 import org.keycloak.component.ComponentValidationException;
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.Connection;
 import java.util.List;
 
-import static foodbank.it.CustomUserStorageProviderConstants.*;
+import static foodbank.it.keycloak.CustomUserStorageProviderConstants.*;
 
 public class KeycloakFoodBankUserProviderFactory implements UserStorageProviderFactory<KeycloakFoodBankUserProvider> {
 

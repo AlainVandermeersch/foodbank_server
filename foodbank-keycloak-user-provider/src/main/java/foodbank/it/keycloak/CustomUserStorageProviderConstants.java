@@ -1,4 +1,4 @@
-package foodbank.it;
+package foodbank.it.keycloak;
 
 public final class CustomUserStorageProviderConstants {
     public static final String CONFIG_KEY_JDBC_DRIVER = "jdbcDriver";

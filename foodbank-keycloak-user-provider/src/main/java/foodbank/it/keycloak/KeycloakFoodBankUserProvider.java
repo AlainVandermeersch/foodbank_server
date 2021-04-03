@@ -1,4 +1,4 @@
-package foodbank.it;
+package foodbank.it.keycloak;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.component.ComponentModel;

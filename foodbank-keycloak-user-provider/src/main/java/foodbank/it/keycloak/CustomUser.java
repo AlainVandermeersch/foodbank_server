@@ -1,4 +1,4 @@
-package foodbank.it;
+package foodbank.it.keycloak;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,6 @@ import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import org.keycloak.models.UserModel;
 import org.keycloak.storage.adapter.AbstractUserAdapter;
 
 import java.util.Date;
