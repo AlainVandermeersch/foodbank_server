@@ -134,7 +134,7 @@ if exist %WRAPPER_JAR% (
 	if not "%MVNW_REPOURL%" == "" (
 	  SET DOWNLOAD_URL="%MVNW_REPOURL%/io/takari/maven-wrapper/0.5.2/maven-wrapper-0.5.2.jar"
 	)
-    echo Couldn't find %WRAPPER_JAR%, downloading it ...
+    echo Couldn't find %WRAPPER_JAR%, downloading foodbank.it ...
 	echo Downloading from: %DOWNLOAD_URL%
 	
     powershell -Command "&{"^

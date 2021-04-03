@@ -91,7 +91,7 @@ if [ -z "$M2_HOME" ] ; then
 
   M2_HOME=`dirname "$PRG"`/..
 
-  # make it fully qualified
+  # make foodbank.it fully qualified
   M2_HOME=`cd "$M2_HOME" && pwd`
 
   cd "$saveddir"
