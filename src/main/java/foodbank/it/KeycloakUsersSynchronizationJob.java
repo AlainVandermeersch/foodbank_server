@@ -13,12 +13,12 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 @Component
 public class KeycloakUsersSynchronizationJob {
@@ -32,10 +32,12 @@ public class KeycloakUsersSynchronizationJob {
 	public static final String KEYCLOAK_ADMIN_CLIENT_ID = "security-admin-console";
 
 	private final ITUserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public KeycloakUsersSynchronizationJob(ITUserRepository userRepository) {
+	public KeycloakUsersSynchronizationJob(ITUserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@EventListener

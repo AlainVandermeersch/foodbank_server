@@ -37,6 +37,22 @@ services:
     environment:
       - MYSQL_HOST=${MYSQL_HOST}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
+  keycloak:
+    build: ./docker/keycloak
+    ports:
+      - "8083:8080"
+    depends_on:
+      - mysql
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      #    - KEYCLOAK_IMPORT=config/keycloak/realm.json
+      - DB_ADDR=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=keycloak
+      - DB_USER=keycloak
+      - DB_PASSWORD=keycloak
+      - MYSQL_ROOT_PASSWORD=fl11tw00d
 volumes:
   mysql-data:
   letsencrypt-data:
