@@ -1,5 +1,6 @@
 package foodbank.it;
 
+import foodbank.it.config.FoodBankAppConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

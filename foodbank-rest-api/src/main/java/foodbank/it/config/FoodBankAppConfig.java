@@ -1,4 +1,4 @@
-package foodbank.it;
+package foodbank.it.config;
 
 import java.time.format.DateTimeFormatter;
 
