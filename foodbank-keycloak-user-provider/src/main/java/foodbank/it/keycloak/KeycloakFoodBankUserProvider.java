@@ -24,10 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class KeycloakFoodBankUserProvider implements UserStorageProvider,
-		UserLookupProvider,
-		CredentialInputValidator,
-		UserQueryProvider {
+public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLookupProvider, CredentialInputValidator, UserQueryProvider {
 
 	public static final String USER_BY_ID = "select username, firstName, lastName, email, birthDate from users where id = ?";
 	public static final String USER_BY_USERNAME = "select username, firstName, lastName, email, birthDate from users where username = ?";
