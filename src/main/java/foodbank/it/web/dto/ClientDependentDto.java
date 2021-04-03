@@ -16,11 +16,12 @@ public class ClientDependentDto {
 	private Short regio;
 	private Short civilite;
 	private int eq;
+	private Long  totalRecords;
 	public ClientDependentDto() {
 		super();
 	}
 	public ClientDependentDto(int idDep, int lienDis, int lienMast, String prenom, String nom, String datenais,
-			boolean depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq) {
+			boolean depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq, Long  totalRecords) {
 		super();
 		this.idDep = idDep;
 		this.lienDis = lienDis;
@@ -35,6 +36,7 @@ public class ClientDependentDto {
 		this.regio = regio;
 		this.civilite = civilite;
 		this.eq = eq;
+		this.totalRecords = totalRecords;
 	}
 	public int getIdDep() {
 		return idDep;
@@ -113,6 +115,12 @@ public class ClientDependentDto {
 	}
 	public void setEq(int eq) {
 		this.eq = eq;
+	}
+	public Long getTotalRecords() {
+		return totalRecords;
+	}
+	public void setTotalRecords(Long totalRecords) {
+		this.totalRecords = totalRecords;
 	}
 	
 	

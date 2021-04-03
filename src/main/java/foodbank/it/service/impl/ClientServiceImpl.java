@@ -78,6 +78,7 @@ public class ClientServiceImpl implements IClientService{
 		query.setMaxResults(pageable.getPageSize());
 
 		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Client.class)));
 		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
 		long countResult = countQuery.getSingleResult();
