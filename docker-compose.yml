@@ -46,13 +46,7 @@ services:
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
-      #    - KEYCLOAK_IMPORT=config/keycloak/realm.json
-      - DB_ADDR=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=keycloak
-      - DB_USER=keycloak
-      - DB_PASSWORD=keycloak
-      - MYSQL_ROOT_PASSWORD=fl11tw00d
+      - DB_VENDOR=h2
 volumes:
   mysql-data:
   letsencrypt-data:
