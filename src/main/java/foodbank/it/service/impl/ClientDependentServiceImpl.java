@@ -41,36 +41,17 @@ public class ClientDependentServiceImpl implements IClientDependentService{
 	}
 
 	@Override
-	public Page<ClientDependent> findAll(SearchClientDependentCriteria searchCriteria, Pageable pageable) {
+	public Iterable<ClientDependent> findAll(SearchClientDependentCriteria searchCriteria) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<ClientDependent> clientDependentQuery = criteriaBuilder.createQuery(ClientDependent.class);
 		Root<ClientDependent> clientDependent = clientDependentQuery.from(ClientDependent.class);
 
 		List<Predicate> predicates = new ArrayList<>();
-		String searchField = searchCriteria.getSearchField();
-		String searchValue = searchCriteria.getSearchValue();
-
-		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienMast = searchCriteria.getLienMast();
 		Integer intIsActif = searchCriteria.isActif();
-
-		if (searchField != null && searchValue != null && !searchField.isEmpty() && !searchValue.isEmpty()) {
-			Path<String> searchFieldPath = clientDependent.get(searchField);
-			Expression<String> lowerSearchField = criteriaBuilder.lower(searchFieldPath);
-
-			Predicate searchFieldPredicate = criteriaBuilder.like(lowerSearchField, "%" + searchValue.toLowerCase() + "%");
-			predicates.add(searchFieldPredicate);
-		}
-
-		if (lienDis != null) {
-			Predicate lienDisPredicate = criteriaBuilder.equal(clientDependent.get("lienDis"), lienDis);
-			predicates.add(lienDisPredicate);
-		}
-
-		if (lienMast != null) {
-			Predicate lienMastPredicate = criteriaBuilder.equal(clientDependent.get("lienMast"), lienMast);
+		Predicate lienMastPredicate = criteriaBuilder.equal(clientDependent.get("lienMast"), lienMast);
 			predicates.add(lienMastPredicate);
-		}
+	
 		
 		if (intIsActif != null) {
 			boolean booIsActif = false;
@@ -79,21 +60,12 @@ public class ClientDependentServiceImpl implements IClientDependentService{
 			predicates.add(lienActifPredicate);
 		}
 
-		clientDependentQuery.where(predicates.stream().toArray(Predicate[]::new));
-		clientDependentQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), clientDependent, criteriaBuilder));
+		clientDependentQuery.where(predicates.stream().toArray(Predicate[]::new));		
 
-		TypedQuery<ClientDependent> query = entityManager.createQuery(clientDependentQuery);
-		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
-		query.setMaxResults(pageable.getPageSize());
-
-		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
-		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(ClientDependent.class)));
-		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		long countResult = countQuery.getSingleResult();
+		TypedQuery<ClientDependent> query = entityManager.createQuery(clientDependentQuery);		
 
 		List<ClientDependent> resultList = query.getResultList();
-		return new PageImpl<>(resultList, pageable, countResult);
+		return resultList;
 	}
 
 	@Override

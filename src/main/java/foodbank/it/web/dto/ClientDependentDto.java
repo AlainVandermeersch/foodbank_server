@@ -9,19 +9,19 @@ public class ClientDependentDto {
 	private String prenom;
 	private String nom;
 	private String datenais;
-	private boolean depTyp;
+	private Short depTyp;
 	private boolean actif;
 	private boolean deleted;
 	private Short lienBanque;
 	private Short regio;
 	private Short civilite;
 	private int eq;
-	private Long  totalRecords;
+	
 	public ClientDependentDto() {
 		super();
 	}
 	public ClientDependentDto(int idDep, int lienDis, int lienMast, String prenom, String nom, String datenais,
-			boolean depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq, Long  totalRecords) {
+			Short depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq) {
 		super();
 		this.idDep = idDep;
 		this.lienDis = lienDis;
@@ -36,7 +36,7 @@ public class ClientDependentDto {
 		this.regio = regio;
 		this.civilite = civilite;
 		this.eq = eq;
-		this.totalRecords = totalRecords;
+		
 	}
 	public int getIdDep() {
 		return idDep;
@@ -74,10 +74,10 @@ public class ClientDependentDto {
 	public void setDatenais(String datenais) {
 		this.datenais = datenais;
 	}
-	public boolean isDepTyp() {
+	public Short getDepTyp() {
 		return depTyp;
 	}
-	public void setDepTyp(boolean depTyp) {
+	public void setDepTyp(Short depTyp) {
 		this.depTyp = depTyp;
 	}
 	public boolean isActif() {
@@ -116,13 +116,5 @@ public class ClientDependentDto {
 	public void setEq(int eq) {
 		this.eq = eq;
 	}
-	public Long getTotalRecords() {
-		return totalRecords;
-	}
-	public void setTotalRecords(Long totalRecords) {
-		this.totalRecords = totalRecords;
-	}
-	
-	
 
 }

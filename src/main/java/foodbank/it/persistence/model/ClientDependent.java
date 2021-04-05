@@ -38,7 +38,7 @@ public class ClientDependent implements Serializable {
 	@Column(nullable=false)
 	private String datenais;
 	@Column(name="dep_typ", nullable=false, length=3)
-	private boolean depTyp;
+	private Short depTyp;
 	@Column(nullable=false, length=3)
 	private boolean actif;
 	@Column(nullable=false, length=3)
@@ -58,7 +58,7 @@ public class ClientDependent implements Serializable {
 	}
 
 	public ClientDependent(int idDep, int lienDis, int lienMast, String prenom, String nom, String datenais,
-			boolean depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq) {
+			Short depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq) {
 		super();
 		this.idDep = idDep;
 		this.lienDis = lienDis;
@@ -188,7 +188,7 @@ public class ClientDependent implements Serializable {
 	 *
 	 * @return true if and only if depTyp is currently true
 	 */
-	public boolean getDepTyp() {
+	public Short getDepTyp() {
 		return depTyp;
 	}
 
@@ -197,7 +197,7 @@ public class ClientDependent implements Serializable {
 	 *
 	 * @param aDepTyp the new value for depTyp
 	 */
-	public void setDepTyp(boolean aDepTyp) {
+	public void setDepTyp(Short aDepTyp) {
 		depTyp = aDepTyp;
 	}
 
@@ -317,7 +317,7 @@ public class ClientDependent implements Serializable {
 		result = prime * result + civilite;
 		result = prime * result + ((datenais == null) ? 0 : datenais.hashCode());
 		result = prime * result + (deleted ? 1231 : 1237);
-		result = prime * result + (depTyp ? 1231 : 1237);
+		result = prime * result + depTyp;
 		result = prime * result + eq;
 		result = prime * result + idDep;
 		result = prime * result + lienBanque;

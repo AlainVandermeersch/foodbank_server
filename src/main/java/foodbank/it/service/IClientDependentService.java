@@ -11,6 +11,6 @@ public interface IClientDependentService {
 	
 	Optional<ClientDependent> findByIdDep(int idDep);    
     ClientDependent save(ClientDependent clientDependent);
-    Page<ClientDependent> findAll(SearchClientDependentCriteria searchCriteria, Pageable pageable);
+    Iterable<ClientDependent> findAll(SearchClientDependentCriteria searchCriteria);
     void delete(int idDep);
 }
