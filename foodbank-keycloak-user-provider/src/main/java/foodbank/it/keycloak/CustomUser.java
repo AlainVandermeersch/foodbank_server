@@ -1,33 +1,27 @@
 package foodbank.it.keycloak;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.storage.adapter.AbstractUserAdapter;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Getter
 public class CustomUser extends AbstractUserAdapter {
 
 	private final String username;
 	private final String firstName;
 	private final String lastName;
 	private final String email;
-	private final Date birthDate;
 
-	public CustomUser(KeycloakSession session, RealmModel realm, ComponentModel storageProviderModel, String username, String firstName, String lastName, String email, Date birthDate) {
+	public CustomUser(KeycloakSession session, RealmModel realm, ComponentModel storageProviderModel, String username, String firstName, String lastName, String email) {
 		super(session, realm, storageProviderModel);
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.birthDate = birthDate;
 	}
 
 	public static CustomUserBuilder customUser(KeycloakSession keycloakSession, RealmModel realmModel, ComponentModel componentModel, String username) {
@@ -41,11 +35,9 @@ public class CustomUser extends AbstractUserAdapter {
 		attributes.add(EMAIL, getEmail());
 		attributes.add(FIRST_NAME, getFirstName());
 		attributes.add(LAST_NAME, getLastName());
-		attributes.add("birthDate", getBirthDate().toString());
 		return attributes;
 	}
 
-	@RequiredArgsConstructor
 	public static class CustomUserBuilder {
 		private final KeycloakSession keycloakSession;
 		private final RealmModel realmModel;
@@ -54,10 +46,16 @@ public class CustomUser extends AbstractUserAdapter {
 		private String firstName;
 		private String lastName;
 		private String email;
-		private Date birthDate;
+
+		public CustomUserBuilder(KeycloakSession keycloakSession, RealmModel realmModel, ComponentModel componentModel, String username) {
+			this.keycloakSession = keycloakSession;
+			this.realmModel = realmModel;
+			this.componentModel = componentModel;
+			this.username = username;
+		}
 
 		public CustomUser build() {
-			return new CustomUser(keycloakSession, realmModel, componentModel, username, firstName, lastName, email, birthDate);
+			return new CustomUser(keycloakSession, realmModel, componentModel, username, firstName, lastName, email);
 		}
 
 		public CustomUserBuilder withFirstName(String firstName) {
@@ -74,10 +72,25 @@ public class CustomUser extends AbstractUserAdapter {
 			this.email = email;
 			return this;
 		}
+	}
 
-		public CustomUserBuilder withBirthDate(Date birthDate) {
-			this.birthDate = birthDate;
-			return this;
-		}
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	@Override
+	public String getFirstName() {
+		return firstName;
+	}
+
+	@Override
+	public String getLastName() {
+		return lastName;
+	}
+
+	@Override
+	public String getEmail() {
+		return email;
 	}
 }

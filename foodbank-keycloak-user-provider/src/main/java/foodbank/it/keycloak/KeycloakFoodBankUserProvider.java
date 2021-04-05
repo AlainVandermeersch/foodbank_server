@@ -1,6 +1,6 @@
 package foodbank.it.keycloak;
 
-import lombok.RequiredArgsConstructor;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialInputValidator;
@@ -13,7 +13,6 @@ import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.user.UserLookupProvider;
 import org.keycloak.storage.user.UserQueryProvider;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,20 +22,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@RequiredArgsConstructor
 public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLookupProvider, CredentialInputValidator, UserQueryProvider {
 
-	public static final String USER_BY_ID = "select username, firstName, lastName, email, birthDate from users where id = ?";
-	public static final String USER_BY_USERNAME = "select username, firstName, lastName, email, birthDate from users where username = ?";
-	public static final String USER_BY_EMAIL = "select username, firstName, lastName, email, birthDate from users where email = ?";
-	public static final String USER_COUNT = "select count(*) from users";
-	public static final String USERS = "select username, firstName, lastName, email, birthDate from users";
-	public static final String USERS_PAGE = "select username, firstName, lastName, email, birthDate from users OFFSET ? LIMIT ?";
-	public static final String PASSWORD_BY_USERNAME = "select password from users where username = ?";
+	public static final String OFFSET_LIMIT = " OFFSET ? LIMIT ?";
+	public static final String USER_COUNT = "select count(*) from t_user";
+	public static final String PASSWORD_BY_USERNAME = "select password from t_user where id_user = ?";
+	public static final String USERS = "select id_user, user_name, email from t_user";
+	public static final String USERS_LOOKUP = USERS + " where id_user like ? or user_name like ? or email like ?";
+	public static final String USERS_LOOKUP_PAGE = USERS_LOOKUP + OFFSET_LIMIT;
+	public static final String USER_BY_ID = USERS + " where id_user = ?";
+	public static final String USER_BY_USERNAME = USERS + " where id_user = ?";
+	public static final String USER_BY_EMAIL = USERS + " where email = ?";
+	public static final String USERS_PAGE = USERS + OFFSET_LIMIT;
+	public static final int COST = 10;
 
 	private final KeycloakSession ksession;
 	private final ComponentModel model;
-	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final BCrypt.Hasher bcryptHasher;
+
+	public KeycloakFoodBankUserProvider(KeycloakSession ksession, ComponentModel model, BCrypt.Hasher bcryptHasher) {
+		this.ksession = ksession;
+		this.model = model;
+		this.bcryptHasher = bcryptHasher;
+	}
 
 	@Override
 	public boolean supportsCredentialType(String credentialType) {
@@ -64,13 +72,14 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 			ResultSet rs = st.getResultSet();
 			if (rs.next()) {
 				String pwd = rs.getString(1);
-				String credentialHash = bCryptPasswordEncoder.encode(credentialInput.getChallengeResponse());
-				return pwd.equals(credentialHash);
+
+				BCrypt.Result verify = BCrypt.verifyer().verify(credentialInput.getChallengeResponse().toCharArray(), pwd.toCharArray());
+				return verify.verified;
 			} else {
 				return false;
 			}
 		} catch (SQLException ex) {
-			throw new RuntimeException("Database error:" + ex.getMessage(), ex);
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -92,7 +101,7 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 				return null;
 			}
 		} catch (SQLException ex) {
-			throw new RuntimeException("Database error:" + ex.getMessage(), ex);
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -109,16 +118,17 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 				return null;
 			}
 		} catch (SQLException ex) {
-			throw new RuntimeException("Database error:" + ex.getMessage(), ex);
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
 		}
 	}
 
 	private UserModel mapUser(RealmModel realm, ResultSet rs) throws SQLException {
-		return CustomUser.customUser(ksession, realm, model, rs.getString("username"))
+		String[] firstlastname = rs.getString("user_name").split(" ");
+
+		return CustomUser.customUser(ksession, realm, model, rs.getString("id_user"))
 				.withEmail(rs.getString("email"))
-				.withFirstName(rs.getString("firstName"))
-				.withLastName(rs.getString("lastName"))
-				.withBirthDate(rs.getDate("birthDate"))
+				.withFirstName(firstlastname[1])
+				.withLastName(firstlastname[0])
 				.build();
 	}
 
@@ -135,7 +145,7 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 				return null;
 			}
 		} catch (SQLException ex) {
-			throw new RuntimeException("Database error:" + ex.getMessage(), ex);
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -146,12 +156,12 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 			st.execute();
 			ResultSet rs = st.getResultSet();
 			if (rs.next()) {
-				return rs.getInt(0);
+				return rs.getInt(1);
 			} else {
 				return 0;
 			}
 		} catch (SQLException ex) {
-			throw new RuntimeException("Database error:" + ex.getMessage(), ex);
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -173,7 +183,7 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 			return result;
 
 		} catch (SQLException ex) {
-			throw new RuntimeException("Database error:" + ex.getMessage(), ex);
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -181,8 +191,8 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 	public List<UserModel> getUsers(RealmModel realm, int firstResult, int maxResults) {
 		try (Connection c = DbUtil.getConnection(this.model)) {
 			PreparedStatement st = c.prepareStatement(USERS_PAGE);
-			st.setInt(0, firstResult);
-			st.setInt(1, maxResults);
+			st.setInt(1, firstResult);
+			st.setInt(2, maxResults);
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
@@ -196,18 +206,60 @@ public class KeycloakFoodBankUserProvider implements UserStorageProvider, UserLo
 			return result;
 
 		} catch (SQLException ex) {
-			throw new RuntimeException("Database error:" + ex.getMessage(), ex);
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
 		}
 	}
 
 	@Override
-	public List<UserModel> searchForUser(String s, RealmModel realmModel) {
-		return null;
+	public List<UserModel> searchForUser(String search, RealmModel realm) {
+		try (Connection c = DbUtil.getConnection(this.model)) {
+			PreparedStatement st = c.prepareStatement(USERS_LOOKUP);
+			String searchLike = "%" + search + "%";
+			st.setString(1, searchLike);
+			st.setString(2, searchLike);
+			st.setString(3, searchLike);
+			st.execute();
+			ResultSet rs = st.getResultSet();
+
+			List<UserModel> result = new ArrayList<>();
+
+			while (rs.next()) {
+				UserModel userModel = mapUser(realm, rs);
+				result.add(userModel);
+			}
+
+			return result;
+
+		} catch (SQLException ex) {
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
+		}
 	}
 
 	@Override
-	public List<UserModel> searchForUser(String s, RealmModel realmModel, int i, int i1) {
-		return null;
+	public List<UserModel> searchForUser(String search, RealmModel realm, int firstResult, int maxResults) {
+		try (Connection c = DbUtil.getConnection(this.model)) {
+			PreparedStatement st = c.prepareStatement(USERS_LOOKUP_PAGE);
+			String searchLike = "%" + search + "%";
+			st.setString(1, searchLike);
+			st.setString(2, searchLike);
+			st.setString(3, searchLike);
+			st.setInt(4, firstResult);
+			st.setInt(5, maxResults);
+			st.execute();
+			ResultSet rs = st.getResultSet();
+
+			List<UserModel> result = new ArrayList<>();
+
+			while (rs.next()) {
+				UserModel userModel = mapUser(realm, rs);
+				result.add(userModel);
+			}
+
+			return result;
+
+		} catch (SQLException ex) {
+			throw new RuntimeException("Database error: " + ex.getMessage(), ex);
+		}
 	}
 
 	@Override

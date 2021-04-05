@@ -1,5 +1,6 @@
 package foodbank.it.keycloak;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.component.ComponentValidationException;
 import org.keycloak.models.KeycloakSession;
@@ -9,12 +10,11 @@ import org.keycloak.provider.ProviderConfigurationBuilder;
 import org.keycloak.storage.UserStorageProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Connection;
 import java.util.List;
 
-import static foodbank.it.keycloak.CustomUserStorageProviderConstants.*;
+import static foodbank.it.keycloak.KeycloakFoodBankUserProviderConstants.*;
 
 public class KeycloakFoodBankUserProviderFactory implements UserStorageProviderFactory<KeycloakFoodBankUserProvider> {
 
@@ -31,20 +31,23 @@ public class KeycloakFoodBankUserProviderFactory implements UserStorageProviderF
 				.name(CONFIG_KEY_JDBC_DRIVER)
 				.label("JDBC Driver Class")
 				.type(ProviderConfigProperty.STRING_TYPE)
-				.defaultValue("org.h2.Driver")
+//				.defaultValue("org.h2.Driver")
+				.defaultValue("com.mysql.cj.jdbc.Driver")
 				.helpText("Fully qualified class name of the JDBC driver")
 				.add()
 				.property()
 				.name(CONFIG_KEY_JDBC_URL)
 				.label("JDBC URL")
 				.type(ProviderConfigProperty.STRING_TYPE)
-				.defaultValue("jdbc:h2:mem:customdb")
+				.defaultValue("jdbc:mysql://mysql:3306/banque_alimentaire?zeroDateTimeBehavior=convertToNull&serverTimezone=Europe/Brussels")
+//				.defaultValue("jdbc:h2:mem:customdb")
 				.helpText("JDBC URL used to connect to the user database")
 				.add()
 				.property()
 				.name(CONFIG_KEY_DB_USERNAME)
 				.label("Database User")
 				.type(ProviderConfigProperty.STRING_TYPE)
+				.defaultValue("root")
 				.helpText("Username used to connect to the database")
 				.add()
 				.property()
@@ -59,7 +62,7 @@ public class KeycloakFoodBankUserProviderFactory implements UserStorageProviderF
 				.label("SQL Validation Query")
 				.type(ProviderConfigProperty.STRING_TYPE)
 				.helpText("SQL query used to validate a connection")
-				.defaultValue("select 1")
+				.defaultValue("select 1 from dual")
 				.add()
 				.build();
 
@@ -67,15 +70,15 @@ public class KeycloakFoodBankUserProviderFactory implements UserStorageProviderF
 
 	@Override
 	public KeycloakFoodBankUserProvider create(KeycloakSession ksession, ComponentModel model) {
-		log.info("[I63] creating new CustomUserStorageProvider");
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(-1);
-		return new KeycloakFoodBankUserProvider(ksession, model, bCryptPasswordEncoder);
+		log.info("[I63] creating new KeycloakFoodBankUserProvider");
+		BCrypt.Hasher hasher = BCrypt.withDefaults();
+		return new KeycloakFoodBankUserProvider(ksession, model, hasher);
 	}
 
 	@Override
 	public String getId() {
 		log.info("[I69] getId()");
-		return "custom-user-provider";
+		return "foodbank-mysql-user-provider";
 	}
 
 	// Configuration support methods
