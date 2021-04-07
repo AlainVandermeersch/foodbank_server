@@ -1,24 +1,39 @@
 package foodbank.it.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 
 import javax.transaction.Transactional;
+import foodbank.it.persistence.model.Banque;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.persistence.repository.ITUserRepository;
 import foodbank.it.service.ITUserService;
+import foodbank.it.service.SearchTUserCriteria;
 
 @Service
 public class TUserServiceImpl implements ITUserService {
 
     private ITUserRepository TUserRepository;
+    private final EntityManager entityManager;
 
-    public TUserServiceImpl(ITUserRepository TUserRepository) {
+    public TUserServiceImpl(ITUserRepository TUserRepository,EntityManager entityManager) {
         this.TUserRepository = TUserRepository;
+        this.entityManager = entityManager;
+        
     }
 
     
@@ -42,116 +57,51 @@ public class TUserServiceImpl implements ITUserService {
     }
 
 
-	@Override
-	public Page<TUser> findAll(Pageable pageRequest) {
-		return TUserRepository.findAll(pageRequest);
+    @Override 
+    public Page<TUser> findAll(SearchTUserCriteria searchCriteria, Pageable pageable) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
+		Root<TUser> tuser = tuserQuery.from(TUser.class);
+
+		List<Predicate> predicates = new ArrayList<>();
+
+		String searchField = searchCriteria.getSearchField();
+		String searchValue = searchCriteria.getSearchValue();
+		Integer lienBanque = searchCriteria.getLienBanque();
+		Integer idOrg = searchCriteria.getIdOrg();
+
+		if (searchField != null && searchValue != null && !searchField.isEmpty() && !searchValue.isEmpty()) {
+			Path<String> searchFieldPath = tuser.get(searchField);
+			Expression<String> lowerSearchField = criteriaBuilder.lower(searchFieldPath);
+
+			Predicate searchFieldPredicate = criteriaBuilder.like(lowerSearchField, "%" + searchValue.toLowerCase() + "%");
+			predicates.add(searchFieldPredicate);
+		}
+		if (lienBanque != null) {
+			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), idOrg);
+			predicates.add(lienBanquePredicate);
+		}
+		
+
+		if (idOrg != null) {
+			Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
+			predicates.add(idOrgPredicate);
+		}
+
+		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
+		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));
+
+		TypedQuery<TUser> query = entityManager.createQuery(tuserQuery);
+		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+		query.setMaxResults(pageable.getPageSize());
+
+		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(TUser.class)));
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		long countResult = countQuery.getSingleResult();
+
+		List<TUser> resultList = query.getResultList();
+		return new PageImpl<>(resultList, pageable, countResult);
 	}
-
-
-	@Override
-	public Page<TUser> findByIdCompany(String idCompany, Pageable pageRequest) {
-		return TUserRepository.findByIdCompany(idCompany, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdOrg(int idOrg, Pageable pageRequest) {
-		return TUserRepository.findByIdOrg(idOrg, pageRequest);
-	}
-
-	@Override
-	public Page<TUser> findByIdUserContaining(String searchValue, Pageable pageRequest) {
-		return TUserRepository.findByIdUserContaining(searchValue,pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdOrgAndIdUserContaining(int parseInt, String searchValue, Pageable pageRequest) {
-		return TUserRepository.findByIdOrgAndIdUserContaining(parseInt,searchValue,pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdCompanyAndIdUserContaining(String idCompany, String searchValue, Pageable pageRequest) {
-		return TUserRepository.findByIdCompanyAndIdUserContaining(idCompany,searchValue, pageRequest);
-	}
-    
-	@Override
-	public Page<TUser> findByUserNameContaining(String search, Pageable pageRequest) {
-		return TUserRepository.findByUserNameContaining(search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdCompanyAndUserNameContaining(String idCompany, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdCompanyAndUserNameContaining(idCompany, search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdOrgAndUserNameContaining(int idOrg, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdOrgAndUserNameContaining(idOrg, search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdLanguageStartsWith(String search, Pageable pageRequest) {
-		return TUserRepository.findByIdLanguageStartsWith(search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdCompanyAndIdLanguageStartsWith(String idCompany, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdCompanyAndIdLanguageStartsWith(idCompany, search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdOrgAndIdLanguageStartsWith(int idOrg, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdOrgAndIdLanguageStartsWith(idOrg, search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByEmailContaining(String search, Pageable pageRequest) {
-		return TUserRepository.findByEmailContaining(search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdCompanyAndEmailContaining(String idCompany, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdCompanyAndEmailContaining(idCompany, search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdOrgAndEmailContaining(int idOrg, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdOrgAndEmailContaining(idOrg, search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByRightsContaining(String search, Pageable pageRequest) {
-		return TUserRepository.findByRightsContaining(search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdCompanyAndRightsContaining(String idCompany, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdCompanyAndRightsContaining(idCompany, search, pageRequest);
-	}
-
-
-	@Override
-	public Page<TUser> findByIdOrgAndRightsContaining(int idOrg, String search, Pageable pageRequest) {
-		return TUserRepository.findByIdOrgAndRightsContaining(idOrg, search, pageRequest);
-	}
-
-
-
-	
-	
-
-    
-
 }

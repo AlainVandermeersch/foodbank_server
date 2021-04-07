@@ -3,6 +3,8 @@ package foodbank.it.web.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.service.ITUserService;
+import foodbank.it.service.SearchTUserCriteria;
 import foodbank.it.web.dto.TUserDto;
 
 @RestController
@@ -52,7 +55,7 @@ public class TUserController {
     public Collection<TUserDto> find( @RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue, 
-    		@RequestParam(required = false) String idCompany,@RequestParam(required = false) String idOrg )  {
+    		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg )  {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -63,130 +66,16 @@ public class TUserController {
         }
         else {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
-        }   
-        List<TUserDto> TUserDtos = new ArrayList<>();
-        Page<TUser> selectedTUsers = null;
-        if (searchField == null) searchField = "";
-        switch(searchField) {
-        
-		case "idUser":
-			if (idCompany == null) {
-				if (idOrg == null) {
-					selectedTUsers = this.TUserService.findByIdUserContaining(searchValue, pageRequest);
-					long totalRecords = selectedTUsers.getTotalElements();
-					selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
-				} else {
-					selectedTUsers = this.TUserService.findByIdOrgAndIdUserContaining(Integer.parseInt(idOrg),
-							searchValue, pageRequest);
-					long totalRecordsOrg = selectedTUsers.getTotalElements();
-					selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
-				}
-			} else {
-				selectedTUsers = this.TUserService.findByIdCompanyAndIdUserContaining(idCompany, searchValue,
-						pageRequest);
-				long totalRecordsBanque = selectedTUsers.getTotalElements();
-				selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
-			}
-			break;
-        	
-        	case "userName":
-        		 if (idCompany == null) {
-        	        	if (idOrg == null) { 
-        	        		selectedTUsers = this.TUserService.findByUserNameContaining(searchValue,pageRequest);
-        	        		long totalRecords = selectedTUsers.getTotalElements();
-        	        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
-        	        	}
-        	        	else { 
-        	        		selectedTUsers = this.TUserService.findByIdOrgAndUserNameContaining(Integer.parseInt(idOrg),searchValue,pageRequest);
-        	        		long totalRecordsOrg = selectedTUsers.getTotalElements();
-        	        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
-        	        	}
-        	        }
-        	        else {
-        	        	selectedTUsers = this.TUserService.findByIdCompanyAndUserNameContaining(idCompany,searchValue,pageRequest);
-        	        	long totalRecordsBanque = selectedTUsers.getTotalElements();
-        	    		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
-        	        }
-        		break;
-        	case "idLanguage":
-        		if (idCompany == null) {
-                	if (idOrg == null) { 
-                		selectedTUsers = this.TUserService.findByIdLanguageStartsWith(searchValue,pageRequest);
-                		long totalRecords = selectedTUsers.getTotalElements();
-                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
-                	}
-                	else { 
-                		selectedTUsers = this.TUserService.findByIdOrgAndIdLanguageStartsWith(Integer.parseInt(idOrg),searchValue,pageRequest);
-                		long totalRecordsOrg = selectedTUsers.getTotalElements();
-                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
-                	}
-                }
-                else {
-                	selectedTUsers = this.TUserService.findByIdCompanyAndIdLanguageStartsWith(idCompany,searchValue,pageRequest);
-                	long totalRecordsBanque = selectedTUsers.getTotalElements();
-            		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
-                }
-        		break;
-        	case "email":
-        		if (idCompany == null) {
-                	if (idOrg == null) { 
-                		selectedTUsers = this.TUserService.findByEmailContaining(searchValue,pageRequest);
-                		long totalRecords = selectedTUsers.getTotalElements();
-                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
-                	}
-                	else { 
-                		selectedTUsers = this.TUserService.findByIdOrgAndEmailContaining(Integer.parseInt(idOrg),searchValue,pageRequest);
-                		long totalRecordsOrg = selectedTUsers.getTotalElements();
-                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
-                	}
-                }
-                else {
-                	selectedTUsers = this.TUserService.findByIdCompanyAndEmailContaining(idCompany,searchValue,pageRequest);
-                	long totalRecordsBanque = selectedTUsers.getTotalElements();
-            		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
-                }
-        		break;
-        	
-        	case "rights":
-        		if (idCompany == null) {
-                	if (idOrg == null) { 
-                		selectedTUsers = this.TUserService.findByRightsContaining(searchValue,pageRequest);
-                		long totalRecords = selectedTUsers.getTotalElements();
-                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
-                	}
-                	else { 
-                		selectedTUsers = this.TUserService.findByIdOrgAndRightsContaining(Integer.parseInt(idOrg),searchValue,pageRequest);
-                		long totalRecordsOrg = selectedTUsers.getTotalElements();
-                		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
-                	}
-                }
-                else {
-                	selectedTUsers = this.TUserService.findByIdCompanyAndRightsContaining(idCompany,searchValue,pageRequest);
-                	long totalRecordsBanque = selectedTUsers.getTotalElements();
-            		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
-                }
-        		break;
-        		default:
-        if (idCompany == null) {
-        	if (idOrg == null) { 
-        		selectedTUsers = this.TUserService.findAll(pageRequest);
-        		long totalRecords = selectedTUsers.getTotalElements();
-        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecords)));
-        	}
-        	else { 
-        		selectedTUsers = this.TUserService.findByIdOrg(Integer.parseInt(idOrg),pageRequest);
-        		long totalRecordsOrg = selectedTUsers.getTotalElements();
-        		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsOrg)));
-        	}
-        }
-        else {
-        	selectedTUsers = this.TUserService.findByIdCompany(idCompany,pageRequest);
-        	long totalRecordsBanque = selectedTUsers.getTotalElements();
-    		selectedTUsers.forEach(p -> TUserDtos.add(convertToDto(p, totalRecordsBanque)));
-        }
-       
-        }
-        return TUserDtos;
+        } 
+        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		SearchTUserCriteria criteria = new SearchTUserCriteria(searchField, searchValue, lienBanqueInteger, idOrgInteger);
+		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
+		long totalElements = selectedTUsers.getTotalElements();
+
+		return selectedTUsers.stream()
+				.map(TUser -> convertToDto(TUser, totalElements))
+				.collect(Collectors.toList());
     }
     
     @CrossOrigin
