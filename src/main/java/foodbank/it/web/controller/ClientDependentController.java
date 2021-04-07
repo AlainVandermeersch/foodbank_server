@@ -1,10 +1,8 @@
 package foodbank.it.web.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -24,10 +22,6 @@ import foodbank.it.persistence.model.ClientDependent;
 import foodbank.it.service.IClientDependentService;
 import foodbank.it.service.SearchClientDependentCriteria;
 import foodbank.it.web.dto.ClientDependentDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 @RestController
 

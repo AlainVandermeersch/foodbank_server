@@ -1,6 +1,5 @@
 package foodbank.it.web.dto;
 
-import javax.persistence.Column;
 
 public class ClientDependentDto {
 	private int idDep;

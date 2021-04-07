@@ -13,8 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity(name="clients")
 public class Client implements Serializable {
@@ -94,11 +92,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  private String prenomsav;
  @Column(precision=10)
  private Integer genreconj;
- @Column(name="lbanque", nullable=false, insertable = false, updatable = false, precision=5)
- private short lbanque;
- @ManyToOne
- @JoinColumn(name="lbanque")
- private Banque banqueObject;
+ private Short lbanque; 
 
  /** Default constructor. */
  public Client() {
@@ -110,7 +104,7 @@ private static final long serialVersionUID = -8518218294613491486L;
 		short civilite, String daten, String datenConj, short civiliteconj, String adresse, String cp, String localite,
 		String pays, String email, String tel, String gsm, String connu, int genre, short actif, short birb,
 		String natnr, String regio, short lCpas, String datUpdBirb, short critBirb, short coeff,
-		String nomsav, String prenomsav, int genreconj,Banque banqueObject) {
+		String nomsav, String prenomsav, int genreconj) {
 	super();
 	this.idClient = idClient;
 	this.idInt = idInt;
@@ -145,7 +139,6 @@ private static final long serialVersionUID = -8518218294613491486L;
 	this.nomsav = nomsav;
 	this.prenomsav = prenomsav;
 	this.genreconj = genreconj;
-	this.banqueObject = banqueObject;
 }
 
 
@@ -745,13 +738,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  public void setGenreconj(int aGenreconj) {
      genreconj = aGenreconj;
  }
- public Banque getBanqueObject() {
-		return banqueObject;
-	}
 
- public void setBanqueObject(Banque banqueObject) {
-		this.banqueObject = banqueObject;
-	}
  /**
   * Compares the key for this instance with another Clients.
   *

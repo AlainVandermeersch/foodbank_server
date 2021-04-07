@@ -291,8 +291,7 @@ public class ClientDto {
 			String prenomconj, short civilite, String daten, String datenConj, short civiliteconj, String adresse,
 			String cp, String localite, String pays, String email, String tel, String gsm, String connu, int genre,
 			short actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
-			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, String bankName,
-			String bankShortName,Long  totalRecords) {
+			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long  totalRecords) {
 		super();
 		this.idClient = idClient;
 		this.idInt = idInt;
@@ -333,8 +332,6 @@ public class ClientDto {
 		this.prenomsav = prenomsav;
 		this.genreconj = genreconj;
 		this.lbanque = lbanque;
-		this.bankName = bankName;
-		this.bankShortName = bankShortName;
 		this.totalRecords = totalRecords;
 	}
 	

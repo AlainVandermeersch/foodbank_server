@@ -1,10 +1,7 @@
 package foodbank.it.service;
 
 public class SearchClientDependentCriteria {
-	
-	private String searchField;
-	private String searchValue;
-	private Integer lienDis;
+		
 	private Integer lienMast;
 	private Integer actif;
 	public SearchClientDependentCriteria(Integer lienMast, Integer actif) {
