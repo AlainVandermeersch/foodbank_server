@@ -1,11 +1,10 @@
 package foodbank.it.web.controller;
 
-import static java.util.Objects.isNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +23,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.Membre;
-import foodbank.it.service.IBanqueService;
 import foodbank.it.service.IMembreService;
+import foodbank.it.service.SearchMembreCriteria;
 import foodbank.it.web.dto.MembreDto;
 
 @RestController
@@ -35,11 +33,10 @@ import foodbank.it.web.dto.MembreDto;
 public class MembreController {
 	
 	private IMembreService MembreService;
-	private IBanqueService BanqueService;
+	
     
-    public MembreController(IMembreService MembreService, IBanqueService BanqueService) {
-        this.MembreService = MembreService;
-        this.BanqueService = BanqueService;
+    public MembreController(IMembreService MembreService) {
+        this.MembreService = MembreService;       
     }
     @CrossOrigin
     @GetMapping("membre/{batId}")
@@ -54,7 +51,7 @@ public class MembreController {
     public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue,
-    		@RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String lienDis) {
+    		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -67,125 +64,15 @@ public class MembreController {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
         
-        Page<Membre> selectedMembres = null;
-        List<MembreDto> MembreDtos = new ArrayList<>();
-        if (searchField == null) searchField = "";
-        switch(searchField) {
-       
-        	case "nom":
-        		if (bankShortName == null) {
-    				if (lienDis == null) {
-    					selectedMembres = this.MembreService.findByNomContaining(searchValue,pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndNomContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				}
+        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		SearchMembreCriteria criteria = new SearchMembreCriteria(searchField, searchValue, lienBanqueInteger, lienDisInteger);
+		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
+		long totalElements = selectedMembres.getTotalElements();
 
-    			} else {
-    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndNomContaining(bankShortName, searchValue, pageRequest);
-    				long totalRecords = selectedMembres.getTotalElements();
-    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    			}
-        		break;
-        	case "prenom":
-        		if (bankShortName == null) {
-    				if (lienDis == null) {
-    					selectedMembres = this.MembreService.findByPrenomContaining(searchValue,pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndPrenomContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				}
-
-    			} else {
-    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndPrenomContaining(bankShortName, searchValue, pageRequest);
-    				long totalRecords = selectedMembres.getTotalElements();
-    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    			}
-        		break;
-        	case "address":
-        		if (bankShortName == null) {
-    				if (lienDis == null) {
-    					selectedMembres = this.MembreService.findByAddressContaining(searchValue,pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndAddressContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				}
-
-    			} else {
-    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndAddressContaining(bankShortName, searchValue, pageRequest);
-    				long totalRecords = selectedMembres.getTotalElements();
-    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    			}
-        		break;
-        	case "zip":
-        		if (bankShortName == null) {
-    				if (lienDis == null) {
-    					selectedMembres = this.MembreService.findByZipStartsWith(searchValue,pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndZipStartsWith(Integer.parseInt(lienDis),searchValue, pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				}
-
-    			} else {
-    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndZipStartsWith(bankShortName, searchValue, pageRequest);
-    				long totalRecords = selectedMembres.getTotalElements();
-    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    			}
-        		break;
-        	case "city":
-        		if (bankShortName == null) {
-    				if (lienDis == null) {
-    					selectedMembres = this.MembreService.findByCityContaining(searchValue,pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				} else {
-    					selectedMembres = this.MembreService.findByLienDisAndCityContaining(Integer.parseInt(lienDis),searchValue, pageRequest);
-    					long totalRecords = selectedMembres.getTotalElements();
-    					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    				}
-
-    			} else {
-    				selectedMembres = this.MembreService.findByBanqueObjectBankShortNameAndCityContaining(bankShortName, searchValue, pageRequest);
-    				long totalRecords = selectedMembres.getTotalElements();
-    				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-    			}
-        		break;
-        		
-        	default:
-        	
-        		if (bankShortName == null) {
-				if (lienDis == null) {
-					selectedMembres = this.MembreService.findAll(pageRequest);
-					long totalRecords = selectedMembres.getTotalElements();
-					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-				} else {
-					selectedMembres = this.MembreService.findByLienDis(Integer.parseInt(lienDis), pageRequest);
-					long totalRecords = selectedMembres.getTotalElements();
-					selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-				}
-
-			} else {
-				selectedMembres = this.MembreService.findByBanqueObjectBankShortName(bankShortName, pageRequest);
-				long totalRecords = selectedMembres.getTotalElements();
-				selectedMembres.forEach(p -> MembreDtos.add(convertToDto(p, totalRecords)));
-			}
-        }
-       
-   
-        
-        return MembreDtos;
+		return selectedMembres.stream()
+				.map(Membre -> convertToDto(Membre, totalElements))
+				.collect(Collectors.toList());
     }
     @CrossOrigin
     @PutMapping("membre/{batId}")
@@ -208,32 +95,24 @@ public class MembreController {
         Membre Membre = this.MembreService.save(entity);        
         return this.convertToDto(Membre,1);
     }
-    protected MembreDto convertToDto(Membre entity,long totalRecords) {
-    	String bankShortName = "";
-    	String bankName = "";
-    	Banque banqueObject = entity.getBanqueObject();
-    	if ( ! isNull(banqueObject)) {
-    		bankShortName = banqueObject.getBankShortName();
-    		bankName = banqueObject.getBankName();
-    	} 
+    protected MembreDto convertToDto(Membre entity,long totalRecords) {    	
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
 				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
-				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(), bankShortName,bankName,totalRecords  );    
+				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),entity.getLienBanque(),totalRecords  );    
         return dto;
     }
 
-    protected Membre convertToEntity(MembreDto dto) {
-    	Banque banqueObject = this.BanqueService.findByBankShortName(dto.getBankShortName()).get();
+    protected Membre convertToEntity(MembreDto dto) {   	
     	    
     	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
 				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), dto.getCa(), dto.getAg(), dto.getCg(),dto.getCivilite(), 
 				dto.getPays(), dto.getActif(), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  dto.getBen(),
 				dto.getCodeAcces(), dto.getNrCodeAcces(), dto.getLangue(), dto.getDatedeb(), dto.getDateFin(), dto.getDeleted(),
-				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLDep(),banqueObject);       
+				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLDep(),dto.getLienBanque());       
         if (!StringUtils.isEmpty(dto.getBatId())) {
             myMembre.setBatId(dto.getBatId());
         } 

@@ -3,8 +3,6 @@ package foodbank.it.web.dto;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class MembreDto {
 	 private Integer batId;
 	 
@@ -73,8 +71,7 @@ public class MembreDto {
 	 private String dateContrat;
 	
 	 private Integer lDep;
-	 private String bankName;
-	 private String bankShortName;
+	 private Short lienBanque;
 	 private Long  totalRecords;
 	 
 	public MembreDto() {
@@ -87,7 +84,7 @@ public class MembreDto {
 			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand, String rem,
 			Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
-			Integer lDep,LocalDateTime lastVisit, String bankShortName,String bankName, Long  totalRecords) {
+			Integer lDep,LocalDateTime lastVisit, Short lienBanque, Long  totalRecords) {
 		super();
 		this.batId = batId;
 		this.lienDis = lienDis;
@@ -131,8 +128,7 @@ public class MembreDto {
 		this.nnat = nnat;
 		this.dateContrat = dateContrat;
 		this.lDep = lDep;
-		this.bankName = bankName;
-		this.bankShortName = bankShortName;
+		this.lienBanque = lienBanque;
 		this.totalRecords = totalRecords;
 	}
 
@@ -423,21 +419,13 @@ public class MembreDto {
 	public void setLDep(Integer lDep) {
 		this.lDep = lDep;
 	}
-
-	public String getBankName() {
-		return bankName;
+	
+	public Short getLienBanque() {
+		return lienBanque;
 	}
 
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-
-	public String getBankShortName() {
-		return bankShortName;
-	}
-
-	public void setBankShortName(String bankShortName) {
-		this.bankShortName = bankShortName;
+	public void setLienBanque(Short lienBanque) {
+		this.lienBanque = lienBanque;
 	}
 
 	public Long  getTotalRecords() {

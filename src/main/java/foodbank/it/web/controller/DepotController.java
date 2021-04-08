@@ -1,6 +1,4 @@
 package foodbank.it.web.controller;
-import static java.util.Objects.isNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -13,13 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 
@@ -107,9 +101,8 @@ public class Membre implements Serializable {
  private String dateContrat;
  @Column(name="l_dep", precision=10)
  private Integer lDep;
- @ManyToOne
- @JoinColumn(name="lien_banque")
- private Banque banqueObject;
+ @Column(name="lien_banque", precision=10)
+ private Short lienBanque; 
 
  /** Default constructor. */
  public Membre() {
@@ -121,7 +114,7 @@ public class Membre implements Serializable {
 		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand,
 		String rem, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
 		String datedeb, String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat,
-		String dateContrat, Integer lDep, Banque banqueObject) {
+		String dateContrat, Integer lDep, Short lienBanque) {
 	super();
 	this.batId = batId;
 	this.lienDis = lienDis;
@@ -159,7 +152,7 @@ public class Membre implements Serializable {
 	this.dateContrat = dateContrat;
 	this.lDep = lDep;
 	this.lastVisit = LocalDateTime.now(); // do not use lastVisit from DTO we need to update the time
-	this.banqueObject = banqueObject;
+	this.lienBanque = lienBanque;
 }
 
 /**
@@ -802,15 +795,15 @@ public void setLastVisit(LocalDateTime lastVisit) {
 	this.lastVisit = lastVisit;
 }
 
-public Banque getBanqueObject() {
-		return banqueObject;
-	}
+ public Short getLienBanque() {
+	return lienBanque;
+}
 
-	public void setBanqueObject(Banque banqueObject) {
-		this.banqueObject = banqueObject;
-	}
+public void setLienBanque(Short lienBanque) {
+	this.lienBanque = lienBanque;
+}
 
- /**
+/**
   * Compares the key for this instance with another Membre.
   *
   * @param other The object to compare to

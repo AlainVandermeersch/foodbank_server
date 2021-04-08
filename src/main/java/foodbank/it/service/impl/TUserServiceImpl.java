@@ -3,19 +3,20 @@ package foodbank.it.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import foodbank.it.persistence.model.Banque;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageImpl;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
@@ -78,7 +79,7 @@ public class TUserServiceImpl implements ITUserService {
 			predicates.add(searchFieldPredicate);
 		}
 		if (lienBanque != null) {
-			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), idOrg);
+			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
 		}
 		
