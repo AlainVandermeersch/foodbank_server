@@ -222,23 +222,9 @@ public class OrganisationDto {
 	   
 	    private String lupdTs;
 	    
-	    private String bankName;
-	    private String bankShortName;
-	    public String getBankName() {
-			return bankName;
-		}
-
-		public void setBankName(String bankName) {
-			this.bankName = bankName;
-		}
-
-		public String getBankShortName() {
-			return bankShortName;
-		}
-
-		public void setBankShortName(String bankShortName) {
-			this.bankShortName = bankShortName;
-		}
+	    private Short lienBanque; 
+	    
+	   
 
 		
 	    
@@ -264,7 +250,7 @@ public class OrganisationDto {
 				Short tourneeMois, Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres,
 				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN,
 				String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup, Integer  cotMonthsSup, Integer  depotram,
-				String lupdUserName, LocalDateTime lupdTs, String bankShortName,String bankName ) {
+				String lupdUserName, LocalDateTime lupdTs,Short lienBanque ) {
 			super();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 			this.idDis = idDis;
@@ -388,8 +374,8 @@ public class OrganisationDto {
 			else {				
 				this.lupdTs = lupdTs.format(formatter);
 			}
-			this.bankShortName = bankShortName;
-			this.bankName = bankName;
+			this.lienBanque = lienBanque;
+			
 		}
 
 		public int getIdDis() {
@@ -1279,6 +1265,14 @@ public class OrganisationDto {
 
 		public void setLupdTs(String lupdTs) {
 			this.lupdTs = lupdTs;
+		}
+
+		public Short getLienBanque() {
+			return lienBanque;
+		}
+
+		public void setLienBanque(Short lienBanque) {
+			this.lienBanque = lienBanque;
 		}
 	    
 

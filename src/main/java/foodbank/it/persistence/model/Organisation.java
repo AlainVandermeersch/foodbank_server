@@ -11,8 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity(name="organisations")
 public class Organisation implements Serializable {
@@ -242,12 +240,9 @@ public class Organisation implements Serializable {
     @Column(name="LUPD_USER_NAME", length=45)
     private String lupdUserName;
     @Column(name="LUPD_TS")
-    private LocalDateTime lupdTs;  
-    
-
-	@ManyToOne
-    @JoinColumn(name="lien_banque")
-    private Banque banqueObject;
+    private LocalDateTime lupdTs; 
+    @Column(name="lien_banque")
+    private Short lienBanque; 
     
 
 	/** Default constructor. */
@@ -262,7 +257,7 @@ public class Organisation implements Serializable {
         Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp, String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3, Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,
         BigDecimal nEq, Integer  nSen, Short depPrinc, Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs, BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead, Short tourneeMois,
         Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres, String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN, String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup,
-        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, Banque banqueObject) {
+        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, Short lienBanque) {
         super();
         this.idDis = idDis;
         this.refInt = refInt;
@@ -375,7 +370,7 @@ public class Organisation implements Serializable {
         this.depotram = depotram;
         this.lupdUserName = lupdUserName;
         this.lupdTs =  LocalDateTime.now(); // do not use lupdTs from DTO we need to update the time
-        this.banqueObject = banqueObject;
+        this.lienBanque = lienBanque;
     }
 
     /**
@@ -2368,14 +2363,16 @@ public class Organisation implements Serializable {
     public void setLupdTs(LocalDateTime aLupdTs) {
         lupdTs = aLupdTs;
     }
-    public Banque getBanqueObject() {
-		return banqueObject;
+   
+	
+	public Short getLienBanque() {
+		return lienBanque;
 	}
 
-	public void setBanqueObject(Banque banqueObject) {
-		this.banqueObject = banqueObject;
+	public void setLienBanque(Short lienBanque) {
+		this.lienBanque = lienBanque;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -2886,7 +2883,7 @@ public class Organisation implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Organisation [idDis=" + idDis + ", refInt=" + refInt + ",  lienDepot=" + lienDepot + ", societe=" + societe + ", adresse=" + adresse + ", statut="
+		return "Organisation [idDis=" + idDis + ", lienBanque=" + lienBanque + ", refInt=" + refInt + ",  lienDepot=" + lienDepot + ", societe=" + societe + ", adresse=" + adresse + ", statut="
 				+ statut + ", email=" + email + ", cp=" + cp + ", localite=" + localite
 				+ ", pays=" + pays + ", tva=" + tva + ", website=" + website + ", tel=" + tel + ", gsm=" + gsm
 				+ ", daten=" + daten + ", region=" + region + ", iban=" + iban + ", classique="

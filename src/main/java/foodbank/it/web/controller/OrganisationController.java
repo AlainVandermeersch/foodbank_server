@@ -2,7 +2,6 @@ package foodbank.it.web.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -18,9 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.Organisation;
-import foodbank.it.service.IBanqueService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.web.dto.OrganisationDto;
 
@@ -29,11 +26,9 @@ import foodbank.it.web.dto.OrganisationDto;
 public class OrganisationController {
 	
 	private IOrganisationService OrganisationService;
-	private IBanqueService BanqueService;
-    
-    public OrganisationController(IOrganisationService OrganisationService, IBanqueService BanqueService) {
-        this.OrganisationService = OrganisationService;
-        this.BanqueService = BanqueService;
+	    
+    public OrganisationController(IOrganisationService OrganisationService) {
+        this.OrganisationService = OrganisationService;        
     }
     @CrossOrigin
     @GetMapping("organisation/{idDis}")
@@ -45,27 +40,12 @@ public class OrganisationController {
     
     @CrossOrigin
     @GetMapping("organisations/")
-    public Collection<OrganisationDto> find( @RequestParam(required = false) String bankShortName ,@RequestParam(required = false) String idDis) {
+    public Collection<OrganisationDto> find( @RequestParam String lienBanque ) {
         Iterable<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
-        if (bankShortName == null) {
-        	if (idDis == null) {
-        		selectedOrganisations = this.OrganisationService.findAll();
-        		selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
-        	}
-        	else {
-        		Optional<Organisation> myOrganisation = this.OrganisationService.findByIdDis(Integer.parseInt(idDis));
-        		myOrganisation.ifPresent(org-> OrganisationDtos.add(convertToDto( org)));
-        	}
-        	
-        }
-        else {
-        	selectedOrganisations = this.OrganisationService.findByBanqueObjectBankShortName(bankShortName);
-        	// selectedOrganisations = this.OrganisationService.findAll();
-        	selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
-        }
-        
-        
+        selectedOrganisations = this.OrganisationService.findByLienBanque(Short.parseShort(lienBanque));
+        selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
+     
         return OrganisationDtos;
     }
     @CrossOrigin
@@ -108,13 +88,12 @@ public class OrganisationController {
 				entity.getTourneeMois(), entity.getDistrListPdt(), entity.getDistrListVp(), entity.getDistrListSec(), entity.getDistrListTres(),
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), entity.getFeadN(),
 				entity.getRemLivr(), entity.getCotAnnuelle(), entity.getCotMonths(), entity.getCotSup(), entity.getCotMonthsSup(), entity.getDepotram(),
-				entity.getLupdUserName(), entity.getLupdTs(),entity.getBanqueObject().getBankShortName(),entity.getBanqueObject().getBankName()  );    
+				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque() );    
         return dto;
     }
 
     protected Organisation convertToEntity(OrganisationDto dto) {
-    	Banque banqueObject = this.BanqueService.findByBankShortName(dto.getBankShortName()).get();
-    	    
+    	    	    
     	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
 				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), dto.getBanque(),
@@ -133,7 +112,7 @@ public class OrganisationController {
 				dto.getTourneeMois(), dto.getDistrListPdt(), dto.getDistrListVp(), dto.getDistrListSec(), dto.getDistrListTres(),
 				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), dto.getFeadN(),
 				dto.getRemLivr(), dto.getCotAnnuelle(), dto.getCotMonths(), dto.getCotSup(), dto.getCotMonthsSup(), dto.getDepotram(),
-				dto.getLupdUserName(),banqueObject);       
+				dto.getLupdUserName(),dto.getLienBanque());       
         if (!StringUtils.isEmpty(dto.getIdDis())) {
             myOrganisation.setIdDis(dto.getIdDis());
         }

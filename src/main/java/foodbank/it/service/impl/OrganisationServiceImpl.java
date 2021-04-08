@@ -28,20 +28,15 @@ public class OrganisationServiceImpl implements IOrganisationService{
     }
 
     @Override
-    public Iterable<Organisation> findAll() {
-                return OrganisationRepository.findAll();
-    }
-
-    @Override
     @Transactional
     public void delete(int idDis) {
         OrganisationRepository.deleteByIdDis(idDis);
         
     }
-   
+
 	@Override
-	public Iterable<Organisation> findByBanqueObjectBankShortName( String bankShortName) {
-		return OrganisationRepository.findByBanqueObjectBankShortName( bankShortName);
+	public Iterable<Organisation> findByLienBanque(Short lienBanque) {
+		return OrganisationRepository.findByLienBanque(lienBanque);
 	}
 	
 	
