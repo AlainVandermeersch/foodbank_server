@@ -2,6 +2,7 @@ package foodbank.it.web.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -40,11 +41,17 @@ public class OrganisationController {
     
     @CrossOrigin
     @GetMapping("organisations/")
-    public Collection<OrganisationDto> find( @RequestParam String lienBanque ) {
+    public Collection<OrganisationDto> find( @RequestParam(required = false) String lienBanque ,
+    		@RequestParam(required = false) String idDis) {
         Iterable<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
-        selectedOrganisations = this.OrganisationService.findByLienBanque(Short.parseShort(lienBanque));
-        selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
+        if (idDis != null) {
+        	Optional<Organisation> myOrganisation = this.OrganisationService.findByIdDis(Integer.parseInt(idDis));
+            myOrganisation.ifPresent(org-> OrganisationDtos.add(convertToDto( org)));
+        } else if (lienBanque !=null) {        
+        	selectedOrganisations = this.OrganisationService.findByLienBanque(Short.parseShort(lienBanque));
+        	selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
+        }        
      
         return OrganisationDtos;
     }
