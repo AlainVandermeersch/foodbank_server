@@ -83,7 +83,13 @@ public class MembreController {
     @DeleteMapping("membre/{batId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMembre(@PathVariable("batId") Integer batId) {
-        MembreService.delete(batId);
+    	
+        String errorMsg = MembreService.delete(batId);
+    	if (errorMsg !="")
+    	{
+    		System.out.println(errorMsg);
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+    	}
     }
     @CrossOrigin
     @PostMapping("membre/")

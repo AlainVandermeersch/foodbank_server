@@ -15,7 +15,7 @@ public interface IMembreService {
 
     Page<Membre> findAll(SearchMembreCriteria searchCriteria, Pageable pageable);	 
 
-    void delete(int batId);
+    String delete(int batId);
 
 	
 }

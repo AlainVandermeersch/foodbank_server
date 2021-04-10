@@ -3,6 +3,7 @@ package foodbank.it.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,16 +12,16 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Membre;
+import foodbank.it.persistence.model.TUser;
 import foodbank.it.persistence.repository.IMembreRepository;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.SearchMembreCriteria;
@@ -47,8 +48,31 @@ public class MembreServiceImpl implements IMembreService{
 
     @Override
     @Transactional
-    public void delete(int batId) {
-        MembreRepository.deleteByBatId(batId);
+    public String delete(int batId) {
+    	
+    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+    	Root<TUser> tuser = totalCriteriaQuery.from(TUser.class);
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate lienBatPredicate = criteriaBuilder.equal(tuser.get("lienBat"), batId);
+		predicates.add(lienBatPredicate);
+	
+		System.out.printf("\nChecking User References to Member with id: %d", batId);
+		
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.select(criteriaBuilder.count(tuser));
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		long countResult = countQuery.getSingleResult();
+		
+
+		if (countResult > 0) {
+			String errorMsg = String.format("There are %d Users with Member id %d",countResult, batId);		
+			return errorMsg;
+		}
+		else {
+			MembreRepository.deleteByBatId(batId);
+			return "";
+		}
         
     }
    
