@@ -75,5 +75,11 @@ public class ClientDependentServiceImpl implements IClientDependentService{
 		
 	}
 
+	@Override
+	public void deleteByLienMast(int lienMast) {
+		this.ClientDependentRepository.deleteByLienMast(lienMast);
+		
+	}
+
 
 }

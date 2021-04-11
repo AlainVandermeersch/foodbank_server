@@ -9,4 +9,5 @@ import foodbank.it.persistence.model.ClientDependent;
 public interface IClientDependentRepository extends CrudRepository<ClientDependent, Integer>{
 	    Optional<ClientDependent> findByIdDep(int idDep);
 	    void deleteByIdDep(int idDep);
+	    void deleteByLienMast(int lienMast);
 }

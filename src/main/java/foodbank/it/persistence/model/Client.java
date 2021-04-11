@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Formula;
+
 @Entity(name="clients")
 public class Client implements Serializable {
 
@@ -93,6 +95,8 @@ private static final long serialVersionUID = -8518218294613491486L;
  @Column(precision=10)
  private Integer genreconj;
  private Short lbanque; 
+ @Formula("(select count(*) from dep d where d.lien_mast = id_client)")
+ private Long nbDep;
 
  /** Default constructor. */
  public Client() {
@@ -140,6 +144,14 @@ private static final long serialVersionUID = -8518218294613491486L;
 	this.prenomsav = prenomsav;
 	this.genreconj = genreconj;
 }
+
+
+public Long getNbDep() {
+	return nbDep;
+}
+
+
+
 
 
 /**

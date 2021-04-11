@@ -62,7 +62,7 @@ public class MembreServiceImpl implements IMembreService{
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(tuser));
 		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		long countResult = countQuery.getSingleResult();
+		Long countResult = countQuery.getSingleResult();
 		
 
 		if (countResult > 0) {

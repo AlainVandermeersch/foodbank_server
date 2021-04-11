@@ -18,6 +18,7 @@ import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Client;
+import foodbank.it.persistence.repository.IClientDependentRepository;
 import foodbank.it.persistence.repository.IClientRepository;
 import foodbank.it.service.IClientService;
 
@@ -25,10 +26,14 @@ import foodbank.it.service.IClientService;
 public class ClientServiceImpl implements IClientService{
 
 	private final IClientRepository ClientRepository;
+	private final IClientDependentRepository ClientDependentRepository;
 	private final EntityManager entityManager;
 	
-	public ClientServiceImpl(IClientRepository ClientRepository, EntityManager entityManager) {
+	public ClientServiceImpl(IClientRepository ClientRepository,
+			IClientDependentRepository ClientDependentRepository,
+			EntityManager entityManager) {
         this.ClientRepository = ClientRepository;
+        this.ClientDependentRepository = ClientDependentRepository;
 		this.entityManager = entityManager;
 	}
 	@Override
@@ -83,12 +88,15 @@ public class ClientServiceImpl implements IClientService{
 		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
 		long countResult = countQuery.getSingleResult();
 
-		List<Client> resultList = query.getResultList();
-		return new PageImpl<>(resultList, pageable, countResult);
+		List<Client> clients = query.getResultList();	
+		
+		
+		return new PageImpl<>(clients, pageable, countResult);
 	}
 
 	@Override
-    public Client save(Client Client) {        
+    public Client save(Client Client) {   
+		
         return ClientRepository.save(Client);
     }
 
@@ -97,6 +105,9 @@ public class ClientServiceImpl implements IClientService{
     @Override
     @Transactional
     public void delete(int idClient) {
+    	
+    	ClientDependentRepository.deleteByLienMast(idClient);
+		
         ClientRepository.deleteByIdClient(idClient);
         
     }

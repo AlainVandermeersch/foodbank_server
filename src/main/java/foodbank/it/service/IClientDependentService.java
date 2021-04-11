@@ -10,4 +10,5 @@ public interface IClientDependentService {
     ClientDependent save(ClientDependent clientDependent);
     Iterable<ClientDependent> findAll(SearchClientDependentCriteria searchCriteria);
     void delete(int idDep);
+    void deleteByLienMast(int lienMast);
 }

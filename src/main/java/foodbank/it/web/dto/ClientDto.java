@@ -62,8 +62,9 @@ public class ClientDto {
 	 private Integer genreconj;
 	
 	 private short lbanque;
-	 private String bankName;
-	 private String bankShortName;
+	 
+	 private Long nbDep;
+	 
 	 private Long  totalRecords;
 	 
 	public int getIdClient() {
@@ -264,17 +265,10 @@ public class ClientDto {
 	public void setLbanque(short lbanque) {
 		this.lbanque = lbanque;
 	}
-	public String getBankName() {
-		return bankName;
-	}
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-	public String getBankShortName() {
-		return bankShortName;
-	}
-	public void setBankShortName(String bankShortName) {
-		this.bankShortName = bankShortName;
+	
+	
+	public Long getNbDep() {
+		return nbDep;
 	}
 	
 	public Long getTotalRecords() {
@@ -291,7 +285,7 @@ public class ClientDto {
 			String prenomconj, short civilite, String daten, String datenConj, short civiliteconj, String adresse,
 			String cp, String localite, String pays, String email, String tel, String gsm, String connu, int genre,
 			short actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
-			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long  totalRecords) {
+			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long nbDep, Long  totalRecords) {
 		super();
 		this.idClient = idClient;
 		this.idInt = idInt;
@@ -332,6 +326,7 @@ public class ClientDto {
 		this.prenomsav = prenomsav;
 		this.genreconj = genreconj;
 		this.lbanque = lbanque;
+		this.nbDep = nbDep;
 		this.totalRecords = totalRecords;
 	}
 	

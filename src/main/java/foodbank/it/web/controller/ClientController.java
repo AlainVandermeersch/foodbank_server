@@ -105,7 +105,7 @@ public class ClientController {
 				entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getPays(), entity.getEmail(), entity.getTel(), entity.getGsm(),
 				entity.getConnu(), entity.getGenre(), entity.getActif(), entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
 				entity.getLCpas(), entity.getDatUpdBirb(), entity.getCritBirb(), entity.getCoeff(), entity.getNomsav(), entity.getPrenomsav(),
-				entity.getGenreconj(), entity.getLbanque(), totalRecords);
+				entity.getGenreconj(), entity.getLbanque(), entity.getNbDep(),totalRecords);
 		return dto;
 	}
 
