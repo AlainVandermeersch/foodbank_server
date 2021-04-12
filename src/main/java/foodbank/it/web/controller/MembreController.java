@@ -76,29 +76,47 @@ public class MembreController {
     @CrossOrigin
     @PutMapping("membre/{batId}")
     public MembreDto updateMembre(@PathVariable("batId") Integer batId, @RequestBody MembreDto updatedMembre) {
-        Membre MembreEntity = convertToEntity(updatedMembre);
-        return this.convertToDto(this.MembreService.save(MembreEntity),1);
+        Membre entity = convertToEntity(updatedMembre);
+        boolean booCreateMode = false;
+        try {
+            Membre Membre = this.MembreService.save(entity,booCreateMode);        
+            return this.convertToDto(Membre,1);
+            }
+            catch (Exception ex) {
+            	String errorMsg = ex.getMessage();
+            	System.out.println(errorMsg);
+        		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+            }
     }
     @CrossOrigin
     @DeleteMapping("membre/{batId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMembre(@PathVariable("batId") Integer batId) {
-    	
-        String errorMsg = MembreService.delete(batId);
-    	if (errorMsg !="")
-    	{
-    		System.out.println(errorMsg);
-    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
-    	}
+    	 try {
+    		 MembreService.delete(batId);
+    	 }
+         catch (Exception ex) {
+         	String errorMsg = ex.getMessage();
+         	System.out.println(errorMsg);
+     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+         }
     }
     @CrossOrigin
     @PostMapping("membre/")
     @ResponseStatus(HttpStatus.CREATED)
     public MembreDto create(@RequestBody MembreDto newMembre) {
         Membre entity = convertToEntity(newMembre);
-        // Alain todo later entity.setDateCreated(LocalDate.now());
-        Membre Membre = this.MembreService.save(entity);        
+        
+        boolean booCreateMode = true;
+        try {
+        Membre Membre = this.MembreService.save(entity,booCreateMode);        
         return this.convertToDto(Membre,1);
+        }
+        catch (Exception ex) {
+        	String errorMsg = ex.getMessage();
+        	System.out.println(errorMsg);
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+        }
     }
     protected MembreDto convertToDto(Membre entity,long totalRecords) {    	
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),

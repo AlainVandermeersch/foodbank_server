@@ -42,13 +42,36 @@ public class MembreServiceImpl implements IMembreService{
     }
 
     @Override
-    public Membre save(Membre Membre) {        
-        return MembreRepository.save(Membre);
+    public Membre save(Membre membre, boolean booCreateMode) throws Exception {  
+    	if (booCreateMode == true) {
+    		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+        	Root<Membre> existingMembre = totalCriteriaQuery.from(Membre.class);
+    		List<Predicate> predicates = new ArrayList<>();
+    		Predicate lienBatPredicate = criteriaBuilder.equal(existingMembre.get("batmail"), membre.getBatmail());
+    		predicates.add(lienBatPredicate);
+    	
+    		System.out.printf("\nChecking If Member exists with e-mail: %s", membre.getBatmail());
+    		
+    		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+    		totalCriteriaQuery.select(criteriaBuilder.count(existingMembre));
+    		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+    		Long countResult = countQuery.getSingleResult();
+    		
+
+    		if (countResult > 0) {
+    			String errorMsg = String.format("a member exists already with e-mail %s",membre.getBatmail());		
+    			throw new Exception(errorMsg);
+    		}
+
+    	}
+    	
+        return MembreRepository.save(membre);
     }
 
     @Override
     @Transactional
-    public String delete(int batId) {
+    public void delete(int batId) throws Exception {
     	
     	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
@@ -67,11 +90,10 @@ public class MembreServiceImpl implements IMembreService{
 
 		if (countResult > 0) {
 			String errorMsg = String.format("There are %d Users with Member id %d",countResult, batId);		
-			return errorMsg;
+			throw new Exception(errorMsg);
 		}
 		else {
-			MembreRepository.deleteByBatId(batId);
-			return "";
+			MembreRepository.deleteByBatId(batId);		
 		}
         
     }
