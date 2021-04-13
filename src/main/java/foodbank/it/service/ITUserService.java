@@ -9,7 +9,7 @@ import foodbank.it.persistence.model.TUser;
 public interface ITUserService {
 		Optional<TUser> findByIdUser(String idUser);	
 		Page<TUser> findAll(SearchTUserCriteria searchCriteria, Pageable pageable);	    
-	    TUser save(TUser TUser);
+		TUser save(TUser TUser,  boolean booCreateMode) throws Exception;
 	    void delete(String idUser);	
 
 	}

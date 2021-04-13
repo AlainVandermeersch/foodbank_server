@@ -80,7 +80,16 @@ public class TUserController {
     @PutMapping("user/{idUser}")
     public TUserDto updateTUser(@PathVariable("idUser") String idUser, @RequestBody TUserDto updatedTUser) {
         TUser TUserEntity = convertToEntity(updatedTUser);
-        return this.convertToDto(this.TUserService.save(TUserEntity),(long) 1);
+        boolean booCreateMode = false;
+        try {
+        	TUser tuser = this.TUserService.save(TUserEntity,booCreateMode);
+        	return this.convertToDto(tuser,(long) 1);
+        }
+        catch (Exception ex) {
+        	String errorMsg = ex.getMessage();
+        	System.out.println(errorMsg);
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+        }
     }
     @CrossOrigin
     @DeleteMapping("user/{idUser}")
@@ -93,9 +102,16 @@ public class TUserController {
     @ResponseStatus(HttpStatus.CREATED)
     public TUserDto create(@RequestBody TUserDto newTUser) {
         TUser entity = convertToEntity(newTUser);
-        // Alain todo later entity.setDateCreated(LocalDate.now());
-        TUser TUser = this.TUserService.save(entity);        
-        return this.convertToDto(TUser, (long) 1);
+        boolean booCreateMode = true;
+        try {
+        	TUser tuser = this.TUserService.save(entity,booCreateMode);
+        	return this.convertToDto(tuser,(long) 1);
+        }
+        catch (Exception ex) {
+        	String errorMsg = ex.getMessage();
+        	System.out.println(errorMsg);
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+        }
     }
 
 

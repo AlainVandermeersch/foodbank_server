@@ -48,8 +48,8 @@ public class MembreServiceImpl implements IMembreService{
         	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
         	Root<Membre> existingMembre = totalCriteriaQuery.from(Membre.class);
     		List<Predicate> predicates = new ArrayList<>();
-    		Predicate lienBatPredicate = criteriaBuilder.equal(existingMembre.get("batmail"), membre.getBatmail());
-    		predicates.add(lienBatPredicate);
+    		Predicate batMailPredicate = criteriaBuilder.equal(existingMembre.get("batmail"), membre.getBatmail());
+    		predicates.add(batMailPredicate);
     	
     		System.out.printf("\nChecking If Member exists with e-mail: %s", membre.getBatmail());
     		

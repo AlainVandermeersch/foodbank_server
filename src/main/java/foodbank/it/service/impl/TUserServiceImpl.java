@@ -44,11 +44,30 @@ public class TUserServiceImpl implements ITUserService {
     }
 
     @Override
-    public TUser save(TUser TUser) {
-      /*  if (StringUtils.isEmpty(TUser.getIdUser()())) {
-            TUser.setDateCreated(LocalDate.now());
-        } */
-        return TUserRepository.save(TUser);
+    public TUser save(TUser tuser,  boolean booCreateMode) throws Exception {
+    	if (booCreateMode == true) {
+    		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+        	Root<TUser> existingTUser = totalCriteriaQuery.from(TUser.class);
+    		List<Predicate> predicates = new ArrayList<>();
+    		Predicate idUserPredicate = criteriaBuilder.equal(existingTUser.get("idUser"), tuser.getIdUser());
+    		predicates.add(idUserPredicate);
+    	
+    		System.out.printf("\nChecking If User exists with userId: %s", tuser.getIdUser());
+    		
+    		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+    		totalCriteriaQuery.select(criteriaBuilder.count(existingTUser));
+    		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+    		Long countResult = countQuery.getSingleResult();
+    		
+
+    		if (countResult > 0) {
+    			String errorMsg = String.format("a user exists with userId: %s", tuser.getIdUser());		
+    			throw new Exception(errorMsg);
+    		}
+
+    	}
+        return TUserRepository.save(tuser);
     }
 
     @Override
