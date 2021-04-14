@@ -171,6 +171,8 @@ public class Organisation implements Serializable {
     private Integer  nEnf;
     @Column(name="n_ado", precision=10)
     private Integer  nAdo;
+    @Column(name="n_18_24", precision=10)
+    private Integer n1824;
     @Column(name="n_eq", precision=10)
     private BigDecimal nEq;
     @Column(name="n_sen", precision=10)
@@ -254,7 +256,8 @@ public class Organisation implements Serializable {
         String gsm, Short daten, String banque, Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom, String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, Short civiliteSec,
         String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
         String disprog, String afsca, boolean webauthority, Short langue, Integer  nbrefix, Short cpasyN, Short lienCpas, Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
-        Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp, String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3, Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,
+        Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp, String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3, 
+        Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,Integer  n1824,
         BigDecimal nEq, Integer  nSen, Short depPrinc, Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs, BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead, Short tourneeMois,
         Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres, String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN, String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup,
         Integer  cotMonthsSup, Integer  depotram, String lupdUserName, Short lienBanque) {
@@ -335,6 +338,7 @@ public class Organisation implements Serializable {
         this.nBebe = nBebe;
         this.nEnf = nEnf;
         this.nAdo = nAdo;
+        this.n1824 = n1824;
         this.nEq = nEq;
         this.nSen = nSen;
         this.depPrinc = depPrinc;
@@ -1734,7 +1738,16 @@ public class Organisation implements Serializable {
         nAdo = aNAdo;
     }
 
-    /**
+    
+    public Integer getN1824() {
+		return n1824;
+	}
+
+	public void setN1824(Integer n1824) {
+		this.n1824 = n1824;
+	}
+
+	/**
      * Access method for nEq.
      *
      * @return the current value of nEq
@@ -2734,6 +2747,8 @@ public class Organisation implements Serializable {
 			return false;
 		if (nAdo != other.nAdo)
 			return false;
+		if (n1824 != other.n1824)
+			return false;
 		if (nBebe != other.nBebe)
 			return false;
 		if (nEnf != other.nEnf)
@@ -2900,7 +2915,7 @@ public class Organisation implements Serializable {
 				+ ", actComp6=" + actComp6 + ", actComp7=" + actComp7 + ", nrTournee=" + nrTournee + ", susp=" + susp
 				+ ", stopSusp=" + stopSusp + ", rem=" + rem + ", msonac=" + msonac + ", classeFbba1=" + classeFbba1
 				+ ", classeFbba2=" + classeFbba2 + ", classeFbba3=" + classeFbba3 + ", nFam=" + nFam + ", nPers="
-				+ nPers + ", nNour=" + nNour + ", nBebe=" + nBebe + ", nEnf=" + nEnf + ", nAdo=" + nAdo + ", nEq=" + nEq
+				+ nPers + ", nNour=" + nNour + ", nBebe=" + nBebe + ", nEnf=" + nEnf + ", nAdo=" + nAdo + ", n1824=" + n1824 + ", nEq=" + nEq
 				+ ", nSen=" + nSen + ", depPrinc=" + depPrinc + ", gestBen=" + gestBen + ", tourneeJour=" + tourneeJour
 				+ ", tourneeSem=" + tourneeSem + ", coldis=" + coldis + ", lienGd=" + lienGd + ", lienGs=" + lienGs
 				+ ", montCot=" + montCot + ", antenne=" + antenne + ", afsca1=" + afsca1 + ", afsca2=" + afsca2

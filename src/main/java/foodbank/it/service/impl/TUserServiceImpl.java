@@ -53,7 +53,7 @@ public class TUserServiceImpl implements ITUserService {
     		Predicate idUserPredicate = criteriaBuilder.equal(existingTUser.get("idUser"), tuser.getIdUser());
     		predicates.add(idUserPredicate);
     	
-    		System.out.printf("\nChecking If User exists with userId: %s", tuser.getIdUser());
+    		// System.out.printf("\nChecking If User exists with userId: %s", tuser.getIdUser());
     		
     		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
     		totalCriteriaQuery.select(criteriaBuilder.count(existingTUser));

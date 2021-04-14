@@ -151,6 +151,8 @@ public class OrganisationDto {
 	    private Integer  nEnf;
 	   
 	    private Integer  nAdo;
+	    
+	    private Integer  n1824;
 	   
 	    private BigDecimal nEq;
 	    
@@ -244,7 +246,8 @@ public class OrganisationDto {
 				Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
 				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp,
 				String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
-				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo, BigDecimal nEq, Integer  nSen, Short depPrinc,
+				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer nAdo, Integer n1824,
+				BigDecimal nEq, Integer  nSen, Short depPrinc,
 				Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs,
 				BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead,
 				Short tourneeMois, Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres,
@@ -334,6 +337,7 @@ public class OrganisationDto {
 			this.nBebe = nBebe;
 			this.nEnf = nEnf;
 			this.nAdo = nAdo;
+			this.n1824 = n1824;
 			this.nEq = nEq;
 			this.nSen = nSen;
 			this.depPrinc = depPrinc;
@@ -985,6 +989,14 @@ public class OrganisationDto {
 
 		public void setnAdo(Integer  nAdo) {
 			this.nAdo = nAdo;
+		}
+
+		public Integer getN1824() {
+			return n1824;
+		}
+
+		public void setN1824(Integer n1824) {
+			this.n1824 = n1824;
 		}
 
 		public BigDecimal getnEq() {
