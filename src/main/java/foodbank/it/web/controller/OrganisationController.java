@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import foodbank.it.persistence.model.OrgProgram;
 import foodbank.it.persistence.model.Organisation;
+import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.web.dto.OrganisationDto;
 
@@ -27,16 +29,26 @@ import foodbank.it.web.dto.OrganisationDto;
 public class OrganisationController {
 	
 	private IOrganisationService OrganisationService;
+	private IOrgProgramService OrgProgramService;
 	    
-    public OrganisationController(IOrganisationService OrganisationService) {
-        this.OrganisationService = OrganisationService;        
+    public OrganisationController(
+    		IOrganisationService OrganisationService,
+    		IOrgProgramService OrgProgramService ) {
+        this.OrganisationService = OrganisationService;  
+        this.OrgProgramService = OrgProgramService;
     }
     @CrossOrigin
     @GetMapping("organisation/{idDis}")
     public OrganisationDto findOne(@PathVariable Integer idDis) {
-        Organisation entity = OrganisationService.findByIdDis(idDis)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return convertToDto(entity);
+    	Organisation o = OrganisationService.findByIdDis(idDis)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));        
+       OrgProgram op =  OrgProgramService.findByLienDis(idDis)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+      // Todo by Emanuel replace orelseThrow by .ifPresentOrElse 	op = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
+       // but it does not compile 	problem of Local variable op defined in an enclosing scope must be final or effectively final
+    
+         return convertToDto(o,op);
+
     }
     
     @CrossOrigin
@@ -46,11 +58,32 @@ public class OrganisationController {
         Iterable<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
         if (idDis != null) {
-        	Optional<Organisation> myOrganisation = this.OrganisationService.findByIdDis(Integer.parseInt(idDis));
-            myOrganisation.ifPresent(org-> OrganisationDtos.add(convertToDto( org)));
+        	Organisation o = OrganisationService.findByIdDis(Integer.parseInt(idDis))
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+               OrgProgramService.findByLienDis(Integer.parseInt(idDis))
+               .ifPresentOrElse(p -> {
+       			OrganisationDtos.add(convertToDto(o,p));
+       				},
+            	() -> {
+      			 OrgProgram newProgram = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
+      			 OrganisationDtos.add(convertToDto(o,newProgram));
+      			 
+      			 });
+          
         } else if (lienBanque !=null) {        
         	selectedOrganisations = this.OrganisationService.findByLienBanque(Short.parseShort(lienBanque));
-        	selectedOrganisations.forEach(p -> OrganisationDtos.add(convertToDto(p)));
+        	selectedOrganisations.forEach(o -> {
+        		OrgProgramService.findByLienDis(o.getIdDis())
+        		.ifPresentOrElse(p -> {
+        			OrganisationDtos.add(convertToDto(o,p));
+        				},
+        		() -> {
+       			 OrgProgram newProgram = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
+       			 OrganisationDtos.add(convertToDto(o,newProgram));
+       			 
+       			 });   		
+        	
+        	});
         }        
      
         return OrganisationDtos;
@@ -58,8 +91,11 @@ public class OrganisationController {
     @CrossOrigin
     @PutMapping("organisation/{idDis}")
     public OrganisationDto updateOrganisation(@PathVariable("idDis") Integer idDis, @RequestBody OrganisationDto updatedOrganisation) {
-        Organisation OrganisationEntity = convertToEntity(updatedOrganisation);
-        return this.convertToDto(this.OrganisationService.save(OrganisationEntity));
+    	  Organisation entity = convertToEntity(updatedOrganisation);
+          OrgProgram entityProgr = convertToEntityProgram(updatedOrganisation);
+           Organisation Organisation = this.OrganisationService.save(entity);  
+           OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
+           return this.convertToDto(Organisation, OrgProgram);
     }
     @CrossOrigin
     @DeleteMapping("organisation/{idDis}")
@@ -72,11 +108,31 @@ public class OrganisationController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrganisationDto create(@RequestBody OrganisationDto newOrganisation) {
         Organisation entity = convertToEntity(newOrganisation);
-        // Alain todo later entity.setDateCreated(LocalDate.now());
-        Organisation Organisation = this.OrganisationService.save(entity);        
-        return this.convertToDto(Organisation);
+       OrgProgram entityProgr = convertToEntityProgram(newOrganisation);
+        Organisation Organisation = this.OrganisationService.save(entity);  
+        OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
+        return this.convertToDto(Organisation, OrgProgram);
     }
-    protected OrganisationDto convertToDto(Organisation entity) {
+   
+	protected OrganisationDto convertToDto(Organisation entity,OrgProgram entityOrgProgram) {
+		boolean booLuam= entityOrgProgram.getLuam() == 1;
+		boolean booLupm= entityOrgProgram.getLupm() == 1;
+		boolean booTuam= entityOrgProgram.getTuam() == 1;
+		boolean booTupm= entityOrgProgram.getTupm() == 1;
+		boolean booWeam= entityOrgProgram.getWeam() == 1;
+		boolean booWepm= entityOrgProgram.getWepm() == 1;
+		boolean booTham= entityOrgProgram.getTham() == 1;
+		boolean booThpm= entityOrgProgram.getThpm() == 1;
+		boolean booFram= entityOrgProgram.getFram() == 1;
+		boolean booFrpm= entityOrgProgram.getFrpm() == 1;
+		boolean booSaam= entityOrgProgram.getSaam() == 1;
+		boolean booSapm= entityOrgProgram.getSapm() == 1;
+		boolean booSuam= entityOrgProgram.getSunam() == 1;
+		boolean booSupm= entityOrgProgram.getSunpm() == 1;
+		boolean booPorc =entityOrgProgram.getPorc() == 1;
+		boolean booLegFrais = entityOrgProgram.getLegFrais() == 1;
+		boolean booCongel = entityOrgProgram.getCongel() == 1;
+		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(),  entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(),entity.getBanque(), 
@@ -96,7 +152,42 @@ public class OrganisationController {
 				entity.getTourneeMois(), entity.getDistrListPdt(), entity.getDistrListVp(), entity.getDistrListSec(), entity.getDistrListTres(),
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), entity.getFeadN(),
 				entity.getRemLivr(), entity.getCotAnnuelle(), entity.getCotMonths(), entity.getCotSup(), entity.getCotMonthsSup(), entity.getDepotram(),
-				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque() );    
+				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),
+				booLuam,
+    			booLupm,
+    			booTuam,
+    			booTupm,
+    			booWeam,
+    			booWepm,
+    			booTham,
+    			booThpm,
+    			booFram,
+    			booFrpm,
+    			booSaam,
+    			booSapm,
+    			booSuam,
+    			booSupm,
+    			entityOrgProgram.getReluam(),
+    			entityOrgProgram.getRelupm(),
+    			entityOrgProgram.getRetuam(),
+    			entityOrgProgram.getRetupm(),
+    			entityOrgProgram.getReweam(),
+    			entityOrgProgram.getRewepm(),
+    			entityOrgProgram.getRetham(),
+    			entityOrgProgram.getRethpm(),
+    			entityOrgProgram.getRefram(),
+    			entityOrgProgram.getRefrpm(),
+    			entityOrgProgram.getResaam(),
+    			entityOrgProgram.getResapm(),
+    			entityOrgProgram.getResunam(),
+    			entityOrgProgram.getResunpm(),
+    			booPorc,
+    			booLegFrais,
+    			booCongel,
+    			entityOrgProgram.getCongelCap(),
+    			entityOrgProgram.getAuditor(),
+    			entityOrgProgram.getDateAudit(),
+    			entityOrgProgram.getLastAudit());   
         return dto;
     }
 
@@ -127,6 +218,53 @@ public class OrganisationController {
         }
         return myOrganisation;
     }
+    private OrgProgram convertToEntityProgram(OrganisationDto dto) {
+    	
+       	 OrgProgram myOrgProgram = new OrgProgram(
+       			dto.getIdDis(), 
+            		dto.getLienBanque(),
+        			dto.getLienDepot(),
+        			(int) (dto.getLuam() ? 1 : 0),
+         			(int) (dto.getLupm() ? 1 : 0),
+         			(int) (dto.getTuam() ? 1 : 0),
+         			(int) (dto.getTupm() ? 1 : 0),
+         			(int) (dto.getWeam() ? 1 : 0),
+         			(int) (dto.getWepm() ? 1 : 0),
+         			(int) (dto.getTham() ? 1 : 0),
+         			(int) (dto.getThpm() ? 1 : 0),
+         			(int) (dto.getFram() ? 1 : 0),
+         			(int) (dto.getFrpm() ? 1 : 0),
+         			(int) (dto.getSaam() ? 1 : 0),
+         			(int) (dto.getSapm() ? 1 : 0),
+         			(int) (dto.getSunam() ? 1 : 0),
+         			(int) (dto.getSunpm() ? 1 : 0),
+        			dto.getReluam(),
+        			dto.getRelupm(),
+        			dto.getRetuam(),
+        			dto.getRetupm(),
+        			dto.getReweam(),
+        			dto.getRewepm(),
+        			dto.getRetham(),
+        			dto.getRethpm(),
+        			dto.getRefram(),
+        			dto.getRefrpm(),
+        			dto.getResaam(),
+        			dto.getResapm(),
+        			dto.getResunam(),
+        			dto.getResunpm(),
+        			(int) (dto.getPorc() ? 1 : 0),
+         			(int) (dto.getLegFrais() ? 1 : 0),
+         			(int) (dto.getCongel() ? 1 : 0),
+        			dto.getCongelCap(),
+        			dto.getAuditor(),
+        			dto.getDateAudit(),
+        			dto.getLastAudit()
+       			 );
+       			 if (!StringUtils.isEmpty(dto.getIdDis())) {
+       		            myOrgProgram.setLienDis(dto.getIdDis());
+       		        }
+       		        return myOrgProgram;		 
+   	}
 
 
 }

@@ -56,20 +56,20 @@ public class OrgProgramController {
     			dto.getLienDis(), 
          		dto.getLienBanque(),
      			dto.getLienDepot(),
-     			dto.getLuam(),
-     			dto.getLupm(),
-     			dto.getTuam(),
-     			dto.getTupm(),
-     			dto.getWeam(),
-     			dto.getWepm(),
-     			dto.getTham(),
-     			dto.getThpm(),
-     			dto.getFram(),
-     			dto.getFrpm(),
-     			dto.getSaam(),
-     			dto.getSapm(),
-     			dto.getSunam(),
-     			dto.getSunpm(),
+     			(int) (dto.getLuam() ? 1 : 0),
+     			(int) (dto.getLupm() ? 1 : 0),
+     			(int) (dto.getTuam() ? 1 : 0),
+     			(int) (dto.getTupm() ? 1 : 0),
+     			(int) (dto.getWeam() ? 1 : 0),
+     			(int) (dto.getWepm() ? 1 : 0),
+     			(int) (dto.getTham() ? 1 : 0),
+     			(int) (dto.getThpm() ? 1 : 0),
+     			(int) (dto.getFram() ? 1 : 0),
+     			(int) (dto.getFrpm() ? 1 : 0),
+     			(int) (dto.getSaam() ? 1 : 0),
+     			(int) (dto.getSapm() ? 1 : 0),
+     			(int) (dto.getSunam() ? 1 : 0),
+     			(int) (dto.getSunpm() ? 1 : 0),
      			dto.getReluam(),
      			dto.getRelupm(),
      			dto.getRetuam(),
@@ -84,9 +84,9 @@ public class OrgProgramController {
      			dto.getResapm(),
      			dto.getResunam(),
      			dto.getResunpm(),
-     			dto.getPorc(),
-     			dto.getLegFrais(),
-     			dto.getCongel(),
+     			(int) (dto.getPorc() ? 1 : 0),
+     			(int) (dto.getLegFrais() ? 1 : 0),
+     			(int) (dto.getCongel() ? 1 : 0),
      			dto.getCongelCap(),
      			dto.getAuditor(),
      			dto.getDateAudit(),
@@ -98,24 +98,41 @@ public class OrgProgramController {
     		        return myOrgProgram;		 
 	}
 	protected OrgProgramDto convertToDto(OrgProgram entity) {
+		boolean booLuam= entity.getLuam() == 1;
+		boolean booLupm= entity.getLupm() == 1;
+		boolean booTuam= entity.getTuam() == 1;
+		boolean booTupm= entity.getTupm() == 1;
+		boolean booWeam= entity.getWeam() == 1;
+		boolean booWepm= entity.getWepm() == 1;
+		boolean booTham= entity.getTham() == 1;
+		boolean booThpm= entity.getThpm() == 1;
+		boolean booFram= entity.getFram() == 1;
+		boolean booFrpm= entity.getFrpm() == 1;
+		boolean booSaam= entity.getSaam() == 1;
+		boolean booSapm= entity.getSapm() == 1;
+		boolean booSuam= entity.getSunam() == 1;
+		boolean booSupm= entity.getSunpm() == 1;
+		boolean booPorc =entity.getPorc() == 1;
+		boolean booLegFrais = entity.getLegFrais() == 1;
+		boolean booCongel = entity.getCongel() == 1;
         OrgProgramDto dto = new OrgProgramDto(
         		entity.getLienDis(), 
         		entity.getLienBanque(),
     			entity.getLienDepot(),
-    			entity.getLuam(),
-    			entity.getLupm(),
-    			entity.getTuam(),
-    			entity.getTupm(),
-    			entity.getWeam(),
-    			entity.getWepm(),
-    			entity.getTham(),
-    			entity.getThpm(),
-    			entity.getFram(),
-    			entity.getFrpm(),
-    			entity.getSaam(),
-    			entity.getSapm(),
-    			entity.getSunam(),
-    			entity.getSunpm(),
+    			booLuam,
+    			booLupm,
+    			booTuam,
+    			booTupm,
+    			booWeam,
+    			booWepm,
+    			booTham,
+    			booThpm,
+    			booFram,
+    			booFrpm,
+    			booSaam,
+    			booSapm,
+    			booSuam,
+    			booSupm,
     			entity.getReluam(),
     			entity.getRelupm(),
     			entity.getRetuam(),
@@ -130,9 +147,9 @@ public class OrgProgramController {
     			entity.getResapm(),
     			entity.getResunam(),
     			entity.getResunpm(),
-    			entity.getPorc(),
-    			entity.getLegFrais(),
-    			entity.getCongel(),
+    			booPorc,
+    			booLegFrais,
+    			booCongel,
     			entity.getCongelCap(),
     			entity.getAuditor(),
     			entity.getDateAudit(),

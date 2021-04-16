@@ -71,19 +71,19 @@ public class OrgProgram implements Serializable {
     private String resunam;
     private String resunpm;
     @Column(precision=10)
-    private int porc;
+    private Integer porc;
     @Column(name="leg_frais", precision=10)
-    private int legFrais;
+    private Integer legFrais;
     @Column(precision=10)
-    private int congel;
+    private Integer congel;
     @Column(name="congel_cap")
     private String congelCap;
     @Column(precision=10)
-    private int auditor;
+    private Integer auditor;
     @Column(name="date_audit", length=255)
     private String dateAudit;
     @Column(name="last_audit", precision=19)
-    private long lastAudit;
+    private Long lastAudit;
 
     /** Default constructor. */
     public OrgProgram() {
@@ -93,8 +93,8 @@ public class OrgProgram implements Serializable {
     public OrgProgram(int lienDis, int lienBanque, int lienDepot, int luam, int lupm, int tuam, int tupm, int weam,
 			int wepm, int tham, int thpm, int fram, int frpm, int saam, int sapm, int sunam, int sunpm, String reluam,
 			String relupm, String retuam, String retupm, String reweam, String rewepm, String retham, String rethpm,
-			String refram, String refrpm, String resaam, String resapm, String resunam, String resunpm, int porc,
-			int legFrais, int congel, String congelCap, int auditor, String dateAudit, long lastAudit) {
+			String refram, String refrpm, String resaam, String resapm, String resunam, String resunpm, Integer porc,
+			Integer legFrais, Integer congel, String congelCap, Integer auditor, String dateAudit, Long lastAudit) {
 		super();
 		this.lienDis = lienDis;
 		this.lienBanque = lienBanque;
@@ -135,6 +135,48 @@ public class OrgProgram implements Serializable {
 		this.dateAudit = dateAudit;
 		this.lastAudit = lastAudit;
 	}
+    public OrgProgram(int lienDis, int lienBanque, int lienDepot) {
+		super();
+		this.lienDis = lienDis;
+		this.lienBanque = lienBanque;
+		this.lienDepot = lienDepot;
+		this.luam = 0;
+		this.lupm = 0;
+		this.tuam = 0;
+		this.tupm = 0;
+		this.weam = 0;
+		this.wepm = 0;
+		this.tham = 0;
+		this.thpm = 0;
+		this.fram = 0;
+		this.frpm = 0;
+		this.saam = 0;
+		this.sapm = 0;
+		this.sunam = 0;
+		this.sunpm = 0;
+		this.reluam = "";
+		this.relupm = "";
+		this.retuam = "";
+		this.retupm = "";
+		this.reweam = "";
+		this.rewepm = "";
+		this.retham = "";
+		this.rethpm = "";
+		this.refram = "";
+		this.refrpm = "";
+		this.resaam = "";
+		this.resapm = "";
+		this.resunam = "";
+		this.resunpm = "";
+		this.porc = 0;
+		this.legFrais = 0;
+		this.congel = 0;
+		this.congelCap = "";
+		this.auditor = 0;
+		this.dateAudit = "";
+		this.lastAudit = (long) 0;
+	}
+
 
 	/**
      * Access method for lienDis.
@@ -699,7 +741,7 @@ public class OrgProgram implements Serializable {
      *
      * @return the current value of porc
      */
-    public int getPorc() {
+    public Integer getPorc() {
         return porc;
     }
 
@@ -708,7 +750,7 @@ public class OrgProgram implements Serializable {
      *
      * @param aPorc the new value for porc
      */
-    public void setPorc(int aPorc) {
+    public void setPorc(Integer aPorc) {
         porc = aPorc;
     }
 
@@ -717,7 +759,7 @@ public class OrgProgram implements Serializable {
      *
      * @return the current value of legFrais
      */
-    public int getLegFrais() {
+    public Integer getLegFrais() {
         return legFrais;
     }
 
@@ -726,7 +768,7 @@ public class OrgProgram implements Serializable {
      *
      * @param aLegFrais the new value for legFrais
      */
-    public void setLegFrais(int aLegFrais) {
+    public void setLegFrais(Integer aLegFrais) {
         legFrais = aLegFrais;
     }
 
@@ -735,7 +777,7 @@ public class OrgProgram implements Serializable {
      *
      * @return the current value of congel
      */
-    public int getCongel() {
+    public Integer getCongel() {
         return congel;
     }
 
@@ -744,7 +786,7 @@ public class OrgProgram implements Serializable {
      *
      * @param aCongel the new value for congel
      */
-    public void setCongel(int aCongel) {
+    public void setCongel(Integer aCongel) {
         congel = aCongel;
     }
 
@@ -771,7 +813,7 @@ public class OrgProgram implements Serializable {
      *
      * @return the current value of auditor
      */
-    public int getAuditor() {
+    public Integer getAuditor() {
         return auditor;
     }
 
@@ -780,7 +822,7 @@ public class OrgProgram implements Serializable {
      *
      * @param aAuditor the new value for auditor
      */
-    public void setAuditor(int aAuditor) {
+    public void setAuditor(Integer aAuditor) {
         auditor = aAuditor;
     }
 
@@ -807,7 +849,7 @@ public class OrgProgram implements Serializable {
      *
      * @return the current value of lastAudit
      */
-    public long getLastAudit() {
+    public Long getLastAudit() {
         return lastAudit;
     }
 
@@ -816,7 +858,7 @@ public class OrgProgram implements Serializable {
      *
      * @param aLastAudit the new value for lastAudit
      */
-    public void setLastAudit(long aLastAudit) {
+    public void setLastAudit(Long aLastAudit) {
         lastAudit = aLastAudit;
     }
 

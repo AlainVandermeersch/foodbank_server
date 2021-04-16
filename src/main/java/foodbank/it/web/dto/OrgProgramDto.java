@@ -5,33 +5,33 @@ public class OrgProgramDto {
 	  private int lienBanque;
 	  private int lienDepot;
 	    
-	    private int luam;
+	    private boolean luam;
 	    
-	    private int lupm;
+	    private boolean lupm;
 	    
-	    private int tuam;
+	    private boolean tuam;
 	    
-	    private int tupm;
+	    private boolean tupm;
 	    
-	    private int weam;
+	    private boolean weam;
 	    
-	    private int wepm;
+	    private boolean wepm;
 	    
-	    private int tham;
+	    private boolean tham;
 	    
-	    private int thpm;
+	    private boolean thpm;
 	    
-	    private int fram;
+	    private boolean fram;
 	    
-	    private int frpm;
+	    private boolean frpm;
 	    
-	    private int saam;
+	    private boolean saam;
 	    
-	    private int sapm;
+	    private boolean sapm;
 	    
-	    private int sunam;
+	    private boolean sunam;
 	    
-	    private int sunpm;
+	    private boolean sunpm;
 	    private String reluam;
 	    private String relupm;
 	    private String retuam;
@@ -47,20 +47,20 @@ public class OrgProgramDto {
 	    private String resunam;
 	    private String resunpm;
 	    
-	    private int porc;
-	    private int legFrais;
+	    private boolean porc;
+	    private boolean legFrais;
 	    
-	    private int congel;
+	    private boolean congel;
 	    private String congelCap;
 	    
 	    private int auditor;
 	    private String dateAudit;
 	    private long lastAudit;
-		public OrgProgramDto(int lienDis, int lienBanque, int lienDepot, int luam, int lupm, int tuam, int tupm,
-				int weam, int wepm, int tham, int thpm, int fram, int frpm, int saam, int sapm, int sunam, int sunpm,
+		public OrgProgramDto(int lienDis, int lienBanque, int lienDepot, boolean luam, boolean lupm, boolean tuam, boolean tupm,
+				boolean weam, boolean wepm, boolean tham, boolean thpm, boolean fram, boolean frpm, boolean saam, boolean sapm, boolean sunam, boolean sunpm,
 				String reluam, String relupm, String retuam, String retupm, String reweam, String rewepm, String retham,
 				String rethpm, String refram, String refrpm, String resaam, String resapm, String resunam,
-				String resunpm, int porc, int legFrais, int congel, String congelCap, int auditor, String dateAudit,
+				String resunpm, boolean porc, boolean legFrais, boolean congel, String congelCap, int auditor, String dateAudit,
 				long lastAudit) {
 			super();
 			this.lienDis = lienDis;
@@ -120,88 +120,88 @@ public class OrgProgramDto {
 		public void setLienDepot(int lienDepot) {
 			this.lienDepot = lienDepot;
 		}
-		public int getLuam() {
+		public boolean getLuam() {
 			return luam;
 		}
-		public void setLuam(int luam) {
+		public void setLuam(boolean luam) {
 			this.luam = luam;
 		}
-		public int getLupm() {
+		public boolean getLupm() {
 			return lupm;
 		}
-		public void setLupm(int lupm) {
+		public void setLupm(boolean lupm) {
 			this.lupm = lupm;
 		}
-		public int getTuam() {
+		public boolean getTuam() {
 			return tuam;
 		}
-		public void setTuam(int tuam) {
+		public void setTuam(boolean tuam) {
 			this.tuam = tuam;
 		}
-		public int getTupm() {
+		public boolean getTupm() {
 			return tupm;
 		}
-		public void setTupm(int tupm) {
+		public void setTupm(boolean tupm) {
 			this.tupm = tupm;
 		}
-		public int getWeam() {
+		public boolean getWeam() {
 			return weam;
 		}
-		public void setWeam(int weam) {
+		public void setWeam(boolean weam) {
 			this.weam = weam;
 		}
-		public int getWepm() {
+		public boolean getWepm() {
 			return wepm;
 		}
-		public void setWepm(int wepm) {
+		public void setWepm(boolean wepm) {
 			this.wepm = wepm;
 		}
-		public int getTham() {
+		public boolean getTham() {
 			return tham;
 		}
-		public void setTham(int tham) {
+		public void setTham(boolean tham) {
 			this.tham = tham;
 		}
-		public int getThpm() {
+		public boolean getThpm() {
 			return thpm;
 		}
-		public void setThpm(int thpm) {
+		public void setThpm(boolean thpm) {
 			this.thpm = thpm;
 		}
-		public int getFram() {
+		public boolean getFram() {
 			return fram;
 		}
-		public void setFram(int fram) {
+		public void setFram(boolean fram) {
 			this.fram = fram;
 		}
-		public int getFrpm() {
+		public boolean getFrpm() {
 			return frpm;
 		}
-		public void setFrpm(int frpm) {
+		public void setFrpm(boolean frpm) {
 			this.frpm = frpm;
 		}
-		public int getSaam() {
+		public boolean getSaam() {
 			return saam;
 		}
-		public void setSaam(int saam) {
+		public void setSaam(boolean saam) {
 			this.saam = saam;
 		}
-		public int getSapm() {
+		public boolean getSapm() {
 			return sapm;
 		}
-		public void setSapm(int sapm) {
+		public void setSapm(boolean sapm) {
 			this.sapm = sapm;
 		}
-		public int getSunam() {
+		public boolean getSunam() {
 			return sunam;
 		}
-		public void setSunam(int sunam) {
+		public void setSunam(boolean sunam) {
 			this.sunam = sunam;
 		}
-		public int getSunpm() {
+		public boolean getSunpm() {
 			return sunpm;
 		}
-		public void setSunpm(int sunpm) {
+		public void setSunpm(boolean sunpm) {
 			this.sunpm = sunpm;
 		}
 		public String getReluam() {
@@ -288,22 +288,22 @@ public class OrgProgramDto {
 		public void setResunpm(String resunpm) {
 			this.resunpm = resunpm;
 		}
-		public int getPorc() {
+		public boolean getPorc() {
 			return porc;
 		}
-		public void setPorc(int porc) {
+		public void setPorc(boolean porc) {
 			this.porc = porc;
 		}
-		public int getLegFrais() {
+		public boolean getLegFrais() {
 			return legFrais;
 		}
-		public void setLegFrais(int legFrais) {
+		public void setLegFrais(boolean legFrais) {
 			this.legFrais = legFrais;
 		}
-		public int getCongel() {
+		public boolean getCongel() {
 			return congel;
 		}
-		public void setCongel(int congel) {
+		public void setCongel(boolean congel) {
 			this.congel = congel;
 		}
 		public String getCongelCap() {
