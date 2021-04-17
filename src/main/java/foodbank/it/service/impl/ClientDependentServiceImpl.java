@@ -54,9 +54,7 @@ public class ClientDependentServiceImpl implements IClientDependentService{
 	
 		
 		if (intIsActif != null) {
-			boolean booIsActif = false;
-			if (intIsActif== 1) booIsActif = true;
-			Predicate lienActifPredicate = criteriaBuilder.equal(clientDependent.get("actif"), booIsActif);
+			Predicate lienActifPredicate = criteriaBuilder.equal(clientDependent.get("actif"), intIsActif);
 			predicates.add(lienActifPredicate);
 		}
 
@@ -76,6 +74,7 @@ public class ClientDependentServiceImpl implements IClientDependentService{
 	}
 
 	@Override
+	@Transactional
 	public void deleteByLienMast(int lienMast) {
 		this.ClientDependentRepository.deleteByLienMast(lienMast);
 		
