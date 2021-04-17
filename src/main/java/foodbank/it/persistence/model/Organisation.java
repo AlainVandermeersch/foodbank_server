@@ -30,7 +30,9 @@ public class Organisation implements Serializable {
     @Column(name="id_dis", unique=true, nullable=false, precision=10)
     private int idDis;
     @Column(name="ref_int", length=15)
-    private String refInt;   
+    private String refInt;  
+    @Column(name="BirbCode", length=10)
+    private String birbCode;
     @Column(name="lien_depot", nullable=false, precision=10)
     private int lienDepot;
     @Column(nullable=false, length=100)
@@ -252,7 +254,7 @@ public class Organisation implements Serializable {
         super();
     }
 
-    public Organisation(int idDis, String refInt, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
+    public Organisation(int idDis, String refInt,String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
         String gsm, Short daten, String banque, Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom, String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, Short civiliteSec,
         String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
         String disprog, String afsca, boolean webauthority, Short langue, Integer  nbrefix, Short cpasyN, Short lienCpas, Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
@@ -264,6 +266,7 @@ public class Organisation implements Serializable {
         super();
         this.idDis = idDis;
         this.refInt = refInt;
+        this.birbCode = birbCode;
         this.lienDepot = lienDepot;
         this.societe = societe;
         this.adresse = adresse;
@@ -413,7 +416,15 @@ public class Organisation implements Serializable {
         refInt = aRefInt;
     }
 
-   /**
+   public String getBirbCode() {
+		return birbCode;
+	}
+
+	public void setBirbCode(String birbCode) {
+		this.birbCode = birbCode;
+	}
+
+/**
      * Access method for lienDepot.
      *
      * @return the current value of lienDepot

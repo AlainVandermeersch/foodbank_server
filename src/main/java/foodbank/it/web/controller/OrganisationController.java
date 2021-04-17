@@ -132,8 +132,10 @@ public class OrganisationController {
 		boolean booPorc =entityOrgProgram.getPorc() == 1;
 		boolean booLegFrais = entityOrgProgram.getLegFrais() == 1;
 		boolean booCongel = entityOrgProgram.getCongel() == 1;
+		boolean booIsMsonac = entity.getMsonac() == 1;
+		boolean booCpasyN = entity.getCpasyN() == 1;
 		
-        OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(),  entity.getLienDepot(),
+        OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(),entity.getBanque(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), entity.getActif(), entity.getCivilite(), entity.getNom(),
@@ -141,10 +143,10 @@ public class OrganisationController {
 				entity.getCiviliteSec(), entity.getPrenomSec(), entity.getNomSec(), entity.getTelSec(), entity.getGsmSec(), entity.getCiviliteTres(),
 				entity.getPrenomTres(), entity.getNomTres(), entity.getTelTres(), entity.getGsmTres(), entity.getEmailPres(), entity.getEmailVp(),
 				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
-				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(), entity.getCpasyN(), entity.getLienCpas(),
+				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(),booCpasyN, entity.getLienCpas(),
 				entity.getDepyN(), entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
 				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), entity.getSusp(),
-				entity.getStopSusp(), entity.getRem(), entity.getMsonac(), entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
+				entity.getStopSusp(), entity.getRem(), booIsMsonac, entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
 				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getN1824(),
 				entity.getNEq(), entity.getNSen(), entity.getDepPrinc(),
 				entity.getGestBen(), entity.getTourneeJour(), entity.getTourneeSem(), entity.getColdis(), entity.getLienGd(), entity.getLienGs(),
@@ -193,7 +195,7 @@ public class OrganisationController {
 
     protected Organisation convertToEntity(OrganisationDto dto) {
     	    	    
-    	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getLienDepot(),
+    	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getBirbCode(), dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
 				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), dto.getBanque(),
 				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), dto.getActif(), dto.getCivilite(), dto.getNom(),
@@ -201,10 +203,10 @@ public class OrganisationController {
 				dto.getCiviliteSec(), dto.getPrenomSec(), dto.getNomSec(), dto.getTelSec(), dto.getGsmSec(), dto.getCiviliteTres(),
 				dto.getPrenomTres(), dto.getNomTres(), dto.getTelTres(), dto.getGsmTres(), dto.getEmailPres(), dto.getEmailVp(),
 				dto.getEmailSec(), dto.getEmailTres(), dto.getTelPres(), dto.getGsmPres(), dto.getDisprog(), dto.getAfsca(),
-				dto.isWebauthority(), dto.getLangue(),  dto.getNbrefix(), dto.getCpasyN(), dto.getLienCpas(),
+				dto.isWebauthority(), dto.getLangue(),  dto.getNbrefix(),(short) (dto.getCpasyN() ? 1 : 0), dto.getLienCpas(),
 				dto.getDepyN(), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
 				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), dto.getSusp(),
-				dto.getStopSusp(), dto.getRem(), dto.getMsonac(), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
+				dto.getStopSusp(), dto.getRem(), (short) (dto.getMsonac() ? 1 : 0), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
 				dto.getnFam(), dto.getnPers(), dto.getnNour(), dto.getnBebe(), dto.getnEnf(), dto.getnAdo(), dto.getN1824(),
 				dto.getnEq(), dto.getnSen(), dto.getDepPrinc(),
 				dto.getGestBen(), dto.getTourneeJour(), dto.getTourneeSem(), dto.getColdis(), dto.getLienGd(), dto.getLienGs(),

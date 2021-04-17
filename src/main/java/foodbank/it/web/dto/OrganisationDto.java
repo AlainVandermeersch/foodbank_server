@@ -9,6 +9,7 @@ public class OrganisationDto {
 	    private int idDis;
 	     
 	    private String refInt;
+	    private String birbCode;
 	     
 	    private int lienDepot;
 	     
@@ -102,7 +103,7 @@ public class OrganisationDto {
 	   
 	    private Integer  nbrefix;
 	    
-	    private Short cpasyN;
+	    private boolean cpasyN;
 	   
 	    private Short lienCpas;
 	      
@@ -132,7 +133,7 @@ public class OrganisationDto {
 	    
 	    private String rem;
 	    
-	    private Short msonac;
+	    private boolean msonac;
 	    
 	    private Short classeFbba1;
 	   
@@ -286,7 +287,7 @@ private boolean luam;
 	    	
 	    }
 
-		public OrganisationDto(int idDis, String refInt,  int lienDepot,
+		public OrganisationDto(int idDis, String refInt, String birbCode, int lienDepot,
 				String societe, String adresse, String statut, String email, String cp, String localite,
 				Short pays, String tva, String website, String tel, String gsm, Short daten, String banque,
 				Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom,
@@ -294,10 +295,10 @@ private boolean luam;
 				Short civiliteSec, String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres,
 				String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp,
 				String emailSec, String emailTres, String telPres, String gsmPres, String disprog, String afsca,
-				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, Short cpasyN, Short lienCpas,
+				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, boolean cpasyN, Short lienCpas,
 				Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
 				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp,
-				String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
+				String stopSusp, String rem, boolean isMsonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
 				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer nAdo, Integer n1824,
 				BigDecimal nEq, Integer  nSen, Short depPrinc,
 				Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs,
@@ -318,6 +319,7 @@ private boolean luam;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 			this.idDis = idDis;
 			this.refInt = refInt;
+			this.birbCode = birbCode;
 			this.lienDepot = lienDepot;
 			this.societe = societe;
 			this.adresse = adresse;
@@ -387,7 +389,7 @@ private boolean luam;
 			this.susp = susp;
 			this.stopSusp = stopSusp;
 			this.rem = rem;
-			this.msonac = msonac;
+			this.msonac = isMsonac;
 			this.classeFbba1 = classeFbba1;
 			this.classeFbba2 = classeFbba2;
 			this.classeFbba3 = classeFbba3;
@@ -492,6 +494,14 @@ private boolean luam;
 
 		public void setRefInt(String refInt) {
 			this.refInt = refInt;
+		}
+
+		public String getBirbCode() {
+			return birbCode;
+		}
+
+		public void setBirbCode(String birbCode) {
+			this.birbCode = birbCode;
 		}
 
 		public int getLienDepot() {
@@ -886,11 +896,11 @@ private boolean luam;
 			this.nbrefix = nbrefix;
 		}
 
-		public Short getCpasyN() {
+		public boolean getCpasyN() {
 			return cpasyN;
 		}
 
-		public void setCpasyN(Short cpasyN) {
+		public void setCpasyN(boolean cpasyN) {
 			this.cpasyN = cpasyN;
 		}
 
@@ -1007,11 +1017,11 @@ private boolean luam;
 			this.rem = rem;
 		}
 
-		public Short getMsonac() {
+		public boolean getMsonac() {
 			return msonac;
 		}
 
-		public void setMsonac(Short msonac) {
+		public void setMsonac(boolean msonac) {
 			this.msonac = msonac;
 		}
 
