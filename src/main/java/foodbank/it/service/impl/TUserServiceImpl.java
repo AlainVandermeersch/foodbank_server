@@ -107,6 +107,8 @@ public class TUserServiceImpl implements ITUserService {
 			Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
 			predicates.add(idOrgPredicate);
 		}
+		Predicate lienActifPredicate = criteriaBuilder.equal(tuser.get("actif"),1);
+		predicates.add(lienActifPredicate);
 
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));

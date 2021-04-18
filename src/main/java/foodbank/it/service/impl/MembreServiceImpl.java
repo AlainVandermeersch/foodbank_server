@@ -128,6 +128,8 @@ public class MembreServiceImpl implements IMembreService{
 			Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
 			predicates.add(lienDisPredicate);
 		}
+		Predicate lienActifPredicate = criteriaBuilder.equal(membre.get("actif"),1);
+		predicates.add(lienActifPredicate);
 
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
 		membreQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), membre, criteriaBuilder));

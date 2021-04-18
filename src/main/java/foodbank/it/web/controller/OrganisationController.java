@@ -134,24 +134,32 @@ public class OrganisationController {
 		boolean booCongel = entityOrgProgram.getCongel() == 1;
 		boolean booIsMsonac = entity.getMsonac() == 1;
 		boolean booCpasyN = entity.getCpasyN() == 1;
+		boolean booGestBen = entity.getGestBen() == 1;
+		boolean booDepPrinc = entity.getDepPrinc() == 1;
+		boolean booDistrListPdt = entity.getDistrListPdt() == 1;
+		boolean booDistrListVp = entity.getDistrListVp() == 1;
+		boolean booDistrListSec = entity.getDistrListSec() == 1;
+		boolean booDistrListTres = entity.getDistrListTres() == 1;
+		boolean booDepyN = entity.getDepyN() == 1;
+		boolean booActif = entity.getActif() == 1;
 		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(),entity.getBanque(), 
-				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), entity.getActif(), entity.getCivilite(), entity.getNom(),
+				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), booActif, entity.getCivilite(), entity.getNom(),
 				entity.getPrenom(), entity.getCiviliteVp(), entity.getPrenomVp(), entity.getNomVp(), entity.getTelVp(), entity.getGsmVp(),
 				entity.getCiviliteSec(), entity.getPrenomSec(), entity.getNomSec(), entity.getTelSec(), entity.getGsmSec(), entity.getCiviliteTres(),
 				entity.getPrenomTres(), entity.getNomTres(), entity.getTelTres(), entity.getGsmTres(), entity.getEmailPres(), entity.getEmailVp(),
 				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
 				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(),booCpasyN, entity.getLienCpas(),
-				entity.getDepyN(), entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
+				booDepyN, entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
 				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), entity.getSusp(),
 				entity.getStopSusp(), entity.getRem(), booIsMsonac, entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
 				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getN1824(),
-				entity.getNEq(), entity.getNSen(), entity.getDepPrinc(),
-				entity.getGestBen(), entity.getTourneeJour(), entity.getTourneeSem(), entity.getColdis(), entity.getLienGd(), entity.getLienGs(),
+				entity.getNEq(), entity.getNSen(), booDepPrinc,
+				booGestBen, entity.getTourneeJour(), entity.getTourneeSem(), entity.getColdis(), entity.getLienGd(), entity.getLienGs(),
 				entity.getMontCot(), entity.getAntenne(), entity.getAfsca1(), entity.getAfsca2(), entity.getAfsca3(), entity.getNrFead(),
-				entity.getTourneeMois(), entity.getDistrListPdt(), entity.getDistrListVp(), entity.getDistrListSec(), entity.getDistrListTres(),
+				entity.getTourneeMois(), booDistrListPdt, booDistrListVp, booDistrListSec, booDistrListTres,
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), entity.getFeadN(),
 				entity.getRemLivr(), entity.getCotAnnuelle(), entity.getCotMonths(), entity.getCotSup(), entity.getCotMonthsSup(), entity.getDepotram(),
 				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),
@@ -198,20 +206,20 @@ public class OrganisationController {
     	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getBirbCode(), dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
 				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), dto.getDaten(), dto.getBanque(),
-				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), dto.getActif(), dto.getCivilite(), dto.getNom(),
+				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), (short) (dto.getActif() ? 1 : 0), dto.getCivilite(), dto.getNom(),
 				dto.getPrenom(), dto.getCiviliteVp(), dto.getPrenomVp(), dto.getNomVp(), dto.getTelVp(), dto.getGsmVp(),
 				dto.getCiviliteSec(), dto.getPrenomSec(), dto.getNomSec(), dto.getTelSec(), dto.getGsmSec(), dto.getCiviliteTres(),
 				dto.getPrenomTres(), dto.getNomTres(), dto.getTelTres(), dto.getGsmTres(), dto.getEmailPres(), dto.getEmailVp(),
 				dto.getEmailSec(), dto.getEmailTres(), dto.getTelPres(), dto.getGsmPres(), dto.getDisprog(), dto.getAfsca(),
 				dto.isWebauthority(), dto.getLangue(),  dto.getNbrefix(),(short) (dto.getCpasyN() ? 1 : 0), dto.getLienCpas(),
-				dto.getDepyN(), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
+				(short) (dto.getDepyN() ? 1 : 0), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
 				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), dto.getSusp(),
 				dto.getStopSusp(), dto.getRem(), (short) (dto.getMsonac() ? 1 : 0), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
 				dto.getnFam(), dto.getnPers(), dto.getnNour(), dto.getnBebe(), dto.getnEnf(), dto.getnAdo(), dto.getN1824(),
-				dto.getnEq(), dto.getnSen(), dto.getDepPrinc(),
-				dto.getGestBen(), dto.getTourneeJour(), dto.getTourneeSem(), dto.getColdis(), dto.getLienGd(), dto.getLienGs(),
+				dto.getnEq(), dto.getnSen(), (short) (dto.getDepPrinc() ? 1 : 0),
+				(short) (dto.getGestBen() ? 1 : 0), dto.getTourneeJour(), dto.getTourneeSem(), dto.getColdis(), dto.getLienGd(), dto.getLienGs(),
 				dto.getMontCot(), dto.getAntenne(), dto.getAfsca1(), dto.getAfsca2(), dto.getAfsca3(), dto.getNrFead(),
-				dto.getTourneeMois(), dto.getDistrListPdt(), dto.getDistrListVp(), dto.getDistrListSec(), dto.getDistrListTres(),
+				dto.getTourneeMois(), (short) (dto.getDistrListPdt() ? 1 : 0), (short) (dto.getDistrListVp() ? 1 : 0), (short) (dto.getDistrListSec() ? 1 : 0),(short) (dto.getDistrListTres() ? 1 : 0),
 				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), dto.getFeadN(),
 				dto.getRemLivr(), dto.getCotAnnuelle(), dto.getCotMonths(), dto.getCotSup(), dto.getCotMonthsSup(), dto.getDepotram(),
 				dto.getLupdUserName(),dto.getLienBanque());       

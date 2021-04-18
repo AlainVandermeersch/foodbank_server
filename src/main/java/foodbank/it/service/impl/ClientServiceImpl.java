@@ -74,6 +74,8 @@ public class ClientServiceImpl implements IClientService{
 			Predicate lienDisPredicate = criteriaBuilder.equal(client.get("lienDis"), lienDis);
 			predicates.add(lienDisPredicate);
 		}
+		Predicate lienActifPredicate = criteriaBuilder.equal(client.get("actif"),1);
+		predicates.add(lienActifPredicate);
 
 		clientQuery.where(predicates.stream().toArray(Predicate[]::new));
 		clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));

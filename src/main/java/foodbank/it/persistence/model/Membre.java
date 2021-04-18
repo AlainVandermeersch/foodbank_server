@@ -77,6 +77,7 @@ public class Membre implements Serializable {
  private Short authority;
  private String datmand;
  private String rem;
+ @Column(name="last_visit")
  private LocalDateTime lastVisit;
  @Column(nullable=false, precision=3)
  private Short ben;

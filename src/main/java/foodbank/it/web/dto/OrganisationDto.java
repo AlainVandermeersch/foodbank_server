@@ -42,7 +42,7 @@ public class OrganisationDto {
 	    private String classique;
 	    private String bic;
 	  
-	    private Short actif;
+	    private boolean actif;
 	    
 	    private Short civilite;
 	  
@@ -107,7 +107,7 @@ public class OrganisationDto {
 	   
 	    private Short lienCpas;
 	      
-	    private Short depyN;
+	    private boolean depyN;
 	  
 	    private Short logBirb;
 	   
@@ -159,9 +159,9 @@ public class OrganisationDto {
 	    
 	    private Integer  nSen;
 	   
-	    private Short depPrinc;
+	    private boolean depPrinc;
 	   
-	    private Short gestBen;
+	    private boolean gestBen;
 	   
 	    private Short tourneeJour;
 	   
@@ -187,13 +187,13 @@ public class OrganisationDto {
 	   
 	    private Short tourneeMois;
 	   
-	    private Short distrListPdt;
+	    private boolean distrListPdt;
 	  
-	    private Short distrListVp;
+	    private boolean distrListVp;
 	    
-	    private Short distrListSec;
+	    private boolean distrListSec;
 	   
-	    private Short distrListTres;
+	    private boolean distrListTres;
 	    
 	    private String adresse2;
 	    
@@ -290,20 +290,20 @@ private boolean luam;
 		public OrganisationDto(int idDis, String refInt, String birbCode, int lienDepot,
 				String societe, String adresse, String statut, String email, String cp, String localite,
 				Short pays, String tva, String website, String tel, String gsm, Short daten, String banque,
-				Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom,
+				Short region, String iban, String classique, String bic, boolean actif, Short civilite, String nom,
 				String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp,
 				Short civiliteSec, String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres,
 				String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp,
 				String emailSec, String emailTres, String telPres, String gsmPres, String disprog, String afsca,
 				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, boolean cpasyN, Short lienCpas,
-				Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
+				boolean depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
 				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp,
 				String stopSusp, String rem, boolean isMsonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
 				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer nAdo, Integer n1824,
-				BigDecimal nEq, Integer  nSen, Short depPrinc,
-				Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs,
+				BigDecimal nEq, Integer  nSen, boolean depPrinc,
+				boolean gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs,
 				BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead,
-				Short tourneeMois, Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres,
+				Short tourneeMois, boolean distrListPdt, boolean distrListVp, boolean distrListSec, boolean distrListTres,
 				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN,
 				String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup, Integer  cotMonthsSup, Integer  depotram,
 				String lupdUserName, LocalDateTime lupdTs,Short lienBanque,
@@ -648,11 +648,11 @@ private boolean luam;
 			this.bic = bic;
 		}
 
-		public Short getActif() {
+		public boolean getActif() {
 			return actif;
 		}
 
-		public void setActif(Short actif) {
+		public void setActif(boolean actif) {
 			this.actif = actif;
 		}
 
@@ -913,11 +913,11 @@ private boolean luam;
 		}
 
 		
-		public Short getDepyN() {
+		public boolean getDepyN() {
 			return depyN;
 		}
 
-		public void setDepyN(Short depyN) {
+		public void setDepyN(boolean depyN) {
 			this.depyN = depyN;
 		}
 
@@ -1121,19 +1121,19 @@ private boolean luam;
 			this.nSen = nSen;
 		}
 
-		public Short getDepPrinc() {
+		public boolean getDepPrinc() {
 			return depPrinc;
 		}
 
-		public void setDepPrinc(Short depPrinc) {
+		public void setDepPrinc(boolean depPrinc) {
 			this.depPrinc = depPrinc;
 		}
 
-		public Short getGestBen() {
+		public boolean getGestBen() {
 			return gestBen;
 		}
 
-		public void setGestBen(Short gestBen) {
+		public void setGestBen(boolean gestBen) {
 			this.gestBen = gestBen;
 		}
 
@@ -1233,35 +1233,35 @@ private boolean luam;
 			this.tourneeMois = tourneeMois;
 		}
 
-		public Short getDistrListPdt() {
+		public boolean getDistrListPdt() {
 			return distrListPdt;
 		}
 
-		public void setDistrListPdt(Short distrListPdt) {
+		public void setDistrListPdt(boolean distrListPdt) {
 			this.distrListPdt = distrListPdt;
 		}
 
-		public Short getDistrListVp() {
+		public boolean getDistrListVp() {
 			return distrListVp;
 		}
 
-		public void setDistrListVp(Short distrListVp) {
+		public void setDistrListVp(boolean distrListVp) {
 			this.distrListVp = distrListVp;
 		}
 
-		public Short getDistrListSec() {
+		public boolean getDistrListSec() {
 			return distrListSec;
 		}
 
-		public void setDistrListSec(Short distrListSec) {
+		public void setDistrListSec(boolean distrListSec) {
 			this.distrListSec = distrListSec;
 		}
 
-		public Short getDistrListTres() {
+		public boolean getDistrListTres() {
 			return distrListTres;
 		}
 
-		public void setDistrListTres(Short distrListTres) {
+		public void setDistrListTres(boolean distrListTres) {
 			this.distrListTres = distrListTres;
 		}
 
