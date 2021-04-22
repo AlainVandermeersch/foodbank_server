@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
@@ -117,6 +118,12 @@ public class TUserController {
 
     protected TUserDto convertToDto(TUser entity,Long  totalRecords) {
     	
+    	String societe ="";
+    	Organisation orgOfUser = entity.getOrganisationObject();
+    	if (orgOfUser != null) {
+    		societe = orgOfUser.getSociete();
+    	}
+    	
     	boolean booActif= entity.getActif() == 1;
     	boolean booDroit1= entity.getDroit1() == 1;
     	boolean booGestBen = entity.getGestBen() == 1;
@@ -128,7 +135,7 @@ public class TUserController {
     	boolean booGestDon = entity.getGestDon() == 1;
         TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), booActif, entity.getRights(), entity.getPassword(), entity.getDepot(), booDroit1, entity.getEmail(), 
         		booGestBen, booGestInv, booGestFead, booGestAsso,
-        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),totalRecords);       
+        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),societe,totalRecords);       
         return dto;
     }
 

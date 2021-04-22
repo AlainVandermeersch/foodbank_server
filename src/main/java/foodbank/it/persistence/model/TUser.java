@@ -9,6 +9,10 @@ import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity(name="t_user")
 public class TUser implements Serializable {
@@ -28,8 +32,8 @@ public class TUser implements Serializable {
     private String userName;
     @Column(name="ID_COMPANY", length=10)
     private String idCompany;
-    @Column(name="ID_ORG", precision=10)
-    private int idOrg;
+    @Column(name="ID_ORG", precision=10, insertable=false,updatable=false)
+    private Integer idOrg;
     @Column(name="ID_LANGUAGE", length=2)
     private String idLanguage;
     @Column(name="lien_bat", nullable=false, precision=10)
@@ -64,6 +68,18 @@ public class TUser implements Serializable {
     private int lienBanque;
     @Column(name="lien_cpas", precision=10)
     private int lienCpas;
+    @ManyToOne
+    @JoinColumn(name="ID_ORG")
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Organisation organisationObject;
+
+    public Organisation getOrganisationObject() {
+   		return organisationObject;
+   	}
+
+   	public void setOrganisationObject(Organisation organisationObject) {
+   		this.organisationObject = organisationObject;
+   	}
    
 
     /** Default constructor. */
@@ -477,7 +493,8 @@ public class TUser implements Serializable {
 
   
    
-    /**
+
+	/**
      * Compares the key for this instance with another TUser.
      *
      * @param other The object to compare to

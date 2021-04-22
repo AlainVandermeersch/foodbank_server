@@ -4,6 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +26,7 @@ import foodbank.it.persistence.model.OrgProgram;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
+import foodbank.it.service.SearchOrganisationCriteria;
 import foodbank.it.web.dto.OrganisationDto;
 
 @RestController
@@ -47,44 +52,49 @@ public class OrganisationController {
       // Todo by Emanuel replace orelseThrow by .ifPresentOrElse 	op = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
        // but it does not compile 	problem of Local variable op defined in an enclosing scope must be final or effectively final
     
-         return convertToDto(o,op);
+         return convertToDto(o,op,1);
 
     }
     
     @CrossOrigin
     @GetMapping("organisations/")
-    public Collection<OrganisationDto> find( @RequestParam(required = false) String lienBanque ,
+    public Collection<OrganisationDto> find( @RequestParam String offset, @RequestParam String rows, 
+    		@RequestParam String sortField, @RequestParam String sortOrder, 
+    		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue,
+    		@RequestParam(required = false) String lienBanque ,
     		@RequestParam(required = false) String idDis) {
-        Iterable<Organisation> selectedOrganisations = null;
+        Page<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
-        if (idDis != null) {
-        	Organisation o = OrganisationService.findByIdDis(Integer.parseInt(idDis))
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-               OrgProgramService.findByLienDis(Integer.parseInt(idDis))
-               .ifPresentOrElse(p -> {
-       			OrganisationDtos.add(convertToDto(o,p));
-       				},
-            	() -> {
-      			 OrgProgram newProgram = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
-      			 OrganisationDtos.add(convertToDto(o,newProgram));
-      			 
-      			 });
-          
-        } else if (lienBanque !=null) {        
-        	selectedOrganisations = this.OrganisationService.findByLienBanque(Short.parseShort(lienBanque));
-        	selectedOrganisations.forEach(o -> {
+        int intOffset = Integer.parseInt(offset);
+    	int intRows = Integer.parseInt(rows);
+    	int pageNumber=intOffset/intRows; // Java throws away remainder of division
+        int pageSize = intRows;
+        Pageable pageRequest = null;
+        if (sortOrder.equals("1")) {
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).ascending());
+        }
+        else {
+        	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
+        }
+        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(searchField, searchValue, lienBanqueInteger, idDisInteger);
+		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
+		long totalElements = selectedOrganisations.getTotalElements();
+       
+		selectedOrganisations.forEach(o -> {
         		OrgProgramService.findByLienDis(o.getIdDis())
         		.ifPresentOrElse(p -> {
-        			OrganisationDtos.add(convertToDto(o,p));
+        			OrganisationDtos.add(convertToDto(o,p,totalElements));
         				},
         		() -> {
        			 OrgProgram newProgram = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
-       			 OrganisationDtos.add(convertToDto(o,newProgram));
+       			 OrganisationDtos.add(convertToDto(o,newProgram,totalElements));
        			 
        			 });   		
         	
         	});
-        }        
+          
      
         return OrganisationDtos;
     }
@@ -95,7 +105,7 @@ public class OrganisationController {
           OrgProgram entityProgr = convertToEntityProgram(updatedOrganisation);
            Organisation Organisation = this.OrganisationService.save(entity);  
            OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
-           return this.convertToDto(Organisation, OrgProgram);
+           return this.convertToDto(Organisation, OrgProgram,1);
     }
     @CrossOrigin
     @DeleteMapping("organisation/{idDis}")
@@ -111,10 +121,10 @@ public class OrganisationController {
        OrgProgram entityProgr = convertToEntityProgram(newOrganisation);
         Organisation Organisation = this.OrganisationService.save(entity);  
         OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
-        return this.convertToDto(Organisation, OrgProgram);
+        return this.convertToDto(Organisation, OrgProgram,1);
     }
    
-	protected OrganisationDto convertToDto(Organisation entity,OrgProgram entityOrgProgram) {
+	protected OrganisationDto convertToDto(Organisation entity,OrgProgram entityOrgProgram,long totalRecords) {
 		boolean booLuam= entityOrgProgram.getLuam() == 1;
 		boolean booLupm= entityOrgProgram.getLupm() == 1;
 		boolean booTuam= entityOrgProgram.getTuam() == 1;
@@ -197,7 +207,8 @@ public class OrganisationController {
     			entityOrgProgram.getCongelCap(),
     			entityOrgProgram.getAuditor(),
     			entityOrgProgram.getDateAudit(),
-    			entityOrgProgram.getLastAudit());   
+    			entityOrgProgram.getLastAudit(),
+    			totalRecords);   
         return dto;
     }
 

@@ -280,7 +280,7 @@ private boolean luam;
 	    private Integer auditor;
 	    private String dateAudit;
 	    private Long lastAudit;
-
+	    private Long  totalRecords;
 		
 	    
 	    protected OrganisationDto() {
@@ -313,7 +313,7 @@ private boolean luam;
 				String reluam, String relupm, String retuam, String retupm, String reweam, String rewepm, String retham,
 				String rethpm, String refram, String refrpm, String resaam, String resapm, String resunam,
 				String resunpm, boolean porc, boolean legFrais, boolean congel, String congelCap, Integer auditor, String dateAudit,
-				Long lastAudit
+				Long lastAudit, Long  totalRecords
 				) {
 			super();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -477,6 +477,7 @@ private boolean luam;
 			this.auditor = auditor;
 			this.dateAudit = dateAudit;
 			this.lastAudit = lastAudit;
+			this.totalRecords = totalRecords;
 			
 		}
 
@@ -1602,6 +1603,14 @@ private boolean luam;
 		}
 		public void setLastAudit(Long lastAudit) {
 			this.lastAudit = lastAudit;
+		}
+
+		public Long getTotalRecords() {
+			return totalRecords;
+		}
+
+		public void setTotalRecords(Long totalRecords) {
+			this.totalRecords = totalRecords;
 		}
 
 

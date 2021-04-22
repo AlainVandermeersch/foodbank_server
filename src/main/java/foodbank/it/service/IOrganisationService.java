@@ -3,6 +3,9 @@ package foodbank.it.service;
 import java.util.Optional;
 
 import foodbank.it.persistence.model.Organisation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 public interface IOrganisationService {
 	Optional<Organisation> findByIdDis(int idDis);
@@ -10,7 +13,7 @@ public interface IOrganisationService {
 	Organisation save(Organisation Organisation);
 
     void delete(int idDis);
-
-	Iterable<Organisation> findByLienBanque(Short lienBanque);
+	
+	Page<Organisation> findAll(SearchOrganisationCriteria searchCriteria, Pageable pageable);
 
 }
