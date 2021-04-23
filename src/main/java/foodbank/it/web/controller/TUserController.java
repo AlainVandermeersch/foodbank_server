@@ -53,7 +53,9 @@ public class TUserController {
     @GetMapping("users/")     
     public Collection<TUserDto> find( @RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
-    		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue, 
+    		@RequestParam(required = false) String idUser,@RequestParam(required = false) String userName, 
+    		@RequestParam(required = false) String idLanguage,@RequestParam(required = false) String email, 
+    		@RequestParam(required = false) String rights,
     		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg )  {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -68,7 +70,7 @@ public class TUserController {
         } 
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchTUserCriteria criteria = new SearchTUserCriteria(searchField, searchValue, lienBanqueInteger, idOrgInteger);
+		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, userName,idLanguage,email,rights, lienBanqueInteger, idOrgInteger);
 		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 

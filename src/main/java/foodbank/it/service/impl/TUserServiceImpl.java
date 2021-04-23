@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
@@ -85,17 +83,38 @@ public class TUserServiceImpl implements ITUserService {
 
 		List<Predicate> predicates = new ArrayList<>();
 
-		String searchField = searchCriteria.getSearchField();
-		String searchValue = searchCriteria.getSearchValue();
+		String idUser = searchCriteria.getIdUser();
+		String userName = searchCriteria.getUserName();
+		String idLanguage = searchCriteria.getIdLanguage();
+		String email = searchCriteria.getEmail();
+		String rights = searchCriteria.getRights();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idOrg = searchCriteria.getIdOrg();
 
-		if (searchField != null && searchValue != null && !searchField.isEmpty() && !searchValue.isEmpty()) {
-			Path<String> searchFieldPath = tuser.get(searchField);
-			Expression<String> lowerSearchField = criteriaBuilder.lower(searchFieldPath);
+		if (idUser != null) {			
 
-			Predicate searchFieldPredicate = criteriaBuilder.like(lowerSearchField, "%" + searchValue.toLowerCase() + "%");
-			predicates.add(searchFieldPredicate);
+			Predicate idUserPredicate = criteriaBuilder.like(tuser.get("idUser"), "%" + idUser.toLowerCase() + "%");
+			predicates.add(idUserPredicate);
+		}
+		if (userName != null) {			
+
+			Predicate userNamePredicate = criteriaBuilder.like(tuser.get("userName"), "%" + userName.toLowerCase() + "%");
+			predicates.add(userNamePredicate);
+		}
+		if (idLanguage != null) {			
+
+			Predicate idLanguagePredicate = criteriaBuilder.like(tuser.get("idLanguage"), "%" + idLanguage.toLowerCase() + "%");
+			predicates.add(idLanguagePredicate);
+		}
+		if (email != null) {			
+
+			Predicate emailPredicate = criteriaBuilder.like(tuser.get("email"), "%" + email.toLowerCase() + "%");
+			predicates.add(emailPredicate);
+		}
+		if (rights != null) {			
+
+			Predicate rightsPredicate = criteriaBuilder.equal(tuser.get("rights"), rights);
+			predicates.add(rightsPredicate);
 		}
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), lienBanque);
