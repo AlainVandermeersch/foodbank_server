@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import foodbank.it.persistence.model.Membre;
+import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.SearchMembreCriteria;
 import foodbank.it.web.dto.MembreDto;
@@ -49,7 +50,9 @@ public class MembreController {
     @GetMapping("membres/")
     public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
-    		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue,
+    		@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom, 
+     		@RequestParam(required = false) String address,@RequestParam(required = false) String zip, 
+     		@RequestParam(required = false) String city,
     		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -65,7 +68,7 @@ public class MembreController {
         
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchMembreCriteria criteria = new SearchMembreCriteria(searchField, searchValue, lienBanqueInteger, lienDisInteger);
+		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, prenom, address, zip,city, lienBanqueInteger, lienDisInteger);
 		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 
@@ -118,13 +121,19 @@ public class MembreController {
     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    protected MembreDto convertToDto(Membre entity,long totalRecords) {    	
+    protected MembreDto convertToDto(Membre entity,long totalRecords) {   
+    	
+    	String societe ="";
+    	Organisation orgOfMember = entity.getOrganisationObject();
+    	if (orgOfMember != null) {
+    		societe = orgOfMember.getSociete();
+    	}
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
 				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
-				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),entity.getLienBanque(),totalRecords  );    
+				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),entity.getLienBanque(),societe,totalRecords  );    
         return dto;
     }
 

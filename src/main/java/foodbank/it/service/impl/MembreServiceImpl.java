@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
@@ -106,17 +104,38 @@ public class MembreServiceImpl implements IMembreService{
 
 		List<Predicate> predicates = new ArrayList<>();
 
-		String searchField = searchCriteria.getSearchField();
-		String searchValue = searchCriteria.getSearchValue();
+		String nom = searchCriteria.getNom();
+		String prenom = searchCriteria.getPrenom();
+		String address = searchCriteria.getAddress();
+		String zip = searchCriteria.getZip();
+		String city = searchCriteria.getCity();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
 
-		if (searchField != null && searchValue != null && !searchField.isEmpty() && !searchValue.isEmpty()) {
-			Path<String> searchFieldPath = membre.get(searchField);
-			Expression<String> lowerSearchField = criteriaBuilder.lower(searchFieldPath);
+		if (nom != null ) {			
 
-			Predicate searchFieldPredicate = criteriaBuilder.like(lowerSearchField, "%" + searchValue.toLowerCase() + "%");
-			predicates.add(searchFieldPredicate);
+			Predicate nomPredicate = criteriaBuilder.like(membre.get("nom"), "%" + nom.toLowerCase() + "%");
+			predicates.add(nomPredicate);
+		}
+		if (prenom != null ) {			
+
+			Predicate prenomPredicate = criteriaBuilder.like(membre.get("prenom"), "%" + prenom.toLowerCase() + "%");
+			predicates.add(prenomPredicate);
+		}
+		if (address != null ) {			
+
+			Predicate addressPredicate = criteriaBuilder.like(membre.get("address"), "%" + address.toLowerCase() + "%");
+			predicates.add(addressPredicate);
+		}
+		if (zip != null ) {			
+
+			Predicate zipPredicate = criteriaBuilder.like(membre.get("zip"), "%" + zip.toLowerCase() + "%");
+			predicates.add(zipPredicate);
+		}
+		if (city != null ) {			
+
+			Predicate cityPredicate = criteriaBuilder.like(membre.get("city"), "%" + city.toLowerCase() + "%");
+			predicates.add(cityPredicate);
 		}
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);

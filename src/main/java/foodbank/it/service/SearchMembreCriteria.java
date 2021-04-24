@@ -1,34 +1,86 @@
 package foodbank.it.service;
 
 public class SearchMembreCriteria {
-	private String searchField;
-	private String searchValue;
+	private String nom;
+	private String prenom;
+	private String address;
+	private String zip;
+	private String city;
 	private Integer lienBanque;
 	private Integer lienDis;
 	
 	
-	public SearchMembreCriteria(String searchField, String searchValue, Integer lienBanque, Integer lienDis) {
-		this.searchField = searchField;
-		this.searchValue = searchValue;
+	public SearchMembreCriteria(String nom, String prenom, String address, String zip, String city, Integer lienBanque, Integer lienDis) {
+		this.nom = nom;
+		this.prenom = prenom;
+		this.address = address;
+		this.zip = zip;
+		this.city = city;
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;
 	}
 
-	public String getSearchField() {
-		return searchField;
+	
+
+	public String getNom() {
+		return nom;
 	}
 
-	public void setSearchField(String searchField) {
-		this.searchField = searchField;
+
+
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 
-	public String getSearchValue() {
-		return searchValue;
+
+
+	public String getPrenom() {
+		return prenom;
 	}
 
-	public void setSearchValue(String searchValue) {
-		this.searchValue = searchValue;
+
+
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
 	}
+
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+
+
+	public String getZip() {
+		return zip;
+	}
+
+
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+
+
+	public String getCity() {
+		return city;
+	}
+
+
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+
 
 	public Integer getLienBanque() {
 		return lienBanque;

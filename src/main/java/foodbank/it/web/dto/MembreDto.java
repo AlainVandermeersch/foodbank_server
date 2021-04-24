@@ -72,6 +72,9 @@ public class MembreDto {
 	
 	 private Integer lDep;
 	 private Short lienBanque;
+	 
+	 private String societe; // calculated field from organisation object
+	 
 	 private Long  totalRecords;
 	 
 	public MembreDto() {
@@ -84,7 +87,7 @@ public class MembreDto {
 			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand, String rem,
 			Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
-			Integer lDep,LocalDateTime lastVisit, Short lienBanque, Long  totalRecords) {
+			Integer lDep,LocalDateTime lastVisit, Short lienBanque,String societe, Long  totalRecords) {
 		super();
 		this.batId = batId;
 		this.lienDis = lienDis;
@@ -129,6 +132,7 @@ public class MembreDto {
 		this.dateContrat = dateContrat;
 		this.lDep = lDep;
 		this.lienBanque = lienBanque;
+		this.societe = societe;
 		this.totalRecords = totalRecords;
 	}
 
@@ -426,6 +430,15 @@ public class MembreDto {
 
 	public void setLienBanque(Short lienBanque) {
 		this.lienBanque = lienBanque;
+	}	
+	
+
+	public String getSociete() {
+		return societe;
+	}
+
+	public void setSociete(String societe) {
+		this.societe = societe;
 	}
 
 	public Long  getTotalRecords() {

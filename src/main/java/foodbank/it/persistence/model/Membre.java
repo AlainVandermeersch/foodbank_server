@@ -13,7 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 
@@ -35,7 +40,7 @@ public class Membre implements Serializable {
  @GeneratedValue(strategy=GenerationType.IDENTITY)
  @Column(name="bat_ID", unique=true, nullable=false, precision=10)
  private Integer batId;
- @Column(name="lien_dis", precision=10)
+ @Column(name="lien_dis", precision=10, insertable=false,updatable=false)
  private Integer lienDis;
  @Column(nullable=false, length=50)
  private String nom;
@@ -104,6 +109,10 @@ public class Membre implements Serializable {
  private Integer lDep;
  @Column(name="lien_banque", precision=10)
  private Short lienBanque; 
+ @ManyToOne
+ @JoinColumn(name="lien_dis")
+ @NotFound(action = NotFoundAction.IGNORE)
+ private Organisation organisationObject;
 
  /** Default constructor. */
  public Membre() {
@@ -802,6 +811,12 @@ public void setLastVisit(LocalDateTime lastVisit) {
 
 public void setLienBanque(Short lienBanque) {
 	this.lienBanque = lienBanque;
+}
+
+
+
+public Organisation getOrganisationObject() {
+	return organisationObject;
 }
 
 /**

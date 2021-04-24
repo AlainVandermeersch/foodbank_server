@@ -43,7 +43,8 @@ public class TUserDto {
     private int lienBanque;
      
     private int lienCpas;
-    private String societe;
+    
+    private String societe; // calculated field from organisation object
     
     private Long  totalRecords;
      
