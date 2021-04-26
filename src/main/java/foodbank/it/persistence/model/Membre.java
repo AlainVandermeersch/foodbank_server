@@ -119,15 +119,15 @@ public class Membre implements Serializable {
      super();
  }
 
- public Membre(Integer batId, Integer lienDis, String nom, String prenom, String address, String city,
+ public Membre(Integer batId, Organisation organisationObject, String nom, String prenom, String address, String city,
 		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction,
 		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand,
 		String rem, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
 		String datedeb, String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat,
 		String dateContrat, Integer lDep, Short lienBanque) {
-	super();
+	super();	
 	this.batId = batId;
-	this.lienDis = lienDis;
+	this.organisationObject = organisationObject;
 	this.nom = nom;
 	this.prenom = prenom;
 	this.address = address;
@@ -184,23 +184,6 @@ public class Membre implements Serializable {
  }
 
  
- /**
-  * Access method for lienDis.
-  *
-  * @return the current value of lienDis
-  */
- public Integer getLienDis() {
-     return lienDis;
- }
-
- /**
-  * Setter method for lienDis.
-  *
-  * @param aLienDis the new value for lienDis
-  */
- public void setLienDis(Integer aLienDis) {
-     lienDis = aLienDis;
- }
 
  /**
   * Access method for nom.

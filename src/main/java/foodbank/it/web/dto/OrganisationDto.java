@@ -106,6 +106,8 @@ public class OrganisationDto {
 	    private boolean cpasyN;
 	   
 	    private Short lienCpas;
+	    
+	    private boolean birbyN;
 	      
 	    private boolean depyN;
 	  
@@ -296,7 +298,7 @@ private boolean luam;
 				String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp,
 				String emailSec, String emailTres, String telPres, String gsmPres, String disprog, String afsca,
 				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, boolean cpasyN, Short lienCpas,
-				boolean depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
+				boolean birbyN,boolean depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
 				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp,
 				String stopSusp, String rem, boolean isMsonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
 				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer nAdo, Integer n1824,
@@ -376,6 +378,7 @@ private boolean luam;
 			this.nbrefix = nbrefix;
 			this.cpasyN = cpasyN;
 			this.lienCpas = lienCpas;
+			this.birbyN = birbyN;
 			this.depyN = depyN;
 			this.logBirb = logBirb;
 			this.actComp1 = actComp1;
@@ -914,6 +917,14 @@ private boolean luam;
 		}
 
 		
+		public boolean isBirbyN() {
+			return birbyN;
+		}
+
+		public void setBirbyN(boolean birbyN) {
+			this.birbyN = birbyN;
+		}
+
 		public boolean getDepyN() {
 			return depyN;
 		}

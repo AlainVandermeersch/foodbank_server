@@ -25,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IMembreService;
+import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchMembreCriteria;
 import foodbank.it.web.dto.MembreDto;
 
@@ -33,10 +34,12 @@ import foodbank.it.web.dto.MembreDto;
 public class MembreController {
 	
 	private IMembreService MembreService;
+	private IOrganisationService OrganisationService;
 	
     
-    public MembreController(IMembreService MembreService) {
-        this.MembreService = MembreService;       
+    public MembreController(IMembreService MembreService, IOrganisationService OrganisationService) {
+        this.MembreService = MembreService;     
+        this.OrganisationService = OrganisationService; 
     }
     @CrossOrigin
     @GetMapping("membre/{batId}")
@@ -124,11 +127,14 @@ public class MembreController {
     protected MembreDto convertToDto(Membre entity,long totalRecords) {   
     	
     	String societe ="";
+    	Integer liendis = 0;
     	Organisation orgOfMember = entity.getOrganisationObject();
     	if (orgOfMember != null) {
+    		liendis = orgOfMember.getIdDis();
     		societe = orgOfMember.getSociete();
+    		
     	}
-        MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
+        MembreDto dto = new MembreDto(entity.getBatId(),liendis, entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
 				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
@@ -137,9 +143,14 @@ public class MembreController {
         return dto;
     }
 
-    protected Membre convertToEntity(MembreDto dto) {   	
+    protected Membre convertToEntity(MembreDto dto) {  
+    	
+    	Organisation orgOfMember = null;
+    	
+    	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getLienDis());
+    		if (org.isPresent() == true) orgOfMember = org.get() ;
     	    
-    	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
+    	Membre myMembre = new Membre( dto.getBatId(),orgOfMember, dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
 				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), dto.getCa(), dto.getAg(), dto.getCg(),dto.getCivilite(), 
 				dto.getPays(), dto.getActif(), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  dto.getBen(),

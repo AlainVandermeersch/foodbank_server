@@ -58,7 +58,7 @@ public class BanqueController {
         }
         else {
         	Optional<Banque> myBanque = this.BanqueService.findByBankShortName(bankShortName);
-    		myBanque.ifPresent(org-> BanqueDtos.add(convertToDto( org)));
+    		myBanque.ifPresent(banque-> BanqueDtos.add(convertToDto( banque)));
         }
         
        

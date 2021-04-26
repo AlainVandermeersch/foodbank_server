@@ -46,13 +46,15 @@ public class OrganisationController {
     @GetMapping("organisation/{idDis}")
     public OrganisationDto findOne(@PathVariable Integer idDis) {
     	Organisation o = OrganisationService.findByIdDis(idDis)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));        
-       OrgProgram op =  OrgProgramService.findByLienDis(idDis)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-      // Todo by Emanuel replace orelseThrow by .ifPresentOrElse 	op = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
-       // but it does not compile 	problem of Local variable op defined in an enclosing scope must be final or effectively final
-    
-         return convertToDto(o,op,1);
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    	
+    	OrgProgram progOfOrg = null;
+       	
+    	Optional<OrgProgram> prog = this.OrgProgramService.findByLienDis(idDis);
+    		if (prog.isPresent() == true) progOfOrg = prog.get() ;
+    		else	progOfOrg = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
+       
+         return convertToDto(o,progOfOrg,1);
 
     }
     
@@ -150,6 +152,7 @@ public class OrganisationController {
 		boolean booDistrListVp = entity.getDistrListVp() == 1;
 		boolean booDistrListSec = entity.getDistrListSec() == 1;
 		boolean booDistrListTres = entity.getDistrListTres() == 1;
+		boolean booBirbyN = entity.getBirbyN() == 1;
 		boolean booDepyN = entity.getDepyN() == 1;
 		boolean booActif = entity.getActif() == 1;
 		
@@ -162,7 +165,7 @@ public class OrganisationController {
 				entity.getPrenomTres(), entity.getNomTres(), entity.getTelTres(), entity.getGsmTres(), entity.getEmailPres(), entity.getEmailVp(),
 				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
 				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(),booCpasyN, entity.getLienCpas(),
-				booDepyN, entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
+				booBirbyN,booDepyN, entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
 				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), entity.getSusp(),
 				entity.getStopSusp(), entity.getRem(), booIsMsonac, entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
 				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getN1824(),
@@ -223,7 +226,7 @@ public class OrganisationController {
 				dto.getPrenomTres(), dto.getNomTres(), dto.getTelTres(), dto.getGsmTres(), dto.getEmailPres(), dto.getEmailVp(),
 				dto.getEmailSec(), dto.getEmailTres(), dto.getTelPres(), dto.getGsmPres(), dto.getDisprog(), dto.getAfsca(),
 				dto.isWebauthority(), dto.getLangue(),  dto.getNbrefix(),(short) (dto.getCpasyN() ? 1 : 0), dto.getLienCpas(),
-				(short) (dto.getDepyN() ? 1 : 0), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
+				(short) (dto.isBirbyN() ? 1 : 0), (short) (dto.getDepyN() ? 1 : 0), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
 				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), dto.getSusp(),
 				dto.getStopSusp(), dto.getRem(), (short) (dto.getMsonac() ? 1 : 0), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
 				dto.getnFam(), dto.getnPers(), dto.getnNour(), dto.getnBebe(), dto.getnEnf(), dto.getnAdo(), dto.getN1824(),

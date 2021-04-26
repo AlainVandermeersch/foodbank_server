@@ -128,6 +128,8 @@ public class Organisation implements Serializable {
     private Short cpasyN;
     @Column(name="lien_cpas", precision=5)
     private Short lienCpas;
+    @Column(name="birby_n", precision=3)
+    private Short birbyN;
     @Column(name="depy_n", precision=3)
     private Short depyN;
     @Column(name="log_birb", precision=3)
@@ -257,7 +259,7 @@ public class Organisation implements Serializable {
     public Organisation(int idDis, String refInt,String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
         String gsm, Short daten, String banque, Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom, String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, Short civiliteSec,
         String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
-        String disprog, String afsca, boolean webauthority, Short langue, Integer  nbrefix, Short cpasyN, Short lienCpas, Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
+        String disprog, String afsca, boolean webauthority, Short langue, Integer  nbrefix, Short cpasyN, Short lienCpas, Short birbyN,Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
         Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp, String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3, 
         Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,Integer  n1824,
         BigDecimal nEq, Integer  nSen, Short depPrinc, Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs, BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead, Short tourneeMois,
@@ -318,6 +320,7 @@ public class Organisation implements Serializable {
         this.nbrefix = nbrefix;
         this.cpasyN = cpasyN;
         this.lienCpas = lienCpas;
+        this.birbyN = birbyN;
         this.depyN = depyN;
         this.logBirb = logBirb;
         this.actComp1 = actComp1;
@@ -1335,7 +1338,15 @@ public class Organisation implements Serializable {
     }
 
    
-    /**
+    public Short getBirbyN() {
+		return birbyN;
+	}
+
+	public void setBirbyN(Short birbyN) {
+		this.birbyN = birbyN;
+	}
+
+	/**
      * Access method for depyN.
      *
      * @return the current value of depyN
@@ -2921,7 +2932,7 @@ public class Organisation implements Serializable {
 				+ gsmTres + ", emailPres=" + emailPres + ", emailVp=" + emailVp + ", emailSec=" + emailSec
 				+ ", emailTres=" + emailTres + ", telPres=" + telPres + ", gsmPres=" + gsmPres + ", disprog=" + disprog
 				+ ", afsca=" + afsca + ", webauthority=" + webauthority + ", langue=" + langue + ", lastvisit="
-				+ lastvisit + ", nbrefix=" + nbrefix + ", cpasyN=" + cpasyN + ", lienCpas=" + lienCpas + ", depyN=" + depyN + ", logBirb=" + logBirb + ", actComp1=" + actComp1 + ", actComp2="
+				+ lastvisit + ", nbrefix=" + nbrefix + ", cpasyN=" + cpasyN + ", lienCpas=" + lienCpas + ", birbyN=" + birbyN + ", depyN=" + depyN + ", logBirb=" + logBirb + ", actComp1=" + actComp1 + ", actComp2="
 				+ actComp2 + ", actComp3=" + actComp3 + ", actComp4=" + actComp4 + ", actComp5=" + actComp5
 				+ ", actComp6=" + actComp6 + ", actComp7=" + actComp7 + ", nrTournee=" + nrTournee + ", susp=" + susp
 				+ ", stopSusp=" + stopSusp + ", rem=" + rem + ", msonac=" + msonac + ", classeFbba1=" + classeFbba1
