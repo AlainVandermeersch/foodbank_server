@@ -87,13 +87,13 @@ public class TUser implements Serializable {
         super();
     }
 
-    public TUser(String idUser, String userName, String idCompany, int idOrg, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
+    public TUser(String idUser, String userName, String idCompany, Organisation organisationObject, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
         int gestAsso, int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas) {
         super();
         this.idUser = idUser;
         this.userName = userName;
         this.idCompany = idCompany;
-        this.idOrg = idOrg;
+        this.organisationObject = organisationObject;
         this.idLanguage = idLanguage;
         this.lienBat = lienBat;
         this.actif = actif;
@@ -172,7 +172,7 @@ public class TUser implements Serializable {
      *
      * @return the current value of idOrg
      */
-    public int getIdOrg() {
+    public Integer getIdOrg() {
         return idOrg;
     }
 
@@ -181,7 +181,7 @@ public class TUser implements Serializable {
      *
      * @param aIdOrg the new value for idOrg
      */
-    public void setIdOrg(int aIdOrg) {
+    public void setIdOrg(Integer aIdOrg) {
         idOrg = aIdOrg;
     }
 

@@ -8,7 +8,7 @@ public class TUserDto {
     
     private String idCompany;
     
-    private int idOrg;
+    private Integer idOrg;
      
     private String idLanguage;
      
@@ -54,7 +54,7 @@ public class TUserDto {
     protected TUserDto() {
       
     }
-    public TUserDto(String idUser, String userName, String idCompany, int idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String depot, 
+    public TUserDto(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String depot, 
     		boolean droit1, String email, boolean gestBen, boolean gestInv, boolean gestFead, boolean gestAsso,
         boolean gestCpas, boolean gestMemb, boolean gestDon, int lienBanque, int lienCpas,String societe,Long  totalRecords) {
         super();
@@ -108,11 +108,11 @@ public class TUserDto {
         this.idCompany = idCompany;
     }
 
-    public int getIdOrg() {
+    public Integer getIdOrg() {
         return idOrg;
     }
 
-    public void setIdOrg(int idOrg) {
+    public void setIdOrg(Integer idOrg) {
         this.idOrg = idOrg;
     }
 

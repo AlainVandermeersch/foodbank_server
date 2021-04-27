@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
+import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
 import foodbank.it.web.dto.TUserDto;
@@ -32,10 +33,11 @@ import foodbank.it.web.dto.TUserDto;
 public class TUserController {
 
     private ITUserService TUserService;
+    private IOrganisationService OrganisationService;
     
-    public TUserController(ITUserService TUserService) {
+    public TUserController(ITUserService TUserService,IOrganisationService OrganisationService) {
         this.TUserService = TUserService;
-       
+        this.OrganisationService = OrganisationService; 
     }
 
     //
@@ -142,7 +144,12 @@ public class TUserController {
     }
 
     protected TUser convertToEntity(TUserDto dto) {
-        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(), dto.getIdLanguage(), dto.getLienBat(), 
+    	
+    	Organisation orgOfUser = null;
+    	
+    	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getIdOrg());
+    		if (org.isPresent() == true) orgOfUser = org.get() ;
+        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), orgOfUser, dto.getIdLanguage(), dto.getLienBat(), 
         		(short) (dto.getActif() ? 1 : 0) , dto.getRights(), dto.getPassword(), dto.getDepot(), (short) (dto.getDroit1() ? 1 : 0) , dto.getEmail(), 
         		(short) (dto.getGestBen() ? 1 : 0) , (short) (dto.getGestInv() ? 1 : 0) , (short) (dto.getGestFead() ? 1 : 0) , (short) (dto.getGestAsso() ? 1 : 0) ,
         		(short) (dto.getGestCpas() ? 1 : 0) , (short) (dto.getGestMemb() ? 1 : 0) ,(short) (dto.getGestDon() ? 1 : 0) , dto.getLienBanque(), dto.getLienCpas());
