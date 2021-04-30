@@ -41,12 +41,16 @@ services:
     build: ./docker/keycloak
     ports:
       - "8083:8080"
+      - "8787:8787"
     depends_on:
       - mysql
     environment:
+      - DEBUG_PORT=*:8787
+      - DEBUG=true
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
       - DB_VENDOR=h2
+      - KEYCLOAK_IMPORT=/tmp/import/realm/foodbank-realm.json
 volumes:
   mysql-data:
   letsencrypt-data:
