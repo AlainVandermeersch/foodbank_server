@@ -33,8 +33,8 @@ import foodbank.it.web.dto.OrganisationDto;
 
 public class OrganisationController {
 	
-	private IOrganisationService OrganisationService;
-	private IOrgProgramService OrgProgramService;
+	private final IOrganisationService OrganisationService;
+	private final IOrgProgramService OrgProgramService;
 	    
     public OrganisationController(
     		IOrganisationService OrganisationService,
@@ -48,10 +48,10 @@ public class OrganisationController {
     	Organisation o = OrganisationService.findByIdDis(idDis)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     	
-    	OrgProgram progOfOrg = null;
+    	OrgProgram progOfOrg;
        	
     	Optional<OrgProgram> prog = this.OrgProgramService.findByLienDis(idDis);
-    		if (prog.isPresent() == true) progOfOrg = prog.get() ;
+    		if (prog.isPresent()) progOfOrg = prog.get() ;
     		else	progOfOrg = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
        
          return convertToDto(o,progOfOrg,1);
@@ -85,17 +85,13 @@ public class OrganisationController {
 		long totalElements = selectedOrganisations.getTotalElements();
        
 		selectedOrganisations.forEach(o -> {
-        		OrgProgramService.findByLienDis(o.getIdDis())
-        		.ifPresentOrElse(p -> {
-        			OrganisationDtos.add(convertToDto(o,p,totalElements));
-        				},
-        		() -> {
-       			 OrgProgram newProgram = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
-       			 OrganisationDtos.add(convertToDto(o,newProgram,totalElements));
-       			 
-       			 });   		
-        	
-        	});
+			OrgProgram progOfOrg = null;
+
+			Optional<OrgProgram> prog = this.OrgProgramService.findByLienDis(o.getIdDis());
+			if (prog.isPresent()) progOfOrg = prog.get() ;
+			else	progOfOrg = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
+			OrganisationDtos.add(convertToDto(o,progOfOrg,totalElements));
+		});
           
      
         return OrganisationDtos;
