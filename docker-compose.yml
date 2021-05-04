@@ -31,6 +31,6 @@ services:
       - "8081"
     environment:
       - MYSQL_HOST=${MYSQL_HOST}
-      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINGS}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
 volumes:
   mysql-data:
