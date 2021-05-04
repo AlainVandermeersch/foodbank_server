@@ -1,36 +1,36 @@
-version: "3.7"
+version: '3'
+
 services:
-  mysql-server:
-    image: mysql:8.0.19
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-    volumes:
-      - mysql-data:/var/lib/mysql
+  mysql:
+    build: ./docker/mysql
     ports:
       - "3306:3306"
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.0.1
-    restart: always
+    expose:
+      - "3306"
     environment:
-      PMA_HOST: mysql-server
-      PMA_USER: root
-      PMA_PASSWORD: secret
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+  frontend:
+    image: foodbank-client
     ports:
-      - "8080:80"
-  food-it-server:
-    image: foodbank-it-server
-    restart: on-failure
-    depends_on:
-      - mysql-server
-    ports:
-      - 8081:8081
+      - "80:80"
+    expose:
+      - "80"
     environment:
-      - DATABASE_HOST=mysql-server
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=secret
-      - DATABASE_NAME=banque_alimentaire
-      - DATABASE_PORT=3306
+      - SERVER_NAME=${SERVER_NAME}
+      - BACKEND_HOST=${BACKEND_HOST}
+      - BACKEND_PORT=${BACKEND_PORT}
+  backend:
+    build: ./
+    ports:
+      - "8080:8081"
+    expose:
+      - "8081"
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINGS}
 volumes:
   mysql-data:
