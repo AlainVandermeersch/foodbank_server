@@ -14,16 +14,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableConfigurationProperties(FoodBankAppConfig.class)
 public class FoodBankApp {
 
-/*	@Bean
+	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/**").allowedOrigins(System.getenv("CORS_ALLOWED_ORIGINS"));
 			}
 		};
 	}
-*/
+
 	public static void main(String[] args) {
 		SpringApplication.run(FoodBankApp.class, args);
 	}
