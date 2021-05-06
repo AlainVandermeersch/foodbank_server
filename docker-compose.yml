@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  mysql:
+    build: ./docker/mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+  frontend:
+    image: foodbank-client
+    ports:
+      - "80:80"
+      - "443:443"
+    expose:
+      - "80"
+      - "443"
+    environment:
+      - SERVER_NAME=${SERVER_NAME}
+      - BACKEND_HOST=${BACKEND_HOST}
+      - BACKEND_PORT=${BACKEND_PORT}
+    volumes:
+      - letsencrypt-data:/home/letsencrypt/data
+      - letsencrypt-certs:/home/letsencrypt/certs
+  backend:
+    build: ./
+    ports:
+      - "8080:8081"
+    expose:
+      - "8081"
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
+volumes:
+  mysql-data:
+  letsencrypt-data:
+  letsencrypt-certs:
