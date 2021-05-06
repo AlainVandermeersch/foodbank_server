@@ -74,7 +74,15 @@ public class BanqueController {
     @DeleteMapping("banque/{bankId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBanque(@PathVariable("bankId") Integer bankId) {
-        BanqueService.delete(bankId);
+    	 try {
+    		 BanqueService.delete(bankId);
+    	 }
+         catch (Exception ex) {
+         	String errorMsg = ex.getMessage();
+         	System.out.println(errorMsg);
+     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+         }
+        
     }
     @CrossOrigin
     @PostMapping("banque/")

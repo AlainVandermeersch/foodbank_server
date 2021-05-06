@@ -1,21 +1,32 @@
 package foodbank.it.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Banque;
+import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.repository.IBanqueRepository;
 import foodbank.it.service.IBanqueService;
 @Service
 public class BanqueServiceImpl implements IBanqueService{
     
     private IBanqueRepository BanqueRepository;
+    private final EntityManager entityManager;
 
-    public BanqueServiceImpl(IBanqueRepository BanqueRepository) {
+    public BanqueServiceImpl(IBanqueRepository BanqueRepository, EntityManager entityManager) {
         this.BanqueRepository = BanqueRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -39,8 +50,29 @@ public class BanqueServiceImpl implements IBanqueService{
     }
     @Override
     @Transactional
-    public void delete(int bankId) {
-        BanqueRepository.deleteByBankId(bankId);
+    public void delete(int bankId) throws Exception {
+    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+    	Root<Organisation> organisation = totalCriteriaQuery.from(Organisation.class);
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate lienBankPredicate = criteriaBuilder.equal(organisation.get("lienBanque"), bankId);
+		predicates.add(lienBankPredicate);
+	
+		System.out.printf("\nChecking Organisation References to Banque with id: %d", bankId);
+		
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.select(criteriaBuilder.count(organisation));
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		Long countResult = countQuery.getSingleResult();
+		
+
+		if (countResult > 0) {
+			String errorMsg = String.format("There are %d Organisations with Bank id %d",countResult, bankId);		
+			throw new Exception(errorMsg);
+		}
+		else {
+			BanqueRepository.deleteByBankId(bankId);
+		}
         
     }
 

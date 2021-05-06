@@ -109,7 +109,15 @@ public class OrganisationController {
     @DeleteMapping("organisation/{idDis}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrganisation(@PathVariable("idDis") Integer idDis) {
-        OrganisationService.delete(idDis);
+    	 try {
+    		 OrganisationService.delete(idDis);
+    	 }
+         catch (Exception ex) {
+         	String errorMsg = ex.getMessage();
+         	System.out.println(errorMsg);
+     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+         }
+        
     }
     @CrossOrigin
     @PostMapping("organisation/")

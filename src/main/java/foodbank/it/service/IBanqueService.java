@@ -12,5 +12,5 @@ public interface IBanqueService {
     Iterable<Banque> findAll();
     Iterable<Banque> findByActif(short actif);
 
-    void delete(int bankId);
+    void delete(int bankId) throws Exception;
 }

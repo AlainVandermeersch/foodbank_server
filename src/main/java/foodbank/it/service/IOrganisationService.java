@@ -12,7 +12,7 @@ public interface IOrganisationService {
 	
 	Organisation save(Organisation Organisation);
 
-    void delete(int idDis);
+    void delete(int idDis)  throws Exception;
 	
 	Page<Organisation> findAll(SearchOrganisationCriteria searchCriteria, Pageable pageable);
 

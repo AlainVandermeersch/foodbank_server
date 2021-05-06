@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
+// backed out import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.TUser;
@@ -43,7 +44,8 @@ public class TUserServiceImpl implements ITUserService {
 
     @Override
     public TUser save(TUser tuser,  boolean booCreateMode) throws Exception {
-    	if (booCreateMode == true) {
+    	// backed Out   BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();    	
+    	if (booCreateMode == true) {    		
     		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
         	Root<TUser> existingTUser = totalCriteriaQuery.from(TUser.class);
@@ -63,7 +65,7 @@ public class TUserServiceImpl implements ITUserService {
     			String errorMsg = String.format("a user exists with userId: %s", tuser.getIdUser());		
     			throw new Exception(errorMsg);
     		}
-
+    		// Backed Out tuser.setPassword(encoder.encode(tuser.getPassword()));
     	}
         return TUserRepository.save(tuser);
     }

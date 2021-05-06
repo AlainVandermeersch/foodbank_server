@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
+import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IOrganisationService;
@@ -47,8 +48,30 @@ public class OrganisationServiceImpl implements IOrganisationService{
 
     @Override
     @Transactional
-    public void delete(int idDis) {
-        OrganisationRepository.deleteByIdDis(idDis);
+    public void delete (int idDis)throws Exception {
+    	
+    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+    	Root<Membre> membre = totalCriteriaQuery.from(Membre.class);
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), idDis);
+		predicates.add(lienDisPredicate);
+	
+		System.out.printf("\nChecking Membre References to Organisation with id: %d", idDis);
+		
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.select(criteriaBuilder.count(membre));
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		Long countResult = countQuery.getSingleResult();
+		
+
+		if (countResult > 0) {
+			String errorMsg = String.format("There are %d Members in Organisation id %d",countResult, idDis);		
+			throw new Exception(errorMsg);
+		}
+		else {
+			OrganisationRepository.deleteByIdDis(idDis);
+		}
         
     }
 	
