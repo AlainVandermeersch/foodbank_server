@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ~/.bashrc
+
 git pull --rebase origin master
 git remote show upstream || git remote add upstream https://github.com/AlainVandermeersch/foodbank_server.git
 git pull --rebase upstream master
