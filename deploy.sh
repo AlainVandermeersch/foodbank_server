@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source ~/.bashrc
-
 git pull --rebase origin master
 git remote show upstream || git remote add upstream https://github.com/AlainVandermeersch/foodbank_server.git
 git pull --rebase upstream master
@@ -13,4 +11,8 @@ mkdir target && \
     docker build -t foodbank-client . && \
     cd ..
 
-docker-compose up -d
+docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v "$PWD:$PWD" \
+    -w="$PWD" \
+    docker/compose:1.29.1 up -d
