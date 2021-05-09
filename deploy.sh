@@ -6,7 +6,7 @@ git pull --rebase upstream master
 
 mkdir target
 cd target && \
-    git clone git@github.com:AlainVandermeersch/foodbank-client.git && \
+    git clone https://github.com/AlainVandermeersch/foodbank-client.git && \
     npm run build-prod && \
     docker build -t foodbank-client . && \
     cd ..
