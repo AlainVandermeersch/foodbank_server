@@ -6,12 +6,14 @@ public class SearchClientCriteria {
 	private String searchValue;
 	private String bankShortName;
 	private Integer lienDis;
+	private Integer actif;
 
-	public SearchClientCriteria(String searchField, String searchValue, String bankShortName, Integer lienDis) {
+	public SearchClientCriteria(String searchField, String searchValue, String bankShortName, Integer lienDis, Integer actif) {
 		this.searchField = searchField;
 		this.searchValue = searchValue;
 		this.bankShortName = bankShortName;
 		this.lienDis = lienDis;
+		this.actif = actif;
 	}
 
 	public String getSearchField() {
@@ -45,4 +47,13 @@ public class SearchClientCriteria {
 	public void setLienDis(Integer lienDis) {
 		this.lienDis = lienDis;
 	}
+
+	public Integer getActif() {
+		return actif;
+	}
+
+	public void setActif(Integer actif) {
+		this.actif = actif;
+	}
+	
 }

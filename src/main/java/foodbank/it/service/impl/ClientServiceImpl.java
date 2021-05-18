@@ -52,6 +52,7 @@ public class ClientServiceImpl implements IClientService{
 		String searchValue = searchCriteria.getSearchValue();
 		String bankShortName = searchCriteria.getBankShortName();
 		Integer lienDis = searchCriteria.getLienDis();
+		Integer actif = searchCriteria.getActif();
 
 		if (searchField != null && searchValue != null && !searchField.isEmpty() && !searchValue.isEmpty()) {
 			Path<String> searchFieldPath = client.get(searchField);
@@ -74,7 +75,7 @@ public class ClientServiceImpl implements IClientService{
 			Predicate lienDisPredicate = criteriaBuilder.equal(client.get("lienDis"), lienDis);
 			predicates.add(lienDisPredicate);
 		}
-		Predicate lienActifPredicate = criteriaBuilder.equal(client.get("actif"),1);
+		Predicate lienActifPredicate = criteriaBuilder.equal(client.get("actif"),actif);
 		predicates.add(lienActifPredicate);
 
 		clientQuery.where(predicates.stream().toArray(Predicate[]::new));

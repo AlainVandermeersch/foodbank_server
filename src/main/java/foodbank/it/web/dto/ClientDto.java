@@ -37,7 +37,7 @@ public class ClientDto {
 	
 	 private Integer genre;
 	
-	 private short actif;
+	 private boolean actif;
 	 
 	 private short birb;
 	
@@ -187,10 +187,10 @@ public class ClientDto {
 	public void setGenre(int genre) {
 		this.genre = genre;
 	}
-	public short getActif() {
+	public boolean getActif() {
 		return actif;
 	}
-	public void setActif(short actif) {
+	public void setActif(boolean actif) {
 		this.actif = actif;
 	}
 	public short getBirb() {
@@ -284,7 +284,7 @@ public class ClientDto {
 	public ClientDto(int idClient, String idInt, Integer lienDis, String nom, String prenom, String nomconj,
 			String prenomconj, short civilite, String daten, String datenConj, short civiliteconj, String adresse,
 			String cp, String localite, String pays, String email, String tel, String gsm, String connu, int genre,
-			short actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
+			boolean actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
 			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long nbDep, Long  totalRecords) {
 		super();
 		this.idClient = idClient;

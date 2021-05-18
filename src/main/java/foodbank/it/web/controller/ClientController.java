@@ -49,7 +49,7 @@ public class ClientController {
 	@CrossOrigin
 	@GetMapping("beneficiaires/")
 	public Collection<ClientDto> find(@RequestParam String offset, @RequestParam String rows,
-			@RequestParam String sortField, @RequestParam String sortOrder,
+			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String archive,
 			@RequestParam(required = false) String searchField, @RequestParam(required = false) String searchValue,
 			@RequestParam(required = false) String bankShortName, @RequestParam(required = false) String lienDis) {
 		int intOffset = Integer.parseInt(offset);
@@ -65,7 +65,11 @@ public class ClientController {
 		}
 
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchClientCriteria criteria = new SearchClientCriteria(searchField, searchValue, bankShortName, lienDisInteger);
+		Integer actif = 1;
+		if (archive.equals("1")) {
+			actif = 0; // archived means actif flag is 0
+		}
+		SearchClientCriteria criteria = new SearchClientCriteria(searchField, searchValue, bankShortName, lienDisInteger,actif);
 		Page<Client> selectedClients = this.ClientService.findAll(criteria, pageRequest);
 		long totalElements = selectedClients.getTotalElements();
 
@@ -100,10 +104,12 @@ public class ClientController {
 
 	protected ClientDto convertToDto(Client entity, long totalRecords) {
 		
+		boolean booActif= entity.getActif() == 1;
+		
 		ClientDto dto = new ClientDto(entity.getIdClient(), entity.getIdInt(), entity.getLienDis(), entity.getNom(), entity.getPrenom(),
 				entity.getNomconj(), entity.getPrenomconj(), entity.getCivilite(), entity.getDaten(), entity.getDatenConj(), entity.getCiviliteconj(),
 				entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getPays(), entity.getEmail(), entity.getTel(), entity.getGsm(),
-				entity.getConnu(), entity.getGenre(), entity.getActif(), entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
+				entity.getConnu(), entity.getGenre(), booActif, entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
 				entity.getLCpas(), entity.getDatUpdBirb(), entity.getCritBirb(), entity.getCoeff(), entity.getNomsav(), entity.getPrenomsav(),
 				entity.getGenreconj(), entity.getLbanque(), entity.getNbDep(),totalRecords);
 		return dto;
@@ -114,7 +120,7 @@ public class ClientController {
 		Client myClient = new Client(dto.getIdClient(), dto.getIdInt(), dto.getLienDis(), dto.getLbanque(), dto.getNom(), dto.getPrenom(),
 				dto.getNomconj(), dto.getPrenomconj(), dto.getCivilite(), dto.getDaten(), dto.getDatenConj(), dto.getCiviliteconj(),
 				dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getPays(), dto.getEmail(), dto.getTel(), dto.getGsm(),
-				dto.getConnu(), dto.getGenre(), dto.getActif(), dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
+				dto.getConnu(), dto.getGenre(), (short) (dto.getActif() ? 1 : 0) , dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
 				dto.getLCpas(), dto.getDatUpdBirb(), dto.getCritBirb(), dto.getCoeff(), dto.getNomsav(), dto.getPrenomsav(),
 				dto.getGenreconj());
 		if (!StringUtils.isEmpty(dto.getIdClient())) {

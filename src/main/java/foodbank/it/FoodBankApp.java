@@ -19,7 +19,8 @@ public class FoodBankApp {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins(System.getenv("CORS_ALLOWED_ORIGINS"));
+				// registry.addMapping("/**").allowedOrigins(System.getenv("CORS_ALLOWED_ORIGINS"));
+				registry.addMapping("/**").allowedOrigins("http://localhost:4200");
 			}
 		};
 	}
