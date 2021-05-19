@@ -36,8 +36,9 @@ public class ClientDto {
 	 private String connu;
 	
 	 private Integer genre;
-	
-	 private boolean actif;
+	// Alain actif means archived in the MySQLDB - its counterintuitive actif = 1 means archived - actif  = 0 means "current, not archived"
+	// So in the DTO we expose the property as archived
+	 private boolean archived;
 	 
 	 private short birb;
 	
@@ -64,6 +65,8 @@ public class ClientDto {
 	 private short lbanque;
 	 
 	 private Long nbDep;
+	 
+	 private String societe; // calculated field from organisation object
 	 
 	 private Long  totalRecords;
 	 
@@ -187,11 +190,11 @@ public class ClientDto {
 	public void setGenre(int genre) {
 		this.genre = genre;
 	}
-	public boolean getActif() {
-		return actif;
+	public boolean getArchived() {
+		return archived;
 	}
-	public void setActif(boolean actif) {
-		this.actif = actif;
+	public void setArchived(boolean archived) {
+		this.archived = archived;
 	}
 	public short getBirb() {
 		return birb;
@@ -271,6 +274,14 @@ public class ClientDto {
 		return nbDep;
 	}
 	
+	public String getSociete() {
+		return societe;
+	}
+
+	public void setSociete(String societe) {
+		this.societe = societe;
+	}
+	
 	public Long getTotalRecords() {
 		return totalRecords;
 	}
@@ -284,8 +295,8 @@ public class ClientDto {
 	public ClientDto(int idClient, String idInt, Integer lienDis, String nom, String prenom, String nomconj,
 			String prenomconj, short civilite, String daten, String datenConj, short civiliteconj, String adresse,
 			String cp, String localite, String pays, String email, String tel, String gsm, String connu, int genre,
-			boolean actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
-			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long nbDep, Long  totalRecords) {
+			boolean archived, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
+			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long nbDep, String societe, Long  totalRecords) {
 		super();
 		this.idClient = idClient;
 		this.idInt = idInt;
@@ -307,7 +318,7 @@ public class ClientDto {
 		this.gsm = gsm;
 		this.connu = connu;
 		this.genre = genre;
-		this.actif = actif;
+		this.archived = archived;
 		this.birb = birb;
 		this.natnr = natnr;
 		if (dateUpd == null) {
@@ -327,6 +338,7 @@ public class ClientDto {
 		this.genreconj = genreconj;
 		this.lbanque = lbanque;
 		this.nbDep = nbDep;
+		this.societe = societe;
 		this.totalRecords = totalRecords;
 	}
 	

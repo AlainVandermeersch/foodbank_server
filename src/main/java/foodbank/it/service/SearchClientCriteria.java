@@ -2,43 +2,92 @@ package foodbank.it.service;
 
 public class SearchClientCriteria {
 
-	private String searchField;
-	private String searchValue;
-	private String bankShortName;
+	private String nom;
+	private String prenom;
+	private String adresse;
+	private String cp;
+	private String localite;
+	private Integer lienBanque;
 	private Integer lienDis;
 	private Integer actif;
-
-	public SearchClientCriteria(String searchField, String searchValue, String bankShortName, Integer lienDis, Integer actif) {
-		this.searchField = searchField;
-		this.searchValue = searchValue;
-		this.bankShortName = bankShortName;
+    
+	public SearchClientCriteria(String nom, String prenom, String adresse, String cp,String localite, Integer lienBanque, Integer lienDis, Integer actif) {
+		this.nom = nom;
+		this.prenom = prenom;
+		this.adresse = adresse;
+		this.cp = cp;
+		this.localite = localite;
+		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;
 		this.actif = actif;
 	}
 
-	public String getSearchField() {
-		return searchField;
+	
+
+	public String getNom() {
+		return nom;
 	}
 
-	public void setSearchField(String searchField) {
-		this.searchField = searchField;
+
+
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 
-	public String getSearchValue() {
-		return searchValue;
+
+
+	public String getPrenom() {
+		return prenom;
 	}
 
-	public void setSearchValue(String searchValue) {
-		this.searchValue = searchValue;
+
+
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
 	}
 
-	public String getBankShortName() {
-		return bankShortName;
+
+
+	public String getAdresse() {
+		return adresse;
 	}
 
-	public void setBankShortName(String bankShortName) {
-		this.bankShortName = bankShortName;
+
+
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
 	}
+
+
+
+	public String getCp() {
+		return cp;
+	}
+
+
+
+	public void setCp(String cp) {
+		this.cp = cp;
+	}
+
+
+
+	public String getLocalite() {
+		return localite;
+	}
+
+
+	public void setLocalite(String localite) {
+		this.localite = localite;
+	}
+
+	public Integer getLienBanque() {
+		return lienBanque;
+	}
+
+	public void setLienBanque(Integer lienBanque) {
+		this.lienBanque = lienBanque;
+	}	
 
 	public Integer getLienDis() {
 		return lienDis;

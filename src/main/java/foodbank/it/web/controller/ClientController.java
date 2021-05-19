@@ -23,8 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import foodbank.it.persistence.model.Client;
-import foodbank.it.service.IBanqueService;
+import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IClientService;
+import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchClientCriteria;
 import foodbank.it.web.dto.ClientDto;
 
@@ -33,9 +34,11 @@ import foodbank.it.web.dto.ClientDto;
 public class ClientController {
 
 	private IClientService ClientService;
+	private IOrganisationService OrganisationService;
 	
-	public ClientController(IClientService ClientService, IBanqueService BanqueService) {
+	public ClientController(IClientService ClientService, IOrganisationService OrganisationService) {
 		this.ClientService = ClientService;	
+		this.OrganisationService = OrganisationService; 
 	}
 
 	@CrossOrigin
@@ -49,9 +52,11 @@ public class ClientController {
 	@CrossOrigin
 	@GetMapping("beneficiaires/")
 	public Collection<ClientDto> find(@RequestParam String offset, @RequestParam String rows,
-			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String archive,
-			@RequestParam(required = false) String searchField, @RequestParam(required = false) String searchValue,
-			@RequestParam(required = false) String bankShortName, @RequestParam(required = false) String lienDis) {
+			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String archived,
+			@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom, 
+     		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp, 
+     		@RequestParam(required = false) String localite,
+     		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
 		int pageNumber = intOffset / intRows; // Java throws away remainder of division
@@ -63,13 +68,14 @@ public class ClientController {
 		} else {
 			pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
 		}
-
+		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		Integer actif = 1;
-		if (archive.equals("1")) {
-			actif = 0; // archived means actif flag is 0
+		Integer actifInteger = 1;
+		if (archived.equals("1")) {
+			actifInteger = 0; 
 		}
-		SearchClientCriteria criteria = new SearchClientCriteria(searchField, searchValue, bankShortName, lienDisInteger,actif);
+			
+		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite, lienBanqueInteger, lienDisInteger,actifInteger);
 		Page<Client> selectedClients = this.ClientService.findAll(criteria, pageRequest);
 		long totalElements = selectedClients.getTotalElements();
 
@@ -103,24 +109,37 @@ public class ClientController {
 	}
 
 	protected ClientDto convertToDto(Client entity, long totalRecords) {
+		String societe ="";
+    	Integer liendis = 0;
+    	Organisation orgOfClient = entity.getOrganisationObject();
+    	if (orgOfClient != null) {
+    		liendis = orgOfClient.getIdDis();
+    		societe = orgOfClient.getSociete();
+    		
+    	}
 		
-		boolean booActif= entity.getActif() == 1;
-		
-		ClientDto dto = new ClientDto(entity.getIdClient(), entity.getIdInt(), entity.getLienDis(), entity.getNom(), entity.getPrenom(),
+		boolean booArchived = entity.getActif() == 0;
+		// Alain -  Client Table property actif  is mapped into property archived of dto
+		ClientDto dto = new ClientDto(entity.getIdClient(), entity.getIdInt(), liendis, entity.getNom(), entity.getPrenom(),
 				entity.getNomconj(), entity.getPrenomconj(), entity.getCivilite(), entity.getDaten(), entity.getDatenConj(), entity.getCiviliteconj(),
 				entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getPays(), entity.getEmail(), entity.getTel(), entity.getGsm(),
-				entity.getConnu(), entity.getGenre(), booActif, entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
+				entity.getConnu(), entity.getGenre(), booArchived, entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
 				entity.getLCpas(), entity.getDatUpdBirb(), entity.getCritBirb(), entity.getCoeff(), entity.getNomsav(), entity.getPrenomsav(),
-				entity.getGenreconj(), entity.getLbanque(), entity.getNbDep(),totalRecords);
+				entity.getGenreconj(), entity.getLbanque(), entity.getNbDep(),societe,totalRecords);
 		return dto;
 	}
 
 	protected Client convertToEntity(ClientDto dto) {
 		
-		Client myClient = new Client(dto.getIdClient(), dto.getIdInt(), dto.getLienDis(), dto.getLbanque(), dto.getNom(), dto.getPrenom(),
+		Organisation orgOfClient = null;
+    	
+    	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getLienDis());
+    		if (org.isPresent() == true) orgOfClient = org.get() ;
+		// Alain - property archived 0 of dto is mapped into Client Table property actif = 1
+		Client myClient = new Client(dto.getIdClient(), dto.getIdInt(), orgOfClient, dto.getLbanque(), dto.getNom(), dto.getPrenom(),
 				dto.getNomconj(), dto.getPrenomconj(), dto.getCivilite(), dto.getDaten(), dto.getDatenConj(), dto.getCiviliteconj(),
 				dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getPays(), dto.getEmail(), dto.getTel(), dto.getGsm(),
-				dto.getConnu(), dto.getGenre(), (short) (dto.getActif() ? 1 : 0) , dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
+				dto.getConnu(), dto.getGenre(), (short) (dto.getArchived() ? 0 : 1) , dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
 				dto.getLCpas(), dto.getDatUpdBirb(), dto.getCritBirb(), dto.getCoeff(), dto.getNomsav(), dto.getPrenomsav(),
 				dto.getGenreconj());
 		if (!StringUtils.isEmpty(dto.getIdClient())) {

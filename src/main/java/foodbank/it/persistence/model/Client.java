@@ -13,8 +13,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity(name="clients")
 public class Client implements Serializable {
@@ -41,7 +45,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  private int idClient;
  @Column(name="id_int", length=7)
  private String idInt;
- @Column(name="lien_dis", nullable=false, precision=10)
+ @Column(name="lien_dis", nullable=false, precision=10, insertable=false,updatable=false)
  private Integer lienDis;
   @Column(nullable=false, length=50)
  private String nom;
@@ -97,6 +101,10 @@ private static final long serialVersionUID = -8518218294613491486L;
  private Short lbanque; 
  @Formula("(select count(*) from dep d where d.lien_mast = id_client)")
  private Long nbDep;
+ @ManyToOne
+ @JoinColumn(name="lien_dis")
+ @NotFound(action = NotFoundAction.IGNORE)
+ private Organisation organisationObject;
 
  /** Default constructor. */
  public Client() {
@@ -104,7 +112,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  }
  
 
- public Client(int idClient,String idInt, Integer lienDis, short lbanque, String nom, String prenom, String nomconj, String prenomconj,
+ public Client(int idClient,String idInt, Organisation organisationObject, short lbanque, String nom, String prenom, String nomconj, String prenomconj,
 		short civilite, String daten, String datenConj, short civiliteconj, String adresse, String cp, String localite,
 		String pays, String email, String tel, String gsm, String connu, int genre, short actif, short birb,
 		String natnr, String regio, short lCpas, String datUpdBirb, short critBirb, short coeff,
@@ -112,7 +120,7 @@ private static final long serialVersionUID = -8518218294613491486L;
 	super();
 	this.idClient = idClient;
 	this.idInt = idInt;
-	this.lienDis = lienDis;
+	this.organisationObject = organisationObject;
 	this.lbanque = lbanque;
 	this.nom = nom;
 	this.prenom = prenom;
@@ -741,6 +749,10 @@ public Long getNbDep() {
 	 if (genreconj == null ) return 0;
      return genreconj;
  }
+ 
+ public Organisation getOrganisationObject() {
+		return organisationObject;
+	}
 
  /**
   * Setter method for genreconj.

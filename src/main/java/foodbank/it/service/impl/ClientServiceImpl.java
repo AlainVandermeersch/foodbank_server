@@ -9,7 +9,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 
-import foodbank.it.persistence.model.Banque;
 import foodbank.it.service.SearchClientCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,34 +46,51 @@ public class ClientServiceImpl implements IClientService{
 		Root<Client> client = clientQuery.from(Client.class);
 
 		List<Predicate> predicates = new ArrayList<>();
-
-		String searchField = searchCriteria.getSearchField();
-		String searchValue = searchCriteria.getSearchValue();
-		String bankShortName = searchCriteria.getBankShortName();
+		String nom = searchCriteria.getNom();
+		String prenom = searchCriteria.getPrenom();
+		String adresse = searchCriteria.getAdresse();
+		String cp = searchCriteria.getCp();
+		String localite = searchCriteria.getLocalite();
+		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer actif = searchCriteria.getActif();
 
-		if (searchField != null && searchValue != null && !searchField.isEmpty() && !searchValue.isEmpty()) {
-			Path<String> searchFieldPath = client.get(searchField);
-			Expression<String> lowerSearchField = criteriaBuilder.lower(searchFieldPath);
+		if (nom != null ) {			
 
-			Predicate searchFieldPredicate = criteriaBuilder.like(lowerSearchField, "%" + searchValue.toLowerCase() + "%");
-			predicates.add(searchFieldPredicate);
+			Predicate nomPredicate = criteriaBuilder.like(client.get("nom"), "%" + nom.toLowerCase() + "%");
+			predicates.add(nomPredicate);
 		}
+		if (prenom != null ) {			
 
-		if (bankShortName != null && !bankShortName.isEmpty()) {
-			Path<Banque> banqueObject = client.get("banqueObject");
-			Path<String> bankShortNamePath = banqueObject.get("bankShortName");
-			Expression<String> lowerBankShortName = criteriaBuilder.lower(bankShortNamePath);
-
-			Predicate bankShortNamePredicate = criteriaBuilder.like(lowerBankShortName, "%" + bankShortName.toLowerCase() + "%");
-			predicates.add(bankShortNamePredicate);
+			Predicate prenomPredicate = criteriaBuilder.like(client.get("prenom"), "%" + prenom.toLowerCase() + "%");
+			predicates.add(prenomPredicate);
 		}
+		if (adresse != null ) {			
 
+			Predicate adressePredicate = criteriaBuilder.like(client.get("adresse"), "%" + adresse.toLowerCase() + "%");
+			predicates.add(adressePredicate);
+		}
+		if (cp != null ) {			
+
+			Predicate cpPredicate = criteriaBuilder.like(client.get("cp"), "%" + cp.toLowerCase() + "%");
+			predicates.add(cpPredicate);
+		}
+		if (localite != null ) {			
+
+			Predicate localitePredicate = criteriaBuilder.like(client.get("localite"), "%" + localite.toLowerCase() + "%");
+			predicates.add(localitePredicate);
+		}
+		// Alain in Client table field is lbanque		
+		if (lienBanque != null) {
+			Predicate lienBanquePredicate = criteriaBuilder.equal(client.get("lbanque"), lienBanque);
+			predicates.add(lienBanquePredicate);
+		}
+		
 		if (lienDis != null) {
 			Predicate lienDisPredicate = criteriaBuilder.equal(client.get("lienDis"), lienDis);
 			predicates.add(lienDisPredicate);
 		}
+				
 		Predicate lienActifPredicate = criteriaBuilder.equal(client.get("actif"),actif);
 		predicates.add(lienActifPredicate);
 

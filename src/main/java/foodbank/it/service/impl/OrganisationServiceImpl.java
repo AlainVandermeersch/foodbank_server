@@ -9,8 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -82,17 +80,32 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
 
 		List<Predicate> predicates = new ArrayList<>();
-		String searchField = searchCriteria.getSearchField();
-		String searchValue = searchCriteria.getSearchValue();
+		String societe = searchCriteria.getSociete();
+		String adresse = searchCriteria.getAdresse();
+		String cp = searchCriteria.getCp();
+		String localite = searchCriteria.getLocalite();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idDis = searchCriteria.getIdDis();
 		
-		if (searchField != null && searchValue != null && !searchField.isEmpty() && !searchValue.isEmpty()) {
-			Path<String> searchFieldPath = organisation.get(searchField);
-			Expression<String> lowerSearchField = criteriaBuilder.lower(searchFieldPath);
+		if (societe != null ) {			
 
-			Predicate searchFieldPredicate = criteriaBuilder.like(lowerSearchField, "%" + searchValue.toLowerCase() + "%");
-			predicates.add(searchFieldPredicate);
+			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
+			predicates.add(prenomPredicate);
+		}
+		if (adresse != null ) {			
+
+			Predicate adressePredicate = criteriaBuilder.like(organisation.get("adresse"), "%" + adresse.toLowerCase() + "%");
+			predicates.add(adressePredicate);
+		}
+		if (cp != null ) {			
+
+			Predicate cpPredicate = criteriaBuilder.like(organisation.get("cp"), "%" + cp.toLowerCase() + "%");
+			predicates.add(cpPredicate);
+		}
+		if (localite != null ) {			
+
+			Predicate localitePredicate = criteriaBuilder.like(organisation.get("localite"), "%" + localite.toLowerCase() + "%");
+			predicates.add(localitePredicate);
 		}
 		Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);

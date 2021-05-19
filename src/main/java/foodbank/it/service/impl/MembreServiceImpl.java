@@ -41,7 +41,7 @@ public class MembreServiceImpl implements IMembreService{
 
     @Override
     public Membre save(Membre membre, boolean booCreateMode) throws Exception {  
-    	if (booCreateMode == true) {
+    	/* if (booCreateMode == true) {
     		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
         	Root<Membre> existingMembre = totalCriteriaQuery.from(Membre.class);
@@ -63,6 +63,7 @@ public class MembreServiceImpl implements IMembreService{
     		}
 
     	}
+    	*/
     	
         return MembreRepository.save(membre);
     }
