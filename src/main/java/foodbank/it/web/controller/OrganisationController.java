@@ -62,9 +62,10 @@ public class OrganisationController {
     @GetMapping("organisations/")
     public Collection<OrganisationDto> find( @RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
-    		@RequestParam(required = false) String societe, 
-     		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp, 
-     		@RequestParam(required = false) String localite,
+    		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
+     		@RequestParam(required = false) String cp, @RequestParam(required = false) String localite,
+     		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
+     		@RequestParam(required = false) String statut,
     		@RequestParam(required = false) String lienBanque ,
     		@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
@@ -81,8 +82,9 @@ public class OrganisationController {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, cp,localite, lienBanqueInteger, idDisInteger);
+        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
+        
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, cp,localite, lienBanqueInteger, idDisInteger,isDepot,isBirb,statut);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        

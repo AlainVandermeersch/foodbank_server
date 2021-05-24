@@ -86,6 +86,9 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		String localite = searchCriteria.getLocalite();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idDis = searchCriteria.getIdDis();
+		Boolean isDepot = searchCriteria.getIsDepot();
+		Boolean isBirb = searchCriteria.getIsBirb();
+		String statut = searchCriteria.getStatut();
 		
 		if (societe != null ) {			
 
@@ -106,6 +109,29 @@ public class OrganisationServiceImpl implements IOrganisationService{
 
 			Predicate localitePredicate = criteriaBuilder.like(organisation.get("localite"), "%" + localite.toLowerCase() + "%");
 			predicates.add(localitePredicate);
+		}
+		
+		if (isDepot != null) {
+			Integer intDepot = 0;
+			if (isDepot== true) {
+				intDepot = 1;
+			}
+			Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), intDepot);
+			predicates.add(isDepotPredicate);
+		}
+		
+		if (isBirb != null) {
+			Integer intBirb = 0;
+			if (isBirb== true) {
+				intBirb = 1;
+			}
+			Predicate isBirbPredicate = criteriaBuilder.equal(organisation.get("birbyN"), intBirb);
+			predicates.add(isBirbPredicate);
+		} 
+		
+		if (statut != null) {
+			Predicate statutPredicate = criteriaBuilder.like(organisation.get("statut"), "%" + statut + "%");
+			predicates.add(statutPredicate);
 		}
 		Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);

@@ -7,15 +7,21 @@ public class SearchOrganisationCriteria {
 	private String localite;
 	private Integer lienBanque;
 	private Integer idDis;
+	private Boolean isDepot;
+	private Boolean isBirb;
+	private String statut;
 	
 	
-	public SearchOrganisationCriteria(String societe, String adresse, String cp,String localite, Integer lienBanque, Integer lienDis) {
+	public SearchOrganisationCriteria(String societe, String adresse, String cp,String localite, Integer lienBanque, Integer lienDis, Boolean isDepot,Boolean isBirb,String statut) {
 		this.societe = societe;
 		this.adresse = adresse;
 		this.cp = cp;
 		this.localite = localite;
 		this.lienBanque = lienBanque;
 		this.idDis = lienDis;
+		this.isDepot = isDepot;
+		this.isBirb = isBirb;
+		this.statut = statut;
 	}
 
 	
@@ -64,6 +70,42 @@ public class SearchOrganisationCriteria {
 
 	public void setLocalite(String localite) {
 		this.localite = localite;
+	}
+
+
+
+	public Boolean getIsDepot() {
+		return isDepot;
+	}
+
+
+
+	public void setIsDepot(Boolean isDepot) {
+		this.isDepot = isDepot;
+	}
+
+
+
+	public Boolean getIsBirb() {
+		return isBirb;
+	}
+
+
+
+	public void setIsBirb(Boolean isBirb) {
+		this.isBirb = isBirb;
+	}
+
+
+
+	public String getStatut() {
+		return statut;
+	}
+
+
+
+	public void setStatut(String statut) {
+		this.statut = statut;
 	}
 
 
