@@ -65,7 +65,7 @@ public class OrganisationController {
     		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
      		@RequestParam(required = false) String cp, @RequestParam(required = false) String localite,
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
-     		@RequestParam(required = false) String statut,
+     		@RequestParam(required = false) Boolean isWeb,@RequestParam(required = false) String statut,
     		@RequestParam(required = false) String lienBanque ,
     		@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
@@ -84,7 +84,7 @@ public class OrganisationController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, cp,localite, lienBanqueInteger, idDisInteger,isDepot,isBirb,statut);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, cp,localite, lienBanqueInteger, idDisInteger,isDepot,isBirb,isWeb,statut);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -165,7 +165,7 @@ public class OrganisationController {
 		boolean booActif = entity.getActif() == 1;
 		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
-				entity.getSociete(), entity.getAdresse(), entity.getStatut(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
+				entity.getSociete(), entity.getAdresse(), entity.getStatut().trim(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), entity.getDaten(),entity.getBanque(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), booActif, entity.getCivilite(), entity.getNom(),
 				entity.getPrenom(), entity.getCiviliteVp(), entity.getPrenomVp(), entity.getNomVp(), entity.getTelVp(), entity.getGsmVp(),

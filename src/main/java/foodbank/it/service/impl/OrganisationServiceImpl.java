@@ -88,6 +88,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Integer idDis = searchCriteria.getIdDis();
 		Boolean isDepot = searchCriteria.getIsDepot();
 		Boolean isBirb = searchCriteria.getIsBirb();
+		Boolean isWeb = searchCriteria.getIsWeb();
 		String statut = searchCriteria.getStatut();
 		
 		if (societe != null ) {			
@@ -126,6 +127,12 @@ public class OrganisationServiceImpl implements IOrganisationService{
 				intBirb = 1;
 			}
 			Predicate isBirbPredicate = criteriaBuilder.equal(organisation.get("birbyN"), intBirb);
+			predicates.add(isBirbPredicate);
+		} 
+		
+		if (isWeb != null) {
+			// Alain - boolean comparison
+			Predicate isBirbPredicate = criteriaBuilder.equal(organisation.get("webauthority"), isWeb);
 			predicates.add(isBirbPredicate);
 		} 
 		

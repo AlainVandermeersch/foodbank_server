@@ -9,10 +9,11 @@ public class SearchOrganisationCriteria {
 	private Integer idDis;
 	private Boolean isDepot;
 	private Boolean isBirb;
+	private Boolean isWeb;
 	private String statut;
 	
 	
-	public SearchOrganisationCriteria(String societe, String adresse, String cp,String localite, Integer lienBanque, Integer lienDis, Boolean isDepot,Boolean isBirb,String statut) {
+	public SearchOrganisationCriteria(String societe, String adresse, String cp,String localite, Integer lienBanque, Integer lienDis, Boolean isDepot,Boolean isBirb,Boolean isWeb, String statut) {
 		this.societe = societe;
 		this.adresse = adresse;
 		this.cp = cp;
@@ -21,6 +22,7 @@ public class SearchOrganisationCriteria {
 		this.idDis = lienDis;
 		this.isDepot = isDepot;
 		this.isBirb = isBirb;
+		this.isWeb = isWeb;
 		this.statut = statut;
 	}
 
@@ -94,6 +96,18 @@ public class SearchOrganisationCriteria {
 
 	public void setIsBirb(Boolean isBirb) {
 		this.isBirb = isBirb;
+	}
+
+
+
+	public Boolean getIsWeb() {
+		return isWeb;
+	}
+
+
+
+	public void setIsWeb(Boolean isWeb) {
+		this.isWeb = isWeb;
 	}
 
 
