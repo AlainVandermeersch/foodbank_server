@@ -798,6 +798,10 @@ public void setLienBanque(Short lienBanque) {
 
 
 
+public Integer getLienDis() {
+	return lienDis;
+}
+
 public Organisation getOrganisationObject() {
 	return organisationObject;
 }

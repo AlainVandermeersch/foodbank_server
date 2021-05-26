@@ -19,6 +19,7 @@ import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Membre;
+import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.persistence.repository.IMembreRepository;
 import foodbank.it.service.IMembreService;
@@ -41,15 +42,28 @@ public class MembreServiceImpl implements IMembreService{
 
     @Override
     public Membre save(Membre membre, boolean booCreateMode) throws Exception {  
-    	/* if (booCreateMode == true) {
+    	if (booCreateMode == true) {
     		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
         	Root<Membre> existingMembre = totalCriteriaQuery.from(Membre.class);
     		List<Predicate> predicates = new ArrayList<>();
-    		Predicate batMailPredicate = criteriaBuilder.equal(existingMembre.get("batmail"), membre.getBatmail());
-    		predicates.add(batMailPredicate);
-    	
-    		// System.out.printf("\nChecking If Member exists with e-mail: %s", membre.getBatmail());
+    		Predicate nomPredicate = criteriaBuilder.equal(existingMembre.get("nom"), membre.getNom());
+    		predicates.add(nomPredicate);
+    		Predicate prenomPredicate = criteriaBuilder.equal(existingMembre.get("prenom"), membre.getPrenom());
+    		predicates.add(prenomPredicate);
+    		Organisation orgOfMember = membre.getOrganisationObject();
+    		if (orgOfMember != null  ) {
+    			Predicate lienDisPredicate = criteriaBuilder.equal(existingMembre.get("lienDis"), orgOfMember.getIdDis());
+    			predicates.add(lienDisPredicate);    			
+    			System.out.printf("Checking If Member exists with nom: %s prenom %s in Organisation %d\n", membre.getNom(), membre.getPrenom(), orgOfMember.getIdDis());
+    		}
+    		else {
+    			Predicate lienBanquePredicate = criteriaBuilder.equal(existingMembre.get("lienBanque"), membre.getLienBanque());
+    			predicates.add(lienBanquePredicate);
+    			Predicate lienDisPredicate = criteriaBuilder.or((criteriaBuilder.equal(existingMembre.get("lienDis"),0 )),criteriaBuilder.isNull(existingMembre.get("lienDis")));
+    			predicates.add(lienDisPredicate); 
+    			System.out.printf("Checking If Member exists with nom: %s prenom %s in Bank %d\n", membre.getNom(), membre.getPrenom(),membre.getLienBanque());
+    		}
     		
     		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
     		totalCriteriaQuery.select(criteriaBuilder.count(existingMembre));
@@ -58,12 +72,12 @@ public class MembreServiceImpl implements IMembreService{
     		
 
     		if (countResult > 0) {
-    			String errorMsg = String.format("a member exists already with e-mail %s",membre.getBatmail());		
+    			String errorMsg = String.format("a member exists already with name %s %s",membre.getNom(), membre.getPrenom());		
     			throw new Exception(errorMsg);
     		}
 
     	}
-    	*/
+    	
     	
         return MembreRepository.save(membre);
     }
