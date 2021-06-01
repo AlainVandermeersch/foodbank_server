@@ -106,6 +106,9 @@ public class OrganisationController {
     	  Organisation entity = convertToEntity(updatedOrganisation);
           OrgProgram entityProgr = convertToEntityProgram(updatedOrganisation);
            Organisation Organisation = this.OrganisationService.save(entity);  
+           System.out.printf("We updated an Organisation with id: %d nom: %s in bank with id: %d\n", Organisation.getIdDis(), Organisation.getSociete(), Organisation.getLienBanque());
+           // set Liendis from updated Org into OrgProgram object
+           entityProgr.setLienDis(Organisation.getIdDis());
            OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
            return this.convertToDto(Organisation, OrgProgram,1);
     }
@@ -114,7 +117,8 @@ public class OrganisationController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrganisation(@PathVariable("idDis") Integer idDis) {
     	 try {
-    		 OrganisationService.delete(idDis);
+    		 this.OrganisationService.delete(idDis);
+    		 this.OrgProgramService.deleteByLienDis(idDis);
     	 }
          catch (Exception ex) {
          	String errorMsg = ex.getMessage();
@@ -129,7 +133,10 @@ public class OrganisationController {
     public OrganisationDto create(@RequestBody OrganisationDto newOrganisation) {
         Organisation entity = convertToEntity(newOrganisation);
        OrgProgram entityProgr = convertToEntityProgram(newOrganisation);
-        Organisation Organisation = this.OrganisationService.save(entity);  
+        Organisation Organisation = this.OrganisationService.save(entity); 
+        System.out.printf("We created an Organisation with id: %d nom: %s in bank with id: %d\n", Organisation.getIdDis(), Organisation.getSociete(), Organisation.getLienBanque());
+        // set Liendis from created Org into OrgProgram object
+        entityProgr.setLienDis(Organisation.getIdDis());
         OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
         return this.convertToDto(Organisation, OrgProgram,1);
     }
