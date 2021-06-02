@@ -1,5 +1,6 @@
 FROM alpine as builder
 
+ARG FRONTEND_URL
 ARG REDIRECT_URIS
 ARG MYSQL_HOST
 ARG MYSQL_PORT
@@ -9,6 +10,7 @@ ARG MYSQL_DATABASE
 
 COPY ./build/realm/*.json /tmp/import/realm/
 RUN sed -i 's@###REDIRECT_URIS###@'"$REDIRECT_URIS"'@' /tmp/import/realm/*.json && \
+    sed -i 's@###FRONTEND_URL###@'"$FRONTEND_URL"'@' /tmp/import/realm/*.json && \
     sed -i 's@###MYSQL_HOST###@'"$MYSQL_HOST"'@' /tmp/import/realm/*.json && \
     sed -i 's@###MYSQL_PORT###@'"$MYSQL_PORT"'@' /tmp/import/realm/*.json && \
     sed -i 's@###MYSQL_USER###@'"$MYSQL_USER"'@' /tmp/import/realm/*.json && \

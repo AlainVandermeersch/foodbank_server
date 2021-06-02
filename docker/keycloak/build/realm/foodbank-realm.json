@@ -2337,7 +2337,8 @@
     "clientOfflineSessionMaxLifespan": "0",
     "clientSessionIdleTimeout": "0",
     "clientSessionMaxLifespan": "0",
-    "clientOfflineSessionIdleTimeout": "0"
+    "clientOfflineSessionIdleTimeout": "0",
+    "frontendUrl": "###FRONTEND_URL###"
   },
   "keycloakVersion": "12.0.4",
   "userManagedAccessAllowed": false
