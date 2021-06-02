@@ -68,6 +68,7 @@ services:
         - MYSQL_DATABASE=${MYSQL_DATABASE}
     ports:
       - "8083:8080"
+      - "8443:8443"
       - "8787:8787"
     environment:
       - DEBUG_PORT=*:8787
