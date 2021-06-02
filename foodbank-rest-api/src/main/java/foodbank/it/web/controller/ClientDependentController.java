@@ -1,27 +1,17 @@
 package foodbank.it.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import foodbank.it.persistence.model.ClientDependent;
 import foodbank.it.service.IClientDependentService;
 import foodbank.it.service.SearchClientDependentCriteria;
 import foodbank.it.web.dto.ClientDependentDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -33,7 +23,7 @@ public class ClientDependentController {
         this.ClientDependentService = ClientDependentService;
        
     }
-    @CrossOrigin
+
     @GetMapping("dependent/{idDep}")
     public ClientDependentDto findOne(@PathVariable Integer idDep) {
         ClientDependent entity = this.ClientDependentService.findByIdDep(idDep)
@@ -42,7 +32,7 @@ public class ClientDependentController {
     }
     
     
-    @CrossOrigin
+
     @GetMapping("dependents/")
     public Iterable<ClientDependentDto> find(
 			@RequestParam String lienMast,
@@ -57,19 +47,19 @@ public class ClientDependentController {
 		return clientDependentDtos;
 
     }
-    @CrossOrigin
+
     @PutMapping("dependent/{idDep}")
     public ClientDependentDto updateClientDependent(@PathVariable("idDep") Integer idDep, @RequestBody ClientDependentDto updatedClientDependent) {
         ClientDependent ClientDependentEntity = convertToEntity(updatedClientDependent);
         return this.convertToDto(this.ClientDependentService.save(ClientDependentEntity));
     }
-    @CrossOrigin
+
     @DeleteMapping("dependent/{idDep}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClientDependent(@PathVariable("idDep") Integer idDep) {
         this.ClientDependentService.delete(idDep);
     }
-    @CrossOrigin
+
     @PostMapping("dependent/")
     @ResponseStatus(HttpStatus.CREATED)
     public ClientDependentDto create(@RequestBody ClientDependentDto newClientDependent) {

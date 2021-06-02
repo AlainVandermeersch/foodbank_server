@@ -1,32 +1,22 @@
 package foodbank.it.web.controller;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
 import foodbank.it.web.dto.TUserDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 
@@ -41,7 +31,7 @@ public class TUserController {
     }
 
     //
-    @CrossOrigin
+
     @GetMapping(value = "user/{idUser}")
     public TUserDto findOne(@PathVariable String idUser) {
         TUser entity = TUserService.findByIdUser(idUser)
@@ -51,7 +41,7 @@ public class TUserController {
    
    
 
-    @CrossOrigin
+
     @GetMapping("users/")     
     public Collection<TUserDto> find( @RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
@@ -81,7 +71,7 @@ public class TUserController {
 				.collect(Collectors.toList());
     }
     
-    @CrossOrigin
+
     @PutMapping("user/{idUser}")
     public TUserDto updateTUser(@PathVariable("idUser") String idUser, @RequestBody TUserDto updatedTUser) {
         TUser TUserEntity = convertToEntity(updatedTUser);
@@ -96,13 +86,13 @@ public class TUserController {
     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    @CrossOrigin
+
     @DeleteMapping("user/{idUser}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTUser(@PathVariable("idUser") String idUser) {
         TUserService.delete(idUser);
     }
-    @CrossOrigin
+
     @PostMapping("user/")
     @ResponseStatus(HttpStatus.CREATED)
     public TUserDto create(@RequestBody TUserDto newTUser) {

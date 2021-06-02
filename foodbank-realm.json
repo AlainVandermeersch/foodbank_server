@@ -840,7 +840,7 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
-      "redirectUris": [ "###REDIRECT_URIS###" ],
+      "redirectUris": [ "http://localhost:4200/*,http://localhost:4200/" ],
       "webOrigins": [
         "*"
       ],
@@ -1648,13 +1648,13 @@
             "com.mysql.cj.jdbc.Driver"
           ],
           "password": [
-            "###MYSQL_PASSWORD###"
+            "fl11tw00d"
           ],
           "validationQuery": [
             "select 1 from dual"
           ],
           "jdbcUrl": [
-            "jdbc:mysql://###MYSQL_HOST###:###MYSQL_PORT###/###MYSQL_DATABASE###?zeroDateTimeBehavior=convertToNull&serverTimezone=Europe/Brussels"
+            "jdbc:mysql://localhost:3306/banque_alimentaire?zeroDateTimeBehavior=convertToNull&serverTimezone=Europe/Brussels"
           ],
           "cachePolicy": [
             "DEFAULT"
@@ -1666,7 +1666,7 @@
             "true"
           ],
           "username": [
-            "###MYSQL_USER###"
+            "root"
           ]
         }
       }

@@ -1,27 +1,17 @@
 package foodbank.it.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import foodbank.it.persistence.model.OrgPerso;
 import foodbank.it.service.IOrgPersoService;
 import foodbank.it.service.SearchOrgPersoCriteria;
 import foodbank.it.web.dto.OrgPersoDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -33,7 +23,7 @@ public class OrgPersoController {
        this.OrgPersoService = OrgPersoService;
       
    }
-   @CrossOrigin
+
    @GetMapping("orgcontact/{orgPersId}")
    public OrgPersoDto findOne(@PathVariable Integer orgPersId) {
        OrgPerso entity = this.OrgPersoService.findByOrgPersId(orgPersId)
@@ -42,7 +32,7 @@ public class OrgPersoController {
    }
    
    
-   @CrossOrigin
+
    @GetMapping("orgcontacts/")
    public Iterable<OrgPersoDto> find(
 			@RequestParam String lienAsso,
@@ -57,19 +47,19 @@ public class OrgPersoController {
 		return orgPersoDtos;
 
    }
-   @CrossOrigin
+
    @PutMapping("orgcontact/{orgPersId}")
    public OrgPersoDto updateOrgPerso(@PathVariable("orgPersId") Integer orgPersId, @RequestBody OrgPersoDto updatedOrgPerso) {
        OrgPerso OrgPersoEntity = convertToEntity(updatedOrgPerso);
        return this.convertToDto(this.OrgPersoService.save(OrgPersoEntity));
    }
-   @CrossOrigin
+
    @DeleteMapping("orgcontact/{orgPersId}")
    @ResponseStatus(HttpStatus.NO_CONTENT)
    public void deleteOrgPerso(@PathVariable("orgPersId") Integer orgPersId) {
        this.OrgPersoService.deleteByOrgPersId(orgPersId);
    }
-   @CrossOrigin
+
    @PostMapping("orgcontact/")
    @ResponseStatus(HttpStatus.CREATED)
    public OrgPersoDto create(@RequestBody OrgPersoDto newOrgPerso) {

@@ -16,43 +16,6 @@ services:
     networks:
       - foodbank
 
-  frontend:
-    image: foodbank-client:docker-local
-    ports:
-      - "80:80"
-      - "443:443"
-    expose:
-      - "80"
-      - "443"
-    environment:
-      - SERVER_NAME=${SERVER_NAME}
-      - BACKEND_HOST=${BACKEND_HOST}
-      - BACKEND_PORT=${BACKEND_PORT}
-      - AUTH_HOST=${AUTH_HOST}
-      - AUTH_PORT=${AUTH_PORT}
-    volumes:
-      - letsencrypt-data:/home/letsencrypt/data
-      - letsencrypt-certs:/home/letsencrypt/certs
-    networks:
-      - foodbank
-
-  backend:
-    depends_on:
-      - mysql
-    build: ./
-    ports:
-      - "8081:8081"
-    expose:
-      - "8081"
-    environment:
-      - MYSQL_HOST=${MYSQL_HOST}
-      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
-      - AUTH_SERVER_BASE_URL=${AUTH_SERVER_BASE_URL}
-      - DATASOURCE_USERNAME=${MYSQL_USER}
-      - DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
-    networks:
-      - foodbank
-
   keycloak:
     depends_on:
       - mysql
@@ -84,5 +47,3 @@ networks:
 
 volumes:
   mysql-data:
-  letsencrypt-data:
-  letsencrypt-certs:

@@ -1,33 +1,23 @@
 package foodbank.it.web.controller;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchMembreCriteria;
 import foodbank.it.web.dto.MembreDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 
@@ -41,7 +31,7 @@ public class MembreController {
         this.MembreService = MembreService;     
         this.OrganisationService = OrganisationService; 
     }
-    @CrossOrigin
+
     @GetMapping("membre/{batId}")
     public MembreDto findOne(@PathVariable Integer batId) {
         Membre entity = MembreService.findByBatId(batId)
@@ -49,7 +39,7 @@ public class MembreController {
         return convertToDto(entity,1);
     }
     
-    @CrossOrigin
+
     @GetMapping("membres/")
     public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
@@ -79,7 +69,7 @@ public class MembreController {
 				.map(Membre -> convertToDto(Membre, totalElements))
 				.collect(Collectors.toList());
     }
-    @CrossOrigin
+
     @PutMapping("membre/{batId}")
     public MembreDto updateMembre(@PathVariable("batId") Integer batId, @RequestBody MembreDto updatedMembre) {
         Membre entity = convertToEntity(updatedMembre);
@@ -94,7 +84,7 @@ public class MembreController {
         		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
             }
     }
-    @CrossOrigin
+
     @DeleteMapping("membre/{batId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMembre(@PathVariable("batId") Integer batId) {
@@ -107,7 +97,7 @@ public class MembreController {
      		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
          }
     }
-    @CrossOrigin
+
     @PostMapping("membre/")
     @ResponseStatus(HttpStatus.CREATED)
     public MembreDto create(@RequestBody MembreDto newMembre) {

@@ -1,30 +1,20 @@
 package foodbank.it.web.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import foodbank.it.persistence.model.Cpas;
 import foodbank.it.service.ICpasService;
+import foodbank.it.web.dto.CpasDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import foodbank.it.web.dto.CpasDto;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 @RestController
@@ -37,7 +27,7 @@ public class CpasController {
         this.CpasService = CpasService;
        
     }
-    @CrossOrigin
+
     @GetMapping("cpas/{cpasId}")
     public CpasDto findOne(@PathVariable Integer cpasId) {
         Cpas entity = CpasService.findByCpasId(cpasId)
@@ -45,7 +35,7 @@ public class CpasController {
         return convertToDto(entity,1);
     }
    
-    @CrossOrigin
+
     @GetMapping("cpases/")
     public Collection<CpasDto> find( @RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
@@ -84,19 +74,19 @@ public class CpasController {
         }
         return CpasDtos;
     }
-    @CrossOrigin
+
     @PutMapping("cpas/{cpasId}")
     public CpasDto updateCpas(@PathVariable("cpasId") Integer cpasId, @RequestBody CpasDto updatedCpas) {
         Cpas CpasEntity = convertToEntity(updatedCpas);
         return this.convertToDto(this.CpasService.save(CpasEntity),1);
     }
-    @CrossOrigin
+
     @DeleteMapping("cpas/{cpasId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCpas(@PathVariable("cpasId") Integer cpasId) {
         CpasService.delete(cpasId);
     }
-    @CrossOrigin
+
     @PostMapping("cpas/")
     @ResponseStatus(HttpStatus.CREATED)
     public CpasDto create(@RequestBody CpasDto newCpas) {

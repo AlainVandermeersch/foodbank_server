@@ -1,20 +1,12 @@
 package foodbank.it.web.controller;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import foodbank.it.persistence.model.OrgProgram;
 import foodbank.it.service.IOrgProgramService;
 import foodbank.it.web.dto.OrgProgramDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class OrgProgramController {
@@ -23,26 +15,26 @@ public class OrgProgramController {
     public OrgProgramController(IOrgProgramService OrgProgramService) {
         this.OrgProgramService = OrgProgramService;        
     }
-    @CrossOrigin
+
     @GetMapping("orgProgram/{lienDis}")
     public OrgProgramDto findOne(@PathVariable Integer lienDis) {
         OrgProgram entity = OrgProgramService.findByLienDis(lienDis)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return convertToDto(entity);
     }
-    @CrossOrigin
+
     @PutMapping("orgProgram/{lienDis}")
     public OrgProgramDto updateOrgProgram(@PathVariable("lienDis") Integer lienDis, @RequestBody OrgProgramDto updatedOrgProgram) {
         OrgProgram OrgProgramEntity = convertToEntity(updatedOrgProgram);
         return this.convertToDto(this.OrgProgramService.save(OrgProgramEntity));
     }
-    @CrossOrigin
+
     @DeleteMapping("orgProgram/{lienDis}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrgProgram(@PathVariable("lienDis") Integer lienDis) {
         OrgProgramService.deleteByLienDis(lienDis);
     }
-    @CrossOrigin
+
     @PostMapping("orgProgram/")
     @ResponseStatus(HttpStatus.CREATED)
     public OrgProgramDto create(@RequestBody OrgProgramDto newOrgProgram) {

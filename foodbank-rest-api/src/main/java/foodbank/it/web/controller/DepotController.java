@@ -1,25 +1,16 @@
 package foodbank.it.web.controller;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import foodbank.it.persistence.model.Depot;
 import foodbank.it.service.IDepotService;
 import foodbank.it.web.dto.DepotDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @RestController
 
@@ -30,7 +21,7 @@ public class DepotController {
     public DepotController(IDepotService DepotService) {
         this.DepotService = DepotService;      
     }
-    @CrossOrigin
+
     @GetMapping("depot/{idDepot}")
     public DepotDto findOne(@PathVariable String idDepot) {
         Depot entity = DepotService.findByIdDepot(idDepot)
@@ -38,7 +29,7 @@ public class DepotController {
         return convertToDto(entity);
     }
     
-    @CrossOrigin
+
     @GetMapping("depots/")
     public Collection<DepotDto> find( @RequestParam(required = false) String searchValue) {
         Iterable<Depot> selectedDepots = null;
@@ -54,19 +45,19 @@ public class DepotController {
         
         return DepotDtos;
     }
-    @CrossOrigin
+
     @PutMapping("depot/{idDepot}")
     public DepotDto updateDepot(@PathVariable("idDepot") Integer idDepot, @RequestBody DepotDto updatedDepot) {
         Depot DepotEntity = convertToEntity(updatedDepot);
         return this.convertToDto(this.DepotService.save(DepotEntity));
     }
-    @CrossOrigin
+
     @DeleteMapping("depot/{idDepot}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDepot(@PathVariable("idDepot") String idDepot) {
         DepotService.delete(idDepot);
     }
-    @CrossOrigin
+
     @PostMapping("depot/")
     @ResponseStatus(HttpStatus.CREATED)
     public DepotDto create(@RequestBody DepotDto newDepot) {

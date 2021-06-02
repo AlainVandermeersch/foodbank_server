@@ -1,26 +1,4 @@
 package foodbank.it.web.controller;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import foodbank.it.persistence.model.OrgProgram;
 import foodbank.it.persistence.model.Organisation;
@@ -28,6 +6,19 @@ import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
 import foodbank.it.web.dto.OrganisationDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -42,7 +33,7 @@ public class OrganisationController {
         this.OrganisationService = OrganisationService;  
         this.OrgProgramService = OrgProgramService;
     }
-    @CrossOrigin
+
     @GetMapping("organisation/{idDis}")
     public OrganisationDto findOne(@PathVariable Integer idDis) {
     	Organisation o = OrganisationService.findByIdDis(idDis)
@@ -58,7 +49,7 @@ public class OrganisationController {
 
     }
     
-    @CrossOrigin
+
     @GetMapping("organisations/")
     public Collection<OrganisationDto> find( @RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
@@ -100,7 +91,7 @@ public class OrganisationController {
      
         return OrganisationDtos;
     }
-    @CrossOrigin
+
     @PutMapping("organisation/{idDis}")
     public OrganisationDto updateOrganisation(@PathVariable("idDis") Integer idDis, @RequestBody OrganisationDto updatedOrganisation) {
     	  Organisation entity = convertToEntity(updatedOrganisation);
@@ -112,7 +103,7 @@ public class OrganisationController {
            OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
            return this.convertToDto(Organisation, OrgProgram,1);
     }
-    @CrossOrigin
+
     @DeleteMapping("organisation/{idDis}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrganisation(@PathVariable("idDis") Integer idDis) {
@@ -127,7 +118,7 @@ public class OrganisationController {
          }
         
     }
-    @CrossOrigin
+
     @PostMapping("organisation/")
     @ResponseStatus(HttpStatus.CREATED)
     public OrganisationDto create(@RequestBody OrganisationDto newOrganisation) {
