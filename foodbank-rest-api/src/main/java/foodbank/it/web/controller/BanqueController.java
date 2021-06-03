@@ -32,7 +32,7 @@ public class BanqueController {
         return convertToDto(entity);
     }
 
-    @RolesAllowed({"admin", "admin_banq"})
+//    @RolesAllowed({"admin", "admin_banq"})
     @GetMapping(value = "banque/getByShortName/{bankShortName}")
     public BanqueDto findOne(@PathVariable String bankShortName) {
         Banque entity = BanqueService.findByBankShortName(bankShortName)
