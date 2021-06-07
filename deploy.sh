@@ -9,7 +9,7 @@ git pull --rebase upstream master
 rm -rf target
 mkdir target
 cd target && \
-    git clone https://github.com/eciuca/foodbank-client.git && \
+    git clone https://github.com/AlainVandermeersch/foodbank-client.git && \
     cd foodbank-client && \
     docker build -t foodbank-client .
 
