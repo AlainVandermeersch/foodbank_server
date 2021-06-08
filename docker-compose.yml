@@ -17,7 +17,7 @@ services:
       - foodbank
 
   frontend:
-    image: foodbank-client
+    image: foodbank-client:docker-local
     ports:
       - "80:80"
       - "443:443"
