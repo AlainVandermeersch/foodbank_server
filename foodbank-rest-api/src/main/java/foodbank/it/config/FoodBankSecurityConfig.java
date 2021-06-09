@@ -40,7 +40,9 @@ public class FoodBankSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins(System.getenv("CORS_ALLOWED_ORIGINS"));
+				registry.addMapping("/**")
+						.allowedOrigins(System.getenv("CORS_ALLOWED_ORIGINS"))
+						.allowedMethods("*");
 			}
 		};
 	}
