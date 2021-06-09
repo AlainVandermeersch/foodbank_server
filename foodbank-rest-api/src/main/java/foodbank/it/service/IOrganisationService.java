@@ -16,4 +16,6 @@ public interface IOrganisationService {
 	
 	Page<Organisation> findAll(SearchOrganisationCriteria searchCriteria, Pageable pageable);
 
+	Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable);
+
 }

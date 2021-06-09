@@ -23,6 +23,7 @@ import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
+import foodbank.it.service.SearchOrganisationSummariesCriteria;
 @Service
 public class OrganisationServiceImpl implements IOrganisationService{
 
@@ -140,14 +141,52 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate statutPredicate = criteriaBuilder.like(organisation.get("statut"), "%" + statut + "%");
 			predicates.add(statutPredicate);
 		}
+		if (lienBanque != null) {
 		Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
-	
+		}
 		
 		if (idDis != null) {
 			Predicate lienIdDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), idDis);
 			predicates.add(lienIdDisPredicate);
 		}
+
+		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
+		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));
+
+		TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
+		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+		query.setMaxResults(pageable.getPageSize());
+
+		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Organisation.class)));
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		long countResult = countQuery.getSingleResult();
+
+		List<Organisation> resultList = query.getResultList();
+		return new PageImpl<>(resultList, pageable, countResult);
+	}
+	@Override
+	public Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
+		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
+
+		List<Predicate> predicates = new ArrayList<>();
+		String societe = searchCriteria.getSociete();
+		Integer lienBanque = searchCriteria.getLienBanque();		
+		
+		if (societe != null ) {			
+
+			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
+			predicates.add(prenomPredicate);
+		}
+		if (lienBanque != null) {
+			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
+			predicates.add(lienBanquePredicate);
+		}
+		
 
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));

@@ -5,7 +5,9 @@ import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
+import foodbank.it.service.SearchOrganisationSummariesCriteria;
 import foodbank.it.web.dto.OrganisationDto;
+import foodbank.it.web.dto.OrganisationSummaryDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -91,7 +93,31 @@ public class OrganisationController {
      
         return OrganisationDtos;
     }
+  
+    @GetMapping("orgsummaries/")
+    public Collection<OrganisationSummaryDto> findSummaries( 
+    		@RequestParam(required = false) String societe, 
+    		@RequestParam(required = false) String lienBanque ) {
+        Page<Organisation> selectedOrganisations = null;
 
+        Pageable pageRequest = PageRequest.of(0, 300, Sort.by("societe").ascending());
+       
+        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);        
+        
+		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger);
+		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);
+		
+		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();
+		{
+			selectedOrganisations.forEach(o -> {
+				organisationSummaryDtos.add(convertToSummaryDto(o));
+			});
+	
+		}
+		return organisationSummaryDtos;
+        
+    }
+    @CrossOrigin
     @PutMapping("organisation/{idDis}")
     public OrganisationDto updateOrganisation(@PathVariable("idDis") Integer idDis, @RequestBody OrganisationDto updatedOrganisation) {
     	  Organisation entity = convertToEntity(updatedOrganisation);
@@ -130,6 +156,10 @@ public class OrganisationController {
         entityProgr.setLienDis(Organisation.getIdDis());
         OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
         return this.convertToDto(Organisation, OrgProgram,1);
+    }
+    protected OrganisationSummaryDto convertToSummaryDto(Organisation entity) {
+    	OrganisationSummaryDto dto = new OrganisationSummaryDto(entity.getIdDis(),entity.getSociete());
+    	return dto;
     }
    
 	protected OrganisationDto convertToDto(Organisation entity,OrgProgram entityOrgProgram,long totalRecords) {
