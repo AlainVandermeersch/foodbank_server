@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -93,10 +94,12 @@ public class TUserController {
         TUserService.delete(idUser);
     }
 
+    private BCryptPasswordEncoder passwordEncoder;
     @PostMapping("user/")
     @ResponseStatus(HttpStatus.CREATED)
     public TUserDto create(@RequestBody TUserDto newTUser) {
         TUser entity = convertToEntity(newTUser);
+        entity.setPassword(passwordEncoder.encode(newTUser.getPassword()));
         boolean booCreateMode = true;
         try {
         	TUser tuser = this.TUserService.save(entity,booCreateMode);
