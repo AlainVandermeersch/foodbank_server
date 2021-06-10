@@ -28,7 +28,7 @@ public class TUserController {
     
     public TUserController(ITUserService TUserService,IOrganisationService OrganisationService) {
         this.TUserService = TUserService;
-        this.OrganisationService = OrganisationService; 
+        this.OrganisationService = OrganisationService;
     }
 
     //
@@ -94,11 +94,12 @@ public class TUserController {
         TUserService.delete(idUser);
     }
 
-    private BCryptPasswordEncoder passwordEncoder;
+
     @PostMapping("user/")
     @ResponseStatus(HttpStatus.CREATED)
     public TUserDto create(@RequestBody TUserDto newTUser) {
         TUser entity = convertToEntity(newTUser);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         entity.setPassword(passwordEncoder.encode(newTUser.getPassword()));
         boolean booCreateMode = true;
         try {
