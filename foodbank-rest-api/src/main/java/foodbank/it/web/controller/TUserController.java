@@ -1,7 +1,9 @@
 package foodbank.it.web.controller;
 
+import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
+import foodbank.it.service.IMembreService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
@@ -25,10 +27,12 @@ public class TUserController {
 
     private ITUserService TUserService;
     private IOrganisationService OrganisationService;
+    private IMembreService MembreService;
     
-    public TUserController(ITUserService TUserService,IOrganisationService OrganisationService) {
+    public TUserController(ITUserService TUserService,IOrganisationService OrganisationService, IMembreService MembreService) {
         this.TUserService = TUserService;
         this.OrganisationService = OrganisationService;
+        this.MembreService = MembreService;
     }
 
     //
@@ -121,6 +125,18 @@ public class TUserController {
     	if (orgOfUser != null) {
     		societe = orgOfUser.getSociete();
     	}
+    	String membreNom = "";
+    	String membrePrenom = "";
+    	String membreEmail = "";
+    	Short membreLangue = 0;
+    	Membre membreOfUser = entity.getMembreObject();
+    	if (membreOfUser != null) {
+    		membreNom = membreOfUser.getNom();
+    		membrePrenom = membreOfUser.getPrenom();
+    		membreEmail = membreOfUser.getBatmail();
+    		membreLangue = membreOfUser.getLangue();
+    		
+    	}
     	
     	boolean booActif= entity.getActif() == 1;
     	boolean booDroit1= entity.getDroit1() == 1;
@@ -133,17 +149,21 @@ public class TUserController {
     	boolean booGestDon = entity.getGestDon() == 1;
         TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), booActif, entity.getRights(), entity.getPassword(), entity.getDepot(), booDroit1, entity.getEmail(), 
         		booGestBen, booGestInv, booGestFead, booGestAsso,
-        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),societe,totalRecords);       
+        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),societe,membreNom,membrePrenom,membreEmail, membreLangue, totalRecords);       
         return dto;
     }
 
     protected TUser convertToEntity(TUserDto dto) {
     	
-    	Organisation orgOfUser = null;
-    	
+    	Organisation orgOfUser = null;    	
     	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getIdOrg());
-    		if (org.isPresent() == true) orgOfUser = org.get() ;
-        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), orgOfUser, dto.getIdLanguage(), dto.getLienBat(), 
+    	if (org.isPresent() == true) orgOfUser = org.get() ;
+    		
+    	Membre membreOfUser = null;
+    	Optional<Membre> membre = this.MembreService.findByBatId(dto.getLienBat());
+    	if (membre.isPresent()) membreOfUser = membre.get();
+    		
+        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), orgOfUser, dto.getIdLanguage(), membreOfUser, 
         		(short) (dto.getActif() ? 1 : 0) , dto.getRights(), dto.getPassword(), dto.getDepot(), (short) (dto.getDroit1() ? 1 : 0) , dto.getEmail(), 
         		(short) (dto.getGestBen() ? 1 : 0) , (short) (dto.getGestInv() ? 1 : 0) , (short) (dto.getGestFead() ? 1 : 0) , (short) (dto.getGestAsso() ? 1 : 0) ,
         		(short) (dto.getGestCpas() ? 1 : 0) , (short) (dto.getGestMemb() ? 1 : 0) ,(short) (dto.getGestDon() ? 1 : 0) , dto.getLienBanque(), dto.getLienCpas());

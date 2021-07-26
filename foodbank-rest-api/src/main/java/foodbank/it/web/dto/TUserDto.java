@@ -44,7 +44,11 @@ public class TUserDto {
      
     private int lienCpas;
     
-    private String societe; // calculated field from organisation object
+    private String societe; // derived field from organisation object
+    private String membreNom; // derived fields from membre  object
+    private String membrePrenom;
+    private String membreEmail;
+    private Short membreLangue;
     
     private Long  totalRecords;
      
@@ -56,7 +60,7 @@ public class TUserDto {
     }
     public TUserDto(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String depot, 
     		boolean droit1, String email, boolean gestBen, boolean gestInv, boolean gestFead, boolean gestAsso,
-        boolean gestCpas, boolean gestMemb, boolean gestDon, int lienBanque, int lienCpas,String societe,Long  totalRecords) {
+        boolean gestCpas, boolean gestMemb, boolean gestDon, int lienBanque, int lienCpas,String societe,String membreNom, String membrePrenom, String membreEmail, Short membreLangue, Long  totalRecords) {
         super();
         this.idUser = idUser;
         this.userName = userName;
@@ -80,6 +84,10 @@ public class TUserDto {
         this.lienBanque = lienBanque;
         this.lienCpas = lienCpas;
         this.societe = societe;
+        this.membreNom = membreNom;
+        this.membrePrenom = membrePrenom;
+        this.membreEmail = membreEmail;
+        this.membreLangue = membreLangue;       
         this.totalRecords = totalRecords;
         
     }
@@ -255,6 +263,20 @@ public class TUserDto {
    
     public String getSociete() {
 		return societe;
+	}
+    
+	public String getMembreNom() {
+		return membreNom;
+	}
+	public String getMembrePrenom() {
+		return membrePrenom;
+	}
+	
+	public String getMembreEmail() {
+		return membreEmail;
+	}
+	public Short getMembreLangue() {
+		return membreLangue;
 	}
 	public Long  getTotalRecords() {
 		return totalRecords;

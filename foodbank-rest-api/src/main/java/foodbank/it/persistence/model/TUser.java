@@ -36,7 +36,7 @@ public class TUser implements Serializable {
     private Integer idOrg;
     @Column(name="ID_LANGUAGE", length=2)
     private String idLanguage;
-    @Column(name="lien_bat", nullable=false, precision=10)
+    @Column(name="lien_bat", nullable=false, precision=10,insertable=false,updatable=false)
     private int lienBat;
     @Column(name="ACTIF", nullable=false, precision=10)
     private int actif;
@@ -80,14 +80,26 @@ public class TUser implements Serializable {
    	public void setOrganisationObject(Organisation organisationObject) {
    		this.organisationObject = organisationObject;
    	}
-   
+    @ManyToOne
+    @JoinColumn(name="lien_bat")
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Membre membreObject;
+    
+    
+    public Membre getMembreObject() {
+		return membreObject;
+	}
 
-    /** Default constructor. */
+	public void setMembreObject(Membre membreObject) {
+		this.membreObject = membreObject;
+	}
+
+	/** Default constructor. */
     protected TUser() {
         super();
     }
 
-    public TUser(String idUser, String userName, String idCompany, Organisation organisationObject, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
+    public TUser(String idUser, String userName, String idCompany, Organisation organisationObject, String idLanguage, Membre membreObject, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
         int gestAsso, int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas) {
         super();
         this.idUser = idUser;
@@ -95,7 +107,7 @@ public class TUser implements Serializable {
         this.idCompany = idCompany;
         this.organisationObject = organisationObject;
         this.idLanguage = idLanguage;
-        this.lienBat = lienBat;
+        this.membreObject = membreObject;
         this.actif = actif;
         this.rights = rights;
         this.password = password;
