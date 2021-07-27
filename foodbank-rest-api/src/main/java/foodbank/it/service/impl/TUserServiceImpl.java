@@ -8,11 +8,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import foodbank.it.persistence.model.TUser;
+import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.repository.ITUserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -80,15 +82,18 @@ public class TUserServiceImpl implements ITUserService {
     @Override 
     public Page<TUser> findAll(SearchTUserCriteria searchCriteria, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		
 		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
-		Root<TUser> tuser = tuserQuery.from(TUser.class);
+		Root<TUser> tuser = tuserQuery.from(TUser.class);		
+		Join<TUser, Membre> membre = tuser.join("membreObject");
 
 		List<Predicate> predicates = new ArrayList<>();
 
 		String idUser = searchCriteria.getIdUser();
-		String userName = searchCriteria.getUserName();
-		String idLanguage = searchCriteria.getIdLanguage();
-		String email = searchCriteria.getEmail();
+		String membreNom = searchCriteria.getMembreNom();
+		String membrePrenom = searchCriteria.getMembrePrenom();
+		Integer membreLangue = searchCriteria.getMembreLangue();
+		String membreEmail = searchCriteria.getMembreEmail();
 		String rights = searchCriteria.getRights();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idOrg = searchCriteria.getIdOrg();
@@ -98,20 +103,25 @@ public class TUserServiceImpl implements ITUserService {
 			Predicate idUserPredicate = criteriaBuilder.like(tuser.get("idUser"), "%" + idUser.toLowerCase() + "%");
 			predicates.add(idUserPredicate);
 		}
-		if (userName != null) {			
+		if (membreNom != null) {			
 
-			Predicate userNamePredicate = criteriaBuilder.like(tuser.get("userName"), "%" + userName.toLowerCase() + "%");
-			predicates.add(userNamePredicate);
+			Predicate membreNomPredicate = criteriaBuilder.like(membre.<String>get("nom"), "%" + membreNom.toLowerCase() + "%");
+			predicates.add(membreNomPredicate);
 		}
-		if (idLanguage != null) {			
+		if (membrePrenom != null) {			
 
-			Predicate idLanguagePredicate = criteriaBuilder.like(tuser.get("idLanguage"), "%" + idLanguage.toLowerCase() + "%");
-			predicates.add(idLanguagePredicate);
+			Predicate membrePrenomPredicate = criteriaBuilder.like(membre.<String>get("prenom"), "%" + membrePrenom.toLowerCase() + "%");
+			predicates.add(membrePrenomPredicate);
 		}
-		if (email != null) {			
+		
+		if (membreEmail != null) {			
 
-			Predicate emailPredicate = criteriaBuilder.like(tuser.get("email"), "%" + email.toLowerCase() + "%");
+			Predicate emailPredicate = criteriaBuilder.like(membre.<String>get("batmail"), "%" + membreEmail.toLowerCase() + "%");
 			predicates.add(emailPredicate);
+		}
+		if (membreLangue != null) {
+			Predicate languePredicate = criteriaBuilder.equal(membre.<Integer>get("langue"), membreLangue);
+			predicates.add(languePredicate);
 		}
 		if (rights != null) {			
 

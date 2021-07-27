@@ -3,18 +3,20 @@ package foodbank.it.service;
 public class SearchTUserCriteria {
 	
 	private String idUser;
-	private String userName;
-	private String idLanguage;
-	private String email;
+	private String membreNom;
+	private String membrePrenom;
+	private Integer  membreLangue;
+	private String membreEmail;
 	private String rights;
 	private Integer lienBanque;
 	private Integer idOrg;
 	
-	public SearchTUserCriteria(String idUser, String userName,String idLanguage,String email,String rights, Integer lienBanque, Integer idOrg) {
+	public SearchTUserCriteria(String idUser, String membreNom,String membrePrenom,Integer membreLangue,String membreEmail,String rights, Integer lienBanque, Integer idOrg) {
 		this.idUser = idUser;
-		this.userName = userName;
-		this.idLanguage = idLanguage;
-		this.email = email;
+		this.membreNom = membreNom;
+		this.membrePrenom = membrePrenom;
+		this.membreLangue = membreLangue;
+		this.membreEmail = membreEmail;
 		this.rights = rights;
 		this.lienBanque = lienBanque;
 		this.idOrg = idOrg;
@@ -33,39 +35,50 @@ public class SearchTUserCriteria {
 	}
 
 
-
-	public String getUserName() {
-		return userName;
+	public String getMembreNom() {
+		return membreNom;
 	}
 
 
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setMembreNom(String membreNom) {
+		this.membreNom = membreNom;
 	}
 
 
 
-	public String getIdLanguage() {
-		return idLanguage;
+	public String getMembrePrenom() {
+		return membrePrenom;
 	}
 
 
 
-	public void setIdLanguage(String idLanguage) {
-		this.idLanguage = idLanguage;
+	public void setMembrePrenom(String membrePrenom) {
+		this.membrePrenom = membrePrenom;
 	}
 
 
 
-	public String getEmail() {
-		return email;
+	public Integer getMembreLangue() {
+		return membreLangue;
 	}
 
 
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setMembreLangue(Integer membreLangue) {
+		this.membreLangue = membreLangue;
+	}
+
+
+
+	public String getMembreEmail() {
+		return membreEmail;
+	}
+
+
+
+	public void setMembreEmail(String membreEmail) {
+		this.membreEmail = membreEmail;
 	}
 
 
