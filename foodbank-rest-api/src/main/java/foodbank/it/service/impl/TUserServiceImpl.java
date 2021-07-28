@@ -145,16 +145,21 @@ public class TUserServiceImpl implements ITUserService {
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));
 
 		TypedQuery<TUser> query = entityManager.createQuery(tuserQuery);
+        long countResult =  query.getResultList().size(); // todo: delete this expensive statement and replace it by a count query
+        // as commented out below if I can make it work with a join
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
 
-		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+	/* CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+	   tuser = totalCriteriaQuery.from(TUser.class);		
+	   membre = tuser.join("membreObject");
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(TUser.class)));
 		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		long countResult = countQuery.getSingleResult();
+		long countResult = countQuery.getSingleResult(); */
 
 		List<TUser> resultList = query.getResultList();
 		return new PageImpl<>(resultList, pageable, countResult);
+		
 	}
 }
