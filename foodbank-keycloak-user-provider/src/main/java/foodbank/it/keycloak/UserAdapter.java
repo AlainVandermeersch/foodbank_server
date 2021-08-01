@@ -6,6 +6,7 @@ import org.keycloak.component.ComponentModel;
 import org.keycloak.models.GroupModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
 
@@ -75,7 +76,17 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
 
 	@Override
 	public Map<String, List<String>> getAttributes() {
-		Map<String, List<String>> attrs = super.getAttributes();
+		MultivaluedHashMap<String, String> attrs = getFederatedStorage().getAttributes(realm, this.getId());
+		if (attrs == null) {
+			attrs = new MultivaluedHashMap<>();
+		}
+		String firstName = getUsername().split(" ")[0];
+		attrs.add(UserModel.FIRST_NAME, firstName);
+		String lastName = getUsername().split(" ")[1];
+		attrs.add(UserModel.LAST_NAME, lastName);
+		attrs.add(UserModel.EMAIL, getEmail());
+		attrs.add(UserModel.USERNAME, getUsername());
+
 		MultivaluedHashMap<String, String> all = new MultivaluedHashMap<>();
 		all.putAll(attrs);
 
