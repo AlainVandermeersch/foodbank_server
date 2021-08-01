@@ -1,6 +1,5 @@
 package foodbank.it.keycloak;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.jboss.logging.Logger;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
@@ -50,12 +49,12 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
 
 	@Override
 	public String getUsername() {
-		return entity.getUsername();
+		return entity.getId();
 	}
 
 	@Override
 	public void setUsername(String username) {
-		entity.setUsername(username);
+		entity.setId(username);
 
 	}
 
