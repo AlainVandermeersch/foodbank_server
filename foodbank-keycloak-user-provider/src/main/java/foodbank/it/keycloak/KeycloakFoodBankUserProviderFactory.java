@@ -1,112 +1,45 @@
 package foodbank.it.keycloak;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
-import org.keycloak.component.ComponentValidationException;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
-import org.keycloak.provider.ProviderConfigProperty;
-import org.keycloak.provider.ProviderConfigurationBuilder;
 import org.keycloak.storage.UserStorageProviderFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.util.List;
+import javax.naming.InitialContext;
 
-import static foodbank.it.keycloak.KeycloakFoodBankUserProviderConstants.*;
+public class KeycloakFoodBankUserProviderFactory  implements UserStorageProviderFactory<NewKeycloakFoodBankUserProvider> {
 
-public class KeycloakFoodBankUserProviderFactory implements UserStorageProviderFactory<KeycloakFoodBankUserProvider> {
+	public static final String PROVIDER_ID = "foodbank-mysql-user-provider";
 
-	private static final Logger log = LoggerFactory.getLogger(KeycloakFoodBankUserProviderFactory.class);
-
-	protected final List<ProviderConfigProperty> configMetadata;
-
-	public KeycloakFoodBankUserProviderFactory() {
-		log.info("[I24] KeycloakFoodBankUserProviderFactory created");
-
-		// Create config metadata
-		configMetadata = ProviderConfigurationBuilder.create()
-				.property()
-				.name(CONFIG_KEY_JDBC_DRIVER)
-				.label("JDBC Driver Class")
-				.type(ProviderConfigProperty.STRING_TYPE)
-//				.defaultValue("org.h2.Driver")
-				.defaultValue("com.mysql.cj.jdbc.Driver")
-				.helpText("Fully qualified class name of the JDBC driver")
-				.add()
-				.property()
-				.name(CONFIG_KEY_JDBC_URL)
-				.label("JDBC URL")
-				.type(ProviderConfigProperty.STRING_TYPE)
-				.defaultValue("jdbc:mysql://mysql:3306/banque_alimentaire?zeroDateTimeBehavior=convertToNull&serverTimezone=Europe/Brussels")
-//				.defaultValue("jdbc:h2:mem:customdb")
-				.helpText("JDBC URL used to connect to the user database")
-				.add()
-				.property()
-				.name(CONFIG_KEY_DB_USERNAME)
-				.label("Database User")
-				.type(ProviderConfigProperty.STRING_TYPE)
-				.defaultValue("root")
-				.helpText("Username used to connect to the database")
-				.add()
-				.property()
-				.name(CONFIG_KEY_DB_PASSWORD)
-				.label("Database Password")
-				.type(ProviderConfigProperty.STRING_TYPE)
-				.helpText("Password used to connect to the database")
-				.secret(true)
-				.add()
-				.property()
-				.name(CONFIG_KEY_VALIDATION_QUERY)
-				.label("SQL Validation Query")
-				.type(ProviderConfigProperty.STRING_TYPE)
-				.helpText("SQL query used to validate a connection")
-				.defaultValue("select 1 from dual")
-				.add()
-				.build();
-
-	}
+	private static final Logger logger = Logger.getLogger(NewKeycloakFoodBankUserProvider.class);
 
 	@Override
-	public KeycloakFoodBankUserProvider create(KeycloakSession ksession, ComponentModel model) {
-		log.info("[I63] creating new KeycloakFoodBankUserProvider");
-		BCrypt.Hasher hasher = BCrypt.withDefaults();
-		return new KeycloakFoodBankUserProvider(ksession, model, hasher);
-	}
-
-	@Override
-	public String getId() {
-		log.info("[I69] getId()");
-		return "foodbank-mysql-user-provider";
-	}
-
-	// Configuration support methods
-	@Override
-	public List<ProviderConfigProperty> getConfigProperties() {
-		return configMetadata;
-	}
-
-	@Override
-	public void validateConfiguration(KeycloakSession session, RealmModel realm, ComponentModel config) throws ComponentValidationException {
-
-		try (Connection c = DbUtil.getConnection(config)) {
-			log.info("[I84] Testing connection...");
-			c.createStatement().execute(config.get(CONFIG_KEY_VALIDATION_QUERY));
-			log.info("[I92] Connection OK !");
-		} catch (Exception ex) {
-			log.warn("[W94] Unable to validate connection: ex={}", ex.getMessage());
-			throw new ComponentValidationException("Unable to validate database connection", ex);
+	public NewKeycloakFoodBankUserProvider create(KeycloakSession session, ComponentModel model) {
+		try {
+			InitialContext ctx = new InitialContext();
+			String name = "java:global/" + PROVIDER_ID + "/" + NewKeycloakFoodBankUserProvider.class.getSimpleName();
+			NewKeycloakFoodBankUserProvider provider = (NewKeycloakFoodBankUserProvider)ctx.lookup(name);
+			provider.setModel(model);
+			provider.setSession(session);
+			return provider;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public void onUpdate(KeycloakSession session, RealmModel realm, ComponentModel oldModel, ComponentModel newModel) {
-		log.info("[I94] onUpdate()");
+	public String getId() {
+		return PROVIDER_ID;
 	}
 
 	@Override
-	public void onCreate(KeycloakSession session, RealmModel realm, ComponentModel model) {
-		log.info("[I99] onCreate()");
+	public String getHelpText() {
+		return "Foodbank Mysql User Storage Provider";
+	}
+
+	@Override
+	public void close() {
+		logger.info("<<<<<< Closing factory");
+
 	}
 }

@@ -11,6 +11,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -29,9 +31,13 @@ services:
         - MYSQL_USER=${MYSQL_USER}
         - MYSQL_PASSWORD=${MYSQL_PASSWORD}
         - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+        - SMTP_USER=${SMTP_USER}
+        - SMTP_PASSWORD=${SMTP_PASSWORD}
     ports:
       - "8083:8080"
-      - "8787:8787"
+      - "8443:8443"
+      - "8788:8787"
     environment:
       - DEBUG_PORT=*:8787
       - DEBUG=true

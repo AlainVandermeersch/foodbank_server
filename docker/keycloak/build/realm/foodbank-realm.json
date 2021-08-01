@@ -52,6 +52,24 @@
         "attributes": {}
       },
       {
+        "id": "fb76e29a-9418-4f87-8331-1d09ce7d7718",
+        "name": "bank",
+        "description": "bank role",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "FoodBank",
+        "attributes": {}
+      },
+      {
+        "id": "fb76e29a-9418-4f87-8331-1d09ce7d7719",
+        "name": "bank_fbba",
+        "description": "bank fbba role",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "FoodBank",
+        "attributes": {}
+      },
+      {
         "id": "fb1a5802-e006-453c-99de-a4f48c30c7c3",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
@@ -127,24 +145,6 @@
         "id": "fb76e29a-9418-4f87-8331-1d09ce7d7717",
         "name": "admin_fead",
         "description": "admin FEAD role",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "FoodBank",
-        "attributes": {}
-      },
-      {
-        "id": "fb76e29a-9418-4f87-8331-1d09ce7d7718",
-        "name": "bank",
-        "description": "bank role",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "FoodBank",
-        "attributes": {}
-      },
-      {
-        "id": "fb76e29a-9418-4f87-8331-1d09ce7d7719",
-        "name": "bank_fbba",
-        "description": "bank fbba role",
         "composite": false,
         "clientRole": false,
         "containerId": "FoodBank",
@@ -475,6 +475,19 @@
       "subGroups": []
     },
     {
+      "id": "248a2a16-da23-4f99-8f54-ad87c89d6ee1",
+      "name": "admin_asso",
+      "path": "/admin_asso",
+      "attributes": {},
+      "realmRoles": [
+        "uma_authorization",
+        "offline_access",
+        "admin_asso"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
       "id": "248a2a16-da23-4f99-8f54-ad87c89d6eee",
       "name": "admin_banq",
       "path": "/admin_banq",
@@ -488,27 +501,14 @@
       "subGroups": []
     },
     {
-      "id": "248a2a16-da23-4f99-8f54-ad87c89d6ee1",
-      "name": "admin_asso",
-      "path": "/admin_asso",
-      "attributes": {},
-      "realmRoles": [
-        "admin_asso",
-        "uma_authorization",
-        "offline_access"
-      ],
-      "clientRoles": {},
-      "subGroups": []
-    },
-    {
       "id": "248a2a16-da23-4f99-8f54-ad87c89d6ee2",
       "name": "admin_cpas",
       "path": "/admin_cpas",
       "attributes": {},
       "realmRoles": [
-        "admin_cpas",
         "uma_authorization",
-        "offline_access"
+        "offline_access",
+        "admin_cpas"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -519,9 +519,9 @@
       "path": "/admin_ext",
       "attributes": {},
       "realmRoles": [
-        "admin_ext",
         "uma_authorization",
-        "offline_access"
+        "offline_access",
+        "admin_ext"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -532,9 +532,9 @@
       "path": "/admin_fbba",
       "attributes": {},
       "realmRoles": [
-        "admin_fbba",
         "uma_authorization",
-        "offline_access"
+        "offline_access",
+        "admin_fbba"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -545,9 +545,9 @@
       "path": "/admin_fead",
       "attributes": {},
       "realmRoles": [
-        "admin_fead",
         "uma_authorization",
-        "offline_access"
+        "offline_access",
+        "admin_fead"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -558,9 +558,9 @@
       "path": "/asso",
       "attributes": {},
       "realmRoles": [
-        "asso",
         "uma_authorization",
-        "offline_access"
+        "offline_access",
+        "asso"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -1519,7 +1519,15 @@
     "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
-  "smtpServer": {},
+  "smtpServer": {
+    "password": "###SMTP_PASSWORD###",
+    "starttls": "true",
+    "auth": "true",
+    "host": "in-v3.mailjet.com",
+    "from": "noreply@foodbankit.org",
+    "ssl": "true",
+    "user": "###SMTP_USER###"
+  },
   "eventsEnabled": false,
   "eventsListeners": [
     "jboss-logging"
@@ -1551,14 +1559,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-sha256-pairwise-sub-mapper",
             "saml-user-property-mapper",
-            "saml-user-attribute-mapper",
-            "saml-role-list-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-address-mapper",
+            "oidc-full-name-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-attribute-mapper",
-            "oidc-full-name-mapper"
+            "oidc-usermodel-property-mapper",
+            "saml-user-attribute-mapper",
+            "oidc-address-mapper",
+            "saml-role-list-mapper"
           ]
         }
       },
@@ -1582,14 +1590,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper",
-            "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
             "oidc-usermodel-attribute-mapper",
             "oidc-full-name-mapper",
-            "oidc-address-mapper"
+            "oidc-address-mapper",
+            "saml-user-attribute-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "saml-role-list-mapper",
+            "oidc-usermodel-property-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -1639,23 +1647,11 @@
     ],
     "org.keycloak.storage.UserStorageProvider": [
       {
-        "id": "90a74b16-6e04-4a81-b55e-998c3997a5e0",
+        "id": "41c32166-c057-48bd-b218-1ddcb4d2ad93",
         "name": "foodbank-mysql-user-provider",
         "providerId": "foodbank-mysql-user-provider",
         "subComponents": {},
         "config": {
-          "jdbcDriver": [
-            "com.mysql.cj.jdbc.Driver"
-          ],
-          "password": [
-            "###MYSQL_PASSWORD###"
-          ],
-          "validationQuery": [
-            "select 1 from dual"
-          ],
-          "jdbcUrl": [
-            "jdbc:mysql://###MYSQL_HOST###:###MYSQL_PORT###/###MYSQL_DATABASE###?zeroDateTimeBehavior=convertToNull&serverTimezone=Europe/Brussels"
-          ],
           "cachePolicy": [
             "DEFAULT"
           ],
@@ -1664,9 +1660,6 @@
           ],
           "enabled": [
             "true"
-          ],
-          "username": [
-            "###MYSQL_USER###"
           ]
         }
       }
@@ -1714,7 +1707,7 @@
   "supportedLocales": [],
   "authenticationFlows": [
     {
-      "id": "e5735bd1-c77e-489c-b751-89b2ee6e1aa1",
+      "id": "04e9e3d2-d19d-4715-808f-0aecdd4290b3",
       "alias": "Account verification options",
       "description": "Method with which to verity the existing account",
       "providerId": "basic-flow",
@@ -1738,7 +1731,7 @@
       ]
     },
     {
-      "id": "ab0d0a43-bff9-4620-82ff-880454b95262",
+      "id": "ece1e7d9-d49b-43db-b59d-644f6ccb43e1",
       "alias": "Authentication Options",
       "description": "Authentication options.",
       "providerId": "basic-flow",
@@ -1769,7 +1762,7 @@
       ]
     },
     {
-      "id": "e8f1b155-7cea-42fd-8b90-a7680fe1fd0c",
+      "id": "d1bdce58-9226-4f76-9dc3-b26dd7c92874",
       "alias": "Browser - Conditional OTP",
       "description": "Flow to determine if the OTP is required for the authentication",
       "providerId": "basic-flow",
@@ -1793,7 +1786,7 @@
       ]
     },
     {
-      "id": "50f99e27-6b61-4dc1-b132-f092970f0c63",
+      "id": "b87efda0-04ff-4b3d-b863-1ae120a070b9",
       "alias": "Direct Grant - Conditional OTP",
       "description": "Flow to determine if the OTP is required for the authentication",
       "providerId": "basic-flow",
@@ -1817,7 +1810,7 @@
       ]
     },
     {
-      "id": "1a659599-ed6b-4284-95b1-5711b0c4c62e",
+      "id": "9b1b9908-90e9-43d3-8987-7230ab4c78e5",
       "alias": "First broker login - Conditional OTP",
       "description": "Flow to determine if the OTP is required for the authentication",
       "providerId": "basic-flow",
@@ -1841,7 +1834,7 @@
       ]
     },
     {
-      "id": "c790a3a0-877d-4414-8bb5-95bc024741db",
+      "id": "f5a07423-13ce-4aa6-9546-a3fcfaf840ad",
       "alias": "Handle Existing Account",
       "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
       "providerId": "basic-flow",
@@ -1865,7 +1858,7 @@
       ]
     },
     {
-      "id": "b78c5dad-1ae9-4c68-93b8-5cfdd343edc5",
+      "id": "34d4ecd3-ac83-49e3-8cbb-fefcbae2db24",
       "alias": "Reset - Conditional OTP",
       "description": "Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.",
       "providerId": "basic-flow",
@@ -1889,7 +1882,7 @@
       ]
     },
     {
-      "id": "74ab56c3-357c-469c-8fac-e70e755bca14",
+      "id": "5ddb6a41-0a2c-4beb-beb6-3ac6634a55e1",
       "alias": "User creation or linking",
       "description": "Flow for the existing/non-existing user alternatives",
       "providerId": "basic-flow",
@@ -1914,7 +1907,7 @@
       ]
     },
     {
-      "id": "05787337-2365-419d-b0a3-a6634d78b10c",
+      "id": "d52a8f56-18b1-4c17-9b5e-99a436089499",
       "alias": "Verify Existing Account by Re-authentication",
       "description": "Reauthentication of existing account",
       "providerId": "basic-flow",
@@ -1938,7 +1931,7 @@
       ]
     },
     {
-      "id": "21d441e7-13ca-4db4-9ef8-b4def0f4dafc",
+      "id": "1f7e3545-1dc7-4a22-8fd1-fe6bba4645e1",
       "alias": "browser",
       "description": "browser based authentication",
       "providerId": "basic-flow",
@@ -1976,7 +1969,7 @@
       ]
     },
     {
-      "id": "305350b2-b24f-453d-9745-2af1d6919c1a",
+      "id": "21a0b0ec-b864-49be-805a-139139118122",
       "alias": "clients",
       "description": "Base authentication for clients",
       "providerId": "client-flow",
@@ -2014,7 +2007,7 @@
       ]
     },
     {
-      "id": "551fcfbe-0fe0-4847-9416-20838114123f",
+      "id": "c650f990-a4f3-4bf3-a0cb-645c888e99b3",
       "alias": "direct grant",
       "description": "OpenID Connect Resource Owner Grant",
       "providerId": "basic-flow",
@@ -2045,7 +2038,7 @@
       ]
     },
     {
-      "id": "cc15883b-ec68-49b1-b9e1-c4eb97bc84d1",
+      "id": "523bf888-9c67-4eea-92e5-cc7c06d2ce91",
       "alias": "docker auth",
       "description": "Used by Docker clients to authenticate against the IDP",
       "providerId": "basic-flow",
@@ -2062,7 +2055,7 @@
       ]
     },
     {
-      "id": "043000f4-3ec0-43df-b4b5-9e6fee35331b",
+      "id": "8e6891a5-44a6-410d-a922-30d535726359",
       "alias": "first broker login",
       "description": "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
       "providerId": "basic-flow",
@@ -2087,7 +2080,7 @@
       ]
     },
     {
-      "id": "2ac53e93-e85d-4faf-9e3e-7abb026a865e",
+      "id": "3e36f3ba-455a-4e32-8411-a7f49fd6e2db",
       "alias": "forms",
       "description": "Username, password, otp and other auth forms.",
       "providerId": "basic-flow",
@@ -2111,7 +2104,7 @@
       ]
     },
     {
-      "id": "8da58ef8-5b15-4bbb-a1a6-81a377be9600",
+      "id": "1e9b3da2-efac-4922-bbc3-1670845251a1",
       "alias": "http challenge",
       "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
       "providerId": "basic-flow",
@@ -2135,7 +2128,7 @@
       ]
     },
     {
-      "id": "0f4ca318-569b-4016-b0f1-ac0a7b4a8dc2",
+      "id": "1fde4890-6795-4638-977d-ab6a9abdd5b9",
       "alias": "registration",
       "description": "registration flow",
       "providerId": "basic-flow",
