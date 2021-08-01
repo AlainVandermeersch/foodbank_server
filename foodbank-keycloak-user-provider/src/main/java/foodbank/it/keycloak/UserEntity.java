@@ -3,7 +3,7 @@ package foodbank.it.keycloak;
 import javax.persistence.*;
 
 @NamedQueries({
-		@NamedQuery(name="getUserByUsername", query="select u from UserEntity u where u.username = :username"),
+		@NamedQuery(name="getUserByUsername", query="select u from UserEntity u where u.id = :username"),
 		@NamedQuery(name="getUserByEmail", query="select u from UserEntity u where u.email = :email"),
 		@NamedQuery(name="getUserCount", query="select count(u) from UserEntity u"),
 		@NamedQuery(name="getAllUsers", query="select u from UserEntity u"),
