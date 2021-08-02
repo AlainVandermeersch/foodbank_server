@@ -80,9 +80,10 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
 		if (attrs == null) {
 			attrs = new MultivaluedHashMap<>();
 		}
-		String firstName = entity.getUsername().split(" ")[0];
+		String firstAndLastName = entity.getFirstAndLastName();
+		String firstName = firstAndLastName.contains(" ") ? firstAndLastName.split(" ")[0] : firstAndLastName;
 		attrs.add(UserModel.FIRST_NAME, firstName);
-		String lastName = entity.getUsername().split(" ")[1];
+		String lastName = firstAndLastName.contains(" ") ? firstAndLastName.split(" ")[1] : firstAndLastName;
 		attrs.add(UserModel.LAST_NAME, lastName);
 		attrs.add(UserModel.EMAIL, getEmail());
 		attrs.add(UserModel.USERNAME, getUsername());

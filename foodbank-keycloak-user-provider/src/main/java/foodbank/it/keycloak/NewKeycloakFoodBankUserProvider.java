@@ -123,7 +123,7 @@ public class NewKeycloakFoodBankUserProvider implements UserStorageProvider,
 	public UserModel addUser(RealmModel realm, String username) {
 		UserEntity entity = new UserEntity();
 		entity.setId(UUID.randomUUID().toString());
-		entity.setUsername(username);
+		entity.setFirstAndLastName(username);
 		em.persist(entity);
 		logger.info("added user: " + username);
 		return new UserAdapter(session, realm, model, entity);

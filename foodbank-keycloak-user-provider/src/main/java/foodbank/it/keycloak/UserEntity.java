@@ -8,8 +8,8 @@ import javax.persistence.*;
 		@NamedQuery(name="getUserCount", query="select count(u) from UserEntity u"),
 		@NamedQuery(name="getAllUsers", query="select u from UserEntity u"),
 		@NamedQuery(name="searchForUser", query="select u from UserEntity u where " +
-				"( lower(u.id) like :search or lower(u.username) like :search or u.email like :search ) order by u.username"),
-		@NamedQuery(name="searchForGroupMembers", query="select u from UserEntity u where u.rights like :search order by u.username")
+				"( lower(u.id) like :search or lower(u.firstAndLastName) like :search or u.email like :search ) order by u.firstAndLastName"),
+		@NamedQuery(name="searchForGroupMembers", query="select u from UserEntity u where u.rights like :search order by u.firstAndLastName")
 })
 @Entity
 @Table(name = "t_user")
@@ -19,7 +19,7 @@ public class UserEntity {
 	@Column(name = "id_user")
 	private String id;
 	@Column(name = "user_name")
-	private String username;
+	private String firstAndLastName;
 	@Column(name = "email")
 	private String email;
 	@Column(name = "password")
@@ -35,12 +35,12 @@ public class UserEntity {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getFirstAndLastName() {
+		return firstAndLastName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setFirstAndLastName(String firstAndLastName) {
+		this.firstAndLastName = firstAndLastName;
 	}
 
 	public String getEmail() {
