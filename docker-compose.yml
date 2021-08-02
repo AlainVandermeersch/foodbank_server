@@ -61,15 +61,12 @@ services:
       args:
         - REDIRECT_URIS=${REDIRECT_URIS}
         - FRONTEND_URL=${AUTH_SERVER_BASE_URL}/auth
-        - MYSQL_HOST=${MYSQL_HOST}
-        - MYSQL_PORT=${MYSQL_PORT}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - SMTP_USER=${SMTP_USER}
+        - SMTP_PASSWORD=${SMTP_PASSWORD}
     ports:
       - "8083:8080"
       - "8443:8443"
-      - "8787:8787"
+      - "8788:8787"
     environment:
       - DEBUG_PORT=*:8787
       - DEBUG=true
@@ -77,6 +74,12 @@ services:
       - KEYCLOAK_PASSWORD=admin
       - DB_VENDOR=h2
       - KEYCLOAK_IMPORT=/tmp/import/realm/foodbank-realm.json
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
     networks:
       - foodbank
 

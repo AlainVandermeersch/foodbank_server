@@ -15,6 +15,16 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <version.hibernate.javax.persistence>1.0.2.Final</version.hibernate.javax.persistence>
+        <version.jboss-ejb-api>2.0.0.Final</version.jboss-ejb-api>
+        <database.mysql.host>mysql</database.mysql.host>
+        <database.mysql.port>3306</database.mysql.port>
+        <database.mysql.database>banque_alimentaire</database.mysql.database>
+        <database.mysql.additionalparams>?zeroDateTimeBehavior=convertToNull&amp;serverTimezone=Europe/Brussels</database.mysql.additionalparams>
+        <database.mysql.username>root</database.mysql.username>
+        <database.mysql.password>password</database.mysql.password>
+        <version.wildfly.maven.plugin>2.0.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly>14.0.1.Final</version.wildfly>
     </properties>
 
     <dependencies>
@@ -33,21 +43,63 @@
         </dependency>
 
         <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${version.hibernate.javax.persistence}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+            <version>${version.jboss-ejb-api}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>at.favre.lib</groupId>
             <artifactId>bcrypt</artifactId>
             <version>0.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.threeten</groupId>
+            <artifactId>threetenbp</artifactId>
+            <version>1.5.1</version>
+        </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.23</version>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>foodbank-mysql-user-provider</finalName>
         <plugins>
-            <!-- any other plugins -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
@@ -60,12 +112,51 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <finalName>foodbank-mysql-user-provider</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+                <configuration>
+                    <skip>false</skip>
+                    <port>${keycloak.management.port}</port>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-my-resources</id>
+                        <phase>install</phase>
+
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!-- overwrite! -->
+                            <overwrite>true</overwrite>
+
+                            <outputDirectory>${project.parent.basedir}/docker/keycloak/build/providers</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>*.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>

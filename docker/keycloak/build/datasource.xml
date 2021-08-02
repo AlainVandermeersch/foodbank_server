@@ -1,0 +1,20 @@
+<xa-datasource jndi-name="java:jboss/datasources/FoodBankDS" pool-name="FoodBankDS" enabled="true" use-java-context="true">
+    <xa-datasource-property name="URL">
+        jdbc:mysql://${env.MYSQL_HOST}:${env.MYSQL_PORT}/${env.MYSQL_DATABASE}${env.MYSQL_ADDITIONAL_PARAMS}
+    </xa-datasource-property>
+    <driver>mysql-connector-java-8.0.23.jar</driver>
+    <xa-pool>
+        <is-same-rm-override>false</is-same-rm-override>
+        <interleaving>false</interleaving>
+        <pad-xid>false</pad-xid>
+        <wrap-xa-resource>true</wrap-xa-resource>
+    </xa-pool>
+    <security>
+        <user-name>${env.MYSQL_USER}</user-name>
+        <password>${env.MYSQL_PASSWORD}</password>
+    </security>
+</xa-datasource>
+<drivers>
+    <driver name="mysql-connector-java-8.0.23.jar" module="com.mysql.jdbc">
+        <xa-datasource-class>com.mysql.cj.jdbc.MysqlXADataSource</xa-datasource-class>
+    </driver>

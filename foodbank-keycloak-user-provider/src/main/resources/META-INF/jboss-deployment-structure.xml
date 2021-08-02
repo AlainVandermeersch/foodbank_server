@@ -1,7 +1,7 @@
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.0">
     <deployment>
         <dependencies>
-            <module name="com.mysql.jdbc" />
+            <module name="deployment.mysql-connector-java-8.0.23.jar" />
         </dependencies>
     </deployment>
 </jboss-deployment-structure>

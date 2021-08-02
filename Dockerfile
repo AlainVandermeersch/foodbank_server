@@ -4,7 +4,7 @@ COPY foodbank-keycloak-user-provider/pom.xml /app/foodbank-keycloak-user-provide
 COPY foodbank-rest-api/pom.xml /app/foodbank-rest-api/pom.xml
 RUN mvn -f /app/pom.xml dependency:resolve dependency:resolve-plugins
 COPY . /app
-RUN mvn -f /app/pom.xml clean package
+RUN mvn -f /app/pom.xml clean install
 
 FROM openjdk:16-alpine
 ARG JAR_FILE=*.jar
