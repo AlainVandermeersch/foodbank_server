@@ -159,8 +159,16 @@ public class MembreServiceImpl implements IMembreService{
 		
 
 		if (lienDis != null) {
-			Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
-			predicates.add(lienDisPredicate);
+			if (lienDis == 0) {
+				Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);
+				Predicate lienDisNull = criteriaBuilder.isNull(membre.get("lienDis"));
+				Predicate lienDisPredicate = criteriaBuilder.or(lienDisZero,lienDisNull);
+				predicates.add(lienDisPredicate);
+			}
+			else {
+				Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
+				predicates.add(lienDisPredicate);
+			}
 		}
 		Predicate lienActifPredicate = criteriaBuilder.equal(membre.get("actif"),1);
 		predicates.add(lienActifPredicate);

@@ -135,8 +135,16 @@ public class TUserServiceImpl implements ITUserService {
 		
 
 		if (idOrg != null) {
-			Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
-			predicates.add(idOrgPredicate);
+			if (idOrg == 0) {
+				Predicate idOrgZero = criteriaBuilder.equal(tuser.get("idOrg"), 0);
+				Predicate idOrgNull = criteriaBuilder.isNull(tuser.get("idOrg"));
+				Predicate idOrgPredicate = criteriaBuilder.or(idOrgZero,idOrgNull);
+				predicates.add(idOrgPredicate);
+			}
+			else {
+				Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
+				predicates.add(idOrgPredicate);
+			}
 		}
 		Predicate lienActifPredicate = criteriaBuilder.equal(tuser.get("actif"),1);
 		predicates.add(lienActifPredicate);
