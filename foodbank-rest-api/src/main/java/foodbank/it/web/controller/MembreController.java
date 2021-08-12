@@ -5,7 +5,10 @@ import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchMembreCriteria;
+import foodbank.it.service.SearchMembreMailCriteria;
 import foodbank.it.web.dto.MembreDto;
+import foodbank.it.web.dto.MembreMailDto;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -69,8 +73,24 @@ public class MembreController {
 				.map(Membre -> convertToDto(Membre, totalElements))
 				.collect(Collectors.toList());
     }
+    @GetMapping("membremails/")
+    public Collection<MembreMailDto> find( 
+    		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
+    	
+        
+        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		SearchMembreMailCriteria criteria = new SearchMembreMailCriteria(lienBanqueInteger, lienDisInteger);
+		List<Membre> selectedMembres = this.MembreService.findAll(criteria);
+		
 
-    @PutMapping("membre/{batId}")
+		return selectedMembres.stream()
+				.map(Membre -> convertToMembreMailDto(Membre))
+				.collect(Collectors.toList());
+    }
+
+    
+	@PutMapping("membre/{batId}")
     public MembreDto updateMembre(@PathVariable("batId") Integer batId, @RequestBody MembreDto updatedMembre) {
         Membre entity = convertToEntity(updatedMembre);
         boolean booCreateMode = false;
@@ -114,6 +134,16 @@ public class MembreController {
     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
+    private MembreMailDto convertToMembreMailDto(Membre entity) {
+    	String societe ="";
+    	
+    	Organisation orgOfMember = entity.getOrganisationObject();
+    	if (orgOfMember != null) {
+    		societe = orgOfMember.getSociete();
+    	}
+        MembreMailDto dto = new MembreMailDto(entity.getBatId(), societe,entity.getNom(),entity.getPrenom(),entity.getBatmail());
+        return dto;
+	}
     protected MembreDto convertToDto(Membre entity,long totalRecords) {   
     	
     	String societe ="";

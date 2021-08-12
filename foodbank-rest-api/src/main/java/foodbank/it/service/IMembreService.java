@@ -1,5 +1,6 @@
 package foodbank.it.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import foodbank.it.persistence.model.Membre;
@@ -13,7 +14,8 @@ public interface IMembreService {
 	
 	Membre save(Membre membre,boolean booCreateMode) throws Exception;
 
-    Page<Membre> findAll(SearchMembreCriteria searchCriteria, Pageable pageable);	 
+    Page<Membre> findAll(SearchMembreCriteria searchCriteria, Pageable pageable);	
+    List<Membre> findAll(SearchMembreMailCriteria searchCriteria);	 
 
     void delete(int batId) throws Exception;
 
