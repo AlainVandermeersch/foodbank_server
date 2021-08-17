@@ -6,7 +6,7 @@ public class EmailDto {
 	private String to;
 	private String subject;
 	private String bodyText;
-	
+	private String attachmentFileNames;
 	
 	public String getSentDate() {
 		return sentDate;
@@ -37,6 +37,12 @@ public class EmailDto {
 	}
 	public void setBodyText(String bodyText) {
 		this.bodyText = bodyText;
+	}
+	public String getAttachmentFileNames() {
+		return attachmentFileNames;
+	}
+	public void setAttachmentFileNames(String attachmentFileNames) {
+		this.attachmentFileNames = attachmentFileNames;
 	}
 	
 }
