@@ -116,7 +116,7 @@ public class EmailController {
 // from becomes cc and to becomes username
 		email.setFrom(new InternetAddress(username));
 		email.addRecipient(javax.mail.Message.RecipientType.CC, new InternetAddress(from));
-		email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+		email.addRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(to));
 		email.setSubject(subject);
 		if (attachmentFileNames.length()==0) {
 		email.setContent(bodyText, "text/html; charset=utf-8");
