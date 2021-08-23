@@ -146,6 +146,14 @@ public class TUserServiceImpl implements ITUserService {
 				predicates.add(idOrgPredicate);
 			}
 		}
+		else {
+			System.out.printf("\nExcluding Bank Members");
+			// exclude users of bank who have idOrg 0 or null
+			Predicate idOrgNotZero = criteriaBuilder.notEqual(tuser.get("idOrg"), 0);
+			Predicate idOrgNotNull = criteriaBuilder.isNotNull(tuser.get("idOrg"));
+			predicates.add(idOrgNotZero);
+			predicates.add(idOrgNotNull);
+		}
 		Predicate lienActifPredicate = criteriaBuilder.equal(tuser.get("actif"),1);
 		predicates.add(lienActifPredicate);
 
