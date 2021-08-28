@@ -3,7 +3,7 @@ package foodbank.it.service;
 public class SearchOrganisationSummariesCriteria {
 	private String societe;
 	private Integer lienBanque;
-	private Integer idDis;
+	
 	public SearchOrganisationSummariesCriteria(String societe, Integer lienBanque) {
 		super();
 		this.societe = societe;

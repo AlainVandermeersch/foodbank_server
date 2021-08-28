@@ -6,6 +6,8 @@ import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
 import foodbank.it.service.SearchOrganisationSummariesCriteria;
+import foodbank.it.web.dto.OrgClientReportDto;
+import foodbank.it.web.dto.OrgMemberReportDto;
 import foodbank.it.web.dto.OrganisationDto;
 import foodbank.it.web.dto.OrganisationSummaryDto;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 
@@ -157,7 +160,39 @@ public class OrganisationController {
         OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
         return this.convertToDto(Organisation, OrgProgram,1);
     }
-    protected OrganisationSummaryDto convertToSummaryDto(Organisation entity) {
+    
+    @GetMapping("orgmemberreport/")
+    public List<OrgMemberReportDto> OrgMemberReport(@RequestParam(required = false) String lienBanque) {
+    	Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+    	List<OrgMemberReportDto> lista = this.OrganisationService.OrgMemberReport(lienBanqueInteger);
+    
+    	 return lista;
+    	  
+    }
+    @GetMapping("orgclientreport/")
+    public List<OrgClientReportDto> OrgClientReport(@RequestParam(required = false) String lienBanque) {
+    	Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+    	List<Organisation> listOrgs = this.OrganisationService.OrgClientReport(lienBanqueInteger);
+    	List<OrgClientReportDto> orgClientReportDtos = new ArrayList<>();
+		{
+			listOrgs.forEach(o -> {
+				orgClientReportDtos.add(convertToClientReportDto(o));
+			});
+	
+		}
+		return orgClientReportDtos;
+    
+    	
+    	  
+    }	
+    			
+    private OrgClientReportDto convertToClientReportDto(Organisation o) {
+    	OrgClientReportDto dto = new OrgClientReportDto(o.getSociete(), o.getNPers(), o.getNFam(), o.getNNour(), o.getNBebe(), o.getNEnf(),
+    			o.getNAdo(), o.getN1824(), o.getNSen());
+		return dto;
+	}
+
+	protected OrganisationSummaryDto convertToSummaryDto(Organisation entity) {
     	OrganisationSummaryDto dto = new OrganisationSummaryDto(entity.getIdDis(),entity.getSociete());
     	return dto;
     }

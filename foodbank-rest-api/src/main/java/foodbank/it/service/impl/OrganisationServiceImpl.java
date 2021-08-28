@@ -9,21 +9,24 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Join;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
-
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
 import foodbank.it.service.SearchOrganisationSummariesCriteria;
+
+import foodbank.it.web.dto.OrgMemberReportDto;
 @Service
 public class OrganisationServiceImpl implements IOrganisationService{
 
@@ -205,6 +208,61 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
 
+	public List<Organisation> OrgClientReport(Integer lienBanque) {
+    
+    	CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    			
+    			CriteriaQuery<Organisation> cq = cb.createQuery(Organisation.class);
+    			Root<Organisation> organisation = cq.from(Organisation.class);		
+    			List<Predicate> predicates = new ArrayList<>();
+    			
+    			
+    			
+    			if (lienBanque != null) {
+    				Predicate lienBanquePredicate = cb.equal(organisation.get("lienBanque"), lienBanque);
+    				predicates.add(lienBanquePredicate);
+    				
+    			}
+    			cq.where(predicates.stream().toArray(Predicate[]::new));
+    		   
+    		    		      //ordering by count in descending order
+    		    cq.orderBy(cb.desc(organisation.get("nPers")));
+    		   
+    		    TypedQuery<Organisation> query = entityManager.createQuery(cq);
+    		    List<Organisation> resultList = query.getResultList();
 
+    			return resultList;
+    		}
+	public List<OrgMemberReportDto> OrgMemberReport(Integer lienBanque) {
+	    
+    	CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    			
+    			CriteriaQuery<OrgMemberReportDto> cq = cb.createQuery(OrgMemberReportDto.class);
+    			Root<Membre> membre = cq.from(Membre.class);		
+    			Join<Membre,Organisation> organisation = membre.join("organisationObject");
+    			List<Predicate> predicates = new ArrayList<>();
+    			
+    			Expression<String> groupByExp = organisation.get("societe").as(String.class);
+  		      	Expression<Long> countExp = cb.count(groupByExp);
+  		      	cq.multiselect(groupByExp, countExp);
+  		    
+    			
+    			if (lienBanque != null) {
+    				Predicate lienBanquePredicate = cb.equal(organisation.get("lienBanque"), lienBanque);
+    				predicates.add(lienBanquePredicate);
+    				cq.where(predicates.stream().toArray(Predicate[]::new));
+    			}
+ 			
+    		    cq.groupBy(groupByExp);
+    		    		      //ordering by count in descending order
+    		    cq.orderBy(cb.desc(countExp));
+    		    cq.having(cb.gt(cb.count(organisation), 1));
+
+    		    TypedQuery<OrgMemberReportDto> query = entityManager.createQuery(cq);
+    		    List<OrgMemberReportDto> resultList = query.getResultList();
+
+    			return resultList;
+    		}	
+	
 	
 }

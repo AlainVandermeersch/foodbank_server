@@ -242,7 +242,7 @@ public class MembreServiceImpl implements IMembreService{
 		predicates.add(lienActifPredicate);
 
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));	
-		List<Order> orderList = new ArrayList();
+		List<Order> orderList = new ArrayList<Order>();
 		orderList.add(criteriaBuilder.asc(membre.get("nom")));
 		orderList.add(criteriaBuilder.asc(membre.get("prenom")));
 		membreQuery.orderBy(orderList);

@@ -24,7 +24,6 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,7 +47,6 @@ import foodbank.it.service.IFilesStorageService;
 import foodbank.it.service.impl.FileInfo;
 import foodbank.it.service.impl.ResponseMessage;
 import foodbank.it.web.dto.EmailDto;
-import foodbank.it.web.dto.TUserDto;
 
 @RestController
 public class EmailController {
