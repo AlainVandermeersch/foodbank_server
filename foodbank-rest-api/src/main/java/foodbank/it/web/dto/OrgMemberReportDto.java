@@ -2,8 +2,8 @@ package foodbank.it.web.dto;
 
 public class OrgMemberReportDto {
 	private String societe;
-	private int nbMembers;
-	public OrgMemberReportDto(String societe, int nbMembers) {
+	private long nbMembers;
+	public OrgMemberReportDto(String societe, long nbMembers) {
 		super();
 		this.societe = societe;
 		this.nbMembers = nbMembers;
@@ -14,10 +14,10 @@ public class OrgMemberReportDto {
 	public void setSociete(String societe) {
 		this.societe = societe;
 	}
-	public int getNbMembers() {
+	public long getNbMembers() {
 		return nbMembers;
 	}
-	public void setNbMembers(int nbMembers) {
+	public void setNbMembers(long nbMembers) {
 		this.nbMembers = nbMembers;
 	}
 	

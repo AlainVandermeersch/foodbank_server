@@ -161,7 +161,7 @@ public class OrganisationController {
         return this.convertToDto(Organisation, OrgProgram,1);
     }
     
-    @GetMapping("orgmemberreport/")
+    @GetMapping("orgreport/members/")
     public List<OrgMemberReportDto> OrgMemberReport(@RequestParam(required = false) String lienBanque) {
     	Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
     	List<OrgMemberReportDto> lista = this.OrganisationService.OrgMemberReport(lienBanqueInteger);
@@ -169,7 +169,7 @@ public class OrganisationController {
     	 return lista;
     	  
     }
-    @GetMapping("orgclientreport/")
+    @GetMapping("orgreport/clients/")
     public List<OrgClientReportDto> OrgClientReport(@RequestParam(required = false) String lienBanque) {
     	Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
     	List<Organisation> listOrgs = this.OrganisationService.OrgClientReport(lienBanqueInteger);
