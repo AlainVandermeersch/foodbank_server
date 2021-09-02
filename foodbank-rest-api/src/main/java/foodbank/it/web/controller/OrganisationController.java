@@ -162,7 +162,7 @@ public class OrganisationController {
     }
     
     @GetMapping("orgreport/members/")
-    public List<OrgMemberReportDto> OrgMemberReport(@RequestParam(required = false) String lienBanque) {
+    public List<OrgMemberReportDto> AllOrgMemberReport(@RequestParam(required = false) String lienBanque) {
     	Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
     	List<OrgMemberReportDto> lista = this.OrganisationService.OrgMemberReport(lienBanqueInteger);
     
@@ -170,7 +170,7 @@ public class OrganisationController {
     	  
     }
     @GetMapping("orgreport/clients/")
-    public List<OrgClientReportDto> OrgClientReport(@RequestParam(required = false) String lienBanque) {
+    public List<OrgClientReportDto> AllOrgClientReport(@RequestParam(required = false) String lienBanque) {
     	Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
     	List<Organisation> listOrgs = this.OrganisationService.OrgClientReport(lienBanqueInteger);
     	List<OrgClientReportDto> orgClientReportDtos = new ArrayList<>();
@@ -184,6 +184,16 @@ public class OrganisationController {
     
     	
     	  
+    }
+
+    @GetMapping("orgreport/orgclients/")
+    public OrgClientReportDto OneOrgClientReport(@RequestParam String idDis) {
+    	int lienDisInteger = Integer.parseInt(idDis);
+    	Organisation o = OrganisationService.findByIdDis(lienDisInteger)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	
+    	return convertToClientReportDto(o);	
+	  
     }	
     			
     private OrgClientReportDto convertToClientReportDto(Organisation o) {

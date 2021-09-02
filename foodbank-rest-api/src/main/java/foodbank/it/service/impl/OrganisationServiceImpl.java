@@ -227,6 +227,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
     		   
     		    		      //ordering by count in descending order
     		    cq.orderBy(cb.desc(organisation.get("nPers")));
+    		    cq.having(cb.gt(cb.count(organisation.get("nPers")), 1));
     		   
     		    TypedQuery<Organisation> query = entityManager.createQuery(cq);
     		    List<Organisation> resultList = query.getResultList();
@@ -250,13 +251,16 @@ public class OrganisationServiceImpl implements IOrganisationService{
     			if (lienBanque != null) {
     				Predicate lienBanquePredicate = cb.equal(organisation.get("lienBanque"), lienBanque);
     				predicates.add(lienBanquePredicate);
-    				cq.where(predicates.stream().toArray(Predicate[]::new));
+    				
     			}
- 			
+    			Predicate lienActifPredicate = cb.equal(membre.get("actif"),1);
+    			predicates.add(lienActifPredicate);
+
+    			cq.where(predicates.stream().toArray(Predicate[]::new));
     		    cq.groupBy(groupByExp);
     		    		      //ordering by count in descending order
     		    cq.orderBy(cb.desc(countExp));
-    		    cq.having(cb.gt(cb.count(organisation), 1));
+    		    cq.having(cb.gt(countExp, 1));
 
     		    TypedQuery<OrgMemberReportDto> query = entityManager.createQuery(cq);
     		    List<OrgMemberReportDto> resultList = query.getResultList();
