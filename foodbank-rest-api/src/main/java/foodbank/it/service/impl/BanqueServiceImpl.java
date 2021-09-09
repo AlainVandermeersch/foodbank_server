@@ -36,7 +36,7 @@ public class BanqueServiceImpl implements IBanqueService{
 
     @Override
     public Banque save(Banque Banque) {
-        // TODO Auto-generated method stub
+       
         return BanqueRepository.save(Banque);
     }
 
