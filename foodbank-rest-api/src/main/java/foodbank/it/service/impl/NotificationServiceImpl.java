@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -57,6 +55,8 @@ public class NotificationServiceImpl implements INotificationService {
 
 		String language = searchCriteria.getLanguage();
 		String audience = searchCriteria.getAudience();
+		Integer bankId = searchCriteria.getBankId();
+		Integer orgId = searchCriteria.getOrgId();
 		
 
 		if (language != null ) {			
@@ -68,6 +68,16 @@ public class NotificationServiceImpl implements INotificationService {
 
 			Predicate audiencePredicate = criteriaBuilder.equal(notification.get("audience"), audience);
 			predicates.add(audiencePredicate);
+		}
+		if (bankId != null ) {			
+
+			Predicate bankIdPredicate = criteriaBuilder.equal(notification.get("bankId"), bankId);
+			predicates.add(bankIdPredicate);
+		}
+		if (orgId != null ) {			
+
+			Predicate orgIdPredicate = criteriaBuilder.equal(notification.get("orgId"), orgId);
+			predicates.add(orgIdPredicate);
 		}
 		notificationQuery.where(predicates.stream().toArray(Predicate[]::new));
 		notificationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), notification, criteriaBuilder));

@@ -1,22 +1,28 @@
 package foodbank.it.web.controller;
-import foodbank.it.persistence.model.Notification;
-import foodbank.it.service.INotificationService;
-import foodbank.it.service.SearchNotificationCriteria;
-import foodbank.it.web.dto.NotificationDto;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import foodbank.it.persistence.model.Notification;
+import foodbank.it.service.INotificationService;
+import foodbank.it.service.SearchNotificationCriteria;
+import foodbank.it.web.dto.NotificationDto;
 
 @RestController
 public class NotificationController {
@@ -37,14 +43,16 @@ public class NotificationController {
 
 	    @GetMapping("notifications/")
 	    public Collection<NotificationDto> find(@RequestParam String offset, @RequestParam String rows, 
-	    		@RequestParam(required = false) String language,
-	    		@RequestParam(required = false) String audience ) {
+	    		@RequestParam(required = false) String language,@RequestParam(required = false) String audience ,
+	    		@RequestParam(required = false) String bankId ,@RequestParam(required = false) String orgId) {
 	    	int intOffset = Integer.parseInt(offset);
 	    	int intRows = Integer.parseInt(rows);
 	    	int pageNumber=intOffset/intRows; // Java throws away remainder of division
 	        int pageSize = intRows;
 	        Pageable pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("creationdate").descending());
-	        SearchNotificationCriteria criteria = new SearchNotificationCriteria(language, audience);
+	        Integer bankIdInteger = Optional.ofNullable(bankId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+	        Integer orgIdInteger = Optional.ofNullable(orgId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+	        SearchNotificationCriteria criteria = new SearchNotificationCriteria(language, audience,bankIdInteger,orgIdInteger);
 	        Page<Notification> selectedNotifications = this.NotificationService.findAll(criteria, pageRequest);
 			long totalElements = selectedNotifications.getTotalElements();
 
@@ -78,13 +86,13 @@ public class NotificationController {
 	        return this.convertToDto(createdNotification,1);
 	    }
 	    private Notification convertToEntity(NotificationDto dto) {
-	    	Notification myNotification = new Notification( dto.getNotificationId(),  dto.getAuthor(), dto.getSubject(), dto.getAudience(),
+	    	Notification myNotification = new Notification( dto.getNotificationId(), dto.getBankId(),dto.getOrgId(), dto.getAuthor(), dto.getSubject(), dto.getAudience(),
 	    			dto.getImportance(), dto.getLanguage(), dto.getContent());
 	    	 return myNotification;
 	    }
 
 		private NotificationDto convertToDto(Notification entity,long totalRecords) {
-			NotificationDto dto = new NotificationDto(entity.getNotificationId(),entity.getCreationdate(), entity.getAuthor(), entity.getSubject(), entity.getAudience(),
+			NotificationDto dto = new NotificationDto(entity.getNotificationId(),entity.getBankId(),entity.getOrgId(),entity.getCreationdate(), entity.getAuthor(), entity.getSubject(), entity.getAudience(),
 					entity.getImportance(), entity.getLanguage(), entity.getContent(),totalRecords);
 			return dto;
 		}

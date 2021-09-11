@@ -3,10 +3,10 @@ package foodbank.it.web.dto;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javax.persistence.Column;
-
 public class NotificationDto {
-	private Integer notificationId;   
+	private Integer notificationId; 
+	private Integer bankId;
+	private Integer orgId;
     private String creationdate;
     private String author;
     private String subject;
@@ -16,10 +16,12 @@ public class NotificationDto {
     private String content;
     private Long  totalRecords;
     
-	public NotificationDto(Integer notificationId, LocalDate creationDate, String author, String subject, String audience,
+	public NotificationDto(Integer notificationId, Integer bankId,Integer orgId, LocalDate creationDate, String author, String subject, String audience,
 			Short importance, String language, String content, Long  totalRecords) {
 		super();
 		this.notificationId = notificationId;
+		this.bankId = bankId;
+		this.orgId = orgId;
 		if (creationDate == null) {
 			this.creationdate = "";
 		}
@@ -40,6 +42,19 @@ public class NotificationDto {
 	}
 	public void setNotificationId(Integer notificationId) {
 		this.notificationId = notificationId;
+	}
+	
+	public Integer getBankId() {
+		return bankId;
+	}
+	public void setBankId(Integer bankId) {
+		this.bankId = bankId;
+	}
+	public Integer getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(Integer orgId) {
+		this.orgId = orgId;
 	}
 	public String getCreationdate() {
 		return creationdate;

@@ -4,7 +4,6 @@ package foodbank.it.persistence.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Version;
 
 @Entity(name="notifications")
 public class Notification implements Serializable {
@@ -27,7 +25,11 @@ public class Notification implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(unique=true, nullable=false, precision=10)
-    private int notificationId;
+    private Integer notificationId;
+    @Column
+    private Integer bankId;
+    @Column
+    private Integer orgId;
     @Column(nullable=false)
     private LocalDate creationdate;
     @Column(nullable=false, length=255)
@@ -49,10 +51,12 @@ public class Notification implements Serializable {
     }
     
 
-    public Notification(int notificationId,  String author, String subject, String audience,
+    public Notification(Integer notificationId, Integer bankId,Integer orgId, String author, String subject, String audience,
 			short importance, String language, String content) {
 		super();
 		this.notificationId = notificationId;
+		this.bankId = bankId;
+		this.orgId = orgId;
 		this.creationdate =  LocalDate.now(); // do not use creationdate from DTO we need to update the time
 		this.author = author;
 		this.subject = subject;
@@ -68,7 +72,7 @@ public class Notification implements Serializable {
      *
      * @return the current value of notificationId
      */
-    public int getNotificationId() {
+    public Integer getNotificationId() {
         return notificationId;
     }
 
@@ -77,11 +81,32 @@ public class Notification implements Serializable {
      *
      * @param aNotificationId the new value for notificationId
      */
-    public void setNotification(int aNotificationId) {
+    public void setNotificationId(Integer aNotificationId) {
         notificationId = aNotificationId;
     }
 
-    /**
+    
+    public Integer getBankId() {
+		return bankId;
+	}
+
+
+	public void setBankId(Integer bankId) {
+		this.bankId = bankId;
+	}
+
+
+	public Integer getOrgId() {
+		return orgId;
+	}
+
+
+	public void setOrgId(Integer orgId) {
+		this.orgId = orgId;
+	}
+
+
+	/**
      * Access method for creationdate.
      *
      * @return the current value of creationdate
