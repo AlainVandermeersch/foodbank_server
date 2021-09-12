@@ -43,7 +43,7 @@ public class NotificationController {
 
 	    @GetMapping("notifications/")
 	    public Collection<NotificationDto> find(@RequestParam String offset, @RequestParam String rows, 
-	    		@RequestParam(required = false) String language,@RequestParam(required = false) String audience ,
+	    		@RequestParam(required = false) String language,@RequestParam(required = false) String admin ,
 	    		@RequestParam(required = false) String bankId ,@RequestParam(required = false) String orgId) {
 	    	int intOffset = Integer.parseInt(offset);
 	    	int intRows = Integer.parseInt(rows);
@@ -52,7 +52,7 @@ public class NotificationController {
 	        Pageable pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("creationdate").descending());
 	        Integer bankIdInteger = Optional.ofNullable(bankId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 	        Integer orgIdInteger = Optional.ofNullable(orgId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-	        SearchNotificationCriteria criteria = new SearchNotificationCriteria(language, audience,bankIdInteger,orgIdInteger);
+	        SearchNotificationCriteria criteria = new SearchNotificationCriteria(language, admin, bankIdInteger,orgIdInteger);
 	        Page<Notification> selectedNotifications = this.NotificationService.findAll(criteria, pageRequest);
 			long totalElements = selectedNotifications.getTotalElements();
 

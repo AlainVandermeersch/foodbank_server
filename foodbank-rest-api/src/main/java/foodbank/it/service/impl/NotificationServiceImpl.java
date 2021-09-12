@@ -1,6 +1,7 @@
 package foodbank.it.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
@@ -54,30 +56,46 @@ public class NotificationServiceImpl implements INotificationService {
 		List<Predicate> predicates = new ArrayList<>();
 
 		String language = searchCriteria.getLanguage();
-		String audience = searchCriteria.getAudience();
+		String admin = searchCriteria.getAdmin();
 		Integer bankId = searchCriteria.getBankId();
 		Integer orgId = searchCriteria.getOrgId();
-		
+		List<String> audienceList = null;
 
 		if (language != null ) {			
 
 			Predicate languagePredicate = criteriaBuilder.equal(notification.get("language"), language);
 			predicates.add(languagePredicate);
 		}
-		if (audience != null ) {			
-
-			Predicate audiencePredicate = criteriaBuilder.equal(notification.get("audience"), audience);
-			predicates.add(audiencePredicate);
-		}
-		if (bankId != null ) {			
-
-			Predicate bankIdPredicate = criteriaBuilder.equal(notification.get("bankId"), bankId);
-			predicates.add(bankIdPredicate);
-		}
 		if (orgId != null ) {			
 
 			Predicate orgIdPredicate = criteriaBuilder.equal(notification.get("orgId"), orgId);
 			predicates.add(orgIdPredicate);
+			if (admin != null ) {	
+				audienceList = Arrays.asList("general","org_admins","mybank_orgadmin","mybank_org","myorg","myorgadmin"); 			
+			}
+			else {
+				audienceList = Arrays.asList("general", "mybank_org","myorg");
+			}
+		}
+		else if (bankId != null ) {			
+
+			Predicate bankIdPredicate = criteriaBuilder.equal(notification.get("bankId"), bankId);
+			predicates.add(bankIdPredicate);
+		
+			if (admin != null ) {	
+				audienceList = Arrays.asList("general", "bank_admins", "bank_users", "mybank_only","mybank_orgadmin","mybank_org","mybank_all"); 			
+			}
+			else {
+				audienceList = Arrays.asList("general", "bank_users", "mybank_only","mybank_all");
+			}
+		}
+		// no audience filter for admin
+		
+		if (audienceList != null)
+		{
+			Expression<String> parentExpression = notification.get("audience");
+			Predicate audiencePredicate = parentExpression.in(audienceList);			
+			predicates.add(audiencePredicate);
 		}
 		notificationQuery.where(predicates.stream().toArray(Predicate[]::new));
 		notificationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), notification, criteriaBuilder));

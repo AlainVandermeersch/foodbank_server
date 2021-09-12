@@ -2,13 +2,13 @@ package foodbank.it.service;
 
 public class SearchNotificationCriteria {
 	private String language;
-	private String audience;
+	private String admin;
 	private Integer bankId;
 	private Integer orgId;
 	public SearchNotificationCriteria(String language, String audience, Integer bankId, Integer orgId) {
 		super();
 		this.language = language;
-		this.audience = audience;
+		this.admin = audience;
 		this.bankId = bankId;
 		this.orgId = orgId;
 	}
@@ -18,11 +18,12 @@ public class SearchNotificationCriteria {
 	public void setLanguage(String language) {
 		this.language = language;
 	}
-	public String getAudience() {
-		return audience;
+	
+	public String getAdmin() {
+		return admin;
 	}
-	public void setAudience(String audience) {
-		this.audience = audience;
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
 	public Integer getBankId() {
 		return bankId;
