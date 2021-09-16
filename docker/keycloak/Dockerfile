@@ -19,6 +19,7 @@ RUN sed -i 's@###REDIRECT_URIS###@'"$REDIRECT_URIS"'@' /tmp/import/realm/*.json 
 
 FROM jboss/keycloak:12.0.4
 COPY ./build/datasource.xml /tmp/datasource.xml
+COPY ./build/theme/foodbank /opt/jboss/keycloak/themes/foodbank
 # RUN sed -i 's@<drivers>@'"$(cat /tmp/datasource.xml)"'@' /opt/jboss/keycloak/standalone/configuration/standalone*.xml
 RUN sed -e '/<drivers>/ {' -e 'r /tmp/datasource.xml' -e 'd' -e '}' -i /opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
 COPY ./build/providers/*.jar /opt/jboss/keycloak/standalone/deployments/
