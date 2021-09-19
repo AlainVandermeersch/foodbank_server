@@ -1,6 +1,7 @@
 {
   "id": "FoodBank",
   "realm": "FoodBank",
+  "displayName": "FoodBanks",
   "notBefore": 0,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
@@ -1528,6 +1529,10 @@
     "ssl": "true",
     "user": "###SMTP_USER###"
   },
+  "loginTheme": "foodbank",
+  "accountTheme": "foodbank",
+  "adminTheme": "foodbank",
+  "emailTheme": "foodbank",
   "eventsEnabled": false,
   "eventsListeners": [
     "jboss-logging"
