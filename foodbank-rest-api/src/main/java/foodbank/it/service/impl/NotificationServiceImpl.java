@@ -66,39 +66,55 @@ public class NotificationServiceImpl implements INotificationService {
 			predicates.add(languagePredicate);
 		}
 		Predicate generalPredicate = criteriaBuilder.equal(notification.get("audience"), "general");
+		Predicate fromAdminPredicate =null;
+		List<String> fromAdminAudienceList  = null;
+		Expression<String> parentExpression = notification.get("audience");
 		if (orgId != null ) {	
 			Predicate bankIdPredicate = criteriaBuilder.equal(notification.get("bankId"), bankId);
 			Predicate orgAudiencePredicate = null;
+			
 			List<String> orgAudienceList  = null;
 			if (admin != null ) {	
 				orgAudienceList = Arrays.asList("mybank_orgadmin","mybank_org"); 
-				Expression<String> parentExpression = notification.get("audience");
-				 orgAudiencePredicate = parentExpression.in(orgAudienceList);	
+				orgAudiencePredicate = parentExpression.in(orgAudienceList);
+				fromAdminPredicate = criteriaBuilder.equal(notification.get("audience"), "org_admins");	
 			}
 			else {
 				orgAudiencePredicate = criteriaBuilder.equal(notification.get("audience"), "mybank_org");				
 			}
 			Predicate orgPredicate = criteriaBuilder.and(bankIdPredicate,orgAudiencePredicate);
-			Predicate audiencePredicate = criteriaBuilder.or(generalPredicate,orgPredicate);
+			Predicate audiencePredicate = null;
+			if (fromAdminPredicate != null) {
+				audiencePredicate = criteriaBuilder.or(generalPredicate,orgPredicate,fromAdminPredicate);
+			}
+			else {
+				audiencePredicate = criteriaBuilder.or(generalPredicate,orgPredicate);
+			}
 			predicates.add(audiencePredicate);
 		}
 		
-		else if (bankId != null ) {			
+		else if (bankId != null ) {	
+			
+			
 
 			Predicate bankIdPredicate = criteriaBuilder.equal(notification.get("bankId"), bankId);
 			Predicate bankAudiencePredicate = null;
 			List<String> bankAudienceList  = null;
 		
-			if (admin != null ) {	
+			if (admin != null ) {
+				fromAdminAudienceList = Arrays.asList("bank_admins","bank_users","org_admins"); 
+				fromAdminPredicate = parentExpression.in(fromAdminAudienceList);
 				bankAudienceList = Arrays.asList( "mybank_only","mybank_orgadmin","mybank_org","mybank_all"); 			
 			}
 			else {
+				 
+				fromAdminPredicate = criteriaBuilder.equal(notification.get("audience"), "bank_users");	
 				bankAudienceList = Arrays.asList( "mybank_only","mybank_all"); 	
 			}
-			Expression<String> parentExpression = notification.get("audience");
 			bankAudiencePredicate = parentExpression.in(bankAudienceList);	
 			Predicate bankPredicate = criteriaBuilder.and(bankIdPredicate,bankAudiencePredicate);
-			Predicate audiencePredicate = criteriaBuilder.or(generalPredicate,bankPredicate);
+			
+			Predicate audiencePredicate = criteriaBuilder.or(generalPredicate,bankPredicate,fromAdminPredicate);
 			predicates.add(audiencePredicate);
 		}
 		
