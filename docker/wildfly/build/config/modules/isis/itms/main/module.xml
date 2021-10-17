@@ -1,0 +1,22 @@
+<module xmlns="urn:jboss:module:1.0" name="isis.itms">
+
+    <resources>
+        <resource-root path="../../../../standalone/deployments/isis_reports.jar"/>
+         <resource-root path="../../../../standalone/deployments/isis_po.jar"/>
+		<resource-root path="../../../../standalone/deployments/isis_common.jar" />
+    </resources>
+
+    <dependencies>
+		<module name="org.jboss.logging"/>
+	    <system>  
+            <!-- List of exported paths. Mandatory. -->  
+            <paths>  
+               <path name="jboss.server.base.dir"/>  
+            </paths>  
+        </system>  
+        <module name="isis.libs" export="true"/>
+        <module name="javaee.api" export="true"/>
+		<module name="org.jboss.weld.core" export="true"/>
+		<module name="org.jboss.weld.spi" export="true"/>
+    </dependencies>
+</module>

@@ -57,6 +57,19 @@ services:
     networks:
       - foodbank
 
+  wildfly:
+    depends_on:
+      - mysql
+    build:
+      context: ./docker/wildfly
+    environment:
+      - ADMIN_PASS=${WILDFLY_ADMIN_PASS}
+    ports:
+      - 80:8080
+      - 443:8443
+      - 9990:9990
+      - 8787:8787
+
 networks:
   foodbank:
     name: foodbank-network
