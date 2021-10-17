@@ -65,10 +65,10 @@ services:
     environment:
       - ADMIN_PASS=${WILDFLY_ADMIN_PASS}
     ports:
-      - 80:8080
-      - 443:8443
-      - 9990:9990
-      - 8787:8787
+      - "10080:8080"
+      - "10443:8443"
+      - "10990:9990"
+      - "10787:8787"
 
 networks:
   foodbank:
