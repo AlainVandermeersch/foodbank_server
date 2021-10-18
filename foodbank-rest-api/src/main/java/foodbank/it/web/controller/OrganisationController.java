@@ -59,7 +59,7 @@ public class OrganisationController {
     public Collection<OrganisationDto> find( @RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
-     		@RequestParam(required = false) String cp, @RequestParam(required = false) String localite,
+     		@RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
      		@RequestParam(required = false) Boolean isWeb,@RequestParam(required = false) String statut,
     		@RequestParam(required = false) String lienBanque ,
@@ -78,9 +78,9 @@ public class OrganisationController {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
+        Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, cp,localite, lienBanqueInteger, idDisInteger,isDepot,isBirb,isWeb,statut);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,isWeb,statut);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -236,6 +236,7 @@ public class OrganisationController {
 		boolean booBirbyN = entity.getBirbyN() == 1;
 		boolean booDepyN = entity.getDepyN() == 1;
 		boolean booActif = entity.getActif() == 1;
+		boolean booSusp = entity.getSusp() == 1;
 		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut().trim(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
@@ -247,7 +248,7 @@ public class OrganisationController {
 				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
 				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(),booCpasyN, entity.getLienCpas(),
 				booBirbyN,booDepyN, entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
-				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), entity.getSusp(),
+				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), booSusp,
 				entity.getStopSusp(), entity.getRem(), booIsMsonac, entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
 				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getN1824(),
 				entity.getNEq(), entity.getNSen(), booDepPrinc,
@@ -256,7 +257,7 @@ public class OrganisationController {
 				entity.getTourneeMois(), booDistrListPdt, booDistrListVp, booDistrListSec, booDistrListTres,
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), entity.getFeadN(),
 				entity.getRemLivr(), entity.getCotAnnuelle(), entity.getCotMonths(), entity.getCotSup(), entity.getCotMonthsSup(), entity.getDepotram(),
-				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),
+				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),
 				booLuam,
     			booLupm,
     			booTuam,
@@ -308,7 +309,7 @@ public class OrganisationController {
 				dto.getEmailSec(), dto.getEmailTres(), dto.getTelPres(), dto.getGsmPres(), dto.getDisprog(), dto.getAfsca(),
 				dto.isWebauthority(), dto.getLangue(),  dto.getNbrefix(),(short) (dto.getCpasyN() ? 1 : 0), dto.getLienCpas(),
 				(short) (dto.isBirbyN() ? 1 : 0), (short) (dto.getDepyN() ? 1 : 0), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
-				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), dto.getSusp(),
+				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), (short) (dto.getSusp() ? 1 : 0),
 				dto.getStopSusp(), dto.getRem(), (short) (dto.getMsonac() ? 1 : 0), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
 				dto.getnFam(), dto.getnPers(), dto.getnNour(), dto.getnBebe(), dto.getnEnf(), dto.getnAdo(), dto.getN1824(),
 				dto.getnEq(), dto.getnSen(), (short) (dto.getDepPrinc() ? 1 : 0),
@@ -317,7 +318,7 @@ public class OrganisationController {
 				dto.getTourneeMois(), (short) (dto.getDistrListPdt() ? 1 : 0), (short) (dto.getDistrListVp() ? 1 : 0), (short) (dto.getDistrListSec() ? 1 : 0),(short) (dto.getDistrListTres() ? 1 : 0),
 				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), dto.getFeadN(),
 				dto.getRemLivr(), dto.getCotAnnuelle(), dto.getCotMonths(), dto.getCotSup(), dto.getCotMonthsSup(), dto.getDepotram(),
-				dto.getLupdUserName(),dto.getLienBanque());       
+				dto.getLupdUserName(),dto.getLienBanque(),dto.getNomDepot());       
         if (!StringUtils.isEmpty(dto.getIdDis())) {
             myOrganisation.setIdDis(dto.getIdDis());
         }

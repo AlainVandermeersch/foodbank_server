@@ -129,7 +129,7 @@ public class OrganisationDto {
 	    
 	    private Short nrTournee;
 	   
-	    private Short susp;
+	    private boolean susp;
 	    
 	    private String stopSusp;
 	    
@@ -229,6 +229,8 @@ public class OrganisationDto {
 	    
 	    private Short lienBanque; 
 	    
+	    private String nomDepot; // calculated field
+	    
 	    // OrgProgram entities
 	    
 private boolean luam;
@@ -299,7 +301,7 @@ private boolean luam;
 				String emailSec, String emailTres, String telPres, String gsmPres, String disprog, String afsca,
 				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, boolean cpasyN, Short lienCpas,
 				boolean birbyN,boolean depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
-				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp,
+				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, boolean susp,
 				String stopSusp, String rem, boolean isMsonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
 				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer nAdo, Integer n1824,
 				BigDecimal nEq, Integer  nSen, boolean depPrinc,
@@ -308,7 +310,7 @@ private boolean luam;
 				Short tourneeMois, boolean distrListPdt, boolean distrListVp, boolean distrListSec, boolean distrListTres,
 				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN,
 				String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup, Integer  cotMonthsSup, Integer  depotram,
-				String lupdUserName, LocalDateTime lupdTs,Short lienBanque,
+				String lupdUserName, LocalDateTime lupdTs,Short lienBanque, String nomDepot,
 				// orgprogram fields
 				boolean luam, boolean lupm, boolean tuam, boolean tupm,
 				boolean weam, boolean wepm, boolean tham, boolean thpm, boolean fram, boolean frpm, boolean saam, boolean sapm, boolean sunam, boolean sunpm,
@@ -444,6 +446,7 @@ private boolean luam;
 				this.lupdTs = lupdTs.format(formatter);
 			}
 			this.lienBanque = lienBanque;
+			this.nomDepot = nomDepot;
 			// OrgProgram Fields
 			this.luam = luam;
 			this.lupm = lupm;
@@ -1005,11 +1008,11 @@ private boolean luam;
 			this.nrTournee = nrTournee;
 		}
 
-		public Short getSusp() {
+		public boolean getSusp() {
 			return susp;
 		}
 
-		public void setSusp(Short susp) {
+		public void setSusp(boolean susp) {
 			this.susp = susp;
 		}
 
@@ -1614,6 +1617,15 @@ private boolean luam;
 		}
 		public void setLastAudit(Long lastAudit) {
 			this.lastAudit = lastAudit;
+		}
+		
+
+		public String getNomDepot() {
+			return nomDepot;
+		}
+
+		public void setNomDepot(String nomDepot) {
+			this.nomDepot = nomDepot;
 		}
 
 		public Long getTotalRecords() {

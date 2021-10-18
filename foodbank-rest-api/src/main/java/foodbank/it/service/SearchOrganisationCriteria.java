@@ -3,23 +3,21 @@ package foodbank.it.service;
 public class SearchOrganisationCriteria {
 	private String societe;
 	private String adresse;
-	private String cp;
-	private String localite;
+	private String nomDepot;
 	private Integer lienBanque;
-	private Integer idDis;
+	private Integer lienDepot;
 	private Boolean isDepot;
 	private Boolean isBirb;
 	private Boolean isWeb;
 	private String statut;
 	
 	
-	public SearchOrganisationCriteria(String societe, String adresse, String cp,String localite, Integer lienBanque, Integer lienDis, Boolean isDepot,Boolean isBirb,Boolean isWeb, String statut) {
+	public SearchOrganisationCriteria(String societe, String adresse, String nomDepot, Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb,Boolean isWeb, String statut) {
 		this.societe = societe;
 		this.adresse = adresse;
-		this.cp = cp;
-		this.localite = localite;
+		this.nomDepot = nomDepot;		
 		this.lienBanque = lienBanque;
-		this.idDis = lienDis;
+		this.lienDepot = lienDepot;
 		this.isDepot = isDepot;
 		this.isBirb = isBirb;
 		this.isWeb = isWeb;
@@ -52,26 +50,17 @@ public class SearchOrganisationCriteria {
 
 
 
-	public String getCp() {
-		return cp;
+	
+
+
+	public String getNomDepot() {
+		return nomDepot;
 	}
 
 
 
-	public void setCp(String cp) {
-		this.cp = cp;
-	}
-
-
-
-	public String getLocalite() {
-		return localite;
-	}
-
-
-
-	public void setLocalite(String localite) {
-		this.localite = localite;
+	public void setNomDepot(String nomDepot) {
+		this.nomDepot = nomDepot;
 	}
 
 
@@ -132,12 +121,12 @@ public class SearchOrganisationCriteria {
 		this.lienBanque = lienBanque;
 	}
 
-	public Integer getIdDis() {
-		return idDis;
+	public Integer getlienDepot() {
+		return lienDepot;
 	}
 
-	public void setIdDis(Integer idDis) {
-		this.idDis = idDis;
+	public void setlienDepot(Integer lienDepot) {
+		this.lienDepot = lienDepot;
 	}
 
 	

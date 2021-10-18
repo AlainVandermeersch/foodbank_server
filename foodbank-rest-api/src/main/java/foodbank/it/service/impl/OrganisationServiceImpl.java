@@ -86,10 +86,9 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		List<Predicate> predicates = new ArrayList<>();
 		String societe = searchCriteria.getSociete();
 		String adresse = searchCriteria.getAdresse();
-		String cp = searchCriteria.getCp();
-		String localite = searchCriteria.getLocalite();
+		String nomDepot = searchCriteria.getNomDepot();
 		Integer lienBanque = searchCriteria.getLienBanque();
-		Integer idDis = searchCriteria.getIdDis();
+		Integer lienDepot = searchCriteria.getlienDepot();
 		Boolean isDepot = searchCriteria.getIsDepot();
 		Boolean isBirb = searchCriteria.getIsBirb();
 		Boolean isWeb = searchCriteria.getIsWeb();
@@ -102,20 +101,18 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		}
 		if (adresse != null ) {			
 
-			Predicate adressePredicate = criteriaBuilder.like(organisation.get("adresse"), "%" + adresse.toLowerCase() + "%");
+			Predicate adressFieldPredicate = criteriaBuilder.like(organisation.get("adresse"), "%" + adresse.toLowerCase() + "%");
+			Predicate cityPredicate = criteriaBuilder.like(organisation.get("localite"), "%" + adresse.toLowerCase() + "%");
+			Predicate zipCodePredicate = criteriaBuilder.like(organisation.get("cp"), "%" + adresse.toLowerCase() + "%");
+			Predicate adressePredicate = criteriaBuilder.or(adressFieldPredicate,cityPredicate,zipCodePredicate);
 			predicates.add(adressePredicate);
 		}
-		if (cp != null ) {			
+		if (nomDepot != null ) {			
 
-			Predicate cpPredicate = criteriaBuilder.like(organisation.get("cp"), "%" + cp.toLowerCase() + "%");
-			predicates.add(cpPredicate);
+			Predicate nomDepotPredicate = criteriaBuilder.like(organisation.get("nomDepot"), "%" + nomDepot.toLowerCase() + "%");
+			predicates.add(nomDepotPredicate);
 		}
-		if (localite != null ) {			
-
-			Predicate localitePredicate = criteriaBuilder.like(organisation.get("localite"), "%" + localite.toLowerCase() + "%");
-			predicates.add(localitePredicate);
-		}
-		
+			
 		if (isDepot != null) {
 			Integer intDepot = 0;
 			if (isDepot== true) {
@@ -149,9 +146,9 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			predicates.add(lienBanquePredicate);
 		}
 		
-		if (idDis != null) {
-			Predicate lienIdDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), idDis);
-			predicates.add(lienIdDisPredicate);
+		if (lienDepot != null) {
+			Predicate lienlienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienDepot);
+			predicates.add(lienlienDepotPredicate);
 		}
 
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
