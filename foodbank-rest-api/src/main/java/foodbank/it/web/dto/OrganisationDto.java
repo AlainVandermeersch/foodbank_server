@@ -34,7 +34,7 @@ public class OrganisationDto {
 	   
 	    private String gsm;
 
-	    private Short daten; 
+	    private boolean daten; 
 	    private String banque;
 	   
 	    private Short region;
@@ -293,7 +293,7 @@ private boolean luam;
 
 		public OrganisationDto(int idDis, String refInt, String birbCode, int lienDepot,
 				String societe, String adresse, String statut, String email, String cp, String localite,
-				Short pays, String tva, String website, String tel, String gsm, Short daten, String banque,
+				Short pays, String tva, String website, String tel, String gsm, boolean daten, String banque,
 				Short region, String iban, String classique, String bic, boolean actif, Short civilite, String nom,
 				String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp,
 				Short civiliteSec, String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres,
@@ -607,11 +607,11 @@ private boolean luam;
 			this.gsm = gsm;
 		}
 
-		public Short getDaten() {
+		public boolean getDaten() {
 			return daten;
 		}
 
-		public void setDaten(Short daten) {
+		public void setDaten(boolean daten) {
 			this.daten = daten;
 		}
 

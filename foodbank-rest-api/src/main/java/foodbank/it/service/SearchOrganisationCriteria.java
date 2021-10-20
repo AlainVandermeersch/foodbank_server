@@ -8,20 +8,22 @@ public class SearchOrganisationCriteria {
 	private Integer lienDepot;
 	private Boolean isDepot;
 	private Boolean isBirb;
-	private Boolean isWeb;
-	private String statut;
+	private Boolean isAgreed;
+	private Boolean actif;
+	private String refInt;
 	
 	
-	public SearchOrganisationCriteria(String societe, String adresse, String nomDepot, Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb,Boolean isWeb, String statut) {
+	public SearchOrganisationCriteria(String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt) {
 		this.societe = societe;
 		this.adresse = adresse;
+		this.isAgreed = isAgreed;
 		this.nomDepot = nomDepot;		
 		this.lienBanque = lienBanque;
 		this.lienDepot = lienDepot;
 		this.isDepot = isDepot;
 		this.isBirb = isBirb;
-		this.isWeb = isWeb;
-		this.statut = statut;
+		this.actif = actif;
+		this.refInt = refInt;
 	}
 
 	
@@ -49,8 +51,28 @@ public class SearchOrganisationCriteria {
 	}
 
 
+	public Boolean getIsAgreed() {
+		return isAgreed;
+	}
 
-	
+
+
+	public void setIsAgreed(Boolean isAgreed) {
+		this.isAgreed = isAgreed;
+	}
+
+
+
+	public Boolean getActif() {
+		return actif;
+	}
+
+
+
+	public void setActif(Boolean actif) {
+		this.actif = actif;
+	}
+
 
 
 	public String getNomDepot() {
@@ -88,27 +110,14 @@ public class SearchOrganisationCriteria {
 	}
 
 
-
-	public Boolean getIsWeb() {
-		return isWeb;
+	public String getRefInt() {
+		return refInt;
 	}
 
 
 
-	public void setIsWeb(Boolean isWeb) {
-		this.isWeb = isWeb;
-	}
-
-
-
-	public String getStatut() {
-		return statut;
-	}
-
-
-
-	public void setStatut(String statut) {
-		this.statut = statut;
+	public void setRefInt(String refInt) {
+		this.refInt = refInt;
 	}
 
 

@@ -91,8 +91,9 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Integer lienDepot = searchCriteria.getlienDepot();
 		Boolean isDepot = searchCriteria.getIsDepot();
 		Boolean isBirb = searchCriteria.getIsBirb();
-		Boolean isWeb = searchCriteria.getIsWeb();
-		String statut = searchCriteria.getStatut();
+		Boolean isAgreed = searchCriteria.getIsAgreed();
+		Boolean actif = searchCriteria.getActif();
+		String refint = searchCriteria.getRefInt();
 		
 		if (societe != null ) {			
 
@@ -131,15 +132,27 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			predicates.add(isBirbPredicate);
 		} 
 		
-		if (isWeb != null) {
-			// Alain - boolean comparison
-			Predicate isBirbPredicate = criteriaBuilder.equal(organisation.get("webauthority"), isWeb);
-			predicates.add(isBirbPredicate);
+	    if (isAgreed != null) {
+			// Note daten field means is Agreed
+			Integer intAgreed = 0;
+			if (isAgreed == true) {
+				intAgreed = 1;
+			}
+			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intAgreed);
+			predicates.add(isAgreedPredicate);
+		} 
+		if (actif != null) {
+			Integer intActive = 0;
+			if (actif == true) {
+				intActive = 1;
+			}
+			Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), intActive);
+			predicates.add(isActifPredicate);
 		} 
 		
-		if (statut != null) {
-			Predicate statutPredicate = criteriaBuilder.like(organisation.get("statut"), "%" + statut + "%");
-			predicates.add(statutPredicate);
+		if (refint != null) {
+			Predicate refintPredicate = criteriaBuilder.like(organisation.get("refInt"), "%" + refint + "%");
+			predicates.add(refintPredicate);
 		}
 		if (lienBanque != null) {
 		Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
