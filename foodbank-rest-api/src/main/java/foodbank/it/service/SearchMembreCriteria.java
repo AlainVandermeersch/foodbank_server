@@ -8,9 +8,10 @@ public class SearchMembreCriteria {
 	private String city;
 	private Integer lienBanque;
 	private Integer lienDis;
+	private Integer lienDepot;
 	
 	
-	public SearchMembreCriteria(String nom, String prenom, String address, String zip, String city, Integer lienBanque, Integer lienDis) {
+	public SearchMembreCriteria(String nom, String prenom, String address, String zip, String city, Integer lienBanque, Integer lienDis,Integer lienDepot) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.address = address;
@@ -18,6 +19,7 @@ public class SearchMembreCriteria {
 		this.city = city;
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;
+		this.lienDepot = lienDepot;
 	}
 
 	
@@ -96,6 +98,14 @@ public class SearchMembreCriteria {
 
 	public void setLienDis(Integer lienDis) {
 		this.lienDis = lienDis;
+	}
+
+	public Integer getLienDepot() {
+		return lienDepot;
+	}
+
+	public void setLienDepot(Integer lienDepot) {
+		this.lienDepot = lienDepot;
 	}
 
 	

@@ -49,7 +49,7 @@ public class MembreController {
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom, 
      		@RequestParam(required = false) String address,@RequestParam(required = false) String zip, 
-     		@RequestParam(required = false) String city,
+     		@RequestParam(required = false) String city,@RequestParam(required = false) String lienDepot ,
     		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -65,7 +65,8 @@ public class MembreController {
         
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, prenom, address, zip,city, lienBanqueInteger, lienDisInteger);
+        Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, prenom, address, zip,city, lienBanqueInteger, lienDisInteger,lienDepotInteger);
 		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 

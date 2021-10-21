@@ -8,6 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -118,7 +120,7 @@ public class MembreServiceImpl implements IMembreService{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
 		Root<Membre> membre = membreQuery.from(Membre.class);
-
+		Join<Membre,Organisation> organisation = membre.join("organisationObject");
 		List<Predicate> predicates = new ArrayList<>();
 
 		String nom = searchCriteria.getNom();
@@ -128,6 +130,7 @@ public class MembreServiceImpl implements IMembreService{
 		String city = searchCriteria.getCity();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
+		Integer lienDepot = searchCriteria.getLienDepot();
 
 		if (nom != null ) {			
 
@@ -174,12 +177,18 @@ public class MembreServiceImpl implements IMembreService{
 			}
 		}
 		else {
+			if (lienDepot == null) {
 			System.out.printf("\nExcluding Bank Members");
 			// exclude members of bank who have liendis 0 or null
 			Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
 			Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
 			predicates.add(lienDisNotZero);
 			predicates.add(lienDisNotNull);
+			}
+			else {
+				Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"),lienDepot);
+				predicates.add(lienDepotPredicate);
+			}
 		}
 		Predicate lienActifPredicate = criteriaBuilder.equal(membre.get("actif"),1);
 		predicates.add(lienActifPredicate);
@@ -194,9 +203,8 @@ public class MembreServiceImpl implements IMembreService{
 		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Membre.class)));
-		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		long countResult = countQuery.getSingleResult();
-
+        TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+        long countResult = countQuery.getSingleResult();
 		List<Membre> resultList = query.getResultList();
 		return new PageImpl<>(resultList, pageable, countResult);
 	}

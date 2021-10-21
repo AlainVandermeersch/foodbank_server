@@ -61,7 +61,7 @@ public class OrganisationController {
     		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
      		@RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
-     		@RequestParam(required = false) Boolean daten,
+     		@RequestParam(required = false) Boolean agreed,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
     		@RequestParam(required = false) String lienBanque ,
     		@RequestParam(required = false) String idDis) {
@@ -78,9 +78,15 @@ public class OrganisationController {
         else {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
+        // Note daten field means is reverse of Agreed
+        Boolean daten = null;
+        if (agreed != null) {
+        	if (agreed == true) daten = false;
+        	if ( agreed == false) daten = true;
+        }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
-        // Note daten field means is Agreed
+        
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, daten, actif, nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
@@ -238,11 +244,12 @@ public class OrganisationController {
 		boolean booDepyN = entity.getDepyN() == 1;
 		boolean booActif = entity.getActif() == 1;
 		boolean booSusp = entity.getSusp() == 1;
-		boolean booDateN = entity.getDaten() == 1;
+		  // Note daten field means is reverse of Agreed
+		boolean booAgreed= entity.getDaten() == 0;
 		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut().trim(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
-				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), booDateN,entity.getBanque(), 
+				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), booAgreed,entity.getBanque(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), booActif, entity.getCivilite(), entity.getNom(),
 				entity.getPrenom(), entity.getCiviliteVp(), entity.getPrenomVp(), entity.getNomVp(), entity.getTelVp(), entity.getGsmVp(),
 				entity.getCiviliteSec(), entity.getPrenomSec(), entity.getNomSec(), entity.getTelSec(), entity.getGsmSec(), entity.getCiviliteTres(),
@@ -300,10 +307,10 @@ public class OrganisationController {
     }
 
     protected Organisation convertToEntity(OrganisationDto dto) {
-    	    	    
+    	  // Note daten field means is reverse of Agreed	    
     	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getBirbCode(), dto.getLienDepot(),
 				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
-				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), (short) (dto.getDaten() ? 1 : 0), dto.getBanque(),
+				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), (short) (dto.getAgreed() ? 0 : 1), dto.getBanque(),
 				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), (short) (dto.getActif() ? 1 : 0), dto.getCivilite(), dto.getNom(),
 				dto.getPrenom(), dto.getCiviliteVp(), dto.getPrenomVp(), dto.getNomVp(), dto.getTelVp(), dto.getGsmVp(),
 				dto.getCiviliteSec(), dto.getPrenomSec(), dto.getNomSec(), dto.getTelSec(), dto.getGsmSec(), dto.getCiviliteTres(),
