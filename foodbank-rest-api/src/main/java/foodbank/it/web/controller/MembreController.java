@@ -136,42 +136,26 @@ public class MembreController {
         }
     }
     private MembreMailDto convertToMembreMailDto(Membre entity) {
-    	String societe ="";
-    	
-    	Organisation orgOfMember = entity.getOrganisationObject();
-    	if (orgOfMember != null) {
-    		societe = orgOfMember.getSociete();
-    	}
-        MembreMailDto dto = new MembreMailDto(entity.getBatId(), societe,entity.getNom(),entity.getPrenom(),entity.getBatmail());
+    	    	    	
+        MembreMailDto dto = new MembreMailDto(entity.getBatId(),entity.getSociete(),entity.getNom(),entity.getPrenom(),entity.getBatmail());
         return dto;
 	}
     protected MembreDto convertToDto(Membre entity,long totalRecords) {   
     	
-    	String societe ="";
-    	Integer liendis = 0;
-    	Organisation orgOfMember = entity.getOrganisationObject();
-    	if (orgOfMember != null) {
-    		liendis = orgOfMember.getIdDis();
-    		societe = orgOfMember.getSociete();
-    		
-    	}
-        MembreDto dto = new MembreDto(entity.getBatId(),liendis, entity.getNom(), entity.getPrenom(), entity.getAddress(),
+    	
+        MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
 				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
-				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),entity.getLienBanque(),societe,totalRecords  );    
+				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),entity.getLienBanque(),entity.getSociete(),totalRecords  );    
         return dto;
     }
 
     protected Membre convertToEntity(MembreDto dto) {  
     	
-    	Organisation orgOfMember = null;
-    	
-    	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getLienDis());
-    		if (org.isPresent() == true) orgOfMember = org.get() ;
-    	    
-    	Membre myMembre = new Membre( dto.getBatId(),orgOfMember, dto.getNom(), dto.getPrenom(), dto.getAddress(),
+    	    	    
+    	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
 				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), dto.getCa(), dto.getAg(), dto.getCg(),dto.getCivilite(), 
 				dto.getPays(), dto.getActif(), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  dto.getBen(),

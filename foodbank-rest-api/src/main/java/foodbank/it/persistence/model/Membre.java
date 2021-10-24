@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -40,7 +41,7 @@ public class Membre implements Serializable {
  @GeneratedValue(strategy=GenerationType.IDENTITY)
  @Column(name="bat_ID", unique=true, nullable=false, precision=10)
  private Integer batId;
- @Column(name="lien_dis", precision=10, insertable=false,updatable=false)
+ @Column(name="lien_dis", precision=10)
  private Integer lienDis;
  @Column(nullable=false, length=50)
  private String nom;
@@ -109,17 +110,18 @@ public class Membre implements Serializable {
  private Integer lDep;
  @Column(name="lien_banque", precision=10)
  private Short lienBanque; 
- @ManyToOne
- @JoinColumn(name="lien_dis")
- @NotFound(action = NotFoundAction.IGNORE)
- private Organisation organisationObject;
+ @Formula("(select d.societe from organisations d where d.id_dis = lien_dis)")
+ private String societe;
+ @Formula("(select d.lien_depot from organisations d where d.id_dis = lien_dis)")
+ private String lienDepot;
+
 
  /** Default constructor. */
  public Membre() {
      super();
  }
 
- public Membre(Integer batId, Organisation organisationObject, String nom, String prenom, String address, String city,
+ public Membre(Integer batId, Integer lienDis, String nom, String prenom, String address, String city,
 		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction,
 		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand,
 		String rem, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
@@ -127,7 +129,7 @@ public class Membre implements Serializable {
 		String dateContrat, Integer lDep, Short lienBanque) {
 	super();	
 	this.batId = batId;
-	this.organisationObject = organisationObject;
+	this.lienDis = lienDis;
 	this.nom = nom;
 	this.prenom = prenom;
 	this.address = address;
@@ -164,6 +166,8 @@ public class Membre implements Serializable {
 	this.lastVisit = LocalDateTime.now(); // do not use lastVisit from DTO we need to update the time
 	this.lienBanque = lienBanque;
 }
+
+
 
 /**
   * Access method for batId.
@@ -801,9 +805,17 @@ public void setLienBanque(Short lienBanque) {
 public Integer getLienDis() {
 	return lienDis;
 }
+public void setLienDis(Integer lienDis) {
+	this.lienDis = lienDis;
+}
 
-public Organisation getOrganisationObject() {
-	return organisationObject;
+
+public String getSociete() {
+	return societe;
+}
+
+public String getLienDepot() {
+	return lienDepot;
 }
 
 /**

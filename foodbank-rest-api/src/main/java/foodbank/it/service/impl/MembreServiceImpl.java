@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -55,11 +56,11 @@ public class MembreServiceImpl implements IMembreService{
     		predicates.add(nomPredicate);
     		Predicate prenomPredicate = criteriaBuilder.equal(existingMembre.get("prenom"), membre.getPrenom());
     		predicates.add(prenomPredicate);
-    		Organisation orgOfMember = membre.getOrganisationObject();
-    		if (orgOfMember != null  ) {
-    			Predicate lienDisPredicate = criteriaBuilder.equal(existingMembre.get("lienDis"), orgOfMember.getIdDis());
+    		Integer lienDis = membre.getLienDis();
+    		if (lienDis != null && lienDis != 0 ) {
+    			Predicate lienDisPredicate = criteriaBuilder.equal(existingMembre.get("lienDis"), lienDis);
     			predicates.add(lienDisPredicate);    			
-    			System.out.printf("Checking If Member exists with nom: %s prenom %s in Organisation %d\n", membre.getNom(), membre.getPrenom(), orgOfMember.getIdDis());
+    			System.out.printf("Checking If Member exists with nom: %s prenom %s in Organisation %d\n", membre.getNom(), membre.getPrenom(), lienDis);
     		}
     		else {
     			Predicate lienBanquePredicate = criteriaBuilder.equal(existingMembre.get("lienBanque"), membre.getLienBanque());
@@ -120,7 +121,6 @@ public class MembreServiceImpl implements IMembreService{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
 		Root<Membre> membre = membreQuery.from(Membre.class);
-		Join<Membre,Organisation> organisation = membre.join("organisationObject");
 		List<Predicate> predicates = new ArrayList<>();
 
 		String nom = searchCriteria.getNom();
@@ -186,7 +186,7 @@ public class MembreServiceImpl implements IMembreService{
 			predicates.add(lienDisNotNull);
 			}
 			else {
-				Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"),lienDepot);
+				Predicate lienDepotPredicate = criteriaBuilder.equal(membre.get("lienDepot"),lienDepot);
 				predicates.add(lienDepotPredicate);
 			}
 		}
