@@ -1,5 +1,5 @@
 <module xmlns="urn:jboss:module:1.0" name="isis.mysql">
     <resources>
-          <resource-root path="mysql-connector-java-5.0.8-bin.jar"/>
+          <resource-root path="mysql-connector-java-8.0.23.jar"/>
     </resources>
 </module>

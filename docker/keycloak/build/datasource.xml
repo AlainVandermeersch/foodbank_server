@@ -18,3 +18,4 @@
     <driver name="mysql-connector-java-8.0.23.jar" module="com.mysql.jdbc">
         <xa-datasource-class>com.mysql.cj.jdbc.MysqlXADataSource</xa-datasource-class>
     </driver>
+<!-- the drivers tag is not closed on purpose because it is injected using sed in Dockerfile -->

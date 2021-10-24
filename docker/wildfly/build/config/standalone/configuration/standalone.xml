@@ -53,7 +53,7 @@
             <security-realm name="ApplicationRealm">
                 <server-identities>
                     <ssl>
-                        <keystore path="application.keystore" relative-to="jboss.server.config.dir" keystore-password="Nakatomi4812!" alias="server" key-password="Nakatomi4812" generate-self-signed-certificate-host="localhost"/>
+                        <keystore path="application.keystore" relative-to="jboss.server.config.dir" keystore-password="${env.KEYSTORE_PASSWORD}" alias="server" key-password="${env.KEY_PASSWORD}" generate-self-signed-certificate-host="localhost"/>
                     </ssl>
                 </server-identities>
                 <authentication>
@@ -175,11 +175,11 @@
                     </security>
                 </datasource>
                 <datasource jndi-name="java:/MySqlDS" pool-name="MySqlDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:mysql://localhost:3306/banque_Alimentaire</connection-url>
+                    <connection-url>jdbc:mysql://${env.MYSQL_HOST}:${env.MYSQL_PORT}/${env.MYSQL_DATABASE}${env.MYSQL_ADDITIONAL_PARAMS}</connection-url>
                     <driver>mysql</driver>
                     <security>
-                        <user-name>root</user-name>
-                        <password>FWeZc9tn</password>
+                        <user-name>${env.MYSQL_USER}</user-name>
+                        <password>${env.MYSQL_PASSWORD}</password>
                     </security>
                 </datasource>
                 <drivers>
