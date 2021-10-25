@@ -8,9 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -23,7 +20,6 @@ import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Membre;
-import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.persistence.repository.IMembreRepository;
 import foodbank.it.service.IMembreService;

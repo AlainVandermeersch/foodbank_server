@@ -188,16 +188,20 @@ public class OrganisationServiceImpl implements IOrganisationService{
 
 		List<Predicate> predicates = new ArrayList<>();
 		String societe = searchCriteria.getSociete();
-		Integer lienBanque = searchCriteria.getLienBanque();		
+		Integer lienBanque = searchCriteria.getLienBanque();
+		Integer lienDepot = searchCriteria.getLienDepot();
 		
-		if (societe != null ) {			
-
+		if (societe != null ) {	
 			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
 			predicates.add(prenomPredicate);
 		}
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
+		}
+		if (lienDepot != null) {
+			Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienBanque);
+			predicates.add(lienDepotPredicate);
 		}
 		
 

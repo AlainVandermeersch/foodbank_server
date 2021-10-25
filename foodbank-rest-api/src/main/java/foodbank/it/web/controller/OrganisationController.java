@@ -107,14 +107,16 @@ public class OrganisationController {
     @GetMapping("orgsummaries/")
     public Collection<OrganisationSummaryDto> findSummaries( 
     		@RequestParam(required = false) String societe, 
-    		@RequestParam(required = false) String lienBanque ) {
+    		@RequestParam(required = false) String lienBanque ,
+    		@RequestParam(required = false) String lienDepot) {
         Page<Organisation> selectedOrganisations = null;
 
         Pageable pageRequest = PageRequest.of(0, 300, Sort.by("societe").ascending());
        
-        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);        
+        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);  
+        Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         
-		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger);
+		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger);
 		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);
 		
 		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();
