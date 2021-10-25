@@ -97,6 +97,7 @@ public class TUserServiceImpl implements ITUserService {
 		String rights = searchCriteria.getRights();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idOrg = searchCriteria.getIdOrg();
+		Integer lienDepot = searchCriteria.getLienDepot();
 
 		if (idUser != null) {			
 
@@ -142,17 +143,24 @@ public class TUserServiceImpl implements ITUserService {
 				predicates.add(idOrgPredicate);
 			}
 			else {
-				Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
-				predicates.add(idOrgPredicate);
+				
+					Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
+					predicates.add(idOrgPredicate);				
 			}
 		}
 		else {
-			System.out.printf("\nExcluding Bank Members");
-			// exclude users of bank who have idOrg 0 or null
-			Predicate idOrgNotZero = criteriaBuilder.notEqual(tuser.get("idOrg"), 0);
-			Predicate idOrgNotNull = criteriaBuilder.isNotNull(tuser.get("idOrg"));
-			predicates.add(idOrgNotZero);
-			predicates.add(idOrgNotNull);
+			if (lienDepot == null) {
+				System.out.printf("\nExcluding Bank Members");
+				// exclude users of bank who have idOrg 0 or null
+				Predicate idOrgNotZero = criteriaBuilder.notEqual(tuser.get("idOrg"), 0);
+				Predicate idOrgNotNull = criteriaBuilder.isNotNull(tuser.get("idOrg"));
+				predicates.add(idOrgNotZero);
+				predicates.add(idOrgNotNull);
+			}
+			else {
+				Predicate lienDepotPredicate = criteriaBuilder.equal(tuser.get("lienDepot"),lienDepot);
+				predicates.add(lienDepotPredicate);
+			}
 		}
 		Predicate lienActifPredicate = criteriaBuilder.equal(tuser.get("actif"),1);
 		predicates.add(lienActifPredicate);

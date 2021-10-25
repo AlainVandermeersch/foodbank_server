@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -32,7 +34,7 @@ public class TUser implements Serializable {
     private String userName;
     @Column(name="ID_COMPANY", length=10)
     private String idCompany;
-    @Column(name="ID_ORG", precision=10, insertable=false,updatable=false)
+    @Column(name="ID_ORG", precision=10)
     private Integer idOrg;
     @Column(name="ID_LANGUAGE", length=2)
     private String idLanguage;
@@ -68,18 +70,10 @@ public class TUser implements Serializable {
     private int lienBanque;
     @Column(name="lien_cpas", precision=10)
     private int lienCpas;
-    @ManyToOne
-    @JoinColumn(name="ID_ORG")
-    @NotFound(action = NotFoundAction.IGNORE)
-    private Organisation organisationObject;
-
-    public Organisation getOrganisationObject() {
-   		return organisationObject;
-   	}
-
-   	public void setOrganisationObject(Organisation organisationObject) {
-   		this.organisationObject = organisationObject;
-   	}
+    @Formula("(select d.societe from organisations d where d.id_dis = ID_ORG)")
+    private String societe;
+    @Formula("(select d.lien_depot from organisations d where d.id_dis = ID_ORG)")
+    private String lienDepot;
     @ManyToOne
     @JoinColumn(name="lien_bat")
     @NotFound(action = NotFoundAction.IGNORE)
@@ -99,13 +93,13 @@ public class TUser implements Serializable {
         super();
     }
 
-    public TUser(String idUser, String userName, String idCompany, Organisation organisationObject, String idLanguage, Membre membreObject, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
+    public TUser(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, Membre membreObject, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
         int gestAsso, int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas) {
         super();
         this.idUser = idUser;
         this.userName = userName;
         this.idCompany = idCompany;
-        this.organisationObject = organisationObject;
+        this.idOrg = idOrg;
         this.idLanguage = idLanguage;
         this.membreObject = membreObject;
         this.actif = actif;
@@ -505,6 +499,30 @@ public class TUser implements Serializable {
 
   
    
+
+	public String getSociete() {
+		return societe;
+	}
+
+	public void setSociete(String societe) {
+		this.societe = societe;
+	}
+
+	public String getLienDepot() {
+		return lienDepot;
+	}
+
+	public void setLienDepot(String lienDepot) {
+		this.lienDepot = lienDepot;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public static String getPk() {
+		return PK;
+	}
 
 	/**
      * Compares the key for this instance with another TUser.

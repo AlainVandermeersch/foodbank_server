@@ -200,7 +200,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			predicates.add(lienBanquePredicate);
 		}
 		if (lienDepot != null) {
-			Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienBanque);
+			Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienDepot);
 			predicates.add(lienDepotPredicate);
 		}
 		

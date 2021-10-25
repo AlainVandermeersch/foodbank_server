@@ -10,8 +10,9 @@ public class SearchTUserCriteria {
 	private String rights;
 	private Integer lienBanque;
 	private Integer idOrg;
+	private Integer lienDepot;
 	
-	public SearchTUserCriteria(String idUser, String membreNom,String membrePrenom,Integer membreLangue,String membreEmail,String rights, Integer lienBanque, Integer idOrg) {
+	public SearchTUserCriteria(String idUser, String membreNom,String membrePrenom,Integer membreLangue,String membreEmail,String rights, Integer lienBanque, Integer idOrg,Integer lienDepot) {
 		this.idUser = idUser;
 		this.membreNom = membreNom;
 		this.membrePrenom = membrePrenom;
@@ -20,6 +21,8 @@ public class SearchTUserCriteria {
 		this.rights = rights;
 		this.lienBanque = lienBanque;
 		this.idOrg = idOrg;
+		this.lienDepot = lienDepot;
+		
 	}
 
 	
@@ -109,6 +112,13 @@ public class SearchTUserCriteria {
 
 	public void setIdOrg(Integer idOrg) {
 		this.idOrg = idOrg;
+	}
+	public Integer getLienDepot() {
+		return lienDepot;
+	}
+
+	public void setLienDepot(Integer lienDepot) {
+		this.lienDepot = lienDepot;
 	}
 	
 }

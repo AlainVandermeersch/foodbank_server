@@ -62,6 +62,7 @@ public class TUserController {
     		@RequestParam(required = false) String idUser,@RequestParam(required = false) String membreNom, 
     		@RequestParam(required = false) String membrePrenom, @RequestParam(required = false) String membreLangue,
     		@RequestParam(required = false) String membreEmail, @RequestParam(required = false) String rights,
+    		@RequestParam(required = false) String lienDepot ,
     		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg )  {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -76,8 +77,9 @@ public class TUserController {
         } 
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer membreLangueInteger = Optional.ofNullable(membreLangue).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, membreNom,membrePrenom ,membreLangueInteger,membreEmail,rights, lienBanqueInteger, idOrgInteger);
+		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, membreNom,membrePrenom ,membreLangueInteger,membreEmail,rights, lienBanqueInteger, idOrgInteger,lienDepotInteger);
 		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 
@@ -130,11 +132,6 @@ public class TUserController {
 
     protected TUserDto convertToDto(TUser entity,Long  totalRecords) {
     	
-    	String societe ="";
-    	Organisation orgOfUser = entity.getOrganisationObject();
-    	if (orgOfUser != null) {
-    		societe = orgOfUser.getSociete();
-    	}
     	String membreNom = "";
     	String membrePrenom = "";
     	String membreEmail = "";
@@ -159,21 +156,17 @@ public class TUserController {
     	boolean booGestDon = entity.getGestDon() == 1;
         TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), booActif, entity.getRights(), entity.getPassword(), entity.getDepot(), booDroit1, entity.getEmail(), 
         		booGestBen, booGestInv, booGestFead, booGestAsso,
-        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),societe,membreNom,membrePrenom,membreEmail, membreLangue, totalRecords);       
+        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),entity.getSociete(),membreNom,membrePrenom,membreEmail, membreLangue, totalRecords);       
         return dto;
     }
 
     protected TUser convertToEntity(TUserDto dto) {
     	
-    	Organisation orgOfUser = null;    	
-    	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getIdOrg());
-    	if (org.isPresent() == true) orgOfUser = org.get() ;
-    		
     	Membre membreOfUser = null;
     	Optional<Membre> membre = this.MembreService.findByBatId(dto.getLienBat());
     	if (membre.isPresent()) membreOfUser = membre.get();
     		
-        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), orgOfUser, dto.getIdLanguage(), membreOfUser, 
+        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(), dto.getIdLanguage(), membreOfUser, 
         		(short) (dto.getActif() ? 1 : 0) , dto.getRights(), dto.getPassword(), dto.getDepot(), (short) (dto.getDroit1() ? 1 : 0) , dto.getEmail(), 
         		(short) (dto.getGestBen() ? 1 : 0) , (short) (dto.getGestInv() ? 1 : 0) , (short) (dto.getGestFead() ? 1 : 0) , (short) (dto.getGestAsso() ? 1 : 0) ,
         		(short) (dto.getGestCpas() ? 1 : 0) , (short) (dto.getGestMemb() ? 1 : 0) ,(short) (dto.getGestDon() ? 1 : 0) , dto.getLienBanque(), dto.getLienCpas());
