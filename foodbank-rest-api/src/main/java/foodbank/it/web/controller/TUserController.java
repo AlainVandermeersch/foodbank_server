@@ -21,11 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import foodbank.it.persistence.model.Membre;
-import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
-import foodbank.it.service.IMembreService;
-import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
 import foodbank.it.web.dto.TUserDto;
@@ -35,13 +31,10 @@ import foodbank.it.web.dto.TUserDto;
 public class TUserController {
 
     private ITUserService TUserService;
-    private IOrganisationService OrganisationService;
-    private IMembreService MembreService;
+   
     
-    public TUserController(ITUserService TUserService,IOrganisationService OrganisationService, IMembreService MembreService) {
-        this.TUserService = TUserService;
-        this.OrganisationService = OrganisationService;
-        this.MembreService = MembreService;
+    public TUserController(ITUserService TUserService) {
+        this.TUserService = TUserService;       
     }
 
     //
@@ -62,7 +55,7 @@ public class TUserController {
     		@RequestParam(required = false) String idUser,@RequestParam(required = false) String membreNom, 
     		@RequestParam(required = false) String membrePrenom, @RequestParam(required = false) String membreLangue,
     		@RequestParam(required = false) String membreEmail, @RequestParam(required = false) String rights,
-    		@RequestParam(required = false) String lienDepot ,
+    		@RequestParam(required = false) String lienDepot ,@RequestParam(required = false) Boolean actif,
     		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg )  {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -79,7 +72,7 @@ public class TUserController {
         Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer membreLangueInteger = Optional.ofNullable(membreLangue).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, membreNom,membrePrenom ,membreLangueInteger,membreEmail,rights, lienBanqueInteger, idOrgInteger,lienDepotInteger);
+		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, membreNom,membrePrenom ,actif, membreLangueInteger,membreEmail,rights, lienBanqueInteger, idOrgInteger,lienDepotInteger);
 		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 
@@ -132,19 +125,6 @@ public class TUserController {
 
     protected TUserDto convertToDto(TUser entity,Long  totalRecords) {
     	
-    	String membreNom = "";
-    	String membrePrenom = "";
-    	String membreEmail = "";
-    	Short membreLangue = 0;
-    	Membre membreOfUser = entity.getMembreObject();
-    	if (membreOfUser != null) {
-    		membreNom = membreOfUser.getNom();
-    		membrePrenom = membreOfUser.getPrenom();
-    		membreEmail = membreOfUser.getBatmail();
-    		membreLangue = membreOfUser.getLangue();
-    		
-    	}
-    	
     	boolean booActif= entity.getActif() == 1;
     	boolean booDroit1= entity.getDroit1() == 1;
     	boolean booGestBen = entity.getGestBen() == 1;
@@ -156,17 +136,15 @@ public class TUserController {
     	boolean booGestDon = entity.getGestDon() == 1;
         TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), booActif, entity.getRights(), entity.getPassword(), entity.getDepot(), booDroit1, entity.getEmail(), 
         		booGestBen, booGestInv, booGestFead, booGestAsso,
-        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),entity.getSociete(),membreNom,membrePrenom,membreEmail, membreLangue, totalRecords);       
+        		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),entity.getSociete(),
+        		entity.getMembreNom(),entity.getMembrePrenom(),entity.getMembreEmail(), entity.getMembreLangue(), totalRecords);       
         return dto;
     }
 
     protected TUser convertToEntity(TUserDto dto) {
     	
-    	Membre membreOfUser = null;
-    	Optional<Membre> membre = this.MembreService.findByBatId(dto.getLienBat());
-    	if (membre.isPresent()) membreOfUser = membre.get();
-    		
-        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(), dto.getIdLanguage(), membreOfUser, 
+    	    		
+        TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(), dto.getIdLanguage(), dto.getLienBat(), 
         		(short) (dto.getActif() ? 1 : 0) , dto.getRights(), dto.getPassword(), dto.getDepot(), (short) (dto.getDroit1() ? 1 : 0) , dto.getEmail(), 
         		(short) (dto.getGestBen() ? 1 : 0) , (short) (dto.getGestInv() ? 1 : 0) , (short) (dto.getGestFead() ? 1 : 0) , (short) (dto.getGestAsso() ? 1 : 0) ,
         		(short) (dto.getGestCpas() ? 1 : 0) , (short) (dto.getGestMemb() ? 1 : 0) ,(short) (dto.getGestDon() ? 1 : 0) , dto.getLienBanque(), dto.getLienCpas());

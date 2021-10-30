@@ -42,7 +42,7 @@ public class MembreDto {
 	 
 	 private Short pays;
 	
-	 private Short actif;
+	 private boolean actif;
 	 
 	 private Short authority;
 	 private String datmand;
@@ -84,7 +84,7 @@ public class MembreDto {
 
 	public MembreDto(Integer batId, Integer lienDis, String nom, String prenom, String address, String city, String zip,
 			String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction, Short ca,
-			Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand, String rem,
+			Short ag, Short cg, Short civilite, Short pays, boolean actif, Short authority, String datmand, String rem,
 			Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
 			Integer lDep,LocalDateTime lastVisit, Short lienBanque,String societe, Long  totalRecords) {
@@ -288,11 +288,11 @@ public class MembreDto {
 		this.pays = pays;
 	}
 
-	public Short getActif() {
+	public boolean getActif() {
 		return actif;
 	}
 
-	public void setActif(Short actif) {
+	public void setActif(boolean actif) {
 		this.actif = actif;
 	}
 

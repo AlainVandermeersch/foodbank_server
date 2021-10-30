@@ -9,12 +9,8 @@ import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 @Entity(name="t_user")
 public class TUser implements Serializable {
@@ -38,7 +34,7 @@ public class TUser implements Serializable {
     private Integer idOrg;
     @Column(name="ID_LANGUAGE", length=2)
     private String idLanguage;
-    @Column(name="lien_bat", nullable=false, precision=10,insertable=false,updatable=false)
+    @Column(name="lien_bat", nullable=false, precision=10)
     private int lienBat;
     @Column(name="ACTIF", nullable=false, precision=10)
     private int actif;
@@ -74,26 +70,21 @@ public class TUser implements Serializable {
     private String societe;
     @Formula("(select d.lien_depot from organisations d where d.id_dis = ID_ORG)")
     private String lienDepot;
-    @ManyToOne
-    @JoinColumn(name="lien_bat")
-    @NotFound(action = NotFoundAction.IGNORE)
-    private Membre membreObject;
+    @Formula("(select e.nom from bat e where e.bat_ID = lien_bat)")
+    private String membreNom;
+    @Formula("(select e.prenom from bat e where e.bat_ID = lien_bat)")
+    private String membrePrenom;
+    @Formula("(select e.batmail from bat e where e.bat_ID = lien_bat)")
+    private String membreEmail;
+    @Formula("(select e.langue from bat e where e.bat_ID = lien_bat)")
+    private Short membreLangue;
     
-    
-    public Membre getMembreObject() {
-		return membreObject;
-	}
-
-	public void setMembreObject(Membre membreObject) {
-		this.membreObject = membreObject;
-	}
-
 	/** Default constructor. */
     protected TUser() {
         super();
     }
 
-    public TUser(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, Membre membreObject, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
+    public TUser(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
         int gestAsso, int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas) {
         super();
         this.idUser = idUser;
@@ -101,7 +92,7 @@ public class TUser implements Serializable {
         this.idCompany = idCompany;
         this.idOrg = idOrg;
         this.idLanguage = idLanguage;
-        this.membreObject = membreObject;
+        this.lienBat = lienBat;
         this.actif = actif;
         this.rights = rights;
         this.password = password;
@@ -172,8 +163,42 @@ public class TUser implements Serializable {
     public void setIdCompany(String aIdCompany) {
         idCompany = aIdCompany;
     }
+    
+    
 
-    /**
+    public String getMembreNom() {
+		return membreNom;
+	}
+
+	public void setMembreNom(String membreNom) {
+		this.membreNom = membreNom;
+	}
+
+	public String getMembrePrenom() {
+		return membrePrenom;
+	}
+
+	public void setMembrePrenom(String membrePrenom) {
+		this.membrePrenom = membrePrenom;
+	}
+
+	public String getMembreEmail() {
+		return membreEmail;
+	}
+
+	public void setMembreEmail(String membreEmail) {
+		this.membreEmail = membreEmail;
+	}
+
+	public Short getMembreLangue() {
+		return membreLangue;
+	}
+
+	public void setMembreLangue(Short membreLangue) {
+		this.membreLangue = membreLangue;
+	}
+
+	/**
      * Access method for idOrg.
      *
      * @return the current value of idOrg

@@ -8,13 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import foodbank.it.persistence.model.TUser;
-import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.repository.ITUserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -85,13 +83,12 @@ public class TUserServiceImpl implements ITUserService {
 		
 		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
 		Root<TUser> tuser = tuserQuery.from(TUser.class);		
-		Join<TUser, Membre> membre = tuser.join("membreObject");
-
 		List<Predicate> predicates = new ArrayList<>();
 
 		String idUser = searchCriteria.getIdUser();
 		String membreNom = searchCriteria.getMembreNom();
 		String membrePrenom = searchCriteria.getMembrePrenom();
+		Boolean actif = searchCriteria.getActif();
 		Integer membreLangue = searchCriteria.getMembreLangue();
 		String membreEmail = searchCriteria.getMembreEmail();
 		String rights = searchCriteria.getRights();
@@ -106,22 +103,22 @@ public class TUserServiceImpl implements ITUserService {
 		}
 		if (membreNom != null) {			
 
-			Predicate membreNomPredicate = criteriaBuilder.like(membre.<String>get("nom"), "%" + membreNom.toLowerCase() + "%");
+			Predicate membreNomPredicate = criteriaBuilder.like(tuser.<String>get("membreNom"), "%" + membreNom.toLowerCase() + "%");
 			predicates.add(membreNomPredicate);
 		}
 		if (membrePrenom != null) {			
 
-			Predicate membrePrenomPredicate = criteriaBuilder.like(membre.<String>get("prenom"), "%" + membrePrenom.toLowerCase() + "%");
+			Predicate membrePrenomPredicate = criteriaBuilder.like(tuser.<String>get("membrePrenom"), "%" + membrePrenom.toLowerCase() + "%");
 			predicates.add(membrePrenomPredicate);
 		}
 		
 		if (membreEmail != null) {			
 
-			Predicate emailPredicate = criteriaBuilder.like(membre.<String>get("batmail"), "%" + membreEmail.toLowerCase() + "%");
+			Predicate emailPredicate = criteriaBuilder.like(tuser.<String>get("membreEmail"), "%" + membreEmail.toLowerCase() + "%");
 			predicates.add(emailPredicate);
 		}
 		if (membreLangue != null) {
-			Predicate languePredicate = criteriaBuilder.equal(membre.<Integer>get("langue"), membreLangue);
+			Predicate languePredicate = criteriaBuilder.equal(tuser.<Short>get("membreLangue"), membreLangue);
 			predicates.add(languePredicate);
 		}
 		if (rights != null) {			
@@ -162,9 +159,14 @@ public class TUserServiceImpl implements ITUserService {
 				predicates.add(lienDepotPredicate);
 			}
 		}
-		Predicate lienActifPredicate = criteriaBuilder.equal(tuser.get("actif"),1);
-		predicates.add(lienActifPredicate);
-
+		if (actif != null) {
+			Integer intActive = 0;
+			if (actif == true) {
+				intActive = 1;
+			}
+			Predicate isActifPredicate = criteriaBuilder.equal(tuser.get("actif"), intActive);
+			predicates.add(isActifPredicate);
+		} 
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));
 

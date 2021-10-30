@@ -254,7 +254,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
     			
     			CriteriaQuery<OrgMemberReportDto> cq = cb.createQuery(OrgMemberReportDto.class);
     			Root<Membre> membre = cq.from(Membre.class);		
-    			Join<Membre,Organisation> organisation = membre.join("organisationObject");
+    			Join<Membre,Organisation> organisation = membre.join("lienDis");
     			List<Predicate> predicates = new ArrayList<>();
     			
     			Expression<String> groupByExp = organisation.get("societe").as(String.class);

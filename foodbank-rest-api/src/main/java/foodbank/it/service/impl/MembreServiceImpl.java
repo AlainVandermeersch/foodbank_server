@@ -121,6 +121,7 @@ public class MembreServiceImpl implements IMembreService{
 
 		String nom = searchCriteria.getNom();
 		String prenom = searchCriteria.getPrenom();
+		Boolean actif = searchCriteria.getActif();
 		String address = searchCriteria.getAddress();
 		String zip = searchCriteria.getZip();
 		String city = searchCriteria.getCity();
@@ -186,8 +187,14 @@ public class MembreServiceImpl implements IMembreService{
 				predicates.add(lienDepotPredicate);
 			}
 		}
-		Predicate lienActifPredicate = criteriaBuilder.equal(membre.get("actif"),1);
-		predicates.add(lienActifPredicate);
+		if (actif != null) {
+			Integer intActive = 0;
+			if (actif == true) {
+				intActive = 1;
+			}
+			Predicate isActifPredicate = criteriaBuilder.equal(membre.get("actif"), intActive);
+			predicates.add(isActifPredicate);
+		} 
 
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
 		membreQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), membre, criteriaBuilder));

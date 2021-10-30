@@ -55,6 +55,7 @@ public class MembreController {
     		@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom, 
      		@RequestParam(required = false) String address,@RequestParam(required = false) String zip, 
      		@RequestParam(required = false) String city,@RequestParam(required = false) String lienDepot ,
+     		@RequestParam(required = false) Boolean actif,
     		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -71,7 +72,7 @@ public class MembreController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, prenom, address, zip,city, lienBanqueInteger, lienDisInteger,lienDepotInteger);
+		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, prenom, actif,address, zip,city, lienBanqueInteger, lienDisInteger,lienDepotInteger);
 		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 
@@ -146,12 +147,12 @@ public class MembreController {
         return dto;
 	}
     protected MembreDto convertToDto(Membre entity,long totalRecords) {   
-    	
+    	boolean booActif= entity.getActif() == 1;
     	
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
-				entity.getPays(), entity.getActif(), entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
+				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
 				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),entity.getLienBanque(),entity.getSociete(),totalRecords  );    
         return dto;
@@ -163,7 +164,7 @@ public class MembreController {
     	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
 				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), dto.getCa(), dto.getAg(), dto.getCg(),dto.getCivilite(), 
-				dto.getPays(), dto.getActif(), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  dto.getBen(),
+				dto.getPays(), (short) (dto.getActif() ? 1 : 0), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  dto.getBen(),
 				dto.getCodeAcces(), dto.getNrCodeAcces(), dto.getLangue(), dto.getDatedeb(), dto.getDateFin(), dto.getDeleted(),
 				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLDep(),dto.getLienBanque());       
         if (!StringUtils.isEmpty(dto.getBatId())) {
