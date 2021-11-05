@@ -86,8 +86,9 @@ public class OrganisationController {
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
-        
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(societe, adresse, daten, actif, nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint);
+        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
+
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,societe, adresse, daten, actif, nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        

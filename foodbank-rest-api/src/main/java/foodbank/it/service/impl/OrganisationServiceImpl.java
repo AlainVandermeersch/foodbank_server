@@ -84,6 +84,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
 
 		List<Predicate> predicates = new ArrayList<>();
+		Integer idDis = searchCriteria.getIdDis();
 		String societe = searchCriteria.getSociete();
 		String adresse = searchCriteria.getAdresse();
 		String nomDepot = searchCriteria.getNomDepot();
@@ -163,6 +164,10 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate lienlienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienDepot);
 			predicates.add(lienlienDepotPredicate);
 		}
+		if (idDis != null) {
+			Predicate idDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), idDis);
+				predicates.add(idDisPredicate);
+			}
 
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));
