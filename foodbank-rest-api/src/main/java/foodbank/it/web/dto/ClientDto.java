@@ -38,7 +38,7 @@ public class ClientDto {
 	 private Integer genre;
 	// Alain actif means archived in the MySQLDB - its counterintuitive actif = 1 means archived - actif  = 0 means "current, not archived"
 	// So in the DTO we expose the property as archived
-	 private boolean archived;
+	 private boolean actif;
 	 
 	 private short birb;
 	
@@ -190,11 +190,11 @@ public class ClientDto {
 	public void setGenre(int genre) {
 		this.genre = genre;
 	}
-	public boolean getArchived() {
-		return archived;
+	public boolean getActif() {
+		return actif;
 	}
-	public void setArchived(boolean archived) {
-		this.archived = archived;
+	public void setActif(boolean actif) {
+		this.actif = actif;
 	}
 	public short getBirb() {
 		return birb;
@@ -295,7 +295,7 @@ public class ClientDto {
 	public ClientDto(int idClient, String idInt, Integer lienDis, String nom, String prenom, String nomconj,
 			String prenomconj, short civilite, String daten, String datenConj, short civiliteconj, String adresse,
 			String cp, String localite, String pays, String email, String tel, String gsm, String connu, int genre,
-			boolean archived, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
+			boolean actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
 			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long nbDep, String societe, Long  totalRecords) {
 		super();
 		this.idClient = idClient;
@@ -318,7 +318,7 @@ public class ClientDto {
 		this.gsm = gsm;
 		this.connu = connu;
 		this.genre = genre;
-		this.archived = archived;
+		this.actif = actif;
 		this.birb = birb;
 		this.natnr = natnr;
 		if (dateUpd == null) {

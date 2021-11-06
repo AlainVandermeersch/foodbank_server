@@ -54,7 +54,7 @@ public class ClientController {
 
 	@GetMapping("beneficiaires/")
 	public Collection<ClientDto> find(@RequestParam String offset, @RequestParam String rows,
-			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String archived,
+			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String actif,
 			@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
      		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
      		@RequestParam(required = false) String localite,
@@ -73,7 +73,7 @@ public class ClientController {
 		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer actifInteger = 1;
-		if (archived.equals("1")) {
+		if (actif.equals("0")) {
 			actifInteger = 0;
 		}
 
@@ -120,12 +120,12 @@ public class ClientController {
 
     	}
 
-		boolean booArchived = entity.getActif() == 0;
-		// Alain -  Client Table property actif  is mapped into property archived of dto
+		boolean booActif = entity.getActif() == 1;
+		
 		ClientDto dto = new ClientDto(entity.getIdClient(), entity.getIdInt(), liendis, entity.getNom(), entity.getPrenom(),
 				entity.getNomconj(), entity.getPrenomconj(), entity.getCivilite(), entity.getDaten(), entity.getDatenConj(), entity.getCiviliteconj(),
 				entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getPays(), entity.getEmail(), entity.getTel(), entity.getGsm(),
-				entity.getConnu(), entity.getGenre(), booArchived, entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
+				entity.getConnu(), entity.getGenre(),booActif, entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
 				entity.getLCpas(), entity.getDatUpdBirb(), entity.getCritBirb(), entity.getCoeff(), entity.getNomsav(), entity.getPrenomsav(),
 				entity.getGenreconj(), entity.getLbanque(), entity.getNbDep(),societe,totalRecords);
 		return dto;
@@ -137,11 +137,11 @@ public class ClientController {
 
     	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getLienDis());
     		if (org.isPresent() == true) orgOfClient = org.get() ;
-		// Alain - property archived 0 of dto is mapped into Client Table property actif = 1
+		
 		Client myClient = new Client(dto.getIdClient(), dto.getIdInt(), orgOfClient, dto.getLbanque(), dto.getNom(), dto.getPrenom(),
 				dto.getNomconj(), dto.getPrenomconj(), dto.getCivilite(), dto.getDaten(), dto.getDatenConj(), dto.getCiviliteconj(),
 				dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getPays(), dto.getEmail(), dto.getTel(), dto.getGsm(),
-				dto.getConnu(), dto.getGenre(), (short) (dto.getArchived() ? 0 : 1) , dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
+				dto.getConnu(), dto.getGenre(), (short) (dto.getActif() ? 1 : 0) , dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
 				dto.getLCpas(), dto.getDatUpdBirb(), dto.getCritBirb(), dto.getCoeff(), dto.getNomsav(), dto.getPrenomsav(),
 				dto.getGenreconj());
 		if (!StringUtils.isEmpty(dto.getIdClient())) {

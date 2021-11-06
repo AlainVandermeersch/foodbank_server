@@ -87,7 +87,6 @@ public class TUserServiceImpl implements ITUserService {
 
 		String idUser = searchCriteria.getIdUser();
 		String membreNom = searchCriteria.getMembreNom();
-		String membrePrenom = searchCriteria.getMembrePrenom();
 		Boolean actif = searchCriteria.getActif();
 		Integer membreLangue = searchCriteria.getMembreLangue();
 		String membreEmail = searchCriteria.getMembreEmail();
@@ -106,12 +105,7 @@ public class TUserServiceImpl implements ITUserService {
 			Predicate membreNomPredicate = criteriaBuilder.like(tuser.<String>get("membreNom"), "%" + membreNom.toLowerCase() + "%");
 			predicates.add(membreNomPredicate);
 		}
-		if (membrePrenom != null) {			
-
-			Predicate membrePrenomPredicate = criteriaBuilder.like(tuser.<String>get("membrePrenom"), "%" + membrePrenom.toLowerCase() + "%");
-			predicates.add(membrePrenomPredicate);
-		}
-		
+				
 		if (membreEmail != null) {			
 
 			Predicate emailPredicate = criteriaBuilder.like(tuser.<String>get("membreEmail"), "%" + membreEmail.toLowerCase() + "%");

@@ -2,7 +2,6 @@ package foodbank.it.service;
 
 public class SearchMembreCriteria {
 	private String nom;
-	private String prenom;
 	private Boolean actif;
 	private String address;
 	private String zip;
@@ -12,9 +11,8 @@ public class SearchMembreCriteria {
 	private Integer lienDepot;
 	
 	
-	public SearchMembreCriteria(String nom, String prenom, Boolean actif, String address, String zip, String city, Integer lienBanque, Integer lienDis,Integer lienDepot) {
-		this.nom = nom;
-		this.prenom = prenom;
+	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, Integer lienBanque, Integer lienDis,Integer lienDepot) {
+		this.nom = nom;		
 		this.actif = actif;
 		this.address = address;
 		this.zip = zip;
@@ -34,18 +32,6 @@ public class SearchMembreCriteria {
 
 	public void setNom(String nom) {
 		this.nom = nom;
-	}
-
-
-
-	public String getPrenom() {
-		return prenom;
-	}
-
-
-
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
 	}
 
 

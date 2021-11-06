@@ -120,7 +120,6 @@ public class MembreServiceImpl implements IMembreService{
 		List<Predicate> predicates = new ArrayList<>();
 
 		String nom = searchCriteria.getNom();
-		String prenom = searchCriteria.getPrenom();
 		Boolean actif = searchCriteria.getActif();
 		String address = searchCriteria.getAddress();
 		String zip = searchCriteria.getZip();
@@ -133,11 +132,6 @@ public class MembreServiceImpl implements IMembreService{
 
 			Predicate nomPredicate = criteriaBuilder.like(membre.get("nom"), "%" + nom.toLowerCase() + "%");
 			predicates.add(nomPredicate);
-		}
-		if (prenom != null ) {			
-
-			Predicate prenomPredicate = criteriaBuilder.like(membre.get("prenom"), "%" + prenom.toLowerCase() + "%");
-			predicates.add(prenomPredicate);
 		}
 		if (address != null ) {			
 

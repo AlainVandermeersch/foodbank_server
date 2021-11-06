@@ -4,7 +4,6 @@ public class SearchTUserCriteria {
 	
 	private String idUser;
 	private String membreNom;
-	private String membrePrenom;
 	private Boolean actif;
 	private Integer  membreLangue;
 	private String membreEmail;
@@ -13,10 +12,9 @@ public class SearchTUserCriteria {
 	private Integer idOrg;
 	private Integer lienDepot;
 	
-	public SearchTUserCriteria(String idUser, String membreNom,String membrePrenom,Boolean actif, Integer membreLangue,String membreEmail,String rights, Integer lienBanque, Integer idOrg,Integer lienDepot) {
+	public SearchTUserCriteria(String idUser, String membreNom,Boolean actif, Integer membreLangue,String membreEmail,String rights, Integer lienBanque, Integer idOrg,Integer lienDepot) {
 		this.idUser = idUser;
-		this.membreNom = membreNom;
-		this.membrePrenom = membrePrenom;
+		this.membreNom = membreNom;		
 		this.actif = actif;
 		this.membreLangue = membreLangue;
 		this.membreEmail = membreEmail;
@@ -49,20 +47,6 @@ public class SearchTUserCriteria {
 	public void setMembreNom(String membreNom) {
 		this.membreNom = membreNom;
 	}
-
-
-
-	public String getMembrePrenom() {
-		return membrePrenom;
-	}
-
-
-
-	public void setMembrePrenom(String membrePrenom) {
-		this.membrePrenom = membrePrenom;
-	}
-
-
 
 	public Boolean getActif() {
 		return actif;
