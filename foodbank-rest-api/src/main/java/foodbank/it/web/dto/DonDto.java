@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.hibernate.annotations.Formula;
+
 public class DonDto {
 	private int idDon;
 	 private int amount; 
@@ -13,9 +15,12 @@ public class DonDto {
 	 private boolean appended;
 	 private boolean checked;
 	 private LocalDate date;
+	 private String donateurNom;
+	 private String donateurPrenom;
+	 private Long  totalRecords;
 	 
 	public DonDto(int idDon, int amount, int lienBanque, int donateurId, LocalDateTime dateEntered, boolean appended,
-			boolean checked, LocalDate date) {
+			boolean checked, LocalDate date,String donateurNom,String donateurPrenom,  Long  totalRecords) {
 		super();
 		this.idDon = idDon;
 		this.amount = amount;
@@ -31,6 +36,9 @@ public class DonDto {
 		this.appended = appended;
 		this.checked = checked;
 		this.date = date;
+		this.donateurNom = donateurNom;
+		this.donateurPrenom = donateurPrenom;
+		this.totalRecords = totalRecords;
 	}
 
 	public int getIdDon() {
@@ -96,7 +104,20 @@ public class DonDto {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-	
+
+	public String getDonateurPrenom() {
+		return donateurPrenom;
+	}
+
+	public String getDonateurNom() {
+		return donateurNom;
+	}
+
+	public Long getTotalRecords() {
+		return totalRecords;
+	}
+
+		
 	 
 	 
 }

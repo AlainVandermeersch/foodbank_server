@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Formula;
+
 @Entity(name="dons")
 public class Don implements Serializable {
 
@@ -43,6 +45,10 @@ private static final long serialVersionUID = -893007371697272121L;
  @Column(nullable=false, precision=3)
  private short checked;
  private LocalDate date;
+ @Formula("(select e.nom from donateurs e where e.donateur_id = donateur_id)")
+ private String donateurNom;
+ @Formula("(select e.prenom from donateurs e where e.donateur_id = donateur_id)")
+ private String donateurPrenom;
 
  /** Default constructor. */
  public Don() {
@@ -206,7 +212,15 @@ private static final long serialVersionUID = -893007371697272121L;
      date = aDate;
  }
 
- /**
+ public String getDonateurNom() {
+	return donateurNom;
+}
+
+public String getDonateurPrenom() {
+	return donateurPrenom;
+}
+
+/**
   * Compares the key for this instance with another Don.
   *
   * @param other The object to compare to
