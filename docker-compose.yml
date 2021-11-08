@@ -83,6 +83,30 @@ services:
     networks:
       - foodbank
 
+  wildfly:
+    depends_on:
+      - mysql
+      - keycloak
+    build:
+      context: ./docker/wildfly
+    environment:
+      - ADMIN_PASS=${WILDFLY_ADMIN_PASS}
+      - KEY_PASSWORD=${WILDFLY_KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${WILDFLY_KEYSTORE_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+    ports:
+      - "10080:8080"
+      - "10443:8443"
+      - "10990:9990"
+      - "10787:8787"
+    networks:
+      - foodbank
+
 networks:
   foodbank:
     name: foodbank-network
