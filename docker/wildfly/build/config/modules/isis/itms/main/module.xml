@@ -1,11 +1,4 @@
 <module xmlns="urn:jboss:module:1.0" name="isis.itms">
-
-    <resources>
-        <resource-root path="../../../../standalone/deployments/isis_reports.jar"/>
-         <resource-root path="../../../../standalone/deployments/isis_po.jar"/>
-		<resource-root path="../../../../standalone/deployments/isis_common.jar" />
-    </resources>
-
     <dependencies>
 		<module name="org.jboss.logging"/>
 	    <system>  

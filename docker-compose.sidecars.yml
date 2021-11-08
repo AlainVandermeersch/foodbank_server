@@ -38,7 +38,7 @@ services:
         - SMTP_USER=${SMTP_USER}
         - SMTP_PASSWORD=${SMTP_PASSWORD}
     ports:
-      - "8083:8080"
+      - "8080:8080"
       - "8443:8443"
       - "8788:8787"
     environment:
@@ -60,6 +60,7 @@ services:
   wildfly:
     depends_on:
       - mysql
+      - keycloak
     build:
       context: ./docker/wildfly
     environment:

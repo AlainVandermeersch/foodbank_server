@@ -38,6 +38,7 @@
         <extension module="org.wildfly.extension.request-controller"/>
         <extension module="org.wildfly.extension.security.manager"/>
         <extension module="org.wildfly.extension.undertow"/>
+        <extension module="org.keycloak.keycloak-adapter-subsystem"/>
     </extensions>
     <management>
         <security-realms>
@@ -187,10 +188,41 @@
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
                     <driver name="mysql" module="isis.mysql:main">
-                        <driver-class>com.mysql.jdbc.Driver</driver-class>
+                        <driver-class>com.mysql.cj.jdbc.Driver</driver-class>
                     </driver>
                 </drivers>
             </datasources>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:keycloak:1.1">
+            <realm name="FoodBank">
+                <auth-server-url>${env.AUTH_SERVER_BASE_URL}/auth</auth-server-url>
+                <ssl-required>EXTERNAL</ssl-required>
+            </realm>
+            <secure-deployment name="isis_common_web_wf.war">
+                <realm>FoodBank</realm>
+                <resource>stock-app</resource>
+                <public-client>true</public-client>
+            </secure-deployment>
+            <secure-deployment name="isis_birt.war">
+                <realm>FoodBank</realm>
+                <resource>stock-app</resource>
+                <public-client>true</public-client>
+            </secure-deployment>
+            <secure-deployment name="isis_po_web.war">
+                <realm>FoodBank</realm>
+                <resource>stock-app</resource>
+                <public-client>true</public-client>
+            </secure-deployment>
+            <secure-deployment name="isis_cb_vaadin.war">
+                <realm>FoodBank</realm>
+                <resource>stock-app</resource>
+                <public-client>true</public-client>
+            </secure-deployment>
+            <secure-deployment name="isis_assos_vaadin.war">
+                <realm>FoodBank</realm>
+                <resource>stock-app</resource>
+                <public-client>true</public-client>
+            </secure-deployment>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}"/>
