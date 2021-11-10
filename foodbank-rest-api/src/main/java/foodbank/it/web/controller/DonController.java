@@ -1,5 +1,7 @@
 package foodbank.it.web.controller;
 import java.util.Collection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,7 +47,7 @@ public class DonController {
     @GetMapping("dons/")
     public Collection<DonDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
-    		@RequestParam(required = false) String nomDonateur,@RequestParam(required = false) String prenomDonateur, 
+    		@RequestParam(required = false) String donateurNom, 
      		@RequestParam(required = false) String lienBanque) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -60,7 +62,7 @@ public class DonController {
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         
-        SearchDonCriteria criteria = new SearchDonCriteria(nomDonateur, prenomDonateur, lienBanqueInteger);
+        SearchDonCriteria criteria = new SearchDonCriteria(donateurNom,lienBanqueInteger);
         Page<Don> selectedDons = this.DonService.findAll(criteria, pageRequest);
 		long totalElements = selectedDons.getTotalElements();
 
@@ -75,9 +77,12 @@ public class DonController {
 
    
 	@PutMapping("don/{idDon}")
-    public DonDto updateDon(@PathVariable("idDon") Integer idDon, @RequestBody DonDto updatedDon) throws Exception {
-        Don DonEntity = convertToEntity(updatedDon);
-        return this.convertToDto(this.DonService.save(DonEntity),1);
+    public DonDto updateDon(@PathVariable("idDon") Integer idDon, @RequestBody DonDto updatedDonDto) throws Exception {
+        Don donEntity = convertToEntity(updatedDonDto);
+        Don savedDon = this.DonService.save(donEntity);
+        savedDon.setDonateurNom(donEntity.getDonateurNom());
+        savedDon.setDonateurPrenom(donEntity.getDonateurPrenom());
+        return this.convertToDto(savedDon,1);
     }
 
     @DeleteMapping("don/{idDon}")
@@ -88,22 +93,29 @@ public class DonController {
 
     @PostMapping("don/")
     @ResponseStatus(HttpStatus.CREATED)
-    public DonDto create(@RequestBody DonDto newDon) throws Exception {
-        Don entity = convertToEntity(newDon);
-        Don createdDon = this.DonService.save(entity);        
+    public DonDto create(@RequestBody DonDto newDonDto) throws Exception {
+        Don donEntity = convertToEntity(newDonDto);
+        Don createdDon = this.DonService.save(donEntity);  
+        createdDon.setDonateurNom(donEntity.getDonateurNom());
+        createdDon.setDonateurPrenom(donEntity.getDonateurPrenom());
         return this.convertToDto(createdDon,1);
     }
     private Don convertToEntity(DonDto dto) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dateDon = LocalDate.parse(dto.getDate(), formatter);
+    	
     	Don myDon = new Don( dto.getIdDon(), dto.getAmount(), dto.getLienBanque(), dto.getDonateurId(),  (short) (dto.isAppended() ? 1 : 0),
-    			(short) (dto.isChecked() ? 1 : 0), dto.getDate());
+    			(short) (dto.isChecked() ? 1 : 0), dateDon,dto.getDonateurNom(),dto.getDonateurPrenom());
     	 return myDon;
     }
 
 	private DonDto convertToDto(Don entity,long totalRecords) {
 		boolean booChecked= entity.getChecked() == 1;
 		boolean booAppended= entity.getAppended() == 1;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");		
+		String donDate = entity.getDate().format(formatter);
 		DonDto dto = new DonDto(entity.getIdDon(), entity.getAmount(), entity.getLienBanque(), entity.getDonateurId(), entity.getDateEntered(), booAppended,
-				booChecked, entity.getDate(),entity.getDonateurNom(), entity.getDonateurPrenom(),totalRecords);
+				booChecked, donDate,entity.getDonateurNom(), entity.getDonateurPrenom(),totalRecords);
 		return dto;
 	}
 

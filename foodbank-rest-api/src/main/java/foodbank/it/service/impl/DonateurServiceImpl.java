@@ -18,7 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
+import foodbank.it.persistence.model.Don;
 import foodbank.it.persistence.model.Donateur;
+
 import foodbank.it.persistence.repository.IDonateurRepository;
 import foodbank.it.service.IDonateurService;
 import foodbank.it.service.SearchDonateurCriteria;
@@ -45,9 +47,30 @@ public class DonateurServiceImpl implements IDonateurService{
 
     @Override
     @Transactional
-    public void delete(int donateurId) throws Exception {   
+    public void delete(int donateurId) throws Exception { 
+    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+    	Root<Don> don = totalCriteriaQuery.from(Don.class);
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate donateurPredicate = criteriaBuilder.equal(don.get("donateurId"), donateurId);
+		predicates.add(donateurPredicate);
+	
+		System.out.printf("\nChecking Don References to Donateur with id: %d", donateurId);
+		
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.select(criteriaBuilder.count(don));
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		Long countResult = countQuery.getSingleResult();
+		
+
+		if (countResult > 0) {
+			String errorMsg = String.format("There are %d Dons with Donateur id %d",countResult, donateurId);		
+			throw new Exception(errorMsg);
+		}
+		else {
     
-			DonateurRepository.deleteByDonateurId(donateurId);		
+			DonateurRepository.deleteByDonateurId(donateurId);	
+		}
 	        
     }
    
@@ -116,8 +139,7 @@ public class DonateurServiceImpl implements IDonateurService{
 	}
 	@Override
 	public Optional<Donateur> findByDonateurId(int donateurId) {
-		// TODO Auto-generated method stub
-		return null;
+		return DonateurRepository.findByDonateurId(donateurId);
 	}
 	
 }

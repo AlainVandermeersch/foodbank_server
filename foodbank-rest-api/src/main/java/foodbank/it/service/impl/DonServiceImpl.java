@@ -59,7 +59,6 @@ public class DonServiceImpl implements IDonService{
 		List<Predicate> predicates = new ArrayList<>();
 
 		String donateurNom = searchCriteria.getDonateurNom();
-		String donateurPrenom = searchCriteria.getDonateurPrenom();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		
 
@@ -68,11 +67,7 @@ public class DonServiceImpl implements IDonService{
 			Predicate donateurNomPredicate = criteriaBuilder.like(don.get("donateurNom"), "%" + donateurNom.toLowerCase() + "%");
 			predicates.add(donateurNomPredicate);
 		}
-		if (donateurPrenom != null ) {			
-
-			Predicate donateurPrenomPredicate = criteriaBuilder.like(don.get("donateurPrenom"), "%" + donateurPrenom.toLowerCase() + "%");
-			predicates.add(donateurPrenomPredicate);
-		}
+		
 		
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(don.get("lienBanque"), lienBanque);

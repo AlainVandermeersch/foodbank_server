@@ -1,10 +1,7 @@
 package foodbank.it.web.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import org.hibernate.annotations.Formula;
 
 public class DonDto {
 	private int idDon;
@@ -14,13 +11,13 @@ public class DonDto {
 	 private String dateEntered;
 	 private boolean appended;
 	 private boolean checked;
-	 private LocalDate date;
+	 private String date;
 	 private String donateurNom;
 	 private String donateurPrenom;
 	 private Long  totalRecords;
 	 
 	public DonDto(int idDon, int amount, int lienBanque, int donateurId, LocalDateTime dateEntered, boolean appended,
-			boolean checked, LocalDate date,String donateurNom,String donateurPrenom,  Long  totalRecords) {
+			boolean checked, String date,String donateurNom,String donateurPrenom,  Long  totalRecords) {
 		super();
 		this.idDon = idDon;
 		this.amount = amount;
@@ -97,11 +94,12 @@ public class DonDto {
 		this.checked = checked;
 	}
 
-	public LocalDate getDate() {
+	
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

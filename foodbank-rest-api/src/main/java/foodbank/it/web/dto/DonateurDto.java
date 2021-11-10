@@ -1,9 +1,9 @@
 package foodbank.it.web.dto;
 
 public class DonateurDto {
-	private int donateurId;
-	   
-    private short lienBanque;
+	
+    
+    private String titre;  
    
     private String nom;
     
@@ -17,21 +17,23 @@ public class DonateurDto {
    
     private String pays;
     
-    private String titre;   
+    private int donateurId;
+	   
+    private short lienBanque;
     
     private Long  totalRecords;
 	public DonateurDto(int donateurId, short lienBanque, String nom, String prenom, String adresse, short cp, String city,
 			String pays, String titre, Long totalRecords) {
-		super();
-		this.donateurId = donateurId;
-		this.lienBanque = lienBanque;
+		super();		
+		this.titre = titre;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.adresse = adresse;
 		this.cp = cp;
 		this.city = city;
 		this.pays = pays;
-		this.titre = titre;
+		this.donateurId = donateurId;
+		this.lienBanque = lienBanque;
 		this.totalRecords = totalRecords;
 	}
 	public int getDonateurId() {

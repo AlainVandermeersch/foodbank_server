@@ -56,7 +56,7 @@ private static final long serialVersionUID = -893007371697272121L;
  }
 
  public Don(int idDon, int amount, int lienBanque, int donateurId,  short appended,
-		short checked, LocalDate date) {
+		short checked, LocalDate date,String donateurNom,String donateurPrenom) {
 	super();
 	this.idDon = idDon;
 	this.amount = amount;
@@ -66,6 +66,8 @@ private static final long serialVersionUID = -893007371697272121L;
 	this.appended = appended;
 	this.checked = checked;
 	this.date = date;
+	this.donateurNom = donateurNom;
+	this.donateurPrenom = donateurPrenom;
 }
 
 /**
@@ -158,7 +160,8 @@ private static final long serialVersionUID = -893007371697272121L;
      dateEntered = aDateEntered;
  }
 
- /**
+ 
+/**
   * Access method for appended.
   *
   * @return the current value of appended
@@ -218,6 +221,14 @@ private static final long serialVersionUID = -893007371697272121L;
 
 public String getDonateurPrenom() {
 	return donateurPrenom;
+}
+
+public void setDonateurNom(String donateurNom) {
+	this.donateurNom = donateurNom;
+}
+
+public void setDonateurPrenom(String donateurPrenom) {
+	this.donateurPrenom = donateurPrenom;
 }
 
 /**
