@@ -84,7 +84,14 @@ public class DonateurController {
     @DeleteMapping("donateur/{donateurId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDonateur(@PathVariable("donateurId") Integer donateurId) throws Exception {
+    	try {
         DonateurService.delete(donateurId);
+    	}
+        catch (Exception ex) {
+         	String errorMsg = ex.getMessage();
+         	System.out.println(errorMsg);
+     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+         }
     }
 
     @PostMapping("donateur/")

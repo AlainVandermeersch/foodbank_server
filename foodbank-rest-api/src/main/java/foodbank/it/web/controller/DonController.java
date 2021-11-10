@@ -47,7 +47,7 @@ public class DonController {
     @GetMapping("dons/")
     public Collection<DonDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
-    		@RequestParam(required = false) String donateurNom, 
+    		@RequestParam(required = false) String donateurNom, @RequestParam(required = false) String donYear, 
      		@RequestParam(required = false) String lienBanque) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -61,8 +61,9 @@ public class DonController {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer donYearInteger = Optional.ofNullable(donYear).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         
-        SearchDonCriteria criteria = new SearchDonCriteria(donateurNom,lienBanqueInteger);
+        SearchDonCriteria criteria = new SearchDonCriteria(donateurNom,donYearInteger,lienBanqueInteger);
         Page<Don> selectedDons = this.DonService.findAll(criteria, pageRequest);
 		long totalElements = selectedDons.getTotalElements();
 

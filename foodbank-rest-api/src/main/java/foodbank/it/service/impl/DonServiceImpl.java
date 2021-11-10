@@ -60,12 +60,20 @@ public class DonServiceImpl implements IDonService{
 
 		String donateurNom = searchCriteria.getDonateurNom();
 		Integer lienBanque = searchCriteria.getLienBanque();
+		Integer donYear = searchCriteria.getDonYear();
 		
 
 		if (donateurNom != null ) {			
 
 			Predicate donateurNomPredicate = criteriaBuilder.like(don.get("donateurNom"), "%" + donateurNom.toLowerCase() + "%");
 			predicates.add(donateurNomPredicate);
+		}
+
+		
+		if (donYear != null) {
+			Predicate donYearPredicate = criteriaBuilder.equal( criteriaBuilder.function("YEAR", Integer.class, don.get("date")),
+					donYear );
+			predicates.add(donYearPredicate);
 		}
 		
 		
