@@ -30,6 +30,8 @@ services:
       - BACKEND_PORT=${BACKEND_PORT}
       - AUTH_HOST=${AUTH_HOST}
       - AUTH_PORT=${AUTH_PORT}
+      - WILDFLY_HOST=${WILDFLY_HOST}
+      - WILDFLY_PORT=${WILDFLY_PORT}
     volumes:
       - letsencrypt-data:/home/letsencrypt/data
       - letsencrypt-certs:/home/letsencrypt/certs
@@ -99,6 +101,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+      - AUTH_SERVER_BASE_URL=${AUTH_SERVER_BASE_URL}
     ports:
       - "10080:8080"
       - "10443:8443"

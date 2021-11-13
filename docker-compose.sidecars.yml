@@ -73,6 +73,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+      - AUTH_SERVER_BASE_URL=https://auth.dev.foodbankit.org
     ports:
       - "10080:8080"
       - "10443:8443"
