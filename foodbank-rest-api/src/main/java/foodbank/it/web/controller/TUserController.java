@@ -56,6 +56,9 @@ public class TUserController {
     		@RequestParam(required = false) String membreLangue,
     		@RequestParam(required = false) String membreEmail, @RequestParam(required = false) String rights,
     		@RequestParam(required = false) String lienDepot ,@RequestParam(required = false) Boolean actif,
+    		@RequestParam(required = false) Boolean droit1 ,@RequestParam(required = false) Boolean gestMemb,
+    		@RequestParam(required = false) Boolean gestBen ,@RequestParam(required = false) Boolean gestFead,
+    		@RequestParam(required = false) Boolean gestDon,
     		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg )  {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -72,7 +75,8 @@ public class TUserController {
         Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer membreLangueInteger = Optional.ofNullable(membreLangue).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, membreNom,actif, membreLangueInteger,membreEmail,rights, lienBanqueInteger, idOrgInteger,lienDepotInteger);
+		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, membreNom,actif, membreLangueInteger,membreEmail,
+				rights,droit1,gestMemb, gestBen,gestFead, gestDon, lienBanqueInteger, idOrgInteger,lienDepotInteger);
 		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 

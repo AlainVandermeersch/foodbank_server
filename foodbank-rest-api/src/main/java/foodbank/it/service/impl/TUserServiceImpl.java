@@ -88,6 +88,11 @@ public class TUserServiceImpl implements ITUserService {
 		String idUser = searchCriteria.getIdUser();
 		String membreNom = searchCriteria.getMembreNom();
 		Boolean actif = searchCriteria.getActif();
+		Boolean droit1 = searchCriteria.getDroit1();
+		Boolean gestMemb = searchCriteria.getGestMemb();
+		Boolean gestBen = searchCriteria.getGestBen();
+		Boolean gestFead = searchCriteria.getGestFead();
+		Boolean gestDon = searchCriteria.getGestDon();
 		Integer membreLangue = searchCriteria.getMembreLangue();
 		String membreEmail = searchCriteria.getMembreEmail();
 		String rights = searchCriteria.getRights();
@@ -160,6 +165,46 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			Predicate isActifPredicate = criteriaBuilder.equal(tuser.get("actif"), intActive);
 			predicates.add(isActifPredicate);
+		} 
+		if (droit1 != null) {
+			Integer intDroit1 = 0;
+			if (droit1 == true) {
+				intDroit1 = 1;
+			}
+			Predicate isDroit1Predicate = criteriaBuilder.equal(tuser.get("droit1"), intDroit1);
+			predicates.add(isDroit1Predicate);
+		} 
+		if (gestMemb != null) {
+			Integer intGestMemb = 0;
+			if (gestMemb == true) {
+				intGestMemb = 1;
+			}
+			Predicate isGestMembPredicate = criteriaBuilder.equal(tuser.get("gestMemb"), intGestMemb);
+			predicates.add(isGestMembPredicate);
+		} 
+		if (gestBen != null) {
+			Integer intGestBen = 0;
+			if (gestBen == true) {
+				intGestBen = 1;
+			}
+			Predicate isGestBenPredicate = criteriaBuilder.equal(tuser.get("gestBen"), intGestBen);
+			predicates.add(isGestBenPredicate);
+		} 
+		if (gestFead != null) {
+			Integer intGestFead = 0;
+			if (gestFead == true) {
+				intGestFead = 1;
+			}
+			Predicate isGestFeadPredicate = criteriaBuilder.equal(tuser.get("gestFead"), intGestFead);
+			predicates.add(isGestFeadPredicate);
+		}
+		if (gestDon != null) {
+			Integer intGestDon = 0;
+			if (gestDon == true) {
+				intGestDon = 1;
+			}
+			Predicate isGestDonPredicate = criteriaBuilder.equal(tuser.get("gestDon"), intGestDon);
+			predicates.add(isGestDonPredicate);
 		} 
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));

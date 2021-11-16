@@ -8,17 +8,29 @@ public class SearchTUserCriteria {
 	private Integer  membreLangue;
 	private String membreEmail;
 	private String rights;
+	private Boolean droit1;
+	private Boolean gestMemb;
+	private Boolean gestBen;
+	private Boolean gestFead;
+	private Boolean gestDon;
 	private Integer lienBanque;
 	private Integer idOrg;
 	private Integer lienDepot;
 	
-	public SearchTUserCriteria(String idUser, String membreNom,Boolean actif, Integer membreLangue,String membreEmail,String rights, Integer lienBanque, Integer idOrg,Integer lienDepot) {
+	public SearchTUserCriteria(String idUser, String membreNom,Boolean actif, Integer membreLangue,String membreEmail,String rights, 
+			Boolean droit1, Boolean gestMemb, Boolean gestBen, Boolean gestFead, Boolean gestDon,
+			Integer lienBanque, Integer idOrg,Integer lienDepot) {
 		this.idUser = idUser;
 		this.membreNom = membreNom;		
 		this.actif = actif;
 		this.membreLangue = membreLangue;
 		this.membreEmail = membreEmail;
 		this.rights = rights;
+		this.droit1 = droit1;
+		this.gestMemb = gestMemb;
+		this.gestBen = gestBen;
+		this.gestFead = gestFead;
+		this.gestDon = gestDon;
 		this.lienBanque = lienBanque;
 		this.idOrg = idOrg;
 		this.lienDepot = lienDepot;
@@ -92,6 +104,67 @@ public class SearchTUserCriteria {
 
 	public void setRights(String rights) {
 		this.rights = rights;
+	}
+
+	
+
+
+	public Boolean getDroit1() {
+		return droit1;
+	}
+
+
+
+	public void setDroit1(Boolean droit1) {
+		this.droit1 = droit1;
+	}
+
+
+
+	public Boolean getGestMemb() {
+		return gestMemb;
+	}
+
+
+
+	public void setGestMemb(Boolean gestMemb) {
+		this.gestMemb = gestMemb;
+	}
+
+
+
+	public Boolean getGestBen() {
+		return gestBen;
+	}
+
+
+
+	public void setGestBen(Boolean gestBen) {
+		this.gestBen = gestBen;
+	}
+
+
+
+	public Boolean getGestFead() {
+		return gestFead;
+	}
+
+
+
+	public void setGestFead(Boolean gestFead) {
+		this.gestFead = gestFead;
+	}
+
+
+
+	public Boolean getGestDon() {
+		return gestDon;
+	}
+
+
+
+	public void setGestDon(Boolean gestDon) {
+		this.gestDon = gestDon;
 	}
 
 
