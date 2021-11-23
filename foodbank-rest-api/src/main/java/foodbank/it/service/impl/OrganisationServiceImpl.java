@@ -195,6 +195,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		String societe = searchCriteria.getSociete();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDepot = searchCriteria.getLienDepot();
+		Boolean isDepot = searchCriteria.getIsDepot();
 		
 		if (societe != null ) {	
 			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
@@ -207,6 +208,14 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		if (lienDepot != null) {
 			Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienDepot);
 			predicates.add(lienDepotPredicate);
+		}
+		if (isDepot != null) {
+			Integer intDepot = 0;
+			if (isDepot== true) {
+				intDepot = 1;
+			}
+			Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), intDepot);
+			predicates.add(isDepotPredicate);
 		}
 		
 

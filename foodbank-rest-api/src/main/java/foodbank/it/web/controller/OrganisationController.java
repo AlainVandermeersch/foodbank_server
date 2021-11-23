@@ -104,12 +104,23 @@ public class OrganisationController {
      
         return OrganisationDtos;
     }
+    @GetMapping("orgsummary/{idDis}")
+    public OrganisationSummaryDto findOneSummary(@PathVariable Integer idDis) {
+    	Organisation o = OrganisationService.findByIdDis(idDis)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));    	
+       
+         return convertToSummaryDto(o);
+
+    }
+    
   
     @GetMapping("orgsummaries/")
     public Collection<OrganisationSummaryDto> findSummaries( 
     		@RequestParam(required = false) String societe, 
     		@RequestParam(required = false) String lienBanque ,
-    		@RequestParam(required = false) String lienDepot) {
+    		@RequestParam(required = false) String lienDepot,
+    		@RequestParam(required = false) Boolean isDepot
+    		) {
         Page<Organisation> selectedOrganisations = null;
 
         Pageable pageRequest = PageRequest.of(0, 300, Sort.by("societe").ascending());
@@ -117,7 +128,7 @@ public class OrganisationController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);  
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         
-		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger);
+		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger,isDepot);
 		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);
 		
 		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();
