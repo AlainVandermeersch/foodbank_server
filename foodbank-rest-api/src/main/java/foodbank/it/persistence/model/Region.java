@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Formula;
 
 @Entity(name="regions")
 public class Region implements Serializable {
@@ -27,21 +27,22 @@ public class Region implements Serializable {
  private int regId;
  @Column(name="Reg_name", nullable=false, length=25)
  private String regName;
+ @Column(name="Bank_link", nullable=false, precision=3)
+ private short bankLink;
  
- @ManyToOne
- @JoinColumn(name="Bank_link")
- private Banque banqueObject;
+ @Formula("(select d.bank_short_name from banques d where d.bank_id = Bank_link)")
+ private String bankShortName;
 
  /** Default constructor. */
  public Region() {
      super();
  }
 
- public Region(int regId, String regName, Banque banqueObject) {
+ public Region(int regId, String regName, short bankLink) {
 	super();
 	this.regId = regId;
 	this.regName = regName;
-	this.banqueObject = banqueObject;
+	this.bankLink = bankLink;
 }
 
 /**
@@ -80,19 +81,23 @@ public class Region implements Serializable {
      regName = aRegName;
  }
 
-public Banque getBanqueObject() {
-	return banqueObject;
+public short getBankLink() {
+	return bankLink;
 }
 
-public void setBanqueObject(Banque banqueObject) {
-	this.banqueObject = banqueObject;
+public void setBankLink(short bankLink) {
+	this.bankLink = bankLink;
+}
+
+public String getBankShortName() {
+	return bankShortName;
 }
 
 @Override
 public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((banqueObject == null) ? 0 : banqueObject.hashCode());
+	result = prime * result + bankLink;
 	result = prime * result + regId;
 	result = prime * result + ((regName == null) ? 0 : regName.hashCode());
 	return result;
@@ -107,10 +112,7 @@ public boolean equals(Object obj) {
 	if (getClass() != obj.getClass())
 		return false;
 	Region other = (Region) obj;
-	if (banqueObject == null) {
-		if (other.banqueObject != null)
-			return false;
-	} else if (!banqueObject.equals(other.banqueObject))
+	if (bankLink != other.bankLink)
 		return false;
 	if (regId != other.regId)
 		return false;
@@ -122,10 +124,8 @@ public boolean equals(Object obj) {
 	return true;
 }
 
-@Override
-public String toString() {
-	return "Region [regId=" + regId + ", regName=" + regName + ", banqueObject=" + banqueObject + "]";
-}
+
+
 
 
 

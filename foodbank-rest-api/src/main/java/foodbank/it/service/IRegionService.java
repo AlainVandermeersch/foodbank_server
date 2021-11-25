@@ -7,7 +7,7 @@ import foodbank.it.persistence.model.Region;
 public interface IRegionService {
 	Optional<Region> findByRegId(int regId);
 	
-	Iterable<Region> findByBanqueObjectBankShortName( String bankShortName);
+	Iterable<Region> findByBankLink( Short bankLink);
 
     Region save(Region Region);
 

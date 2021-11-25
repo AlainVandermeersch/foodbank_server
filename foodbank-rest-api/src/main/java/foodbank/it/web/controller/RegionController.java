@@ -1,31 +1,34 @@
 package foodbank.it.web.controller;
 
-import foodbank.it.persistence.model.Banque;
-import foodbank.it.persistence.model.Region;
-import foodbank.it.service.IBanqueService;
-import foodbank.it.service.IRegionService;
-import foodbank.it.web.dto.RegionDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.Objects.isNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import foodbank.it.persistence.model.Region;
+import foodbank.it.service.IRegionService;
+import foodbank.it.web.dto.RegionDto;
 
 @RestController
 
 public class RegionController {
 	
 	private IRegionService RegionService;
-	private IBanqueService BanqueService;
-    
-    public RegionController(IRegionService RegionService, IBanqueService BanqueService) {
-        this.RegionService = RegionService;
-        this.BanqueService = BanqueService;
+	    
+    public RegionController(IRegionService RegionService) {
+        this.RegionService = RegionService;      
     }
 
     @GetMapping("region/{regId}")
@@ -37,15 +40,15 @@ public class RegionController {
     
 
     @GetMapping("regions/")
-    public Collection<RegionDto> find( @RequestParam(required = false) String bankShortName ) {
+    public Collection<RegionDto> find( @RequestParam(required = false) String lienBanque ) {
         Iterable<Region> selectedRegions = null;
         List<RegionDto> RegionDtos = new ArrayList<>();
-        if (bankShortName == null) {
+        if (lienBanque == null) {
         		selectedRegions = this.RegionService.findAll();
         		selectedRegions.forEach(p -> RegionDtos.add(convertToDto(p)));
          }
         else {
-        	selectedRegions = this.RegionService.findByBanqueObjectBankShortName(bankShortName);
+        	selectedRegions = this.RegionService.findByBankLink(Short.parseShort(lienBanque));
         	// selectedRegions = this.RegionService.findAll();
         	selectedRegions.forEach(p -> RegionDtos.add(convertToDto(p)));
         }
@@ -75,21 +78,14 @@ public class RegionController {
         return this.convertToDto(Region);
     }
     protected RegionDto convertToDto(Region entity) {
-    	String bankShortName = "";
-    	String bankName = "";
-    	Banque banqueObject = entity.getBanqueObject();
-    	if ( ! isNull(banqueObject)) {
-    		bankShortName = banqueObject.getBankShortName();
-    		bankName = banqueObject.getBankName();
-    	} 
-        RegionDto dto = new RegionDto(entity.getRegId(),entity.getRegName(),bankShortName, bankName );    
+    	
+        RegionDto dto = new RegionDto(entity.getRegId(),entity.getRegName(),entity.getBankLink(),entity.getBankShortName() );    
         return dto;
     }
 
     protected Region convertToEntity(RegionDto dto) {
-    	Banque banqueObject = this.BanqueService.findByBankShortName(dto.getBankShortName()).get();
-    	    
-    	Region myRegion = new Region( dto.getRegId(),dto.getRegName(),banqueObject);       
+    	    	    
+    	Region myRegion = new Region( dto.getRegId(),dto.getRegName(),dto.getBankLink());       
         if (!StringUtils.isEmpty(dto.getRegId())) {
             myRegion.setRegId(dto.getRegId());
         }

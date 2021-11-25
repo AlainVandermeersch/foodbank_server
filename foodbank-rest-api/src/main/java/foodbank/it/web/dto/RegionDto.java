@@ -3,18 +3,18 @@ package foodbank.it.web.dto;
 public class RegionDto {
 	private int regId;
 	private String regName;
-	private String bankName;
-    private String bankShortName;
+	private short bankLink;
+	private String bankShortName;
    
 	public RegionDto() {
 		super();
 	}
-	public RegionDto(int regId, String regName,  String bankShortName, String bankName) {
+	public RegionDto(int regId, String regName,short bankLink,  String bankShortName) {
 		super();
 		this.regId = regId;
 		this.regName = regName;
-		this.bankShortName = bankShortName;
-		this.bankName = bankName;		
+		this.bankLink = bankLink;	
+		this.bankShortName = bankShortName;			
 	}
 	public int getRegId() {
 		return regId;
@@ -27,16 +27,14 @@ public class RegionDto {
 	}
 	public void setRegName(String regName) {
 		this.regName = regName;
+	}	 
+   
+	public short getBankLink() {
+		return bankLink;
 	}
-	 
-    public String getBankName() {
-		return bankName;
+	public void setBankLink(short bankLink) {
+		this.bankLink = bankLink;
 	}
-
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-
 	public String getBankShortName() {
 		return bankShortName;
 	}

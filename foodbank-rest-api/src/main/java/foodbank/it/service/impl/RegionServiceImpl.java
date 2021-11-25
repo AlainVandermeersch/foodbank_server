@@ -39,9 +39,10 @@ public class RegionServiceImpl implements IRegionService {
         
     }
    
+	
 	@Override
-	public Iterable<Region> findByBanqueObjectBankShortName( String bankShortName) {
-		return RegionRepository.findByBanqueObjectBankShortName( bankShortName);
+	public Iterable<Region> findByBankLink(Short bankLink) {
+		return RegionRepository.findByBankLink(bankLink);
 	}
 	
 	

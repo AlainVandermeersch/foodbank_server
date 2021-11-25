@@ -8,5 +8,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface IRegionRepository extends CrudRepository<Region, Integer>{
     Optional<Region> findByRegId(int regId);
     void deleteByRegId(int regId);
-    Iterable<Region> findByBanqueObjectBankShortName( String bankShortName);
+   	Iterable<Region> findByBankLink(Short bankLink);
 }
