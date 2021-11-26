@@ -61,9 +61,9 @@ public class OrganisationController {
     		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
      		@RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
-     		@RequestParam(required = false) Boolean agreed,
+     		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
-    		@RequestParam(required = false) String lienBanque ,
+     		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String lienBanque ,
     		@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
@@ -84,11 +84,13 @@ public class OrganisationController {
         	if (agreed == true) daten = false;
         	if ( agreed == false) daten = true;
         }
+        Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer classeFBBAInteger = Optional.ofNullable(classeFBBA).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
 
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,societe, adresse, daten, actif, nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, daten, actif, nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        

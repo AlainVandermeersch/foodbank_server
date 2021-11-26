@@ -85,6 +85,8 @@ public class OrganisationServiceImpl implements IOrganisationService{
 
 		List<Predicate> predicates = new ArrayList<>();
 		Integer idDis = searchCriteria.getIdDis();
+		Integer regId = searchCriteria.getRegId();
+		Integer classeFBBA = searchCriteria.getClasseFBBA();
 		String societe = searchCriteria.getSociete();
 		String adresse = searchCriteria.getAdresse();
 		String nomDepot = searchCriteria.getNomDepot();
@@ -168,7 +170,19 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate idDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), idDis);
 				predicates.add(idDisPredicate);
 			}
-
+		if (regId != null) {
+			Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId);
+				predicates.add(regIdPredicate);
+			}
+		if (classeFBBA != null) {
+			if ( classeFBBA > 0 ) {
+				Predicate classeFBBAPredicate = criteriaBuilder.or(criteriaBuilder.equal(organisation.get("classeFbba1"),classeFBBA ),criteriaBuilder.equal(organisation.get("classeFbba2"),classeFBBA ), criteriaBuilder.equal(organisation.get("classeFbba3"),classeFBBA ));
+				predicates.add(classeFBBAPredicate);
+			} else { // test no FBBA Class assigned
+				Predicate classeFBBAPredicate = criteriaBuilder.and(criteriaBuilder.equal(organisation.get("classeFbba1"),0 ),criteriaBuilder.equal(organisation.get("classeFbba2"),0 ), criteriaBuilder.equal(organisation.get("classeFbba3"),0 ));
+				predicates.add(classeFBBAPredicate);
+			}
+		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));
 

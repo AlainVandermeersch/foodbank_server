@@ -2,6 +2,8 @@ package foodbank.it.service;
 
 public class SearchOrganisationCriteria {
 	private Integer idDis;
+	private Integer regId;
+	private Integer classeFBBA;
 	private String societe;
 	private String adresse;
 	private String nomDepot;
@@ -14,8 +16,10 @@ public class SearchOrganisationCriteria {
 	private String refInt;
 	
 	
-	public SearchOrganisationCriteria(Integer idDis,String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt) {
+	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt) {
 		this.idDis = idDis;
+		this.regId = regId;
+		this.classeFBBA = classeFBBA;
 		this.societe = societe;
 		this.adresse = adresse;
 		this.isAgreed = isAgreed;
@@ -38,6 +42,30 @@ public class SearchOrganisationCriteria {
 
 	public void setIdDis(Integer idDis) {
 		this.idDis = idDis;
+	}
+
+
+
+	public Integer getRegId() {
+		return regId;
+	}
+
+
+
+	public void setRegId(Integer regId) {
+		this.regId = regId;
+	}
+
+
+
+	public Integer getClasseFBBA() {
+		return classeFBBA;
+	}
+
+
+
+	public void setClasseFBBA(Integer classeFBBA) {
+		this.classeFBBA = classeFBBA;
 	}
 
 
