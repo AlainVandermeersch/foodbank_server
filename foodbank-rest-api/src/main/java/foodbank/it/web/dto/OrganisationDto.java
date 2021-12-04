@@ -213,11 +213,11 @@ public class OrganisationDto {
 	    
 	    private String remLivr;
 	    
-	    private Short cotAnnuelle;
+	    private boolean cotAnnuelle;
 	   
 	    private Integer  cotMonths;
 	    
-	    private Integer cotSup;
+	    private boolean cotSup;
 	   
 	    private Integer  cotMonthsSup;
 	    
@@ -309,7 +309,7 @@ private boolean luam;
 				BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead,
 				Short tourneeMois, boolean distrListPdt, boolean distrListVp, boolean distrListSec, boolean distrListTres,
 				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN,
-				String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup, Integer  cotMonthsSup, Integer  depotram,
+				String remLivr, boolean cotAnnuelle, Integer  cotMonths, boolean cotSup, Integer  cotMonthsSup, Integer  depotram,
 				String lupdUserName, LocalDateTime lupdTs,Short lienBanque, String nomDepot,
 				// orgprogram fields
 				boolean luam, boolean lupm, boolean tuam, boolean tupm,
@@ -1344,11 +1344,11 @@ private boolean luam;
 			this.remLivr = remLivr;
 		}
 
-		public Short getCotAnnuelle() {
+		public boolean isCotAnnuelle() {
 			return cotAnnuelle;
 		}
 
-		public void setCotAnnuelle(Short cotAnnuelle) {
+		public void setCotAnnuelle(boolean cotAnnuelle) {
 			this.cotAnnuelle = cotAnnuelle;
 		}
 
@@ -1360,11 +1360,11 @@ private boolean luam;
 			this.cotMonths = cotMonths;
 		}
 
-		public Integer getCotSup() {
+		public boolean isCotSup() {
 			return cotSup;
 		}
 
-		public void setCotSup(Integer cotSup) {
+		public void setCotSup(boolean cotSup) {
 			this.cotSup = cotSup;
 		}
 

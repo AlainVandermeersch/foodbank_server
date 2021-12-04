@@ -2326,6 +2326,7 @@ public class Organisation implements Serializable {
      * @return the current value of cotSup
      */
     public Integer getCotSup() {
+    	if (cotSup == null) return 0;
         return cotSup;
     }
 

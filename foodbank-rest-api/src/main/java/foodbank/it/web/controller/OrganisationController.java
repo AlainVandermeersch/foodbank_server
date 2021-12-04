@@ -63,8 +63,9 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
-     		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String lienBanque ,
-    		@RequestParam(required = false) String idDis) {
+     		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
+     		@RequestParam(required = false) String classeFBBA,
+     		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
         int intOffset = Integer.parseInt(offset);
@@ -90,7 +91,8 @@ public class OrganisationController {
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
 
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, daten, actif, nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, daten, actif, 
+				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -260,6 +262,8 @@ public class OrganisationController {
 		boolean booDepyN = entity.getDepyN() == 1;
 		boolean booActif = entity.getActif() == 1;
 		boolean booSusp = entity.getSusp() == 1;
+		boolean booCotAnnuelle = entity.getCotAnnuelle() == 1;
+		boolean booCotSup = entity.getCotSup() == 1;
 		  // Note daten field means is reverse of Agreed
 		boolean booAgreed= entity.getDaten() == 0;
 		
@@ -281,7 +285,7 @@ public class OrganisationController {
 				entity.getMontCot(), entity.getAntenne(), entity.getAfsca1(), entity.getAfsca2(), entity.getAfsca3(), entity.getNrFead(),
 				entity.getTourneeMois(), booDistrListPdt, booDistrListVp, booDistrListSec, booDistrListTres,
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), entity.getFeadN(),
-				entity.getRemLivr(), entity.getCotAnnuelle(), entity.getCotMonths(), entity.getCotSup(), entity.getCotMonthsSup(), entity.getDepotram(),
+				entity.getRemLivr(), booCotAnnuelle, entity.getCotMonths(), booCotSup, entity.getCotMonthsSup(), entity.getDepotram(),
 				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),
 				booLuam,
     			booLupm,
@@ -342,7 +346,7 @@ public class OrganisationController {
 				dto.getMontCot(), dto.getAntenne(), dto.getAfsca1(), dto.getAfsca2(), dto.getAfsca3(), dto.getNrFead(),
 				dto.getTourneeMois(), (short) (dto.getDistrListPdt() ? 1 : 0), (short) (dto.getDistrListVp() ? 1 : 0), (short) (dto.getDistrListSec() ? 1 : 0),(short) (dto.getDistrListTres() ? 1 : 0),
 				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), dto.getFeadN(),
-				dto.getRemLivr(), dto.getCotAnnuelle(), dto.getCotMonths(), dto.getCotSup(), dto.getCotMonthsSup(), dto.getDepotram(),
+				dto.getRemLivr(), (short) (dto.isCotAnnuelle() ? 1 : 0), dto.getCotMonths(),(int) (dto.isCotSup() ? 1 : 0), dto.getCotMonthsSup(), dto.getDepotram(),
 				dto.getLupdUserName(),dto.getLienBanque(),dto.getNomDepot());       
         if (!StringUtils.isEmpty(dto.getIdDis())) {
             myOrganisation.setIdDis(dto.getIdDis());

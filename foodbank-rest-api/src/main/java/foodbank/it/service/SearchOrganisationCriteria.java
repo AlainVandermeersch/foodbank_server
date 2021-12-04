@@ -14,9 +14,12 @@ public class SearchOrganisationCriteria {
 	private Boolean isAgreed;
 	private Boolean actif;
 	private String refInt;
+	private Boolean cotAnnuelle;
+	private Boolean cotSup;
 	
 	
-	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt) {
+	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, 
+			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt, Boolean cotAnnuelle,Boolean cotSup) {
 		this.idDis = idDis;
 		this.regId = regId;
 		this.classeFBBA = classeFBBA;
@@ -30,6 +33,8 @@ public class SearchOrganisationCriteria {
 		this.isBirb = isBirb;
 		this.actif = actif;
 		this.refInt = refInt;
+		this.cotAnnuelle = cotAnnuelle;
+		this.cotSup = cotSup;
 	}
 
 	
@@ -160,6 +165,30 @@ public class SearchOrganisationCriteria {
 
 	public void setRefInt(String refInt) {
 		this.refInt = refInt;
+	}
+
+
+
+	public Boolean getCotAnnuelle() {
+		return cotAnnuelle;
+	}
+
+
+
+	public void setCotAnnuelle(Boolean cotAnnuelle) {
+		this.cotAnnuelle = cotAnnuelle;
+	}
+
+
+
+	public Boolean getCotSup() {
+		return cotSup;
+	}
+
+
+
+	public void setCotSup(Boolean cotSup) {
+		this.cotSup = cotSup;
 	}
 
 

@@ -95,6 +95,8 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Boolean isDepot = searchCriteria.getIsDepot();
 		Boolean isBirb = searchCriteria.getIsBirb();
 		Boolean isAgreed = searchCriteria.getIsAgreed();
+		Boolean isCotAnnuelle = searchCriteria.getCotAnnuelle();
+		Boolean isCotSup = searchCriteria.getCotSup();
 		Boolean actif = searchCriteria.getActif();
 		String refint = searchCriteria.getRefInt();
 		
@@ -143,6 +145,22 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			}
 			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intAgreed);
 			predicates.add(isAgreedPredicate);
+		} 
+	    if (isCotAnnuelle != null) {			
+			Integer intCotAnnuelle = 0;
+			if (isCotAnnuelle == true) {
+				intCotAnnuelle = 1;
+			}
+			Predicate isCotAnnuellePredicate = criteriaBuilder.equal(organisation.get("cotAnnuelle"), intCotAnnuelle);
+			predicates.add(isCotAnnuellePredicate);
+		} 
+	    if (isCotSup != null) {			
+			Integer intCotSup = 0;
+			if (isCotSup == true) {
+				intCotSup = 1;
+			}
+			Predicate isCotSupPredicate = criteriaBuilder.equal(organisation.get("cotSup"), intCotSup);
+			predicates.add(isCotSupPredicate);
 		} 
 		if (actif != null) {
 			Integer intActive = 0;
