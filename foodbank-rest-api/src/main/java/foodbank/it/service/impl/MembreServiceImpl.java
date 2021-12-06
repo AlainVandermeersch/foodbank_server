@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.persistence.repository.IMembreRepository;
+import foodbank.it.persistence.repository.ITUserRepository;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.SearchMembreCriteria;
 import foodbank.it.service.SearchMembreMailCriteria;
@@ -30,10 +31,12 @@ import foodbank.it.service.SearchMembreMailCriteria;
 public class MembreServiceImpl implements IMembreService{
 
 	private IMembreRepository MembreRepository;
+	private ITUserRepository TUserRepository;
 	private final EntityManager entityManager;
 	
-	public MembreServiceImpl(IMembreRepository MembreRepository,EntityManager entityManager) {
+	public MembreServiceImpl(IMembreRepository MembreRepository,ITUserRepository TUserRepository, EntityManager entityManager) {
         this.MembreRepository = MembreRepository;
+        this.TUserRepository = TUserRepository;
         this.entityManager = entityManager;
     }
 	@Override
@@ -42,9 +45,10 @@ public class MembreServiceImpl implements IMembreService{
     }
 
     @Override
+    @Transactional
     public Membre save(Membre membre, boolean booCreateMode) throws Exception {  
-    	if (booCreateMode == true) {
-    		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    	if (booCreateMode == true) {    		
         	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
         	Root<Membre> existingMembre = totalCriteriaQuery.from(Membre.class);
     		List<Predicate> predicates = new ArrayList<>();
@@ -77,6 +81,42 @@ public class MembreServiceImpl implements IMembreService{
     			throw new Exception(errorMsg);
     		}
 
+    	}
+    	else {
+    		// updating members we must update the duplicate User Name, E-Mail and Language fields in the Users pointing to the Member
+    		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
+    		Root<TUser> tuser = tuserQuery.from(TUser.class);		
+    		List<Predicate> predicates = new ArrayList<>();
+    		Predicate lienBatPredicate = criteriaBuilder.equal(tuser.get("lienBat"), membre.getBatId());
+			predicates.add(lienBatPredicate);
+			tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
+			TypedQuery<TUser> query = entityManager.createQuery(tuserQuery);
+			List<TUser> userList = query.getResultList();
+			userList.forEach((tUser) -> {
+				tUser.setEmail(membre.getBatmail());
+				tUser.setUserName(membre.getNom() + ' ' + membre.getPrenom());
+				switch (membre.getLangue()) {
+                case 1:
+                    tUser.setIdLanguage("fr");
+                    break;
+                case 2:
+                	tUser.setIdLanguage("nl");
+                    break;
+                case 3:
+                	tUser.setIdLanguage("en");
+                    break;
+                case 4:
+                	tUser.setIdLanguage("de");
+                    break;
+                default:
+                	tUser.setIdLanguage("??");
+            }
+				// System.out.printf("\nSynchronizing User with id: %s with data from to Member with id: %d", tUser.getIdUser(),membre.getBatId());
+				TUserRepository.save(tUser);
+	        });
+			
+
+    		
     	}
     	
     	
