@@ -228,6 +228,8 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		Boolean isDepot = searchCriteria.getIsDepot();
+		Boolean actif = searchCriteria.getActif();
+		Boolean isAgreed = searchCriteria.getAgreed();
 		
 		if (societe != null ) {	
 			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
@@ -249,6 +251,23 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), intDepot);
 			predicates.add(isDepotPredicate);
 		}
+		if (isAgreed != null) {
+				// Note daten field means is Agreed
+				Integer intAgreed = 0;
+				if (isAgreed == true) {
+					intAgreed = 1;
+				}
+				Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intAgreed);
+				predicates.add(isAgreedPredicate);
+		} 
+		if (actif != null) {
+			Integer intActive = 0;
+			if (actif == true) {
+				intActive = 1;
+			}
+			Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), intActive);
+			predicates.add(isActifPredicate);
+		} 
 		
 
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	

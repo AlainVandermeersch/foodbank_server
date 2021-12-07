@@ -123,6 +123,8 @@ public class OrganisationController {
     		@RequestParam(required = false) String societe, 
     		@RequestParam(required = false) String lienBanque ,
     		@RequestParam(required = false) String lienDepot,
+    		@RequestParam(required = false) Boolean agreed,
+    		@RequestParam(required = false) Boolean actif,
     		@RequestParam(required = false) Boolean isDepot
     		) {
         Page<Organisation> selectedOrganisations = null;
@@ -132,7 +134,7 @@ public class OrganisationController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);  
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         
-		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger,isDepot);
+		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger,isDepot,agreed,actif);
 		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);
 		
 		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();
