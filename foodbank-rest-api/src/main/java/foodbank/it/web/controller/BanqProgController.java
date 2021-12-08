@@ -30,7 +30,7 @@ public class BanqProgController {
         this.BanqProgService = BanqProgService;      
     }
 
-    @GetMapping("banqProg/{lienBanque}")
+    @GetMapping("banqprog/{lienBanque}")
     public BanqProgDto findOne(@PathVariable Integer lienBanque) {
         BanqProg entity = BanqProgService.findByLienBanque(lienBanque)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -38,7 +38,7 @@ public class BanqProgController {
     }
     
 
-    @GetMapping("banqProgs/")
+    @GetMapping("banqprogs/")
     public Collection<BanqProgDto> findAll( ) {
          List<BanqProgDto> BanqProgDtos = new ArrayList<>();
         
@@ -50,19 +50,19 @@ public class BanqProgController {
         return BanqProgDtos;
     }
 
-    @PutMapping("banqProg/{lienBanque}")
+    @PutMapping("banqprog/{lienBanque}")
     public BanqProgDto updateBanqProg(@PathVariable("lienBanque") Integer lienBanque, @RequestBody BanqProgDto updatedBanqProg) {
         BanqProg BanqProgEntity = convertToEntity(updatedBanqProg);
         return this.convertToDto(this.BanqProgService.save(BanqProgEntity));
     }
 
-    @DeleteMapping("banqProg/{lienBanque}")
+    @DeleteMapping("banqprog/{lienBanque}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBanqProg(@PathVariable("lienBanque") Integer lienBanque) {
         BanqProgService.delete(lienBanque);
     }
 
-    @PostMapping("banqProg/")
+    @PostMapping("banqprog/")
     @ResponseStatus(HttpStatus.CREATED)
     public BanqProgDto create(@RequestBody BanqProgDto newBanqProg) {
         BanqProg entity = convertToEntity(newBanqProg);
