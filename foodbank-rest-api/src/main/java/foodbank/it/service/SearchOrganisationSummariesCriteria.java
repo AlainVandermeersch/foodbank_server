@@ -7,8 +7,9 @@ public class SearchOrganisationSummariesCriteria {
 	private Boolean isDepot;
 	private Boolean agreed;
 	private Boolean actif;
+	private Boolean cotType;
 	
-	public SearchOrganisationSummariesCriteria(String societe, Integer lienBanque, Integer lienDepot, Boolean isDepot, Boolean agreed,Boolean actif) {
+	public SearchOrganisationSummariesCriteria(String societe, Integer lienBanque, Integer lienDepot, Boolean isDepot, Boolean agreed, Boolean actif, Boolean cotType) {
 		super();
 		this.societe = societe;
 		this.lienBanque = lienBanque;	
@@ -16,6 +17,7 @@ public class SearchOrganisationSummariesCriteria {
 		this.isDepot = isDepot;
 		this.agreed = agreed;
 		this.actif = actif;
+		this.cotType = cotType;
 	}
 	public String getSociete() {
 		return societe;
@@ -52,6 +54,12 @@ public class SearchOrganisationSummariesCriteria {
 	}
 	public void setActif(Boolean actif) {
 		this.actif = actif;
+	}
+	public Boolean getCotType() {
+		return cotType;
+	}
+	public void setCotType(Boolean cotType) {
+		this.cotType = cotType;
 	}
 	
 	
