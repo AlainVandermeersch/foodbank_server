@@ -138,12 +138,12 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		} 
 		
 	    if (isAgreed != null) {
-			// Note daten field means is Agreed
-			Integer intAgreed = 0;
+			// Note daten field means is reverse of Agreed
+			Integer intDaten= 1;
 			if (isAgreed == true) {
-				intAgreed = 1;
+				intDaten = 0;
 			}
-			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intAgreed);
+			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intDaten);
 			predicates.add(isAgreedPredicate);
 		} 
 	    if (isCotAnnuelle != null) {			
@@ -253,13 +253,13 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			predicates.add(isDepotPredicate);
 		}
 		if (isAgreed != null) {
-				// Note daten field means is Agreed
-				Integer intAgreed = 0;
-				if (isAgreed == true) {
-					intAgreed = 1;
-				}
-				Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intAgreed);
-				predicates.add(isAgreedPredicate);
+			// Note daten field means is reverse of Agreed
+			Integer intDaten= 1;
+			if (isAgreed == true) {
+				intDaten = 0;
+			}
+			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intDaten);
+			predicates.add(isAgreedPredicate);
 		} 
 		if (actif != null) {
 			Integer intActive = 0;

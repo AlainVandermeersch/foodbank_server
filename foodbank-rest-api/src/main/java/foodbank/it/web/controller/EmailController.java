@@ -98,7 +98,7 @@ public class EmailController {
 			throws MessagingException {
 		Path root = Paths.get("uploads");
 		String username = "foodbankshelpdesk@gmail.com";
-		String password = "V0lunt11rs$";
+		String password = "1970$F00dB1nks";
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
