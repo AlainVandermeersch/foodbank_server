@@ -28,16 +28,20 @@ public class Audit implements Serializable {
     private int auditId;
     @Column(nullable=false, length=50)
     private String user;
-    @Column(name="date_in", nullable=false)
+    @Column(name="date_in")
     private LocalDateTime dateIn;
     @Column(name="ip_address", length=20)
     private String ipAddress;
     @Column(name="id_dis", nullable=false, precision=10)
     private int idDis;
+    private String application;
     @Formula("(select d.societe from organisations d where d.id_dis = id_dis)")
     private String societe;
-    @Formula("(select d.lien_banque from organisations d where d.id_dis = id_dis)")
-    private Integer lienBanque; 
+    @Formula("(select d.ID_COMPANY from t_user d where d.ID_USER = user)")
+    private String shortBankName; 
+    @Formula("(select d.USER_NAME from t_user d where d.ID_USER = user)")
+    private String userName;   
+
 
     /** Default constructor. */
     public Audit() {
@@ -50,6 +54,9 @@ public class Audit implements Serializable {
 		this.user = user;
 		this.ipAddress = ipAddress;
 		this.idDis = idDis;
+		this.dateIn = LocalDateTime.now(); 
+		this.application = "FBIT";
+		
 	}
 
 	/**
@@ -123,17 +130,37 @@ public class Audit implements Serializable {
     public void setIpAddress(String aIpAddress) {
         ipAddress = aIpAddress;
     }
+    
+    public String getApplication() {
+		return application;
+	}
+
+	public void setApplication(String application) {
+		this.application = application;
+	}
 
 	public int getIdDis() {
 		return idDis;
+	}
+
+	public void setIdDis(int idDis) {
+		this.idDis = idDis;
 	}
 
 	public String getSociete() {
 		return societe;
 	}
 
-	public Integer getLienBanque() {
-		return lienBanque;
+	public String getShortBankName() {
+		return shortBankName;
 	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	
+
+	
 
 }

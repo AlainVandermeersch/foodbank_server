@@ -3,15 +3,19 @@ package foodbank.it.service;
 public class SearchAuditCriteria {
 	
 	private String user;
-	private Integer lienBanque;         
+	private String shortBankName;         
     private Integer idDis;    
     private String societe;
-	public SearchAuditCriteria(String user, Integer lienBanque, Integer idDis, String societe) {
+    private String userName;
+    private Boolean isJavaApp;
+	public SearchAuditCriteria(String user, String shortBankName, Integer idDis, String societe, String userName, Boolean isJavaApp) {
 		super();
 		this.user = user;
-		this.lienBanque = lienBanque;
+		this.shortBankName = shortBankName;
 		this.idDis = idDis;
 		this.societe = societe;
+		this.userName = userName;
+		this.isJavaApp = isJavaApp;
 	}
 	public String getUser() {
 		return user;
@@ -19,12 +23,7 @@ public class SearchAuditCriteria {
 	public void setUser(String user) {
 		this.user = user;
 	}
-	public Integer getLienBanque() {
-		return lienBanque;
-	}
-	public void setLienBanque(Integer lienBanque) {
-		this.lienBanque = lienBanque;
-	}
+	
 	public Integer getIdDis() {
 		return idDis;
 	}
@@ -37,6 +36,25 @@ public class SearchAuditCriteria {
 	public void setSociete(String societe) {
 		this.societe = societe;
 	}
+	public String getShortBankName() {
+		return shortBankName;
+	}
+	public void setShortBankName(String shortBankName) {
+		this.shortBankName = shortBankName;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public Boolean getIsJavaApp() {
+		return isJavaApp;
+	}
+	public void setIsJavaApp(Boolean isJavaApp) {
+		this.isJavaApp = isJavaApp;
+	}
+	
 	
   
    

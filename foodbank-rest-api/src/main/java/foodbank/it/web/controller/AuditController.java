@@ -32,7 +32,8 @@ public class AuditController {
     public Collection<AuditDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String societe,@RequestParam(required = false) String user, 
-     		@RequestParam(required = false) String idDis,@RequestParam(required = false) String lienBanque) {
+    		@RequestParam(required = false) Boolean isJavaApp,@RequestParam(required = false) String userName, 
+     		@RequestParam(required = false) String idDis,@RequestParam(required = false) String shortBankName) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -44,10 +45,9 @@ public class AuditController {
         else {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
-        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		 Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         
-        SearchAuditCriteria criteria = new SearchAuditCriteria( user,lienBanqueInteger,idDisInteger, societe);
+        SearchAuditCriteria criteria = new SearchAuditCriteria( user,shortBankName,idDisInteger, societe, userName , isJavaApp);
         Page<Audit> selectedAudits = this.AuditService.findAll(criteria, pageRequest);
 		long totalElements = selectedAudits.getTotalElements();
 
@@ -68,8 +68,8 @@ public class AuditController {
     	 return myAudit;
     }
     private AuditDto convertToDto(Audit entity,long totalRecords) {
-		AuditDto dto = new AuditDto(entity.getAuditId(), entity.getUser(),entity.getDateIn(), entity.getIpAddress(), entity.getIdDis(), entity.getSociete(),
-		entity.getLienBanque(),totalRecords);
+		AuditDto dto = new AuditDto(entity.getAuditId(), entity.getUser(),entity.getDateIn(), entity.getIpAddress(), entity.getIdDis(),
+				entity.getApplication(),entity.getSociete(),entity.getShortBankName(),entity.getUserName(),totalRecords);
 		return dto;
 	}
 

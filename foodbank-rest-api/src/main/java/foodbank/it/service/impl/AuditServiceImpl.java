@@ -52,10 +52,12 @@ public class AuditServiceImpl implements IAuditService{
 		Root<Audit> audit = auditQuery.from(Audit.class);
 		List<Predicate> predicates = new ArrayList<>();
 
-		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idDis = searchCriteria.getIdDis();
 		String societe = searchCriteria.getSociete();
 		String user = searchCriteria.getUser();
+		String userName = searchCriteria.getUserName();
+		String shortBankName = searchCriteria.getShortBankName();
+		Boolean isJavaApp = searchCriteria.getIsJavaApp();
 
 		if (societe != null ) {			
 
@@ -67,17 +69,28 @@ public class AuditServiceImpl implements IAuditService{
 			Predicate userPredicate = criteriaBuilder.like(audit.get("user"), "%" + user.toLowerCase() + "%");
 			predicates.add(userPredicate);
 		}
-				
-
-		if (lienBanque != null) {
-			Predicate lienBanquePredicate = criteriaBuilder.equal(audit.get("lienBanque"), lienBanque);
-			predicates.add(lienBanquePredicate);
-		}
 		if (idDis != null) {
 			Predicate idDisPredicate = criteriaBuilder.equal(audit.get("idDis"), idDis);
 			predicates.add(idDisPredicate);
+		}	
+		
+		if (shortBankName != null) {
+			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
+			predicates.add(shortBankNamePredicate);
+		}
+		if (userName != null ) {			
+
+			Predicate userNamePredicate = criteriaBuilder.like(audit.get("userName"), "%" + user.toLowerCase() + "%");
+			predicates.add(userNamePredicate);
 		}
 		
+		if (isJavaApp != null) {
+			Predicate applicationPredicate = criteriaBuilder.isNull(audit.get("application"));
+			if (isJavaApp == true) {
+				applicationPredicate = criteriaBuilder.isNotNull(audit.get("application"));
+			}
+			predicates.add(applicationPredicate);
+		}
 
 		
 

@@ -14,15 +14,17 @@ public class AuditDto {
     private String ipAddress;
     
     private Integer idDis;
+    private String application;
     
     private String societe;
   
-    private Integer lienBanque;
+    private String shortBankName;
+    private String userName;
     
     private Long  totalRecords;
 
-	public AuditDto(int auditId, String user, LocalDateTime dateIn, String ipAddress, Integer idDis, String societe,
-			Integer lienBanque,Long  totalRecords) {
+	public AuditDto(int auditId, String user, LocalDateTime dateIn, String ipAddress, Integer idDis, String application,
+			String societe,	String shortBankName,String userName, Long  totalRecords) {
 		super();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		this.auditId = auditId;
@@ -35,8 +37,10 @@ public class AuditDto {
 		}
 		this.ipAddress = ipAddress;
 		this.idDis = idDis;
+		this.application = application;
 		this.societe = societe;
-		this.lienBanque = lienBanque;
+		this.shortBankName = shortBankName;
+		this.userName = userName;
 		this.totalRecords = totalRecords;
 	}
 
@@ -80,6 +84,14 @@ public class AuditDto {
 		this.idDis = idDis;
 	}
 
+	public String getApplication() {
+		return application;
+	}
+
+	public void setApplication(String application) {
+		this.application = application;
+	}
+
 	public String getSociete() {
 		return societe;
 	}
@@ -88,12 +100,20 @@ public class AuditDto {
 		this.societe = societe;
 	}
 
-	public Integer getLienBanque() {
-		return lienBanque;
+	public String getShortBankName() {
+		return shortBankName;
 	}
 
-	public void setLienBanque(Integer lienBanque) {
-		this.lienBanque = lienBanque;
+	public void setShortBankName(String shortBankName) {
+		this.shortBankName = shortBankName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public Long getTotalRecords() {
