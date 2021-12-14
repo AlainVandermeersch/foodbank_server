@@ -33,6 +33,8 @@ public class AuditController {
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String societe,@RequestParam(required = false) String user, 
     		@RequestParam(required = false) Boolean isJavaApp,@RequestParam(required = false) String userName, 
+    		@RequestParam(required = false) String rights,
+    		@RequestParam(required = false) String fromDate,@RequestParam(required = false) String toDate,
      		@RequestParam(required = false) String idDis,@RequestParam(required = false) String shortBankName) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -47,7 +49,8 @@ public class AuditController {
         }
         Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         
-        SearchAuditCriteria criteria = new SearchAuditCriteria( user,shortBankName,idDisInteger, societe, userName , isJavaApp);
+        SearchAuditCriteria criteria = new SearchAuditCriteria( user,shortBankName,idDisInteger, societe, userName ,
+        		rights, fromDate, toDate, isJavaApp);
         Page<Audit> selectedAudits = this.AuditService.findAll(criteria, pageRequest);
 		long totalElements = selectedAudits.getTotalElements();
 
@@ -69,7 +72,7 @@ public class AuditController {
     }
     private AuditDto convertToDto(Audit entity,long totalRecords) {
 		AuditDto dto = new AuditDto(entity.getAuditId(), entity.getUser(),entity.getDateIn(), entity.getIpAddress(), entity.getIdDis(),
-				entity.getApplication(),entity.getSociete(),entity.getShortBankName(),entity.getUserName(),totalRecords);
+				entity.getApplication(),entity.getSociete(),entity.getShortBankName(),entity.getUserName(),entity.getRights(),totalRecords);
 		return dto;
 	}
 

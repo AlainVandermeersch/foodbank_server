@@ -1,5 +1,8 @@
 package foodbank.it.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +60,22 @@ public class AuditServiceImpl implements IAuditService{
 		String user = searchCriteria.getUser();
 		String userName = searchCriteria.getUserName();
 		String shortBankName = searchCriteria.getShortBankName();
+		String rights = searchCriteria.getRights();
+		String fromDateString = searchCriteria.getFromDate();
+		String toDateString = searchCriteria.getToDate();
 		Boolean isJavaApp = searchCriteria.getIsJavaApp();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		
+		if ( fromDateString != null) {
+			LocalDateTime fromDate = LocalDate.parse(fromDateString, formatter).atStartOfDay();
+			Predicate fromDatePredicate = criteriaBuilder.greaterThanOrEqualTo(audit.get("dateIn"), fromDate);
+			predicates.add(fromDatePredicate);
+		}
+		if ( toDateString != null) {
+			LocalDateTime toDate = LocalDate.parse(toDateString, formatter).atStartOfDay();
+			Predicate toDatePredicate = criteriaBuilder.lessThanOrEqualTo(audit.get("dateIn"), toDate);
+			predicates.add(toDatePredicate);
+		}
 
 		if (societe != null ) {			
 
@@ -80,8 +98,14 @@ public class AuditServiceImpl implements IAuditService{
 		}
 		if (userName != null ) {			
 
-			Predicate userNamePredicate = criteriaBuilder.like(audit.get("userName"), "%" + user.toLowerCase() + "%");
+			Predicate userNamePredicate = criteriaBuilder.like(audit.get("userName"), "%" + userName.toLowerCase() + "%");
 			predicates.add(userNamePredicate);
+		}
+		
+		if (rights != null) {			
+
+			Predicate rightsPredicate = criteriaBuilder.equal(audit.get("rights"), rights);
+			predicates.add(rightsPredicate);
 		}
 		
 		if (isJavaApp != null) {

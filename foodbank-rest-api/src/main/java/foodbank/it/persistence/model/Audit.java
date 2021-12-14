@@ -41,7 +41,8 @@ public class Audit implements Serializable {
     private String shortBankName; 
     @Formula("(select d.USER_NAME from t_user d where d.ID_USER = user)")
     private String userName;   
-
+    @Formula("(select d.rights from t_user d where d.ID_USER = user)")
+    private String rights; 
 
     /** Default constructor. */
     public Audit() {
@@ -157,6 +158,10 @@ public class Audit implements Serializable {
 
 	public String getUserName() {
 		return userName;
+	}
+
+	public String getRights() {
+		return rights;
 	}
 
 	

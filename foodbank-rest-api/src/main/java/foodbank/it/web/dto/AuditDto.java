@@ -20,11 +20,12 @@ public class AuditDto {
   
     private String shortBankName;
     private String userName;
+    private String rights;
     
     private Long  totalRecords;
 
 	public AuditDto(int auditId, String user, LocalDateTime dateIn, String ipAddress, Integer idDis, String application,
-			String societe,	String shortBankName,String userName, Long  totalRecords) {
+			String societe,	String shortBankName,String userName, String rights, Long  totalRecords) {
 		super();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		this.auditId = auditId;
@@ -41,6 +42,7 @@ public class AuditDto {
 		this.societe = societe;
 		this.shortBankName = shortBankName;
 		this.userName = userName;
+		this.rights = rights;
 		this.totalRecords = totalRecords;
 	}
 
@@ -114,6 +116,14 @@ public class AuditDto {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}	
+	
+	public String getRights() {
+		return rights;
+	}
+
+	public void setRights(String rights) {
+		this.rights = rights;
 	}
 
 	public Long getTotalRecords() {
