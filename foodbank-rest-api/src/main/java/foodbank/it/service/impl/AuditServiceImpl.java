@@ -135,13 +135,14 @@ public class AuditServiceImpl implements IAuditService{
 	}
 	@Override
 	public Optional<Audit> findByAuditId(int auditId) {
-		return AuditRepository.findByAuditId(auditId);
+		return AuditRepository.findById(auditId);
 	}
 
 
 	@Override
+	@Transactional
 	public void delete(int auditId) throws Exception {
-		AuditRepository.deleteByAuditId(auditId);
+		AuditRepository.deleteById(auditId);
 		
 	}
 	

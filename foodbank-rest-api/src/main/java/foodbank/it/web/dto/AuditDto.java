@@ -1,7 +1,10 @@
 package foodbank.it.web.dto;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 public class AuditDto {
 
@@ -28,6 +31,8 @@ public class AuditDto {
 			String societe,	String shortBankName,String userName, String rights, Long  totalRecords) {
 		super();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		// DateFormat converter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		// converter.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"));
 		this.auditId = auditId;
 		this.user = user;
 		if (dateIn == null) {
@@ -35,6 +40,7 @@ public class AuditDto {
 		}
 		else {				
 			this.dateIn = dateIn.format(formatter);
+			// this.dateIn = converter.format(dateIn);
 		}
 		this.ipAddress = ipAddress;
 		this.idDis = idDis;
