@@ -31,20 +31,22 @@ public class AuditDto {
 			String societe,	String shortBankName,String userName, String rights, Long  totalRecords) {
 		super();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		// DateFormat converter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		// converter.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"));
 		this.auditId = auditId;
 		this.user = user;
 		if (dateIn == null) {
 			this.dateIn = "";
 		}
-		else {				
-			this.dateIn = dateIn.format(formatter);
-			// this.dateIn = converter.format(dateIn);
+		else {	
+			this.dateIn = dateIn.plusHours(1).format(formatter);
 		}
 		this.ipAddress = ipAddress;
 		this.idDis = idDis;
-		this.application = application;
+		if (application == null) {
+			this.application = "PHP";
+		}
+		else {
+			this.application = application;
+		}
 		this.societe = societe;
 		this.shortBankName = shortBankName;
 		this.userName = userName;

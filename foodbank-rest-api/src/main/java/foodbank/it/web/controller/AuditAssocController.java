@@ -107,7 +107,7 @@ public class AuditAssocController {
 		boolean booBenefChecked= entity.getBenefCheck() == "Y";
 		AuditAssocDto dto = new AuditAssocDto(entity.getAuditId(), entity.getLienDis(), entity.getLienDep(), entity.getAuditorNr(), entity.getDemunisYNRem(), entity.getHygCheck(), entity.getServUsage(),
     			entity.getProbSug(), entity.getAuditDate(),booBenefChecked, 
-    			entity.getSociete(), entity.getDepotName(), entity.getLienBanque(),totalRecords);
+    			entity.getSociete(), entity.getDepotName(), entity.getLienBanque(),entity.getAuditorName(),totalRecords);
 		return dto;
 	}
 

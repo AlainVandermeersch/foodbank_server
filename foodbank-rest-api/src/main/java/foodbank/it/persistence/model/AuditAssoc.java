@@ -57,6 +57,8 @@ public class AuditAssoc implements Serializable {
     private String depotName;
     @Formula("(select d.lien_banque from organisations d where d.id_dis = lien_dis)")
     private Short lienBanque; 
+    @Formula("(select concat(d.nom,' ',d.prenom) from bat d where d.bat_ID = auditor_nr)")
+    private String auditorName; 
 
     /** Default constructor. */
     public AuditAssoc() {
@@ -270,6 +272,11 @@ public class AuditAssoc implements Serializable {
 
 	public Short getLienBanque() {
 		return lienBanque;
+	}
+	
+
+	public String getAuditorName() {
+		return auditorName;
 	}
 
 	/**

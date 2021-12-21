@@ -26,6 +26,7 @@ public class AuditAssocDto {
     private String depotName;
    
     private Short lienBanque; 
+    private String auditorName; 
     
     private Long  totalRecords;
     
@@ -33,7 +34,7 @@ public class AuditAssocDto {
 
 	public AuditAssocDto(long auditId, int lienDis, int lienDep, int auditorNr, String demunisYNRem, String hygCheck,
 			String servUsage, String probSug, String auditDate, boolean benefCheck,
-			String societe, String depotName,Short lienBanque, Long  totalRecords) {
+			String societe, String depotName,Short lienBanque,String auditorName, Long  totalRecords) {
 		super();
 		this.auditId = auditId;
 		this.lienDis = lienDis;
@@ -47,6 +48,7 @@ public class AuditAssocDto {
 		this.benefCheck = benefCheck;
 		this.societe = societe;
 		this.depotName = depotName;
+		this.auditorName = auditorName;
 		this.lienBanque = lienBanque;
 		this.totalRecords = totalRecords;
 	}
@@ -153,6 +155,15 @@ public class AuditAssocDto {
 
 	public void setLienBanque(Short lienBanque) {
 		this.lienBanque = lienBanque;
+	}
+	
+	
+	public String getAuditorName() {
+		return auditorName;
+	}
+
+	public void setAuditorName(String auditorName) {
+		this.auditorName = auditorName;
 	}
 
 	public Long getTotalRecords() {
