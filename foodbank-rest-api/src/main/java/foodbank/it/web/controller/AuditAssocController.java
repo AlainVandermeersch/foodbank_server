@@ -72,14 +72,14 @@ public class AuditAssocController {
 
    
 	@PutMapping("orgaudit/{auditId}")
-    public AuditAssocDto updateAuditAssoc(@PathVariable("auditId") Integer auditId, @RequestBody AuditAssocDto updatedAuditAssoc) throws Exception {
+    public AuditAssocDto updateAuditAssoc(@PathVariable("auditId") Long auditId, @RequestBody AuditAssocDto updatedAuditAssoc) throws Exception {
         AuditAssoc AuditAssocEntity = convertToEntity(updatedAuditAssoc);
         return this.convertToDto(this.AuditAssocService.save(AuditAssocEntity),1);
     }
 
     @DeleteMapping("orgaudit/{auditId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAuditAssoc(@PathVariable("auditId") Integer auditId) throws Exception {
+    public void deleteAuditAssoc(@PathVariable("auditId") Long auditId) throws Exception {
     	try {
         AuditAssocService.delete(auditId);
     	}

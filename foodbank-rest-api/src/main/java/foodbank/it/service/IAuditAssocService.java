@@ -9,13 +9,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface IAuditAssocService {
 	
-    Optional<AuditAssoc> findByAuditId(int auditAssocId);
+    Optional<AuditAssoc> findByAuditId(long auditAssocId);
 	
 	AuditAssoc save(AuditAssoc auditAssoc) ;
 
     Page<AuditAssoc> findAll(SearchAuditAssocCriteria searchCriteria, Pageable pageable);	
    
 
-    void delete(int auditId) throws Exception;
+    void delete(long auditId) throws Exception;
 
 }

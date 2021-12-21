@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
-import foodbank.it.persistence.model.Don;
 import foodbank.it.persistence.model.AuditAssoc;
 
 import foodbank.it.persistence.repository.IAuditAssocRepository;
@@ -41,36 +40,14 @@ public class AuditAssocServiceImpl implements IAuditAssocService{
     @Override
     public AuditAssoc save(AuditAssoc auditAssoc) {  
     	
-    	
         return AuditAssocRepository.save(auditAssoc);
     }
 
     @Override
     @Transactional
-    public void delete(int auditId) throws Exception { 
-    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-    	Root<Don> don = totalCriteriaQuery.from(Don.class);
-		List<Predicate> predicates = new ArrayList<>();
-		Predicate auditAssocPredicate = criteriaBuilder.equal(don.get("auditId"), auditId);
-		predicates.add(auditAssocPredicate);
-	
-		System.out.printf("\nChecking Don References to AuditAssoc with id: %d", auditId);
-		
-		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
-		totalCriteriaQuery.select(criteriaBuilder.count(don));
-		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		Long countResult = countQuery.getSingleResult();
-		
-
-		if (countResult > 0) {
-			String errorMsg = String.format("There are %d Dons with AuditAssoc id %d",countResult, auditId);		
-			throw new Exception(errorMsg);
-		}
-		else {
-    
-			AuditAssocRepository.deleteById(auditId);	
-		}
+    public void delete(long auditId) throws Exception {    	
+			
+    	AuditAssocRepository.deleteById(auditId);	
 	        
     }
    
@@ -111,7 +88,7 @@ public class AuditAssocServiceImpl implements IAuditAssocService{
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
 	@Override
-	public Optional<AuditAssoc> findByAuditId(int auditId) {
+	public Optional<AuditAssoc> findByAuditId(long auditId) {
 		return AuditAssocRepository.findById(auditId);
 	}
 	
