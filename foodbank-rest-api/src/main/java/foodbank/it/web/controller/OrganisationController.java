@@ -31,6 +31,17 @@ public class OrganisationController {
 	
 	private final IOrganisationService OrganisationService;
 	private final IOrgProgramService OrgProgramService;
+	private  boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        double d = Double.parseDouble(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
 	    
     public OrganisationController(
     		IOrganisationService OrganisationService,
@@ -84,7 +95,11 @@ public class OrganisationController {
         Integer classeFBBAInteger = Optional.ofNullable(classeFBBA).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
-        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
+        Integer idDisInteger = null;
+        
+        if (idDis != null && this.isNumeric(idDis)) {
+        	idDisInteger = Integer.parseInt(idDis );
+        }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
 				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup);

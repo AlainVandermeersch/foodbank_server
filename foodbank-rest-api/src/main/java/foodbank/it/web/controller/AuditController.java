@@ -23,6 +23,17 @@ import foodbank.it.web.dto.AuditDto;
 
 public class AuditController {
 	private IAuditService AuditService;
+	private  boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        double d = Double.parseDouble(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
     
     public AuditController(IAuditService AuditService) {
         this.AuditService = AuditService;
@@ -47,7 +58,12 @@ public class AuditController {
         else {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
-        Integer idDisInteger = Optional.ofNullable(idDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer idDisInteger = null;
+        
+        if (this.isNumeric(idDis)) {
+        	idDisInteger = Integer.parseInt(idDis);
+        }
+        
         
         SearchAuditCriteria criteria = new SearchAuditCriteria( user,shortBankName,idDisInteger, societe, userName ,
         		rights, fromDate, toDate, isJavaApp);

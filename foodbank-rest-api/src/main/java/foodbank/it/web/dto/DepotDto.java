@@ -29,6 +29,8 @@ public class DepotDto {
 	 
 	 private Integer lienBanque;
 	 
+	 private Long  totalRecords;
+	 
 	
 	 
 	public DepotDto() {
@@ -38,7 +40,7 @@ public class DepotDto {
 
 	public DepotDto(String idDepot, String nom, String adresse, String adresse2, String cp, String ville,
 			String telephone, String contact, String email, String memo, boolean depPrinc, boolean actif, boolean depFead,
-			Integer lienBanque) {
+			Integer lienBanque, Long  totalRecords) {
 		super();
 		this.idDepot = idDepot;
 		this.nom = nom;
@@ -54,6 +56,7 @@ public class DepotDto {
 		this.actif = actif ;
 		this.depFead = depFead;
 		this.lienBanque = lienBanque;	
+		this.totalRecords = totalRecords;
 		
 	}
 
@@ -167,6 +170,14 @@ public class DepotDto {
 
 	public void setLienBanque(Integer lienBanque) {
 		this.lienBanque = lienBanque;
+	}
+
+	public Long getTotalRecords() {
+		return totalRecords;
+	}
+
+	public void setTotalRecords(Long totalRecords) {
+		this.totalRecords = totalRecords;
 	}
 
 	
