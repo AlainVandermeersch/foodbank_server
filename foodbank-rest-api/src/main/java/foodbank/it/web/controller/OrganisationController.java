@@ -75,7 +75,7 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
      		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
-     		@RequestParam(required = false) String classeFBBA,
+     		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
      		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
@@ -102,7 +102,7 @@ public class OrganisationController {
         }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup);
+				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
