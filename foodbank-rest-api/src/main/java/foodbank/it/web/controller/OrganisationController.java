@@ -94,7 +94,10 @@ public class OrganisationController {
         Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer classeFBBAInteger = Optional.ofNullable(classeFBBA).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
+        Integer lienDepotInteger = null; 
+        if (lienDepot != null && this.isNumeric(lienDepot)) {
+        	lienDepotInteger = Integer.parseInt(lienDepot );
+        }
         Integer idDisInteger = null;
         
         if (idDis != null && this.isNumeric(idDis)) {

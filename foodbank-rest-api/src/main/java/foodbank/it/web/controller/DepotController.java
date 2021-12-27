@@ -38,7 +38,8 @@ public class DepotController {
     @GetMapping("depots/")
     public Collection<DepotDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
-    		@RequestParam(required = false) String nom,@RequestParam(required = false) String lienBanque) {
+    		@RequestParam(required = false) Boolean actif, @RequestParam(required = false) String nom,
+    		@RequestParam(required = false) String lienBanque) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -52,7 +53,7 @@ public class DepotController {
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         
-        SearchDepotCriteria criteria = new SearchDepotCriteria(nom,lienBanqueInteger);
+        SearchDepotCriteria criteria = new SearchDepotCriteria(nom,actif,lienBanqueInteger);
         Page<Depot> selectedDepots = this.DepotService.findAll(criteria, pageRequest);
 		long totalElements = selectedDepots.getTotalElements();
 

@@ -1,6 +1,5 @@
 package foodbank.it.web.controller;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;

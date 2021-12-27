@@ -84,6 +84,7 @@ public class DepotServiceImpl implements IDepotService{
 	List<Predicate> predicates = new ArrayList<>();
 
 	String nom = searchCriteria.getNom();
+	Boolean actif = searchCriteria.getActif();
 	Integer lienBanque = searchCriteria.getLienBanque();
 	
 
@@ -92,6 +93,15 @@ public class DepotServiceImpl implements IDepotService{
 		Predicate nomPredicate = criteriaBuilder.like(depot.get("nom"), "%" + nom.toLowerCase() + "%");
 		predicates.add(nomPredicate);
 	}
+	
+	if (actif != null) {
+		Integer intActive = 0;
+		if (actif == true) {
+			intActive = 1;
+		}
+		Predicate isActifPredicate = criteriaBuilder.equal(depot.get("actif"), intActive);
+		predicates.add(isActifPredicate);
+	} 
 	
 	if (lienBanque != null) {
 		Predicate lienBanquePredicate = criteriaBuilder.equal(depot.get("lienBanque"), lienBanque);
