@@ -74,6 +74,7 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
+     		@RequestParam(required = false) Boolean gestBen,
      		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
      		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
      		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
@@ -105,7 +106,7 @@ public class OrganisationController {
         }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut);
+				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -281,7 +282,11 @@ public class OrganisationController {
 		boolean booCotAnnuelle = entity.getCotAnnuelle() == 1;
 		boolean booCotSup = entity.getCotSup() == 1;
 		  // Note daten field means is reverse of Agreed
-		boolean booAgreed= entity.getDaten() == 0;
+		boolean booAgreed = false;
+		if (entity.getDaten() != null) {
+			booAgreed= entity.getDaten() == 0;
+		}
+	
 		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), entity.getStatut().trim(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
