@@ -10,8 +10,10 @@ public class SearchClientCriteria {
 	private Integer lienBanque;
 	private Integer lienDis;
 	private Integer actif;
+	private Boolean suspect;
     
-	public SearchClientCriteria(String nom, String prenom, String adresse, String cp,String localite, Integer lienBanque, Integer lienDis, Integer actif) {
+	public SearchClientCriteria(String nom, String prenom, String adresse, String cp,String localite,
+			Integer lienBanque, Integer lienDis, Integer actif, Boolean suspect) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.adresse = adresse;
@@ -20,6 +22,7 @@ public class SearchClientCriteria {
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;
 		this.actif = actif;
+		this.suspect = suspect;
 	}
 
 	
@@ -103,6 +106,15 @@ public class SearchClientCriteria {
 
 	public void setActif(Integer actif) {
 		this.actif = actif;
+	}
+
+
+	public Boolean getSuspect() {
+		return suspect;
+	}
+
+	public void setSuspect(Boolean suspect) {
+		this.suspect = suspect;
 	}
 	
 }

@@ -54,6 +54,7 @@ public class ClientServiceImpl implements IClientService{
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer actif = searchCriteria.getActif();
+		Boolean isSuspect = searchCriteria.getSuspect();
 
 		if (nom != null ) {			
 
@@ -93,6 +94,14 @@ public class ClientServiceImpl implements IClientService{
 				
 		Predicate lienActifPredicate = criteriaBuilder.equal(client.get("actif"),actif);
 		predicates.add(lienActifPredicate);
+		
+		if (isSuspect != null) {
+			Predicate isSuspectPredicate = criteriaBuilder.equal(client.get("coeff"), 1);	
+			if (isSuspect== true) {
+				isSuspectPredicate = criteriaBuilder.notEqual(client.get("coeff"), 1);	
+			}
+			predicates.add(isSuspectPredicate);
+		}
 
 		clientQuery.where(predicates.stream().toArray(Predicate[]::new));
 		clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));

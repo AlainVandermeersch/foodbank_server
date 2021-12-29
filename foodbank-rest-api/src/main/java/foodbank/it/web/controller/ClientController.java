@@ -57,7 +57,7 @@ public class ClientController {
 			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String actif,
 			@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
      		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
-     		@RequestParam(required = false) String localite,
+     		@RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
      		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
@@ -77,7 +77,7 @@ public class ClientController {
 			actifInteger = 0;
 		}
 
-		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite, lienBanqueInteger, lienDisInteger,actifInteger);
+		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite, lienBanqueInteger, lienDisInteger,actifInteger,suspect);
 		Page<Client> selectedClients = this.ClientService.findAll(criteria, pageRequest);
 		long totalElements = selectedClients.getTotalElements();
 
