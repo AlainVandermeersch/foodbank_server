@@ -18,10 +18,12 @@ public class SearchOrganisationCriteria {
 	private Boolean cotSup;
 	private String statut;
 	private Boolean gestBen;
+	private Boolean feadN;
 	
 	
 	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, 
-			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt, Boolean cotAnnuelle,Boolean cotSup,String statut,Boolean gestBen) {
+			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt, 
+			Boolean cotAnnuelle,Boolean cotSup,String statut,Boolean gestBen,Boolean feadN) {
 		this.idDis = idDis;
 		this.regId = regId;
 		this.classeFBBA = classeFBBA;
@@ -39,6 +41,7 @@ public class SearchOrganisationCriteria {
 		this.cotSup = cotSup;
 		this.statut = statut;
 		this.gestBen = gestBen;
+		this.feadN = feadN;
 	}
 
 	
@@ -235,6 +238,18 @@ public class SearchOrganisationCriteria {
 
 	public void setGestBen(Boolean gestBen) {
 		this.gestBen = gestBen;
+	}
+
+
+
+	public Boolean getFeadN() {
+		return feadN;
+	}
+
+
+
+	public void setFeadN(Boolean feadN) {
+		this.feadN = feadN;
 	}
 
 	

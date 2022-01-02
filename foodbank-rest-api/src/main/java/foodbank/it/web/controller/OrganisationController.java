@@ -74,7 +74,7 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
-     		@RequestParam(required = false) Boolean gestBen,
+     		@RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
      		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
      		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
      		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
@@ -106,7 +106,7 @@ public class OrganisationController {
         }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen);
+				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen,feadN);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -281,15 +281,20 @@ public class OrganisationController {
 		boolean booSusp = entity.getSusp() == 1;
 		boolean booCotAnnuelle = entity.getCotAnnuelle() == 1;
 		boolean booCotSup = entity.getCotSup() == 1;
+		boolean booFeadN = entity.getFeadN() == 1;
 		  // Note daten field means is reverse of Agreed
 		boolean booAgreed = false;
 		if (entity.getDaten() != null) {
 			booAgreed= entity.getDaten() == 0;
 		}
+		String strStatut = "";
+		if ( entity.getStatut() != null) {
+			strStatut = entity.getStatut().trim();
+		}
 	
 		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
-				entity.getSociete(), entity.getAdresse(), entity.getStatut().trim(), entity.getEmail(),  entity.getCp(), entity.getLocalite(),
+				entity.getSociete(), entity.getAdresse(), strStatut , entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), booAgreed,entity.getBanque(), 
 				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), booActif, entity.getCivilite(), entity.getNom(),
 				entity.getPrenom(), entity.getCiviliteVp(), entity.getPrenomVp(), entity.getNomVp(), entity.getTelVp(), entity.getGsmVp(),
@@ -305,7 +310,7 @@ public class OrganisationController {
 				booGestBen, entity.getTourneeJour(), entity.getTourneeSem(), entity.getColdis(), entity.getLienGd(), entity.getLienGs(),
 				entity.getMontCot(), entity.getAntenne(), entity.getAfsca1(), entity.getAfsca2(), entity.getAfsca3(), entity.getNrFead(),
 				entity.getTourneeMois(), booDistrListPdt, booDistrListVp, booDistrListSec, booDistrListTres,
-				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), entity.getFeadN(),
+				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), booFeadN,
 				entity.getRemLivr(), booCotAnnuelle, entity.getCotMonths(), booCotSup, entity.getCotMonthsSup(), entity.getDepotram(),
 				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),
 				booLuam,
@@ -366,7 +371,7 @@ public class OrganisationController {
 				(short) (dto.getGestBen() ? 1 : 0), dto.getTourneeJour(), dto.getTourneeSem(), dto.getColdis(), dto.getLienGd(), dto.getLienGs(),
 				dto.getMontCot(), dto.getAntenne(), dto.getAfsca1(), dto.getAfsca2(), dto.getAfsca3(), dto.getNrFead(),
 				dto.getTourneeMois(), (short) (dto.getDistrListPdt() ? 1 : 0), (short) (dto.getDistrListVp() ? 1 : 0), (short) (dto.getDistrListSec() ? 1 : 0),(short) (dto.getDistrListTres() ? 1 : 0),
-				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), dto.getFeadN(),
+				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), (short) (dto.isFeadN() ? 1 : 0),
 				dto.getRemLivr(), (short) (dto.isCotAnnuelle() ? 1 : 0), dto.getCotMonths(),(int) (dto.isCotSup() ? 1 : 0), dto.getCotMonthsSup(), dto.getDepotram(),
 				dto.getLupdUserName(),dto.getLienBanque(),dto.getNomDepot());       
         if (!StringUtils.isEmpty(dto.getIdDis())) {

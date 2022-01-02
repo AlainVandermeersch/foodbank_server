@@ -101,6 +101,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		String refint = searchCriteria.getRefInt();
 		String statut = searchCriteria.getStatut();
 		Boolean gestBen = searchCriteria.getGestBen();
+		Boolean feadN = searchCriteria.getFeadN();
 		
 		if (societe != null ) {			
 
@@ -172,6 +173,14 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate isgestBenPredicate = criteriaBuilder.equal(organisation.get("gestBen"), intgestBen);
 			predicates.add(isgestBenPredicate);
 		} 
+	    if (feadN != null) {			
+			Integer intfeadN = 0;
+			if (feadN == true) {
+				intfeadN = 1;
+			}
+			Predicate isfeadNPredicate = criteriaBuilder.equal(organisation.get("feadN"), intfeadN);
+			predicates.add(isfeadNPredicate);
+		}
 		if (actif != null) {
 			Integer intActive = 0;
 			if (actif == true) {

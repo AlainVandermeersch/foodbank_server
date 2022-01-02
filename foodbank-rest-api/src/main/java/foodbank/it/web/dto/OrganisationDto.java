@@ -209,7 +209,7 @@ public class OrganisationDto {
 	  
 	    private String fax;
 	   
-	    private Short feadN;
+	    private boolean feadN;
 	    
 	    private String remLivr;
 	    
@@ -308,7 +308,7 @@ private boolean luam;
 				boolean gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs,
 				BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead,
 				Short tourneeMois, boolean distrListPdt, boolean distrListVp, boolean distrListSec, boolean distrListTres,
-				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN,
+				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, boolean feadN,
 				String remLivr, boolean cotAnnuelle, Integer  cotMonths, boolean cotSup, Integer  cotMonthsSup, Integer  depotram,
 				String lupdUserName, LocalDateTime lupdTs,Short lienBanque, String nomDepot,
 				// orgprogram fields
@@ -1327,12 +1327,12 @@ private boolean luam;
 		public void setFax(String fax) {
 			this.fax = fax;
 		}
-
-		public Short getFeadN() {
+	
+		public boolean isFeadN() {
 			return feadN;
 		}
 
-		public void setFeadN(Short feadN) {
+		public void setFeadN(boolean feadN) {
 			this.feadN = feadN;
 		}
 
