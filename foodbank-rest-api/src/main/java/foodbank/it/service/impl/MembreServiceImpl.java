@@ -25,7 +25,7 @@ import foodbank.it.persistence.repository.IMembreRepository;
 import foodbank.it.persistence.repository.ITUserRepository;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.SearchMembreCriteria;
-import foodbank.it.service.SearchMembreMailCriteria;
+import foodbank.it.service.SearchMailListCriteria;
 
 @Service
 public class MembreServiceImpl implements IMembreService{
@@ -245,56 +245,6 @@ public class MembreServiceImpl implements IMembreService{
 		List<Membre> resultList = query.getResultList();
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
-	@Override
-	public List<Membre> findAll(SearchMembreMailCriteria searchCriteria) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
-		Root<Membre> membre = membreQuery.from(Membre.class);
-
-		List<Predicate> predicates = new ArrayList<>();
-
-		
-		Integer lienBanque = searchCriteria.getLienBanque();
-		Integer lienDis = searchCriteria.getLienDis();
-		
-		if (lienBanque != null) {
-			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
-			predicates.add(lienBanquePredicate);
-		}
-		
-
-		if (lienDis != null) {
-			if (lienDis == 0) {
-				Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);
-				Predicate lienDisNull = criteriaBuilder.isNull(membre.get("lienDis"));
-				Predicate lienDisPredicate = criteriaBuilder.or(lienDisZero,lienDisNull);
-				predicates.add(lienDisPredicate);
-			}
-			else {
-				Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
-				predicates.add(lienDisPredicate);
-			}
-		}
-		else {
-			System.out.printf("\nExcluding Bank Members");
-			// exclude members of bank who have liendis 0 or null
-			Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
-			Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
-			predicates.add(lienDisNotZero);
-			predicates.add(lienDisNotNull);
-		}
-		Predicate lienActifPredicate = criteriaBuilder.equal(membre.get("actif"),1);
-		predicates.add(lienActifPredicate);
-
-		membreQuery.where(predicates.stream().toArray(Predicate[]::new));	
-		List<Order> orderList = new ArrayList<Order>();
-		orderList.add(criteriaBuilder.asc(membre.get("nom")));
-		orderList.add(criteriaBuilder.asc(membre.get("prenom")));
-		membreQuery.orderBy(orderList);
-
-		TypedQuery<Membre> query = entityManager.createQuery(membreQuery);
-		List<Membre> resultList = query.getResultList();
-		return resultList;
-	}
+	
 }
 	

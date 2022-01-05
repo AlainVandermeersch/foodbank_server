@@ -15,7 +15,7 @@ public interface IMembreService {
 	Membre save(Membre membre,boolean booCreateMode) throws Exception;
 
     Page<Membre> findAll(SearchMembreCriteria searchCriteria, Pageable pageable);	
-    List<Membre> findAll(SearchMembreMailCriteria searchCriteria);	 
+    
 
     void delete(int batId) throws Exception;
 

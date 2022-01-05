@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -43,16 +45,44 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 
+import foodbank.it.persistence.model.Membre;
 import foodbank.it.service.IFilesStorageService;
+import foodbank.it.service.IMailService;
+import foodbank.it.service.IMembreService;
+import foodbank.it.service.SearchMailListCriteria;
 import foodbank.it.service.impl.FileInfo;
 import foodbank.it.service.impl.ResponseMessage;
 import foodbank.it.web.dto.EmailDto;
+import foodbank.it.web.dto.MailAddressDto;
 
 @RestController
 public class EmailController {
+private IMailService MailService;
+		
+    
+    public EmailController(IMailService MailService) {
+        this.MailService = MailService;     
+       
+    }
 	
 	@Autowired
 	  IFilesStorageService storageService;
+	 @GetMapping("mailaddresses/")
+	    public Collection<MailAddressDto> find( 
+	    		@RequestParam(required = false) String lienBanque ,
+	    		@RequestParam(required = false) String lienDis,
+	    		@RequestParam(required = false) String rights
+	    		) {
+	    	
+	        
+	        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+	        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+			SearchMailListCriteria criteria = new SearchMailListCriteria(lienBanqueInteger, lienDisInteger,rights);
+			List<MailAddressDto> mailAddressDtos = this.MailService.find(criteria);			
+
+			return mailAddressDtos;
+	    }
+
 	
 	@PostMapping("mailing/upload/")
 	  public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
