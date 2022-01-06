@@ -37,5 +37,5 @@ docker run --rm \
 
 cd target/food-it && \
     /bin/bash build.sh && \
-    /bin/bash deploy.sh
+    /bin/bash deploy.sh --password $WILDFLY_ADMIN_PASS
 cd $CURRENT_DIRECTORY
