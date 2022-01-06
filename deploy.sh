@@ -16,8 +16,10 @@ cd target && \
 cd $CURRENT_DIRECTORY
 
 cd target && \
-    git clone git@gitlab.com:dubus.dominique/food-it.git && git checkout keycloak-migration && \
-    cd food-it/docker/wildfly && \
+    git clone git@gitlab.com:dubus.dominique/food-it.git && \
+    cd food-it && \
+    git checkout keycloak-migration && \
+    cd docker/wildfly && \
     cd docker build -t foodbank-stock-app-wildfly .
 cd $CURRENT_DIRECTORY
 
