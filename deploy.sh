@@ -15,6 +15,12 @@ cd target && \
 
 cd $CURRENT_DIRECTORY
 
+cd target && \
+    git clone https://github.com/eciuca/foodbank-stock-app.git && git checkout keycloak-migration && \
+    cd foodbank-stock-app/docker/wildfly && \
+    cd docker build -t foodbank-stock-app-wildfly .
+cd $CURRENT_DIRECTORY
+
 docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "$PWD:$PWD" \
@@ -26,7 +32,6 @@ docker run --rm \
     -w="$PWD" \
     docker/compose:1.29.1 --env-file=.env.gcloud-dev up -d
 
-cd target && \
-    git clone https://github.com/eciuca/foodbank-stock-app.git && git checkout keycloak-migration && \
-    cd foodbank-stock-app && bash deploy.sh
+cd target/foodbank-stock-app && \
+    build.sh && deploy.sh
 cd $CURRENT_DIRECTORY
