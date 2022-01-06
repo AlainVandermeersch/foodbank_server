@@ -16,7 +16,7 @@ cd target && \
 cd $CURRENT_DIRECTORY
 
 cd target && \
-    git clone https://github.com/eciuca/foodbank-stock-app.git && git checkout keycloak-migration && \
+    git clone git@gitlab.com:dubus.dominique/food-it.git && git checkout keycloak-migration && \
     cd foodbank-stock-app/docker/wildfly && \
     cd docker build -t foodbank-stock-app-wildfly .
 cd $CURRENT_DIRECTORY
