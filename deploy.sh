@@ -35,5 +35,5 @@ docker run --rm \
     docker/compose:1.29.1 --env-file=.env.gcloud-dev up -d
 
 cd target/food-it && \
-    build.sh && deploy.sh
+    build.sh && deploy.sh && \
 cd $CURRENT_DIRECTORY
