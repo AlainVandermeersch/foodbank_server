@@ -45,10 +45,8 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 
-import foodbank.it.persistence.model.Membre;
 import foodbank.it.service.IFilesStorageService;
 import foodbank.it.service.IMailService;
-import foodbank.it.service.IMembreService;
 import foodbank.it.service.SearchMailListCriteria;
 import foodbank.it.service.impl.FileInfo;
 import foodbank.it.service.impl.ResponseMessage;
@@ -71,13 +69,14 @@ private IMailService MailService;
 	    public Collection<MailAddressDto> find( 
 	    		@RequestParam(required = false) String lienBanque ,
 	    		@RequestParam(required = false) String lienDis,
-	    		@RequestParam(required = false) String rights
+	    		@RequestParam(required = false) String regId
 	    		) {
 	    	
 	        
 	        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 	        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-			SearchMailListCriteria criteria = new SearchMailListCriteria(lienBanqueInteger, lienDisInteger,rights);
+	        Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+			SearchMailListCriteria criteria = new SearchMailListCriteria(lienBanqueInteger, lienDisInteger,regIdInteger);
 			List<MailAddressDto> mailAddressDtos = this.MailService.find(criteria);			
 
 			return mailAddressDtos;

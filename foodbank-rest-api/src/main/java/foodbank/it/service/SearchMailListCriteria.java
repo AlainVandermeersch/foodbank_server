@@ -3,11 +3,11 @@ package foodbank.it.service;
 public class SearchMailListCriteria {
 	private Integer lienBanque;
 	private Integer lienDis;
-	private String rights;
-	public SearchMailListCriteria(Integer lienBanque, Integer lienDis,String rights) {
+	private Integer regId;
+	public SearchMailListCriteria(Integer lienBanque, Integer lienDis,Integer regId) {
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;	 
-		this.rights = rights;
+		this.regId = regId;
 	}
 	public Integer getLienBanque() {
 		return lienBanque;
@@ -21,12 +21,13 @@ public class SearchMailListCriteria {
 	public void setLienDis(Integer lienDis) {
 		this.lienDis = lienDis;
 	}
-	public String getRights() {
-		return rights;
+	public Integer getRegId() {
+		return regId;
 	}
-	public void setRights(String rights) {
-		this.rights = rights;
+	public void setRegId(Integer regId) {
+		this.regId = regId;
 	}
+	
 	
 
 }

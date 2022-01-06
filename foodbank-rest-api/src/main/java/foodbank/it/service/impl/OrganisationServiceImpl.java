@@ -254,6 +254,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Boolean actif = searchCriteria.getActif();
 		Boolean isAgreed = searchCriteria.getAgreed();
 		Boolean isCotType = searchCriteria.getCotType();
+		Integer regId = searchCriteria.getRegId();
 		
 		if (societe != null ) {	
 			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
@@ -304,9 +305,12 @@ public class OrganisationServiceImpl implements IOrganisationService{
 				predicates.add(isCotSupPredicate);	
 			}
 		
-	} 
+		} 
 		
-
+		if (regId != null) {
+			Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId);
+				predicates.add(regIdPredicate);
+			}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));
 

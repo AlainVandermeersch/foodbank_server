@@ -1,7 +1,6 @@
 package foodbank.it.web.controller;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,9 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.SearchMembreCriteria;
-import foodbank.it.service.SearchMailListCriteria;
 import foodbank.it.web.dto.MembreDto;
-import foodbank.it.web.dto.MailAddressDto;
 
 @RestController
 

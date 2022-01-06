@@ -14,9 +14,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Service;
 
-import foodbank.it.persistence.model.Membre;
-import foodbank.it.persistence.repository.IMembreRepository;
-import foodbank.it.persistence.repository.ITUserRepository;
+import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IMailService;
 import foodbank.it.service.SearchMailListCriteria;
 import foodbank.it.web.dto.MailAddressDto;
@@ -24,72 +22,61 @@ import foodbank.it.web.dto.MailAddressDto;
 @Service
 public class MailServiceImpl implements IMailService{
 
-	private IMembreRepository MembreRepository;
-	private ITUserRepository TUserRepository;
+	
 	private final EntityManager entityManager;
 	
-	public MailServiceImpl(IMembreRepository MembreRepository,ITUserRepository TUserRepository, EntityManager entityManager) {
-        this.MembreRepository = MembreRepository;
-        this.TUserRepository = TUserRepository;
-        this.entityManager = entityManager;
+	public MailServiceImpl(EntityManager entityManager) {
+         this.entityManager = entityManager;
     }
 	@Override
 	public List<MailAddressDto> find(SearchMailListCriteria 
 			searchCriteria) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
-		Root<Membre> membre = membreQuery.from(Membre.class);
+		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
+		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
 
 		List<Predicate> predicates = new ArrayList<>();
 
 		
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
+		Integer regId =  searchCriteria.getRegId();
 		
 		if (lienBanque != null) {
-			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
+			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
 		}
 		
 
 		if (lienDis != null) {
-			if (lienDis == 0) {
-				Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);
-				Predicate lienDisNull = criteriaBuilder.isNull(membre.get("lienDis"));
-				Predicate lienDisPredicate = criteriaBuilder.or(lienDisZero,lienDisNull);
+			    Predicate lienDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), lienDis);
 				predicates.add(lienDisPredicate);
-			}
-			else {
-				Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
-				predicates.add(lienDisPredicate);
-			}
-		}
-		else {
-			System.out.printf("\nExcluding Bank Members");
-			// exclude members of bank who have liendis 0 or null
-			Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
-			Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
-			predicates.add(lienDisNotZero);
-			predicates.add(lienDisNotNull);
-		}
-		Predicate lienActifPredicate = criteriaBuilder.equal(membre.get("actif"),1);
+	    }
+		
+		if (regId != null) {
+		    Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId	);
+			predicates.add(regIdPredicate);
+    }
+	
+		
+		Predicate lienActifPredicate = criteriaBuilder.equal(organisation.get("actif"),1);
 		predicates.add(lienActifPredicate);
 
-		membreQuery.where(predicates.stream().toArray(Predicate[]::new));	
+		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		List<Order> orderList = new ArrayList<Order>();
-		orderList.add(criteriaBuilder.asc(membre.get("nom")));
-		orderList.add(criteriaBuilder.asc(membre.get("prenom")));
-		membreQuery.orderBy(orderList);
+		orderList.add(criteriaBuilder.asc(organisation.get("idDis")));
+		
+		organisationQuery.orderBy(orderList);
 
-		TypedQuery<Membre> query = entityManager.createQuery(membreQuery);
-		List<Membre> selectedMembres = query.getResultList();
-		return selectedMembres.stream()
-				.map(Membre -> convertMembreToMailAddressDto(Membre))
+		TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
+		List<Organisation> selectedOrganisations = query.getResultList();
+		return selectedOrganisations.stream()
+				.map(org -> convertOrganisationToMailAddressDto(org))
 				.collect(Collectors.toList());
 	}
-	protected MailAddressDto convertMembreToMailAddressDto(Membre entity) {  
+	protected MailAddressDto convertOrganisationToMailAddressDto(Organisation entity) {  
     	   	
-    	MailAddressDto dto = new MailAddressDto(entity.getSociete(),entity.getNom(),entity.getPrenom(),entity.getBatmail());
+    	MailAddressDto dto = new MailAddressDto(entity.getIdDis() + " " + entity.getSociete(),"Organisation","Contact",entity.getEmail());
     	return dto;
 	}
 }
