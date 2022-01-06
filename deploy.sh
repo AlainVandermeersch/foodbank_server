@@ -17,7 +17,7 @@ cd $CURRENT_DIRECTORY
 
 cd target && \
     git clone git@gitlab.com:dubus.dominique/food-it.git && git checkout keycloak-migration && \
-    cd foodbank-stock-app/docker/wildfly && \
+    cd food-it/docker/wildfly && \
     cd docker build -t foodbank-stock-app-wildfly .
 cd $CURRENT_DIRECTORY
 
@@ -32,6 +32,6 @@ docker run --rm \
     -w="$PWD" \
     docker/compose:1.29.1 --env-file=.env.gcloud-dev up -d
 
-cd target/foodbank-stock-app && \
+cd target/food-it && \
     build.sh && deploy.sh
 cd $CURRENT_DIRECTORY
