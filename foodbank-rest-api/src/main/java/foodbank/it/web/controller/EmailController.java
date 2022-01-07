@@ -69,14 +69,17 @@ private IMailService MailService;
 	    public Collection<MailAddressDto> find( 
 	    		@RequestParam(required = false) String lienBanque ,
 	    		@RequestParam(required = false) String lienDis,
-	    		@RequestParam(required = false) String regId
+	    		@RequestParam(required = false) String regId,
+	    		@RequestParam(required = false) Boolean agreed,
+	    		@RequestParam(required = false) Boolean feadN,
+	    		@RequestParam(required = false) String target
 	    		) {
 	    	
 	        
 	        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 	        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 	        Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-			SearchMailListCriteria criteria = new SearchMailListCriteria(lienBanqueInteger, lienDisInteger,regIdInteger);
+			SearchMailListCriteria criteria = new SearchMailListCriteria(lienBanqueInteger, lienDisInteger,regIdInteger,agreed,feadN,target);
 			List<MailAddressDto> mailAddressDtos = this.MailService.find(criteria);			
 
 			return mailAddressDtos;
