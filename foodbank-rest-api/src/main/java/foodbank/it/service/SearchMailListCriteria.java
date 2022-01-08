@@ -5,14 +5,19 @@ public class SearchMailListCriteria {
 	private Integer lienDis;
 	private Integer regId;
 	private Boolean agreed;
-	private Boolean feadN;	
+	private Boolean feadN;
+	private Boolean isDepot;
+	private Integer langue;
 	private String target;
-	public SearchMailListCriteria(Integer lienBanque, Integer lienDis,Integer regId,Boolean agreed,Boolean feadN,String target) {
+	public SearchMailListCriteria(Integer lienBanque, Integer lienDis,Integer regId,Boolean agreed,Boolean feadN,
+			Boolean isDepot,Integer langue,String target) {
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;	 
 		this.regId = regId;
 		this.agreed = agreed;
 		this.feadN = feadN;
+		this.isDepot = isDepot;
+		this.langue = langue;
 		this.target = target;
 	}
 	public Integer getLienBanque() {
@@ -44,6 +49,20 @@ public class SearchMailListCriteria {
 	}
 	public void setFeadN(Boolean feadN) {
 		this.feadN = feadN;
+	}	
+	
+	public Boolean getIsDepot() {
+		return isDepot;
+	}
+	public void setIsDepot(Boolean isDepot) {
+		this.isDepot = isDepot;
+	}
+	
+	public Integer getLangue() {
+		return langue;
+	}
+	public void setLangue(Integer langue) {
+		this.langue = langue;
 	}
 	public String getTarget() {
 		return target;

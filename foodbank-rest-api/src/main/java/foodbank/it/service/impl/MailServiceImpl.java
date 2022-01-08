@@ -46,6 +46,8 @@ public class MailServiceImpl implements IMailService{
 		Boolean feadN = searchCriteria.getFeadN();
 		Boolean isAgreed = searchCriteria.getAgreed();
 		String target = searchCriteria.getTarget();
+		Boolean isDepot = searchCriteria.getIsDepot();
+		Integer langue = searchCriteria.getLangue();
 		
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
@@ -80,6 +82,14 @@ public class MailServiceImpl implements IMailService{
 			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intDaten);
 			predicates.add(isAgreedPredicate);
 		}
+		if (isDepot != null) {
+			Integer intDepot = 0;
+			if (isDepot== true) {
+				intDepot = 1;
+			}
+			Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), intDepot);
+			predicates.add(isDepotPredicate);
+		}
 	
 		
 		Predicate lienActifPredicate = criteriaBuilder.equal(organisation.get("actif"),1);
@@ -104,7 +114,7 @@ public class MailServiceImpl implements IMailService{
 			//simple iteration
 			while(iterator.hasNext()){
 				Organisation org = iterator.next();
-				returnedDtos.addAll(convertOrganisationToMailAddressPersonDto(org,target));
+				returnedDtos.addAll(convertOrganisationToMailAddressPersonDto(org,target,langue));
 			}
 			return returnedDtos;			
 		}
@@ -114,7 +124,7 @@ public class MailServiceImpl implements IMailService{
     	MailAddressDto dto = new MailAddressDto(org.getIdDis() + " " + org.getSociete(),"Organisation","Contact",org.getEmail());
     	return dto;
 	}
-	protected List<MailAddressDto> convertOrganisationToMailAddressPersonDto(Organisation org,String target) {  
+	protected List<MailAddressDto> convertOrganisationToMailAddressPersonDto(Organisation org,String target, Integer langue) {  
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		
 		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
@@ -124,8 +134,15 @@ public class MailServiceImpl implements IMailService{
 		predicates.add(idOrgPredicate);	
 		Predicate isActifPredicate = criteriaBuilder.equal(tuser.get("actif"), 1);
 		predicates.add(isActifPredicate);
+		if (langue != null) {
+			Predicate languePredicate = criteriaBuilder.equal(tuser.get("membreLangue"), langue);
+			predicates.add(languePredicate);
+		}
+		
+		if (target.equals("1")) {
 		Predicate rightsPredicate = criteriaBuilder.equal(tuser.get("rights"), "Admin_Asso");
-		predicates.add(rightsPredicate);
+			predicates.add(rightsPredicate);
+		}
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(criteriaBuilder.asc(tuser.get("userName")));
 
