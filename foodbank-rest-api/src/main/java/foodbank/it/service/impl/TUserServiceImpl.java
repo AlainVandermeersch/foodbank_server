@@ -99,6 +99,7 @@ public class TUserServiceImpl implements ITUserService {
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idOrg = searchCriteria.getIdOrg();
 		Integer lienDepot = searchCriteria.getLienDepot();
+		String idCompany = searchCriteria.getIdCompany();
 
 		if (idUser != null) {			
 
@@ -124,6 +125,11 @@ public class TUserServiceImpl implements ITUserService {
 
 			Predicate rightsPredicate = criteriaBuilder.equal(tuser.get("rights"), rights);
 			predicates.add(rightsPredicate);
+		}
+		if (idCompany != null) {			
+
+			Predicate idCompanyPredicate = criteriaBuilder.equal(tuser.get("idCompany"), idCompany);
+			predicates.add(idCompanyPredicate);
 		}
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), lienBanque);

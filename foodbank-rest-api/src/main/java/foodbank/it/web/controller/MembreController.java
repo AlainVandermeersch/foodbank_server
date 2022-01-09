@@ -52,7 +52,7 @@ public class MembreController {
     		@RequestParam(required = false) String nom, 
      		@RequestParam(required = false) String address,@RequestParam(required = false) String zip, 
      		@RequestParam(required = false) String city,@RequestParam(required = false) String lienDepot ,
-     		@RequestParam(required = false) Boolean actif,
+     		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String bankShortName,
     		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -69,7 +69,8 @@ public class MembreController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, actif,address, zip,city, lienBanqueInteger, lienDisInteger,lienDepotInteger);
+		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, actif,address, zip,city, 
+				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName );
 		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 
@@ -132,7 +133,8 @@ public class MembreController {
 				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
 				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
-				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),entity.getLienBanque(),entity.getSociete(),totalRecords  );    
+				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),
+				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),totalRecords  );    
         return dto;
     }
 

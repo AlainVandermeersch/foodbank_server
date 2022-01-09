@@ -9,9 +9,10 @@ public class SearchMembreCriteria {
 	private Integer lienBanque;
 	private Integer lienDis;
 	private Integer lienDepot;
+	private String bankShortName;
 	
-	
-	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, Integer lienBanque, Integer lienDis,Integer lienDepot) {
+	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, 
+			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName) {
 		this.nom = nom;		
 		this.actif = actif;
 		this.address = address;
@@ -20,6 +21,7 @@ public class SearchMembreCriteria {
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;
 		this.lienDepot = lienDepot;
+		this.bankShortName = bankShortName;
 	}
 
 	
@@ -107,6 +109,19 @@ public class SearchMembreCriteria {
 	public void setLienDepot(Integer lienDepot) {
 		this.lienDepot = lienDepot;
 	}
+
+
+
+	public String getBankShortName() {
+		return bankShortName;
+	}
+
+
+
+	public void setBankShortName(String bankShortName) {
+		this.bankShortName = bankShortName;
+	}
+	
 
 	
 }

@@ -110,6 +110,8 @@ public class Membre implements Serializable {
  private String societe;
  @Formula("(select d.lien_depot from organisations d where d.id_dis = lien_dis)")
  private String lienDepot;
+ @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
+ private String bankShortName;
 
 
  /** Default constructor. */
@@ -812,6 +814,10 @@ public String getSociete() {
 
 public String getLienDepot() {
 	return lienDepot;
+}
+
+public String getBankShortName() {
+	return bankShortName;
 }
 
 /**

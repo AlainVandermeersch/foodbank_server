@@ -165,6 +165,7 @@ public class MembreServiceImpl implements IMembreService{
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienDepot = searchCriteria.getLienDepot();
+		String bankShortName = searchCriteria.getBankShortName();
 
 		if (nom != null ) {			
 
@@ -189,6 +190,10 @@ public class MembreServiceImpl implements IMembreService{
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
+		}
+		if (bankShortName != null) {
+			Predicate lienBankShortNamePredicate = criteriaBuilder.equal(membre.get("bankShortName"), bankShortName);
+			predicates.add(lienBankShortNamePredicate);
 		}
 		
 
