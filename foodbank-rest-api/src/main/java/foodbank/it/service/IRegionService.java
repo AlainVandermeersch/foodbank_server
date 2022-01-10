@@ -8,6 +8,7 @@ public interface IRegionService {
 	Optional<Region> findByRegId(int regId);
 	
 	Iterable<Region> findByBankLink( Short bankLink);
+	Iterable<Region> findByBankShortName( String  bankShortName);
 
     Region save(Region Region);
 

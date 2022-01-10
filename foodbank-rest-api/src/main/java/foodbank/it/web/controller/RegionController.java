@@ -40,19 +40,24 @@ public class RegionController {
     
 
     @GetMapping("regions/")
-    public Collection<RegionDto> find( @RequestParam(required = false) String lienBanque ) {
+    public Collection<RegionDto> find( 
+    		@RequestParam(required = false) String lienBanque,
+    		@RequestParam(required = false) String bankShortName
+    		) {
         Iterable<Region> selectedRegions = null;
         List<RegionDto> RegionDtos = new ArrayList<>();
         if (lienBanque == null) {
+        	if (bankShortName == null) {
         		selectedRegions = this.RegionService.findAll();
-        		selectedRegions.forEach(p -> RegionDtos.add(convertToDto(p)));
+        	
+        	} else {
+        		selectedRegions = this.RegionService.findByBankShortName(bankShortName);
+        	}
          }
         else {
-        	selectedRegions = this.RegionService.findByBankLink(Short.parseShort(lienBanque));
-        	// selectedRegions = this.RegionService.findAll();
-        	selectedRegions.forEach(p -> RegionDtos.add(convertToDto(p)));
+        	selectedRegions = this.RegionService.findByBankLink(Short.parseShort(lienBanque));        	
         }
-        
+    	selectedRegions.forEach(p -> RegionDtos.add(convertToDto(p)));
         
         return RegionDtos;
     }
