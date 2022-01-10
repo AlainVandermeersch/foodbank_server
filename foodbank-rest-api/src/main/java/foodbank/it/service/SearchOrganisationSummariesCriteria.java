@@ -10,9 +10,10 @@ public class SearchOrganisationSummariesCriteria {
 	private Boolean cotType;
 	private Integer regId;
 	private Boolean feadN;
+	private String bankShortName;
 	
 	public SearchOrganisationSummariesCriteria(String societe, Integer lienBanque, Integer lienDepot, Boolean isDepot, Boolean agreed, 
-			Boolean actif, Boolean cotType,Integer regId,Boolean feadN) {
+			Boolean actif, Boolean cotType,Integer regId,Boolean feadN, String bankShortName) {
 		super();
 		this.societe = societe;
 		this.lienBanque = lienBanque;	
@@ -77,6 +78,12 @@ public class SearchOrganisationSummariesCriteria {
 	}
 	public void setFeadN(Boolean feadN) {
 		this.feadN = feadN;
+	}
+	public String getBankShortName() {
+		return bankShortName;
+	}
+	public void setBankShortName(String bankShortName) {
+		this.bankShortName = bankShortName;
 	}
 	
 	

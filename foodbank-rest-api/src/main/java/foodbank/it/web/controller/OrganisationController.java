@@ -77,6 +77,7 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
      		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
      		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
+     		@RequestParam(required = false) String bankShortName,
      		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
@@ -106,7 +107,7 @@ public class OrganisationController {
         }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen,feadN);
+				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -136,6 +137,7 @@ public class OrganisationController {
     public Collection<OrganisationSummaryDto> findSummaries( 
     		@RequestParam(required = false) String societe, 
     		@RequestParam(required = false) String lienBanque ,
+    		@RequestParam(required = false) String bankShortName,
     		@RequestParam(required = false) String lienDepot,
     		@RequestParam(required = false) Boolean agreed,
     		@RequestParam(required = false) Boolean actif,
@@ -151,7 +153,8 @@ public class OrganisationController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);  
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
         Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger,isDepot,agreed,actif,cotType,regIdInteger,feadN);
+		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger,
+				isDepot,agreed,actif,cotType,regIdInteger,feadN,bankShortName);
 		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);
 		
 		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();
@@ -247,7 +250,7 @@ public class OrganisationController {
 	}
 
 	protected OrganisationSummaryDto convertToSummaryDto(Organisation entity) {
-    	OrganisationSummaryDto dto = new OrganisationSummaryDto(entity.getIdDis(),entity.getSociete());
+    	OrganisationSummaryDto dto = new OrganisationSummaryDto(entity.getIdDis(),entity.getSociete(),entity.getBankShortName());
     	return dto;
     }
    
@@ -350,6 +353,7 @@ public class OrganisationController {
     			entityOrgProgram.getAuditor(),
     			entityOrgProgram.getDateAudit(),
     			entityOrgProgram.getLastAudit(),
+    			entity.getBankShortName(),
     			totalRecords);   
         return dto;
     }

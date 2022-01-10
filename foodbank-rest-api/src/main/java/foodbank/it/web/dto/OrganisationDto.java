@@ -284,6 +284,7 @@ private boolean luam;
 	    private Integer auditor;
 	    private String dateAudit;
 	    private Long lastAudit;
+	    private String bankShortName;
 	    private Long  totalRecords;
 		
 	    
@@ -317,7 +318,7 @@ private boolean luam;
 				String reluam, String relupm, String retuam, String retupm, String reweam, String rewepm, String retham,
 				String rethpm, String refram, String refrpm, String resaam, String resapm, String resunam,
 				String resunpm, boolean porc, boolean legFrais, boolean congel, String congelCap, Integer auditor, String dateAudit,
-				Long lastAudit, Long  totalRecords
+				Long lastAudit, String bankShortName, Long  totalRecords
 				) {
 			super();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -483,6 +484,7 @@ private boolean luam;
 			this.auditor = auditor;
 			this.dateAudit = dateAudit;
 			this.lastAudit = lastAudit;
+			this.bankShortName = bankShortName;
 			this.totalRecords = totalRecords;
 			
 		}
@@ -1626,6 +1628,14 @@ private boolean luam;
 
 		public void setNomDepot(String nomDepot) {
 			this.nomDepot = nomDepot;
+		}
+
+		public String getBankShortName() {
+			return bankShortName;
+		}
+
+		public void setBankShortName(String bankShortName) {
+			this.bankShortName = bankShortName;
 		}
 
 		public Long getTotalRecords() {

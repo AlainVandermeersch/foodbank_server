@@ -102,6 +102,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		String statut = searchCriteria.getStatut();
 		Boolean gestBen = searchCriteria.getGestBen();
 		Boolean feadN = searchCriteria.getFeadN();
+		String bankShortName = searchCriteria.getBankShortName();
 		
 		if (societe != null ) {			
 
@@ -211,6 +212,10 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId);
 				predicates.add(regIdPredicate);
 			}
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);
+				predicates.add(bankShortNamePredicate);
+			}
 		if (statut != null) {
 			Predicate statutPredicate = criteriaBuilder.equal(organisation.get("statut"), statut);
 				predicates.add(statutPredicate);
@@ -256,6 +261,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Boolean isCotType = searchCriteria.getCotType();
 		Integer regId = searchCriteria.getRegId();
 		Boolean feadN = searchCriteria.getFeadN();
+		String bankShortName = searchCriteria.getBankShortName();
 		
 		if (societe != null ) {	
 			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
@@ -265,6 +271,10 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
 		}
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);
+				predicates.add(bankShortNamePredicate);
+			}
 		if (lienDepot != null) {
 			Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienDepot);
 			predicates.add(lienDepotPredicate);

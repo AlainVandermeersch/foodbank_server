@@ -253,6 +253,9 @@ public class Organisation implements Serializable {
     private Short lienBanque; 
     @Formula("(select d.societe from organisations d where d.id_dis = lien_depot)")
     private String nomDepot;
+    @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
+    private String bankShortName;
+
     
 
 	/** Default constructor. */
@@ -2418,6 +2421,11 @@ public class Organisation implements Serializable {
 
 	public void setLienBanque(Short lienBanque) {
 		this.lienBanque = lienBanque;
+	}
+	
+
+	public String getBankShortName() {
+		return bankShortName;
 	}
 
 	@Override
