@@ -135,35 +135,35 @@ public class TUserServiceImpl implements ITUserService {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
 		}
-		
-
 		if (idOrg != null) {
+			System.out.printf("\nChecking Users with idOrg: %d", idOrg);
 			if (idOrg == 0) {
+				// selecting bank members only
 				Predicate idOrgZero = criteriaBuilder.equal(tuser.get("idOrg"), 0);
 				Predicate idOrgNull = criteriaBuilder.isNull(tuser.get("idOrg"));
 				Predicate idOrgPredicate = criteriaBuilder.or(idOrgZero,idOrgNull);
 				predicates.add(idOrgPredicate);
 			}
 			else {
-				
-					Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
-					predicates.add(idOrgPredicate);				
-			}
-		}
-		else {
-			if (lienDepot == null) {
-				System.out.printf("\nExcluding Bank Members");
-				// exclude users of bank who have idOrg 0 or null
+				if (idOrg == 999){
+				// exclude members of bank who have idOrg 0 or null
 				Predicate idOrgNotZero = criteriaBuilder.notEqual(tuser.get("idOrg"), 0);
 				Predicate idOrgNotNull = criteriaBuilder.isNotNull(tuser.get("idOrg"));
 				predicates.add(idOrgNotZero);
 				predicates.add(idOrgNotNull);
-			}
-			else {
-				Predicate lienDepotPredicate = criteriaBuilder.equal(tuser.get("lienDepot"),lienDepot);
-				predicates.add(lienDepotPredicate);
+				}
+				else {
+					Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
+					predicates.add(idOrgPredicate);
+				}
 			}
 		}
+
+		if (lienDepot != null) {
+				Predicate lienDepotPredicate = criteriaBuilder.equal(tuser.get("lienDepot"),lienDepot);
+				predicates.add(lienDepotPredicate);
+		}
+	
 		if (actif != null) {
 			Integer intActive = 0;
 			if (actif == true) {
