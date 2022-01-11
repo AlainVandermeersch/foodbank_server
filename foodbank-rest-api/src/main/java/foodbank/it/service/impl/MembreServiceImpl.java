@@ -200,29 +200,31 @@ public class MembreServiceImpl implements IMembreService{
 		if (lienDis != null) {
 			System.out.printf("\nChecking Members with liendis: %d", lienDis);
 			if (lienDis == 0) {
+				// selecting bank members only
 				Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);
 				Predicate lienDisNull = criteriaBuilder.isNull(membre.get("lienDis"));
 				Predicate lienDisPredicate = criteriaBuilder.or(lienDisZero,lienDisNull);
 				predicates.add(lienDisPredicate);
 			}
 			else {
-				Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
-				predicates.add(lienDisPredicate);
+				if (lienDis == 999){
+				// exclude members of bank who have liendis 0 or null
+				Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
+				Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
+				predicates.add(lienDisNotZero);
+				predicates.add(lienDisNotNull);
+				}
+				else {
+					Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
+					predicates.add(lienDisPredicate);
+				}
 			}
 		}
-		else {
-			if (lienDepot == null) {
-			System.out.printf("\nExcluding Bank Members");
-			// exclude members of bank who have liendis 0 or null
-			Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
-			Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
-			predicates.add(lienDisNotZero);
-			predicates.add(lienDisNotNull);
-			}
-			else {
+		
+		if (lienDepot != null) {
 				Predicate lienDepotPredicate = criteriaBuilder.equal(membre.get("lienDepot"),lienDepot);
 				predicates.add(lienDepotPredicate);
-			}
+		
 		}
 		if (actif != null) {
 			Integer intActive = 0;
