@@ -19,7 +19,7 @@ rm -rf target/foodbank-client
 cd target && \
     git clone git@gitlab.com:dubus.dominique/food-it.git && \
     cd food-it && \
-    git checkout keycloak-migration && \
+    git checkout new-version && \
     cd docker/wildfly && \
     docker build -t foodbank-stock-app-wildfly .
 cd $CURRENT_DIRECTORY
