@@ -4,12 +4,12 @@ public class SearchDepotCriteria {
 	
 	private String nom;
 	private Boolean actif;
-	private Integer lienBanque;
-	public SearchDepotCriteria(String nom, Boolean actif,Integer lienBanque) {
+	private String idCompany;
+	public SearchDepotCriteria(String nom, Boolean actif,String idCompany) {
 		super();
 		this.nom = nom;
 		this.actif = actif;
-		this.lienBanque = lienBanque;
+		this.idCompany = idCompany;
 	}
 	public String getNom() {
 		return nom;
@@ -24,12 +24,13 @@ public class SearchDepotCriteria {
 	public void setActif(Boolean actif) {
 		this.actif = actif;
 	}
-	public Integer getLienBanque() {
-		return lienBanque;
+	public String getIdCompany() {
+		return idCompany;
 	}
-	public void setLienBanque(Integer lienBanque) {
-		this.lienBanque = lienBanque;
+	public void setIdCompany(String idCompany) {
+		this.idCompany = idCompany;
 	}
+	
 	
 
 }

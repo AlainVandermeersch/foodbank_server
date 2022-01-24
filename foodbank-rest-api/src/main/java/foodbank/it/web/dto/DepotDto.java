@@ -13,6 +13,8 @@ public class DepotDto {
 	
 	 private String ville;
 	 
+	 private String idCompany;
+	 
 	 private String telephone;
 	
 	 private String contact;
@@ -38,7 +40,7 @@ public class DepotDto {
 		
 	}
 
-	public DepotDto(String idDepot, String nom, String adresse, String adresse2, String cp, String ville,
+	public DepotDto(String idDepot, String nom, String adresse, String adresse2, String cp, String ville,String idCompany,
 			String telephone, String contact, String email, String memo, boolean depPrinc, boolean actif, boolean depFead,
 			Integer lienBanque, Long  totalRecords) {
 		super();
@@ -48,6 +50,7 @@ public class DepotDto {
 		this.adresse2 = adresse2;
 		this.cp = cp;
 		this.ville = ville;
+		this.idCompany = idCompany;
 		this.telephone = telephone;
 		this.contact = contact;
 		this.email = email;
@@ -106,6 +109,16 @@ public class DepotDto {
 
 	public void setVille(String ville) {
 		this.ville = ville;
+	}
+	
+	
+
+	public String getIdCompany() {
+		return idCompany;
+	}
+
+	public void setIdCompany(String idCompany) {
+		this.idCompany = idCompany;
 	}
 
 	public String getTelephone() {

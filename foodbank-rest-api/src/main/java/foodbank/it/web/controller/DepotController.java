@@ -39,7 +39,7 @@ public class DepotController {
     public Collection<DepotDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) Boolean actif, @RequestParam(required = false) String nom,
-    		@RequestParam(required = false) String lienBanque) {
+    		@RequestParam(required = false) String idCompany) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -51,9 +51,8 @@ public class DepotController {
         else {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
-        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        
-        SearchDepotCriteria criteria = new SearchDepotCriteria(nom,actif,lienBanqueInteger);
+               
+        SearchDepotCriteria criteria = new SearchDepotCriteria(nom,actif,idCompany);
         Page<Depot> selectedDepots = this.DepotService.findAll(criteria, pageRequest);
 		long totalElements = selectedDepots.getTotalElements();
 
@@ -93,7 +92,7 @@ public class DepotController {
     	boolean booDepFead= entity.getDepFead() == 1;
     	
         DepotDto dto = new DepotDto(entity.getIdDepot(), entity.getNom(), entity.getAdresse(), entity.getAdresse2(), entity.getCp(), entity.getVille(),
-    			entity.getTelephone(), entity.getContact(), entity.getEmail(), entity.getMemo(), booDepPrinc, booActif, booDepFead,
+    			entity.getIdCompany(),entity.getTelephone(), entity.getContact(), entity.getEmail(), entity.getMemo(), booDepPrinc, booActif, booDepFead,
     			entity.getLienBanque() ,totalRecords );    
         return dto;
     }
@@ -101,7 +100,7 @@ public class DepotController {
     protected Depot convertToEntity(DepotDto dto) {
     	    	    
     	Depot myDepot = new Depot( dto.getIdDepot(), dto.getNom(), dto.getAdresse(), dto.getAdresse2(), dto.getCp(), dto.getVille(),
-    			dto.getTelephone(), dto.getContact(), dto.getEmail(), dto.getMemo(), 
+    			dto.getIdCompany(),dto.getTelephone(), dto.getContact(), dto.getEmail(), dto.getMemo(), 
     			(short) (dto.getDepPrinc() ? 1 : 0), (short) (dto.getActif() ? 1 : 0) , (short) (dto.getDepFead() ? 1 : 0),dto.getLienBanque());  
     	
         if (!StringUtils.isEmpty(dto.getIdDepot())) {

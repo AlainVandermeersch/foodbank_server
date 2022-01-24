@@ -36,6 +36,8 @@ public class Depot implements Serializable {
  private String cp;
  @Column(name="VILLE", length=45)
  private String ville;
+ @Column(name="ID_COMPANY", length=45)
+ private String idCompany;
  @Column(name="TELEPHONE", length=20)
  private String telephone;
  @Column(name="CONTACT", length=45)
@@ -60,7 +62,7 @@ public class Depot implements Serializable {
  }
 
  
- public Depot(String idDepot, String nom, String adresse, String adresse2, String cp, String ville, String telephone,
+ public Depot(String idDepot, String nom, String adresse, String adresse2, String cp, String ville, String idCompany,String telephone,
 		String contact, String email, String memo, short depPrinc, short actif, short depFead, Integer lienBanque) {
 	super();
 	this.idDepot = idDepot;
@@ -69,6 +71,7 @@ public class Depot implements Serializable {
 	this.adresse2 = adresse2;
 	this.cp = cp;
 	this.ville = ville;
+	this.idCompany = idCompany;
 	this.telephone = telephone;
 	this.contact = contact;
 	this.email = email;
@@ -188,7 +191,17 @@ public class Depot implements Serializable {
      ville = aVille;
  }
 
- /**
+ public String getIdCompany() {
+	return idCompany;
+}
+
+
+public void setIdCompany(String idCompany) {
+	this.idCompany = idCompany;
+}
+
+
+/**
   * Access method for telephone.
   *
   * @return the current value of telephone
