@@ -38,7 +38,7 @@ services:
         - SMTP_USER=${SMTP_USER}
         - SMTP_PASSWORD=${SMTP_PASSWORD}
     ports:
-      - "8083:8080"
+      - "8080:8080"
       - "8443:8443"
       - "8788:8787"
     environment:
@@ -54,6 +54,34 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+    networks:
+      - foodbank
+
+  wildfly:
+    depends_on:
+      - mysql
+      - keycloak
+    image: foodbank-stock-app-wildfly
+    environment:
+      - ADMIN_PASS=${WILDFLY_ADMIN_PASS}
+      - KEY_PASSWORD=${WILDFLY_KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${WILDFLY_KEYSTORE_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+      - AUTH_SERVER_BASE_URL=https://auth.dev.foodbankit.org
+      - SERVER_NAME=${SERVER_NAME}
+      - SERVER_PORT=${SERVER_PORT}
+      - SERVER_PROTOCOL=${SERVER_PROTOCOL}
+
+    ports:
+      - "10080:8080"
+      - "10443:8443"
+      - "10990:9990"
+      - "10787:8787"
     networks:
       - foodbank
 

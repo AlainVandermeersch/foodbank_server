@@ -14,6 +14,15 @@ cd target && \
     docker build -t foodbank-client .
 
 cd $CURRENT_DIRECTORY
+rm -rf target/foodbank-client
+
+cd target && \
+    git clone git@gitlab.com:dubus.dominique/food-it.git && \
+    cd food-it && \
+    git checkout new-version && \
+    cd docker/wildfly && \
+    docker build -t foodbank-stock-app-wildfly .
+cd $CURRENT_DIRECTORY
 
 docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
@@ -25,3 +34,8 @@ docker run --rm \
     -v "$PWD:$PWD" \
     -w="$PWD" \
     docker/compose:1.29.1 --env-file=.env.gcloud-dev up -d
+
+cd target/food-it && \
+    /bin/bash build.sh && \
+    /bin/bash deploy.sh --password $WILDFLY_ADMIN_PASS
+cd $CURRENT_DIRECTORY

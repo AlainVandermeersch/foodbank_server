@@ -11,6 +11,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -26,10 +28,12 @@ services:
       - "443"
     environment:
       - SERVER_NAME=${SERVER_NAME}
-      - BACKEND_HOST=${BACKEND_HOST}
-      - BACKEND_PORT=${BACKEND_PORT}
-      - AUTH_HOST=${AUTH_HOST}
-      - AUTH_PORT=${AUTH_PORT}
+      - BACKEND_HOST=${BACKEND_PROXY_HOST}
+      - BACKEND_PORT=${BACKEND_PROXY_PORT}
+      - AUTH_HOST=${AUTH_PROXY_HOST}
+      - AUTH_PORT=${AUTH_PROXY_PORT}
+      - WILDFLY_HOST=${WILDFLY_PROXY_HOST}
+      - WILDFLY_PORT=${WILDFLY_PROXY_PORT}
     volumes:
       - letsencrypt-data:/home/letsencrypt/data
       - letsencrypt-certs:/home/letsencrypt/certs
@@ -80,6 +84,33 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+    networks:
+      - foodbank
+
+  wildfly:
+    depends_on:
+      - mysql
+      - keycloak
+    image: foodbank-stock-app-wildfly
+    environment:
+      - ADMIN_PASS=${WILDFLY_ADMIN_PASS}
+      - KEY_PASSWORD=${WILDFLY_KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${WILDFLY_KEYSTORE_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
+      - AUTH_SERVER_BASE_URL=${AUTH_SERVER_BASE_URL}
+      - SERVER_NAME=${SERVER_NAME}
+      - SERVER_PORT=${SERVER_PORT}
+      - SERVER_PROTOCOL=${SERVER_PROTOCOL}
+    ports:
+      - "10080:8080"
+      - "10443:8443"
+      - "10990:9990"
+      - "10787:8787"
     networks:
       - foodbank
 
