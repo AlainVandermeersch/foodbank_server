@@ -27,6 +27,8 @@ local.properties
 .loadpath
 .recommenders
 
+.env.*
+
 # External tool builders
 .externalToolBuilders/
 

@@ -1023,16 +1023,13 @@
     {
       "id": "5b64c39c-b725-41e5-8d79-1f6aae1845b8",
       "clientId": "stock-app",
-      "rootUrl": "https://localhost:10443/",
       "adminUrl": "",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
-      "redirectUris": [
-        "https://localhost:10443/*"
-      ],
+      "redirectUris": [ "###REDIRECT_URIS_ISIS###" ],
       "webOrigins": [
         "*"
       ],
