@@ -1,11 +1,13 @@
 package foodbank.it.web.controller;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import foodbank.it.persistence.model.Audit;
 import foodbank.it.service.IAuditService;
 import foodbank.it.service.SearchAuditCriteria;
 import foodbank.it.web.dto.AuditDto;
+import foodbank.it.web.dto.AuditReportDto;
 
 @RestController
 
@@ -90,5 +93,18 @@ public class AuditController {
 				entity.getApplication(),entity.getSociete(),entity.getShortBankName(),entity.getUserName(),entity.getRights(),totalRecords);
 		return dto;
 	}
+    @GetMapping("auditreport/")
+    public List<AuditReportDto> AuditReport(
+    		@RequestParam(required = false) String shortBankName,
+    		@RequestParam(required = false) String reportType
+    		) {
+    	
+    	List<AuditReportDto> listAudits = this.AuditService.report(shortBankName,reportType);
+    	
+		return listAudits;
+    
+    	
+    	  
+    }
 
 }

@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
@@ -22,10 +23,10 @@ import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Audit;
-
 import foodbank.it.persistence.repository.IAuditRepository;
 import foodbank.it.service.IAuditService;
 import foodbank.it.service.SearchAuditCriteria;
+import foodbank.it.web.dto.AuditReportDto;
 
 
 @Service
@@ -143,6 +144,28 @@ public class AuditServiceImpl implements IAuditService{
 	@Transactional
 	public void delete(int auditId) throws Exception {
 		AuditRepository.deleteById(auditId);
+		
+	}
+
+
+	@Override
+	public List<AuditReportDto> report(String shortBankName, String reportType) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<AuditReportDto> auditQuery = criteriaBuilder.createQuery(AuditReportDto.class);
+		Root<Audit> audit = auditQuery.from(Audit.class);
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate applicationPredicate = criteriaBuilder.equal(audit.get("application"), "PHP");
+		predicates.add(applicationPredicate);
+		if (shortBankName != null) {
+			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
+			predicates.add(shortBankNamePredicate);
+		}
+		auditQuery.where(predicates.stream().toArray(Predicate[]::new));		
+		auditQuery.groupBy(audit.get("societe"));
+		auditQuery.multiselect(audit.get("societe"), criteriaBuilder.count(audit));
+		List<AuditReportDto> results = entityManager.createQuery( auditQuery ).getResultList();
+
+		return results;
 		
 	}
 	
