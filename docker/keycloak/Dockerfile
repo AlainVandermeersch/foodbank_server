@@ -2,6 +2,7 @@ FROM alpine as builder
 
 ARG FRONTEND_URL
 ARG REDIRECT_URIS
+ARG REDIRECT_URIS_ISIS
 ARG MYSQL_HOST
 ARG MYSQL_PORT
 ARG MYSQL_USER
@@ -12,6 +13,7 @@ ARG SMTP_PASSWORD
 
 COPY ./build/realm/*.json /tmp/import/realm/
 RUN sed -i 's@###REDIRECT_URIS###@'"$REDIRECT_URIS"'@' /tmp/import/realm/*.json && \
+    sed -i 's@###REDIRECT_URIS_ISIS###@'"$REDIRECT_URIS_ISIS"'@' /tmp/import/realm/*.json && \
     sed -i 's@###FRONTEND_URL###@'"$FRONTEND_URL"'@' /tmp/import/realm/*.json && \
     sed -i 's@###SMTP_PASSWORD###@'"$SMTP_PASSWORD"'@' /tmp/import/realm/*.json && \
     sed -i 's@###SMTP_USER###@'"$SMTP_USER"'@' /tmp/import/realm/*.json
