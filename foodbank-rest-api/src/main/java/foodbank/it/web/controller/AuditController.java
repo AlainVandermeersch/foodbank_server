@@ -95,11 +95,12 @@ public class AuditController {
 	}
     @GetMapping("auditreport/")
     public List<AuditReportDto> AuditReport(
-    		@RequestParam(required = false) String shortBankName,
-    		@RequestParam(required = false) String reportType
+    		@RequestParam(required = false) String bankShortName,
+    		@RequestParam(required = false) String fromDate,
+    		@RequestParam(required = false) String toDate
     		) {
     	
-    	List<AuditReportDto> listAudits = this.AuditService.report(shortBankName,reportType);
+    	List<AuditReportDto> listAudits = this.AuditService.report(bankShortName,fromDate,toDate);
     	
 		return listAudits;
     

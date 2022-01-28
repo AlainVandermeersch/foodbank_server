@@ -149,20 +149,40 @@ public class AuditServiceImpl implements IAuditService{
 
 
 	@Override
-	public List<AuditReportDto> report(String shortBankName, String reportType) {
+	public List<AuditReportDto> report( String shortBankName, String fromDateString, String toDateString) {
+		// to confuse the enemy bankShortName which is the field of banque is substituted here to shortBankName which is the audit class field
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<AuditReportDto> auditQuery = criteriaBuilder.createQuery(AuditReportDto.class);
 		Root<Audit> audit = auditQuery.from(Audit.class);
 		List<Predicate> predicates = new ArrayList<>();
-		Predicate applicationPredicate = criteriaBuilder.equal(audit.get("application"), "PHP");
-		predicates.add(applicationPredicate);
+		// Predicate applicationPredicate = criteriaBuilder.notEqual(audit.get("application"),"FBIT");
+		// predicates.add(applicationPredicate);
 		if (shortBankName != null) {
 			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
 			predicates.add(shortBankNamePredicate);
 		}
-		auditQuery.where(predicates.stream().toArray(Predicate[]::new));		
-		auditQuery.groupBy(audit.get("societe"));
-		auditQuery.multiselect(audit.get("societe"), criteriaBuilder.count(audit));
+		if ( fromDateString != null) {
+			LocalDateTime fromDate = LocalDate.parse(fromDateString, formatter).atStartOfDay();
+			Predicate fromDatePredicate = criteriaBuilder.greaterThanOrEqualTo(audit.get("dateIn"), fromDate);
+			predicates.add(fromDatePredicate);
+		}
+		if ( toDateString != null) {
+			LocalDateTime toDate = LocalDate.parse(toDateString, formatter).atStartOfDay();
+			Predicate toDatePredicate = criteriaBuilder.lessThanOrEqualTo(audit.get("dateIn"), toDate);
+			predicates.add(toDatePredicate);
+		}
+		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+		if (shortBankName != null) {
+			auditQuery.groupBy(audit.get("societe"));		
+			auditQuery.multiselect(audit.get("societe"), criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.asc(audit.get("societe")));
+		}
+		else {
+			auditQuery.groupBy(audit.get("shortBankName"));			
+			auditQuery.multiselect(audit.get("shortBankName"), criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")));
+		}
 		List<AuditReportDto> results = entityManager.createQuery( auditQuery ).getResultList();
 
 		return results;
