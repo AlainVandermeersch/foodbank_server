@@ -174,14 +174,14 @@ public class AuditServiceImpl implements IAuditService{
 		}
 		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
 		if (shortBankName != null) {
-			auditQuery.groupBy(audit.get("societe"));		
-			auditQuery.multiselect(audit.get("societe"), criteriaBuilder.count(audit));
-			auditQuery.orderBy(criteriaBuilder.asc(audit.get("societe")));
+			auditQuery.groupBy(audit.get("societe"),audit.get("application"));		
+			auditQuery.multiselect(audit.get("societe"),audit.get("application"), criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.asc(audit.get("societe")),criteriaBuilder.asc(audit.get("application")));
 		}
 		else {
-			auditQuery.groupBy(audit.get("shortBankName"));			
-			auditQuery.multiselect(audit.get("shortBankName"), criteriaBuilder.count(audit));
-			auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")));
+			auditQuery.groupBy(audit.get("shortBankName"),audit.get("application"));			
+			auditQuery.multiselect(audit.get("shortBankName"), audit.get("application"),criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")),criteriaBuilder.asc(audit.get("application")));
 		}
 		List<AuditReportDto> results = entityManager.createQuery( auditQuery ).getResultList();
 
