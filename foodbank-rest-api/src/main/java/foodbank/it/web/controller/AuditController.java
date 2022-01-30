@@ -97,10 +97,11 @@ public class AuditController {
     public List<AuditReportDto> AuditReport(
     		@RequestParam(required = false) String bankShortName,
     		@RequestParam(required = false) String fromDate,
-    		@RequestParam(required = false) String toDate
+    		@RequestParam(required = false) String toDate,
+    		@RequestParam(required = false) Boolean byDate
     		) {
     	
-    	List<AuditReportDto> listAudits = this.AuditService.report(bankShortName,fromDate,toDate);
+    	List<AuditReportDto> listAudits = this.AuditService.report(bankShortName,fromDate,toDate,byDate);
     	
 		return listAudits;
     
