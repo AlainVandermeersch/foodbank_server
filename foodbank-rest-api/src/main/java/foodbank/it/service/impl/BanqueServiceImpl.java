@@ -18,6 +18,7 @@ import foodbank.it.persistence.repository.IBanqueRepository;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.service.IBanqueService;
+import foodbank.it.web.dto.BanqueOrgCountDto;
 @Service
 public class BanqueServiceImpl implements IBanqueService{
     
@@ -81,6 +82,29 @@ public class BanqueServiceImpl implements IBanqueService{
 		// TODO Auto-generated method stub
 		return BanqueRepository.findByBankShortName(bankShortName);
 	}
-    
+	@Override
+	public List<BanqueOrgCountDto> reportOrgCount(Boolean hasBirbCode ) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<BanqueOrgCountDto> organisationQuery = criteriaBuilder.createQuery(BanqueOrgCountDto.class);
+		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
+		
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), 1);
+		predicates.add(isActifPredicate);
+		Predicate isValidBankPredicate = criteriaBuilder.isNotNull(organisation.get("bankShortName"));
+		predicates.add(isValidBankPredicate);
+		if (hasBirbCode != null) {
+			Predicate hasBirbCodePredicate = criteriaBuilder.greaterThan(organisation.get("birbCode"),0) ;
+			predicates.add(hasBirbCodePredicate);
+		}
+		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
+		organisationQuery.groupBy(organisation.get("lienBanque"));
+		organisationQuery.multiselect(organisation.get("bankShortName"), 
+				criteriaBuilder.count(organisation));
+		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("bankShortName")));
+		List<BanqueOrgCountDto> results = entityManager.createQuery(organisationQuery).getResultList();
+
+		return results;
+	}
 
 }

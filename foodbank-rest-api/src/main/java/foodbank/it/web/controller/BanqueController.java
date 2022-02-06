@@ -3,6 +3,8 @@ package foodbank.it.web.controller;
 import foodbank.it.persistence.model.Banque;
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueDto;
+import foodbank.it.web.dto.BanqueOrgCountDto;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -84,6 +86,17 @@ public class BanqueController {
         // Alain todo later entity.setDateCreated(LocalDate.now());
         Banque Banque = this.BanqueService.save(entity);
         return this.convertToDto(Banque);
+    }
+    @GetMapping("banqueOrgCount/")
+    public List<BanqueOrgCountDto> AuditReport(
+    		@RequestParam(required = false) Boolean hasBirbCode) {
+    	
+    	List<BanqueOrgCountDto> listBanqueOrgCount = this.BanqueService.reportOrgCount(hasBirbCode);
+    	    	
+		return listBanqueOrgCount;
+    
+    	
+    	  
     }
     protected BanqueDto convertToDto(Banque entity) {
         BanqueDto dto = new BanqueDto(entity.getBankId(), entity.getBankShortName(), entity.getBankName(), entity.getNrEntr(), entity.getBankMail(), entity.getActif(), entity.getComGest(), entity.getLastvisit(), entity.getIdMemberPres(), entity.getIdMemberVp(), entity.getIdMemberSec(), entity.getIdMemberTres(), entity.getIdMemberIt(), entity.getIdMemberLog(), entity.getIdMemberRh(),
