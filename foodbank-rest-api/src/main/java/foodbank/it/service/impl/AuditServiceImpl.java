@@ -167,9 +167,9 @@ public class AuditServiceImpl implements IAuditService {
 			Predicate toDatePredicate = criteriaBuilder.lessThanOrEqualTo(audit.get("dateIn"), toDate);
 			predicates.add(toDatePredicate);
 		}
-		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+		
 		if (byDate != null) {
-
+			auditQuery.where(predicates.stream().toArray(Predicate[]::new));
 			Expression<String> expression = criteriaBuilder.function("DATE_FORMAT", String.class, audit.get("dateIn"),
 					criteriaBuilder.literal("%Y-%m-%d"));
 			auditQuery.groupBy(expression, audit.get("application"));
@@ -178,11 +178,17 @@ public class AuditServiceImpl implements IAuditService {
 
 		} else {
 			if (byUsage != null) {
-				auditQuery.groupBy(audit.get("shortBankName"), audit.get("societe"));
+				Predicate idDisNotZeroPredicate = criteriaBuilder.notEqual(audit.get("idDis"), 0);
+				predicates.add(idDisNotZeroPredicate);
+				Predicate idDisNotNullPredicate = criteriaBuilder.isNotNull(audit.get("idDis"));
+				predicates.add(idDisNotNullPredicate);
+				auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+				auditQuery.groupBy(audit.get("shortBankName"),audit.get("idDis"), audit.get("societe"));
 				auditQuery.multiselect(audit.get("shortBankName"), audit.get("societe"), criteriaBuilder.count(audit));
 				auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")),
 						criteriaBuilder.asc(audit.get("societe")));
 			} else {
+				auditQuery.where(predicates.stream().toArray(Predicate[]::new));
 				if (shortBankName != null) {
 					auditQuery.groupBy(audit.get("societe"), audit.get("application"));
 					auditQuery.multiselect(audit.get("societe"), audit.get("application"),
