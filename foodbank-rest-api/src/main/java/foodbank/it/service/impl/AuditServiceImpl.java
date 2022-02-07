@@ -153,7 +153,7 @@ public class AuditServiceImpl implements IAuditService {
 		Root<Audit> audit = auditQuery.from(Audit.class);
 		List<Predicate> predicates = new ArrayList<>();
 
-		if (shortBankName != null) {
+		if (shortBankName != null && byUsage == null) {
 			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
 			predicates.add(shortBankNamePredicate);
 		}
