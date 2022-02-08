@@ -56,7 +56,7 @@ public class AuditServiceImpl implements IAuditService {
 		String societe = searchCriteria.getSociete();
 		String user = searchCriteria.getUser();
 		String userName = searchCriteria.getUserName();
-		String shortBankName = searchCriteria.getShortBankName();
+		String bankShortName = searchCriteria.getBankShortName();
 		String rights = searchCriteria.getRights();
 		String fromDateString = searchCriteria.getFromDate();
 		String toDateString = searchCriteria.getToDate();
@@ -89,9 +89,9 @@ public class AuditServiceImpl implements IAuditService {
 			predicates.add(idDisPredicate);
 		}
 
-		if (shortBankName != null) {
-			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
-			predicates.add(shortBankNamePredicate);
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(audit.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
 		}
 		if (userName != null) {
 
@@ -143,18 +143,18 @@ public class AuditServiceImpl implements IAuditService {
 	}
 
 	@Override
-	public List<AuditReportDto> report(String shortBankName, String fromDateString, String toDateString, String reportType) {
+	public List<AuditReportDto> report(String bankShortName, String fromDateString, String toDateString, String reportType) {
 		// to confuse the enemy bankShortName which is the field of banque is
-		// substituted here to shortBankName which is the audit class field
+		// substituted here to bankShortName which is the audit class field
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<AuditReportDto> auditQuery = criteriaBuilder.createQuery(AuditReportDto.class);
 		Root<Audit> audit = auditQuery.from(Audit.class);
 		List<Predicate> predicates = new ArrayList<>();
 
-		if (shortBankName != null && (reportType == "general" ||reportType == "history" )) {
-			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
-			predicates.add(shortBankNamePredicate);
+		if (bankShortName != null && (reportType == "general" ||reportType == "history" )) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(audit.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
 		}
 		if (fromDateString != null) {
 			LocalDateTime fromDate = LocalDate.parse(fromDateString, formatter).atStartOfDay();
@@ -182,31 +182,31 @@ public class AuditServiceImpl implements IAuditService {
 				Predicate idDisNotNullPredicate = criteriaBuilder.isNotNull(audit.get("idDis"));
 				predicates.add(idDisNotNullPredicate);
 				auditQuery.where(predicates.stream().toArray(Predicate[]::new));
-				auditQuery.groupBy(audit.get("shortBankName"),audit.get("idDis"), audit.get("societe"));
-				auditQuery.multiselect(audit.get("shortBankName"), audit.get("societe"), criteriaBuilder.count(audit));
-				auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")),
+				auditQuery.groupBy(audit.get("bankShortName"),audit.get("idDis"), audit.get("societe"));
+				auditQuery.multiselect(audit.get("bankShortName"), audit.get("societe"), criteriaBuilder.count(audit));
+				auditQuery.orderBy(criteriaBuilder.asc(audit.get("bankShortName")),
 						criteriaBuilder.asc(audit.get("societe")));
 				break;
 		case "rights":
 			auditQuery.where(predicates.stream().toArray(Predicate[]::new));
-			auditQuery.groupBy(audit.get("shortBankName"), audit.get("application"));
-			auditQuery.multiselect(audit.get("shortBankName"), audit.get("rights"), criteriaBuilder.count(audit));
-			auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")), criteriaBuilder.asc(audit.get("rights")));
+			auditQuery.groupBy(audit.get("bankShortName"), audit.get("application"));
+			auditQuery.multiselect(audit.get("bankShortName"), audit.get("rights"), criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.asc(audit.get("bankShortName")), criteriaBuilder.asc(audit.get("rights")));
 			
 			break;
 		default: // must be general	
 				auditQuery.where(predicates.stream().toArray(Predicate[]::new));
-				if (shortBankName != null) {
+				if (bankShortName != null) {
 					auditQuery.groupBy(audit.get("societe"), audit.get("application"));
 					auditQuery.multiselect(audit.get("societe"), audit.get("application"),
 							criteriaBuilder.count(audit));
 					auditQuery.orderBy(criteriaBuilder.asc(audit.get("societe")),
 							criteriaBuilder.asc(audit.get("application")));
 				} else {
-					auditQuery.groupBy(audit.get("shortBankName"), audit.get("application"));
-					auditQuery.multiselect(audit.get("shortBankName"), audit.get("application"),
+					auditQuery.groupBy(audit.get("bankShortName"), audit.get("application"));
+					auditQuery.multiselect(audit.get("bankShortName"), audit.get("application"),
 							criteriaBuilder.count(audit));
-					auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")),
+					auditQuery.orderBy(criteriaBuilder.asc(audit.get("bankShortName")),
 							criteriaBuilder.asc(audit.get("application")));
 				}
 			
