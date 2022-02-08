@@ -143,8 +143,7 @@ public class AuditServiceImpl implements IAuditService {
 	}
 
 	@Override
-	public List<AuditReportDto> report(String shortBankName, String fromDateString, String toDateString, Boolean byDate,
-			Boolean byUsage) {
+	public List<AuditReportDto> report(String shortBankName, String fromDateString, String toDateString, String reportType) {
 		// to confuse the enemy bankShortName which is the field of banque is
 		// substituted here to shortBankName which is the audit class field
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -153,7 +152,7 @@ public class AuditServiceImpl implements IAuditService {
 		Root<Audit> audit = auditQuery.from(Audit.class);
 		List<Predicate> predicates = new ArrayList<>();
 
-		if (shortBankName != null && byUsage == null) {
+		if (shortBankName != null && (reportType == "general" ||reportType == "history" )) {
 			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
 			predicates.add(shortBankNamePredicate);
 		}
@@ -167,17 +166,17 @@ public class AuditServiceImpl implements IAuditService {
 			Predicate toDatePredicate = criteriaBuilder.lessThanOrEqualTo(audit.get("dateIn"), toDate);
 			predicates.add(toDatePredicate);
 		}
+		switch(reportType) {
 		
-		if (byDate != null) {
+		case "history": 
 			auditQuery.where(predicates.stream().toArray(Predicate[]::new));
 			Expression<String> expression = criteriaBuilder.function("DATE_FORMAT", String.class, audit.get("dateIn"),
 					criteriaBuilder.literal("%Y-%m-%d"));
 			auditQuery.groupBy(expression, audit.get("application"));
 			auditQuery.multiselect(expression.alias("key"), audit.get("application"), criteriaBuilder.count(audit));
 			auditQuery.orderBy(criteriaBuilder.desc(expression), criteriaBuilder.asc(audit.get("application")));
-
-		} else {
-			if (byUsage != null) {
+			break;
+		case "usage":
 				Predicate idDisNotZeroPredicate = criteriaBuilder.notEqual(audit.get("idDis"), 0);
 				predicates.add(idDisNotZeroPredicate);
 				Predicate idDisNotNullPredicate = criteriaBuilder.isNotNull(audit.get("idDis"));
@@ -187,7 +186,15 @@ public class AuditServiceImpl implements IAuditService {
 				auditQuery.multiselect(audit.get("shortBankName"), audit.get("societe"), criteriaBuilder.count(audit));
 				auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")),
 						criteriaBuilder.asc(audit.get("societe")));
-			} else {
+				break;
+		case "rights":
+			auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+			auditQuery.groupBy(audit.get("shortBankName"), audit.get("application"));
+			auditQuery.multiselect(audit.get("shortBankName"), audit.get("rights"), criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")), criteriaBuilder.asc(audit.get("rights")));
+			
+			break;
+		default: // must be general	
 				auditQuery.where(predicates.stream().toArray(Predicate[]::new));
 				if (shortBankName != null) {
 					auditQuery.groupBy(audit.get("societe"), audit.get("application"));
@@ -202,7 +209,7 @@ public class AuditServiceImpl implements IAuditService {
 					auditQuery.orderBy(criteriaBuilder.asc(audit.get("shortBankName")),
 							criteriaBuilder.asc(audit.get("application")));
 				}
-			}
+			
 		}
 		List<AuditReportDto> results = entityManager.createQuery(auditQuery).getResultList();
 
