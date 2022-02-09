@@ -189,7 +189,7 @@ public class AuditServiceImpl implements IAuditService {
 				break;
 		case "rights":
 			auditQuery.where(predicates.stream().toArray(Predicate[]::new));
-			auditQuery.groupBy(audit.get("bankShortName"), audit.get("application"));
+			auditQuery.groupBy(audit.get("bankShortName"), audit.get("rights"));
 			auditQuery.multiselect(audit.get("bankShortName"), audit.get("rights"), criteriaBuilder.count(audit));
 			auditQuery.orderBy(criteriaBuilder.asc(audit.get("bankShortName")), criteriaBuilder.asc(audit.get("rights")));
 			
