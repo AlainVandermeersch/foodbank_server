@@ -1,6 +1,7 @@
 package foodbank.it.web.controller;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,23 @@ public class MembreController {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return convertToDto(entity,1);
     }
-    
+    @GetMapping("membresall/")
+    public Collection<MembreDto> findAll(@RequestParam(required = false) String lienBanque,@RequestParam(required = false) Boolean actif) {
+    	List<Membre> selectedMembres;
+    	Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
+    	Short shortActif = 0;
+    	if (actif) { shortActif = 1; }
+    	if (lienBanque != null) {
+    		selectedMembres = (List<Membre>) this.MembreService.findByLienBanqueAndActif(lienBanqueShort,shortActif);
+    	}
+    	else {
+    		selectedMembres = (List<Membre>) this.MembreService.findByActif(shortActif);
+    	}
+    	
+    	return selectedMembres.stream()
+				.map(Membre -> convertToDto(Membre, selectedMembres.size()))
+				.collect(Collectors.toList());
+    }
 
     @GetMapping("membres/")
     public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, 

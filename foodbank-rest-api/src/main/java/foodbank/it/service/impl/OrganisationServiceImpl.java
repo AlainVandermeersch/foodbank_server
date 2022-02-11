@@ -405,7 +405,15 @@ public class OrganisationServiceImpl implements IOrganisationService{
     		    List<OrgMemberReportDto> resultList = query.getResultList();
 
     			return resultList;
-    		}	
+    		}
+	@Override
+	public Iterable<Organisation> findAll() {
+		return OrganisationRepository.findAll();
+	}
+	@Override
+	public Iterable<Organisation> findByLienBanque(Short lienBanque) {
+		return OrganisationRepository.findByLienBanque(lienBanque);
+	}	
 	
 	
 }

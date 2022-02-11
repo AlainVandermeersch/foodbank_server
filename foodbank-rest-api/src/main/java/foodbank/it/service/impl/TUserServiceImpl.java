@@ -233,4 +233,16 @@ public class TUserServiceImpl implements ITUserService {
 		return new PageImpl<>(resultList, pageable, countResult);
 		
 	}
+
+
+	@Override
+	public Iterable<TUser> findAll() {
+		return TUserRepository.findAll();
+	}
+
+
+	@Override
+	public Iterable<TUser> findByLienBanque(Short lienBanque) {
+		return TUserRepository.findByLienBanque(lienBanque);
+	}
 }
