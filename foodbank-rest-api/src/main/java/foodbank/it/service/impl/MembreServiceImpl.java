@@ -258,14 +258,7 @@ public class MembreServiceImpl implements IMembreService{
 	public Iterable<Membre> findByLienBanque(Short lienBanque) {
 		return MembreRepository.findByLienBanque(lienBanque);
 	}
-	@Override
-	public Iterable<Membre> findByActif(Short actif) {
-		return MembreRepository.findByActif(actif);
-	}
-	@Override
-	public Iterable<Membre> findByLienBanqueAndActif(Short lienBanque, Short actif) {
-		return MembreRepository.findByLienBanqueAndActif(lienBanque, actif);
-	}
+	
 	
 }
 	

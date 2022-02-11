@@ -46,16 +46,15 @@ public class MembreController {
         return convertToDto(entity,1);
     }
     @GetMapping("membresall/")
-    public Collection<MembreDto> findAll(@RequestParam(required = false) String lienBanque,@RequestParam(required = false) Boolean actif) {
+    public Collection<MembreDto> findAll(@RequestParam(required = false) String lienBanque) {
     	List<Membre> selectedMembres;
     	Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
-    	Short shortActif = 0;
-    	if (actif) { shortActif = 1; }
+    	
     	if (lienBanque != null) {
-    		selectedMembres = (List<Membre>) this.MembreService.findByLienBanqueAndActif(lienBanqueShort,shortActif);
+    		selectedMembres = (List<Membre>) this.MembreService.findByLienBanque(lienBanqueShort);
     	}
     	else {
-    		selectedMembres = (List<Membre>) this.MembreService.findByActif(shortActif);
+    		selectedMembres = (List<Membre>) this.MembreService.findAll();
     	}
     	
     	return selectedMembres.stream()

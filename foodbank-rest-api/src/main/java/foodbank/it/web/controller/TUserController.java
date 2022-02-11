@@ -1,6 +1,7 @@
 package foodbank.it.web.controller;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,23 @@ public class TUserController {
         return convertToDto(entity,(long) 1);
     }
    
-   
+    @GetMapping("usersall/")
+    public Collection<TUserDto> findAll(@RequestParam(required = false) String lienBanque) {
+    	List<TUser> selectedTUsers;
+    	Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
+    	
+    	if (lienBanque != null) {
+    		selectedTUsers = (List<TUser>) this.TUserService.findByLienBanque(lienBanqueShort);
+    	}
+    	else {
+    		selectedTUsers = (List<TUser>) this.TUserService.findAll();
+    	}
+    	long nbOfSelectedTusers= selectedTUsers.size();
+    	
+    	return selectedTUsers.stream()
+				.map(tuser -> convertToDto(tuser,nbOfSelectedTusers))
+				.collect(Collectors.toList());
+    }
 
 
     @GetMapping("users/")     
@@ -127,7 +144,7 @@ public class TUserController {
     }
 
 
-    protected TUserDto convertToDto(TUser entity,Long  totalRecords) {
+    protected TUserDto convertToDto(TUser entity,long  totalRecords) {
     	
     	boolean booActif= entity.getActif() == 1;
     	boolean booDroit1= entity.getDroit1() == 1;
@@ -151,7 +168,7 @@ public class TUserController {
         TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(), dto.getIdLanguage(), dto.getLienBat(), 
         		(short) (dto.getActif() ? 1 : 0) , dto.getRights(), dto.getPassword(), dto.getDepot(), (short) (dto.getDroit1() ? 1 : 0) , dto.getEmail(), 
         		(short) (dto.getGestBen() ? 1 : 0) , (short) (dto.getGestInv() ? 1 : 0) , (short) (dto.getGestFead() ? 1 : 0) , (short) (dto.getGestAsso() ? 1 : 0) ,
-        		(short) (dto.getGestCpas() ? 1 : 0) , (short) (dto.getGestMemb() ? 1 : 0) ,(short) (dto.getGestDon() ? 1 : 0) , dto.getLienBanque(), dto.getLienCpas());
+        		(short) (dto.getGestCpas() ? 1 : 0) , (short) (dto.getGestMemb() ? 1 : 0) ,(short) (dto.getGestDon() ? 1 : 0) ,(short) dto.getLienBanque(), dto.getLienCpas());
        
         return tUser;
     }

@@ -63,7 +63,7 @@ public class TUser implements Serializable {
     @Column(name="Gest_Don", precision=10)
     private int gestDon;
     @Column(name="lien_banque", precision=10)
-    private int lienBanque;
+    private Short lienBanque;
     @Column(name="lien_cpas", precision=10)
     private int lienCpas;
     @Formula("(select d.societe from organisations d where d.id_dis = ID_ORG)")
@@ -85,7 +85,7 @@ public class TUser implements Serializable {
     }
 
     public TUser(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
-        int gestAsso, int gestCpas, int gestMemb, int gestDon, int lienBanque, int lienCpas) {
+        int gestAsso, int gestCpas, int gestMemb, int gestDon, Short lienBanque, int lienCpas) {
         super();
         this.idUser = idUser;
         this.userName = userName;
@@ -486,25 +486,17 @@ public class TUser implements Serializable {
         gestDon = aGestDon;
     }
 
-    /**
-     * Access method for lienBanque.
-     *
-     * @return the current value of lienBanque
-     */
-    public int getLienBanque() {
-        return lienBanque;
-    }
+    
 
-    /**
-     * Setter method for lienBanque.
-     *
-     * @param aLienBanque the new value for lienBanque
-     */
-    public void setLienBanque(int aLienBanque) {
-        lienBanque = aLienBanque;
-    }
+    public Short getLienBanque() {
+		return lienBanque;
+	}
 
-    /**
+	public void setLienBanque(Short lienBanque) {
+		this.lienBanque = lienBanque;
+	}
+
+	/**
      * Access method for lienCpas.
      *
      * @return the current value of lienCpas

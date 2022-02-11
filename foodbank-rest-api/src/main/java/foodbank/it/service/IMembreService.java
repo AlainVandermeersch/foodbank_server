@@ -16,9 +16,7 @@ public interface IMembreService {
 	
     Page<Membre> findAll(SearchMembreCriteria searchCriteria, Pageable pageable);	
     Iterable<Membre> findByLienBanque(Short lienBanque);
-    Iterable<Membre> findByActif(Short actif);
-    Iterable<Membre> findByLienBanqueAndActif(Short lienBanque, Short actif);
-
+    
     void delete(int batId) throws Exception;
 
 	

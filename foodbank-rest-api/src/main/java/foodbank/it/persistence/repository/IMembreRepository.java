@@ -10,7 +10,6 @@ public interface IMembreRepository  extends PagingAndSortingRepository<Membre, I
 	Optional<Membre> findByBatId(int batId);
     void deleteByBatId(int batId);
     Iterable<Membre> findByLienBanque(Short lienBanque);
-    Iterable<Membre> findByActif(Short actif);
-    Iterable<Membre> findByLienBanqueAndActif(Short lienBanque, Short actif);
+   
    
 }
