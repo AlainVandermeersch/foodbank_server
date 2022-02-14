@@ -49,6 +49,7 @@ public class TUserDto {
     private String membrePrenom;
     private String membreEmail;
     private Short membreLangue;
+    private long nbLogins;
     
     private Long  totalRecords;
      
@@ -60,7 +61,8 @@ public class TUserDto {
     }
     public TUserDto(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String depot, 
     		boolean droit1, String email, boolean gestBen, boolean gestInv, boolean gestFead, boolean gestAsso,
-        boolean gestCpas, boolean gestMemb, boolean gestDon, Short lienBanque, int lienCpas,String societe,String membreNom, String membrePrenom, String membreEmail, Short membreLangue, Long  totalRecords) {
+        boolean gestCpas, boolean gestMemb, boolean gestDon, Short lienBanque, int lienCpas,String societe,String membreNom, String membrePrenom, String membreEmail, Short membreLangue, 
+        long nbLogins,Long  totalRecords) {
         super();
         this.idUser = idUser;
         this.userName = userName;
@@ -87,7 +89,8 @@ public class TUserDto {
         this.membreNom = membreNom;
         this.membrePrenom = membrePrenom;
         this.membreEmail = membreEmail;
-        this.membreLangue = membreLangue;       
+        this.membreLangue = membreLangue;  
+        this.nbLogins = nbLogins;
         this.totalRecords = totalRecords;
         
     }
@@ -275,6 +278,13 @@ public class TUserDto {
 	}
 	public Short getMembreLangue() {
 		return membreLangue;
+	}
+	
+	public long getNbLogins() {
+		return nbLogins;
+	}
+	public void setNbLogins(long nbLogins) {
+		this.nbLogins = nbLogins;
 	}
 	public Long  getTotalRecords() {
 		return totalRecords;

@@ -2,13 +2,13 @@ package foodbank.it.web.dto;
 
 public class AuditReportDto {
   private String key; 
-  private String application;
+  private String category;
   private Long loginCount;
   
 
-public AuditReportDto(String key,String application,  Long loginCount) {
+public AuditReportDto(String key,String category,  Long loginCount) {
 	this.key = key;
-	this.application = application;
+	this.category = category;
 	this.loginCount = loginCount;
 }
 
@@ -23,13 +23,13 @@ public void setKey(String key) {
 }
 
 
-public String getApplication() {
-	return application;
+public String getCategory() {
+	return category;
 }
 
 
-public void setApplication(String application) {
-	this.application = application;
+public void setCategory(String category) {
+	this.category = category;
 }
 
 

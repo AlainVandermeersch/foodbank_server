@@ -78,7 +78,11 @@ public class TUser implements Serializable {
     private String membreEmail;
     @Formula("(select e.langue from bat e where e.bat_ID = lien_bat)")
     private Short membreLangue;
+    @Formula("(select count(*) from audit a where a.user = ID_USER and year(a.date_in) > 2020)")
+    long nbLogins;
     
+	//  and (a.date_in >= (now() - interval 60 DAY))
+
 	/** Default constructor. */
     protected TUser() {
         super();
@@ -531,6 +535,12 @@ public class TUser implements Serializable {
 
 	public void setLienDepot(String lienDepot) {
 		this.lienDepot = lienDepot;
+	}
+	
+	
+
+	public long getNbLogins() {
+		return nbLogins;
 	}
 
 	public static long getSerialversionuid() {

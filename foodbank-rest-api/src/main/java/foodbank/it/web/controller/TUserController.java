@@ -82,12 +82,14 @@ public class TUserController {
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
         int pageSize = intRows;
         Pageable pageRequest = null;
+       
         if (sortOrder.equals("1")) {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).ascending());
         }
         else {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         } 
+       
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
@@ -155,10 +157,12 @@ public class TUserController {
     	boolean booGestCpas = entity.getGestCpas() == 1;
     	boolean booGestMemb = entity.getGestMemb() == 1;
     	boolean booGestDon = entity.getGestDon() == 1;
+    	long nbOfLogins = entity.getNbLogins();
         TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), booActif, entity.getRights(), entity.getPassword(), entity.getDepot(), booDroit1, entity.getEmail(), 
         		booGestBen, booGestInv, booGestFead, booGestAsso,
         		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),entity.getSociete(),
-        		entity.getMembreNom(),entity.getMembrePrenom(),entity.getMembreEmail(), entity.getMembreLangue(), totalRecords);       
+        		entity.getMembreNom(),entity.getMembrePrenom(),entity.getMembreEmail(), entity.getMembreLangue(), 
+        		nbOfLogins, totalRecords);       
         return dto;
     }
 
