@@ -40,9 +40,35 @@ public class AuditServiceImpl implements IAuditService {
 	}
 
 	@Override
-	public Audit save(Audit audit) {
-
-		return AuditRepository.save(audit);
+	public Audit save(Audit auditnew) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Audit> auditQuery = criteriaBuilder.createQuery(Audit.class);
+		Root<Audit> audit = auditQuery.from(Audit.class);
+		List<Predicate> predicates = new ArrayList<>();
+		String userId = auditnew.getUser();
+		Predicate isUser = criteriaBuilder.equal(audit.get("user"), userId);
+		predicates.add(isUser);
+		Predicate isJavaAppPredicate = criteriaBuilder.equal(audit.get("application"), "FBIT");
+		predicates.add(isJavaAppPredicate);
+		Expression<String> parentExpression = criteriaBuilder.function("DATE_FORMAT", String.class, audit.get("dateIn"),
+				criteriaBuilder.literal("%Y-%m-%d"));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String today = LocalDate.now().format(formatter);
+		
+		Predicate hasLoggedinTodayPredicate = criteriaBuilder.equal(parentExpression,today);
+		predicates.add(hasLoggedinTodayPredicate);
+		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+		System.out.printf("\nQuerying if  User %s logged on today %s\n",userId,today);
+		TypedQuery<Audit> query = entityManager.createQuery(auditQuery);
+		
+		List<Audit> resultList = query.getResultList();
+				
+		if (resultList.size() >0 ) {
+			System.out.printf("\nUser %s logged on already today %d times - not recording\n",userId, resultList.size());
+			return auditnew;
+		}
+		System.out.printf("\nRecording  User %s logged on today %s\n",userId,today);
+		return AuditRepository.save(auditnew);
 	}
 
 	@Override
