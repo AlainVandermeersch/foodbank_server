@@ -1,6 +1,5 @@
 package foodbank.it.web.controller;
 
-import foodbank.it.persistence.model.OrgProgram;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
@@ -53,15 +52,9 @@ public class OrganisationController {
     @GetMapping("organisation/{idDis}")
     public OrganisationDto findOne(@PathVariable Integer idDis) {
     	Organisation o = OrganisationService.findByIdDis(idDis)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));    	
     	
-    	OrgProgram progOfOrg;
-       	
-    	Optional<OrgProgram> prog = this.OrgProgramService.findByLienDis(idDis);
-    		if (prog.isPresent()) progOfOrg = prog.get() ;
-    		else	progOfOrg = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
-       
-         return convertToDto(o,progOfOrg,1);
+         return convertToDto(o,1);
 
     }
     
@@ -111,13 +104,8 @@ public class OrganisationController {
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
-		selectedOrganisations.forEach(o -> {
-			OrgProgram progOfOrg = null;
-
-			Optional<OrgProgram> prog = this.OrgProgramService.findByLienDis(o.getIdDis());
-			if (prog.isPresent()) progOfOrg = prog.get() ;
-			else	progOfOrg = new OrgProgram(o.getIdDis(),o.getLienBanque(),o.getLienDepot());
-			OrganisationDtos.add(convertToDto(o,progOfOrg,totalElements));
+		selectedOrganisations.forEach(o -> {			
+			OrganisationDtos.add(convertToDto(o,totalElements));
 		});
           
      
@@ -171,13 +159,10 @@ public class OrganisationController {
     @PutMapping("organisation/{idDis}")
     public OrganisationDto updateOrganisation(@PathVariable("idDis") Integer idDis, @RequestBody OrganisationDto updatedOrganisation) {
     	  Organisation entity = convertToEntity(updatedOrganisation);
-          OrgProgram entityProgr = convertToEntityProgram(updatedOrganisation);
            Organisation Organisation = this.OrganisationService.save(entity);  
            System.out.printf("We updated an Organisation with id: %d nom: %s in bank with id: %d\n", Organisation.getIdDis(), Organisation.getSociete(), Organisation.getLienBanque());
-           // set Liendis from updated Org into OrgProgram object
-           entityProgr.setLienDis(Organisation.getIdDis());
-           OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
-           return this.convertToDto(Organisation, OrgProgram,1);
+
+           return this.convertToDto(Organisation, 1);
     }
 
     @DeleteMapping("organisation/{idDis}")
@@ -199,13 +184,9 @@ public class OrganisationController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrganisationDto create(@RequestBody OrganisationDto newOrganisation) {
         Organisation entity = convertToEntity(newOrganisation);
-       OrgProgram entityProgr = convertToEntityProgram(newOrganisation);
         Organisation Organisation = this.OrganisationService.save(entity); 
         System.out.printf("We created an Organisation with id: %d nom: %s in bank with id: %d\n", Organisation.getIdDis(), Organisation.getSociete(), Organisation.getLienBanque());
-        // set Liendis from created Org into OrgProgram object
-        entityProgr.setLienDis(Organisation.getIdDis());
-        OrgProgram OrgProgram = this.OrgProgramService.save(entityProgr);     
-        return this.convertToDto(Organisation, OrgProgram,1);
+          return this.convertToDto(Organisation, 1);
     }
     
     @GetMapping("orgreport/members/")
@@ -254,24 +235,7 @@ public class OrganisationController {
     	return dto;
     }
    
-	protected OrganisationDto convertToDto(Organisation entity,OrgProgram entityOrgProgram,long totalRecords) {
-		boolean booLuam= entityOrgProgram.getLuam() == 1;
-		boolean booLupm= entityOrgProgram.getLupm() == 1;
-		boolean booTuam= entityOrgProgram.getTuam() == 1;
-		boolean booTupm= entityOrgProgram.getTupm() == 1;
-		boolean booWeam= entityOrgProgram.getWeam() == 1;
-		boolean booWepm= entityOrgProgram.getWepm() == 1;
-		boolean booTham= entityOrgProgram.getTham() == 1;
-		boolean booThpm= entityOrgProgram.getThpm() == 1;
-		boolean booFram= entityOrgProgram.getFram() == 1;
-		boolean booFrpm= entityOrgProgram.getFrpm() == 1;
-		boolean booSaam= entityOrgProgram.getSaam() == 1;
-		boolean booSapm= entityOrgProgram.getSapm() == 1;
-		boolean booSuam= entityOrgProgram.getSunam() == 1;
-		boolean booSupm= entityOrgProgram.getSunpm() == 1;
-		boolean booPorc =entityOrgProgram.getPorc() == 1;
-		boolean booLegFrais = entityOrgProgram.getLegFrais() == 1;
-		boolean booCongel = entityOrgProgram.getCongel() == 1;
+	protected OrganisationDto convertToDto(Organisation entity,long totalRecords) {
 		boolean booIsMsonac = entity.getMsonac() == 1;
 		boolean booCpasyN = entity.getCpasyN() == 1;
 		boolean booGestBen = entity.getGestBen() == 1;
@@ -318,41 +282,7 @@ public class OrganisationController {
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), booFeadN,
 				entity.getRemLivr(), booCotAnnuelle, entity.getCotMonths(), booCotSup, entity.getCotMonthsSup(), entity.getDepotram(),
 				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),
-				booLuam,
-    			booLupm,
-    			booTuam,
-    			booTupm,
-    			booWeam,
-    			booWepm,
-    			booTham,
-    			booThpm,
-    			booFram,
-    			booFrpm,
-    			booSaam,
-    			booSapm,
-    			booSuam,
-    			booSupm,
-    			entityOrgProgram.getReluam(),
-    			entityOrgProgram.getRelupm(),
-    			entityOrgProgram.getRetuam(),
-    			entityOrgProgram.getRetupm(),
-    			entityOrgProgram.getReweam(),
-    			entityOrgProgram.getRewepm(),
-    			entityOrgProgram.getRetham(),
-    			entityOrgProgram.getRethpm(),
-    			entityOrgProgram.getRefram(),
-    			entityOrgProgram.getRefrpm(),
-    			entityOrgProgram.getResaam(),
-    			entityOrgProgram.getResapm(),
-    			entityOrgProgram.getResunam(),
-    			entityOrgProgram.getResunpm(),
-    			booPorc,
-    			booLegFrais,
-    			booCongel,
-    			entityOrgProgram.getCongelCap(),
-    			entityOrgProgram.getAuditor(),
-    			entityOrgProgram.getDateAudit(),
-    			entityOrgProgram.getLastAudit(),
+				
     			entity.getBankShortName(),
     			entity.getNbLogins(),
     			totalRecords);   
@@ -386,53 +316,7 @@ public class OrganisationController {
         }
         return myOrganisation;
     }
-    private OrgProgram convertToEntityProgram(OrganisationDto dto) {
-    	
-       	 OrgProgram myOrgProgram = new OrgProgram(
-       			dto.getIdDis(), 
-            		dto.getLienBanque(),
-        			dto.getLienDepot(),
-        			(int) (dto.getLuam() ? 1 : 0),
-         			(int) (dto.getLupm() ? 1 : 0),
-         			(int) (dto.getTuam() ? 1 : 0),
-         			(int) (dto.getTupm() ? 1 : 0),
-         			(int) (dto.getWeam() ? 1 : 0),
-         			(int) (dto.getWepm() ? 1 : 0),
-         			(int) (dto.getTham() ? 1 : 0),
-         			(int) (dto.getThpm() ? 1 : 0),
-         			(int) (dto.getFram() ? 1 : 0),
-         			(int) (dto.getFrpm() ? 1 : 0),
-         			(int) (dto.getSaam() ? 1 : 0),
-         			(int) (dto.getSapm() ? 1 : 0),
-         			(int) (dto.getSunam() ? 1 : 0),
-         			(int) (dto.getSunpm() ? 1 : 0),
-        			dto.getReluam(),
-        			dto.getRelupm(),
-        			dto.getRetuam(),
-        			dto.getRetupm(),
-        			dto.getReweam(),
-        			dto.getRewepm(),
-        			dto.getRetham(),
-        			dto.getRethpm(),
-        			dto.getRefram(),
-        			dto.getRefrpm(),
-        			dto.getResaam(),
-        			dto.getResapm(),
-        			dto.getResunam(),
-        			dto.getResunpm(),
-        			(int) (dto.getPorc() ? 1 : 0),
-         			(int) (dto.getLegFrais() ? 1 : 0),
-         			(int) (dto.getCongel() ? 1 : 0),
-        			dto.getCongelCap(),
-        			dto.getAuditor(),
-        			dto.getDateAudit(),
-        			dto.getLastAudit()
-       			 );
-       			 if (!StringUtils.isEmpty(dto.getIdDis())) {
-       		            myOrgProgram.setLienDis(dto.getIdDis());
-       		        }
-       		        return myOrgProgram;		 
-   	}
+    
 
 
 }

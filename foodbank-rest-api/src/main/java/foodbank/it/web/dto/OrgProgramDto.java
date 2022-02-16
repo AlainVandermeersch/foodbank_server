@@ -55,13 +55,13 @@ public class OrgProgramDto {
 	    
 	    private int auditor;
 	    private String dateAudit;
-	    private long lastAudit;
+	    private Long lastAudit;
 		public OrgProgramDto(int lienDis, int lienBanque, int lienDepot, boolean luam, boolean lupm, boolean tuam, boolean tupm,
 				boolean weam, boolean wepm, boolean tham, boolean thpm, boolean fram, boolean frpm, boolean saam, boolean sapm, boolean sunam, boolean sunpm,
 				String reluam, String relupm, String retuam, String retupm, String reweam, String rewepm, String retham,
 				String rethpm, String refram, String refrpm, String resaam, String resapm, String resunam,
 				String resunpm, boolean porc, boolean legFrais, boolean congel, String congelCap, int auditor, String dateAudit,
-				long lastAudit) {
+				Long lastAudit) {
 			super();
 			this.lienDis = lienDis;
 			this.lienBanque = lienBanque;
@@ -324,10 +324,10 @@ public class OrgProgramDto {
 		public void setDateAudit(String dateAudit) {
 			this.dateAudit = dateAudit;
 		}
-		public long getLastAudit() {
+		public Long getLastAudit() {
 			return lastAudit;
 		}
-		public void setLastAudit(long lastAudit) {
+		public void setLastAudit(Long lastAudit) {
 			this.lastAudit = lastAudit;
 		}
 	    
