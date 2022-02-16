@@ -17,10 +17,11 @@ public class SearchTUserCriteria {
 	private Integer idOrg;
 	private Integer lienDepot;
 	private String idCompany;
+	private Boolean hasLogins;
 	
 	public SearchTUserCriteria(String idUser, String membreNom,Boolean actif, Integer membreLangue,String membreEmail,String rights, 
 			Boolean droit1, Boolean gestMemb, Boolean gestBen, Boolean gestFead, Boolean gestDon,
-			Integer lienBanque, Integer idOrg,Integer lienDepot, String idCompany) {
+			Integer lienBanque, Integer idOrg,Integer lienDepot, String idCompany,Boolean hasLogins) {
 		this.idUser = idUser;
 		this.membreNom = membreNom;		
 		this.actif = actif;
@@ -36,7 +37,7 @@ public class SearchTUserCriteria {
 		this.idOrg = idOrg;
 		this.lienDepot = lienDepot;
 		this.idCompany = idCompany;
-		
+		this.hasLogins = hasLogins;
 	}
 
 	
@@ -200,6 +201,14 @@ public class SearchTUserCriteria {
 
 	public void setIdCompany(String idCompany) {
 		this.idCompany = idCompany;
+	}
+
+	public Boolean getHasLogins() {
+		return hasLogins;
+	}
+
+	public void setHasLogins(Boolean hasLogins) {
+		this.hasLogins = hasLogins;
 	}
 	
 }

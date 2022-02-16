@@ -103,6 +103,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Boolean gestBen = searchCriteria.getGestBen();
 		Boolean feadN = searchCriteria.getFeadN();
 		String bankShortName = searchCriteria.getBankShortName();
+		Boolean hasLogins = searchCriteria.getHasLogins();
 		
 		if (societe != null ) {			
 
@@ -228,6 +229,13 @@ public class OrganisationServiceImpl implements IOrganisationService{
 				Predicate classeFBBAPredicate = criteriaBuilder.and(criteriaBuilder.equal(organisation.get("classeFbba1"),0 ),criteriaBuilder.equal(organisation.get("classeFbba2"),0 ), criteriaBuilder.equal(organisation.get("classeFbba3"),0 ));
 				predicates.add(classeFBBAPredicate);
 			}
+		}
+		if (hasLogins != null) {
+			Predicate hasLoginsPredicate = criteriaBuilder.equal(organisation.get("nbLogins"), 0);
+			if (hasLogins== true) {
+				hasLoginsPredicate = criteriaBuilder.gt(organisation.get("nbLogins"), 0);				
+			}
+			predicates.add(hasLoginsPredicate);
 		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));

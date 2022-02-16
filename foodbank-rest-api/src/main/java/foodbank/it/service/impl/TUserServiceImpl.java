@@ -100,6 +100,7 @@ public class TUserServiceImpl implements ITUserService {
 		Integer idOrg = searchCriteria.getIdOrg();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String idCompany = searchCriteria.getIdCompany();
+		Boolean hasLogins = searchCriteria.getHasLogins();
 
 		if (idUser != null) {			
 
@@ -212,6 +213,13 @@ public class TUserServiceImpl implements ITUserService {
 			Predicate isGestDonPredicate = criteriaBuilder.equal(tuser.get("gestDon"), intGestDon);
 			predicates.add(isGestDonPredicate);
 		} 
+		if (hasLogins != null) {
+			Predicate hasLoginsPredicate = criteriaBuilder.equal(tuser.get("nbLogins"), 0);
+			if (hasLogins== true) {
+				hasLoginsPredicate = criteriaBuilder.gt(tuser.get("nbLogins"), 0);				
+			}
+			predicates.add(hasLoginsPredicate);
+		}
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));
 

@@ -77,7 +77,7 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
      		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
      		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
-     		@RequestParam(required = false) String bankShortName,
+     		@RequestParam(required = false) String bankShortName,@RequestParam(required = false) Boolean hasLogins,
      		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<>();
@@ -107,7 +107,7 @@ public class OrganisationController {
         }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName);
+				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -354,6 +354,7 @@ public class OrganisationController {
     			entityOrgProgram.getDateAudit(),
     			entityOrgProgram.getLastAudit(),
     			entity.getBankShortName(),
+    			entity.getNbLogins(),
     			totalRecords);   
         return dto;
     }
