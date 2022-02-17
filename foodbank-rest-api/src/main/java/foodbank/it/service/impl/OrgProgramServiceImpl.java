@@ -30,7 +30,12 @@ public class OrgProgramServiceImpl implements IOrgProgramService {
     @Override
     @Transactional
     public void deleteByLienDis(int lienDis) {
-        OrgProgramRepository.deleteByLienDis(lienDis);
+    	// in some situations the org program was created but not saved when delete was called
+    	Optional<OrgProgram> orgProgram = this.OrgProgramRepository.findByLienDis(lienDis);
+		    orgProgram.ifPresent( myOrgProg -> {
+				 this.OrgProgramRepository.deleteByLienDis(lienDis);
+		 });
+        
         
     }
 }

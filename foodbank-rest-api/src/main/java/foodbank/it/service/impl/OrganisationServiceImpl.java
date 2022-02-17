@@ -21,6 +21,8 @@ import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.model.OrgProgram;
+import foodbank.it.persistence.repository.IOrgProgramRepository;
 import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
@@ -31,11 +33,14 @@ import foodbank.it.web.dto.OrgMemberReportDto;
 public class OrganisationServiceImpl implements IOrganisationService{
 
 	private IOrganisationRepository OrganisationRepository;
+	private IOrgProgramRepository OrgProgramRepository;
 	private final EntityManager entityManager;
 	
 	public OrganisationServiceImpl(IOrganisationRepository OrganisationRepository,
+			IOrgProgramRepository OrgProgramRepository,
 			EntityManager entityManager) {
         this.OrganisationRepository = OrganisationRepository;
+        this.OrgProgramRepository = OrgProgramRepository;
         this.entityManager = entityManager;
     }
 	@Override
@@ -72,6 +77,10 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			throw new Exception(errorMsg);
 		}
 		else {
+			Optional<OrgProgram> orgProgram = this.OrgProgramRepository.findByLienDis(idDis);
+   		    orgProgram.ifPresent( myOrgProg -> {
+   				 this.OrgProgramRepository.deleteByLienDis(idDis);
+   		 });
 			OrganisationRepository.deleteByIdDis(idDis);
 		}
         
