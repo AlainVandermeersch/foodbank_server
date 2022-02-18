@@ -12,7 +12,8 @@ public interface ITUserRepository extends PagingAndSortingRepository<TUser, Inte
 
     void deleteByIdUser(String idUser);
     Optional<TUser> findByIdUser(String idUser);
-	Iterable<TUser> findByLienBanque(Short lienBanque);    
+	Iterable<TUser> findByLienBanque(Short lienBanque);
+	Iterable<TUser> findByIdOrg(Integer idOrgInteger);    
 
 	
 }

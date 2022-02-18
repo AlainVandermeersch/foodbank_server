@@ -258,6 +258,10 @@ public class MembreServiceImpl implements IMembreService{
 	public Iterable<Membre> findByLienBanque(Short lienBanque) {
 		return MembreRepository.findByLienBanque(lienBanque);
 	}
+	@Override
+	public Iterable<Membre> findByLienDis(Integer lienDisInteger) {
+		return MembreRepository.findByLienDis(lienDisInteger);
+	}
 	
 	
 }

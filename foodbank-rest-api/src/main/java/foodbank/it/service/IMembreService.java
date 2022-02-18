@@ -19,5 +19,7 @@ public interface IMembreService {
     
     void delete(int batId) throws Exception;
 
+	Iterable<Membre> findByLienDis(Integer lienDisInteger);
+
 	
 }

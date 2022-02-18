@@ -51,15 +51,22 @@ public class TUserController {
     }
    
     @GetMapping("usersall/")
-    public Collection<TUserDto> findAll(@RequestParam(required = false) String lienBanque) {
+    public Collection<TUserDto> findAll(@RequestParam(required = false) String lienBanque,
+    		@RequestParam(required = false) 	String idOrg) {
     	List<TUser> selectedTUsers;
     	Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
     	
+    	Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+    	if (idOrg != null) {
+    		selectedTUsers = (List<TUser>) this.TUserService.findByIdOrg(idOrgInteger);
+    	}
+    	else {
     	if (lienBanque != null) {
     		selectedTUsers = (List<TUser>) this.TUserService.findByLienBanque(lienBanqueShort);
     	}
     	else {
     		selectedTUsers = (List<TUser>) this.TUserService.findAll();
+    	}
     	}
     	long nbOfSelectedTusers= selectedTUsers.size();
     	
@@ -162,7 +169,7 @@ public class TUserController {
     	boolean booGestDon = entity.getGestDon() == 1;
     	long nbOfLogins = entity.getNbLogins();
     	// for performance, query executed only for dto selection
-    	String membreBankShortname = "?";
+    	String membreBankShortname = entity.getIdCompany();
     	Short membreLienBanque = entity.getMembreLienBanque();
     	if ( membreLienBanque != null) {
     		Banque memberBanque = this.BanqueService.findByBankId(membreLienBanque).orElse(null);

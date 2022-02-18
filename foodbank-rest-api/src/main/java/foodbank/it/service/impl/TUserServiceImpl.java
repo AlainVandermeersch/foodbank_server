@@ -253,4 +253,10 @@ public class TUserServiceImpl implements ITUserService {
 	public Iterable<TUser> findByLienBanque(Short lienBanque) {
 		return TUserRepository.findByLienBanque(lienBanque);
 	}
+
+
+	@Override
+	public Iterable<TUser> findByIdOrg(Integer idOrgInteger) {
+		return TUserRepository.findByIdOrg(idOrgInteger);
+	}
 }
