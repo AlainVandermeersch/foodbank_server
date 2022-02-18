@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.TUser;
+import foodbank.it.service.IBanqueService;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
 import foodbank.it.web.dto.TUserDto;
@@ -32,10 +34,11 @@ import foodbank.it.web.dto.TUserDto;
 public class TUserController {
 
     private ITUserService TUserService;
-   
+    private IBanqueService BanqueService;
     
-    public TUserController(ITUserService TUserService) {
-        this.TUserService = TUserService;       
+    public TUserController(ITUserService TUserService, IBanqueService BanqueService) {
+        this.TUserService = TUserService;  
+        this.BanqueService = BanqueService;
     }
 
     //
@@ -145,7 +148,7 @@ public class TUserController {
         }
     }
 
-
+  
     protected TUserDto convertToDto(TUser entity,long  totalRecords) {
     	
     	boolean booActif= entity.getActif() == 1;
@@ -158,10 +161,17 @@ public class TUserController {
     	boolean booGestMemb = entity.getGestMemb() == 1;
     	boolean booGestDon = entity.getGestDon() == 1;
     	long nbOfLogins = entity.getNbLogins();
+    	// for performance, query executed only for dto selection
+    	String membreBankShortname = "?";
+    	Short membreLienBanque = entity.getMembreLienBanque();
+    	if ( membreLienBanque != null) {
+    		Banque memberBanque = this.BanqueService.findByBankId(membreLienBanque).orElse(null);
+    		if (memberBanque != null) { membreBankShortname = memberBanque.getBankShortName();};
+    	}
         TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(), entity.getIdLanguage(), entity.getLienBat(), booActif, entity.getRights(), entity.getPassword(), entity.getDepot(), booDroit1, entity.getEmail(), 
         		booGestBen, booGestInv, booGestFead, booGestAsso,
         		booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(),entity.getSociete(),
-        		entity.getMembreNom(),entity.getMembrePrenom(),entity.getMembreEmail(), entity.getMembreLangue(), 
+        		entity.getMembreNom(),entity.getMembrePrenom(),entity.getMembreEmail(), entity.getMembreLangue(),membreBankShortname,
         		nbOfLogins, totalRecords);       
         return dto;
     }

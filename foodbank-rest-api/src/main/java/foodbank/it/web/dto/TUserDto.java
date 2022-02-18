@@ -49,6 +49,7 @@ public class TUserDto {
     private String membrePrenom;
     private String membreEmail;
     private Short membreLangue;
+    private String membreBankShortname;
     private long nbLogins;
     
     private Long  totalRecords;
@@ -61,7 +62,8 @@ public class TUserDto {
     }
     public TUserDto(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String depot, 
     		boolean droit1, String email, boolean gestBen, boolean gestInv, boolean gestFead, boolean gestAsso,
-        boolean gestCpas, boolean gestMemb, boolean gestDon, Short lienBanque, int lienCpas,String societe,String membreNom, String membrePrenom, String membreEmail, Short membreLangue, 
+        boolean gestCpas, boolean gestMemb, boolean gestDon, Short lienBanque, int lienCpas,String societe,
+        String membreNom, String membrePrenom, String membreEmail, Short membreLangue, String membreBankShortname,
         long nbLogins,Long  totalRecords) {
         super();
         this.idUser = idUser;
@@ -90,6 +92,7 @@ public class TUserDto {
         this.membrePrenom = membrePrenom;
         this.membreEmail = membreEmail;
         this.membreLangue = membreLangue;  
+        this.membreBankShortname = membreBankShortname;
         this.nbLogins = nbLogins;
         this.totalRecords = totalRecords;
         
@@ -280,6 +283,9 @@ public class TUserDto {
 		return membreLangue;
 	}
 	
+	public String getMembreBankShortname() {
+		return membreBankShortname;
+	}
 	public long getNbLogins() {
 		return nbLogins;
 	}
