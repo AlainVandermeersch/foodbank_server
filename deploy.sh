@@ -36,5 +36,6 @@ docker run --rm \
     docker/compose:1.29.1 --env-file=.env.ovh-dev up -d
 
 cd target/food-it && \
-    /bin/bash deploy.sh --libext=/home/ubuntu/lib-ext --password $WILDFLY_ADMIN_PASS
+    /bin/bash deploy.sh --libext /home/ubuntu/lib-ext --password $WILDFLY_ADMIN_PASS
 cd $CURRENT_DIRECTORY
+rm -rf target/food-it
