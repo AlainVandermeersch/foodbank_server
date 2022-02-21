@@ -9,5 +9,8 @@ import foodbank.it.persistence.model.Membre;
 public interface IMembreRepository  extends PagingAndSortingRepository<Membre, Integer>{
 	Optional<Membre> findByBatId(int batId);
     void deleteByBatId(int batId);
+    Iterable<Membre> findByLienBanque(Short lienBanque);
+	Iterable<Membre> findByLienDis(Integer lienDisInteger);
+   
    
 }

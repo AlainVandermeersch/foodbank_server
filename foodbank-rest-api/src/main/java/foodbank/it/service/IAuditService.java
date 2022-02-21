@@ -20,7 +20,7 @@ Optional<Audit> findByAuditId(int auditId);
 
     void delete(int auditId) throws Exception;
 
-	List<AuditReportDto> report(String shortBankName, String reportType);
+	List<AuditReportDto> report( String bankShortName, String fromDateString, String toDateString, String reportType);
 
 
 }

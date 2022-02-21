@@ -28,29 +28,51 @@ import foodbank.it.service.IAuditService;
 import foodbank.it.service.SearchAuditCriteria;
 import foodbank.it.web.dto.AuditReportDto;
 
-
 @Service
-public class AuditServiceImpl implements IAuditService{
+public class AuditServiceImpl implements IAuditService {
 
 	private IAuditRepository AuditRepository;
 	private final EntityManager entityManager;
-	
-	public AuditServiceImpl(IAuditRepository AuditRepository,EntityManager entityManager) {
-       this.AuditRepository = AuditRepository;
-       this.entityManager = entityManager;
-   }
-	
 
-   @Override
-   public Audit save(Audit audit) {  
-   	
-   	
-       return AuditRepository.save(audit);
-   }
+	public AuditServiceImpl(IAuditRepository AuditRepository, EntityManager entityManager) {
+		this.AuditRepository = AuditRepository;
+		this.entityManager = entityManager;
+	}
 
-     
-   @Override 
-   public Page<Audit> findAll(SearchAuditCriteria searchCriteria, Pageable pageable) {
+	@Override
+	public Audit save(Audit auditnew) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Audit> auditQuery = criteriaBuilder.createQuery(Audit.class);
+		Root<Audit> audit = auditQuery.from(Audit.class);
+		List<Predicate> predicates = new ArrayList<>();
+		String userId = auditnew.getUser();
+		Predicate isUser = criteriaBuilder.equal(audit.get("user"), userId);
+		predicates.add(isUser);
+		Predicate isJavaAppPredicate = criteriaBuilder.equal(audit.get("application"), "FBIT");
+		predicates.add(isJavaAppPredicate);
+		Expression<String> parentExpression = criteriaBuilder.function("DATE_FORMAT", String.class, audit.get("dateIn"),
+				criteriaBuilder.literal("%Y-%m-%d"));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String today = LocalDate.now().format(formatter);
+		
+		Predicate hasLoggedinTodayPredicate = criteriaBuilder.equal(parentExpression,today);
+		predicates.add(hasLoggedinTodayPredicate);
+		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+		System.out.printf("\nQuerying if  User %s logged on today %s\n",userId,today);
+		TypedQuery<Audit> query = entityManager.createQuery(auditQuery);
+		
+		List<Audit> resultList = query.getResultList();
+				
+		if (resultList.size() >0 ) {
+			System.out.printf("\nUser %s logged on already today %d times - not recording\n",userId, resultList.size());
+			return auditnew;
+		}
+		System.out.printf("\nRecording  User %s logged on today %s\n",userId,today);
+		return AuditRepository.save(auditnew);
+	}
+
+	@Override
+	public Page<Audit> findAll(SearchAuditCriteria searchCriteria, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Audit> auditQuery = criteriaBuilder.createQuery(Audit.class);
 		Root<Audit> audit = auditQuery.from(Audit.class);
@@ -60,30 +82,30 @@ public class AuditServiceImpl implements IAuditService{
 		String societe = searchCriteria.getSociete();
 		String user = searchCriteria.getUser();
 		String userName = searchCriteria.getUserName();
-		String shortBankName = searchCriteria.getShortBankName();
+		String bankShortName = searchCriteria.getBankShortName();
 		String rights = searchCriteria.getRights();
 		String fromDateString = searchCriteria.getFromDate();
 		String toDateString = searchCriteria.getToDate();
 		Boolean isJavaApp = searchCriteria.getIsJavaApp();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		
-		if ( fromDateString != null) {
+
+		if (fromDateString != null) {
 			LocalDateTime fromDate = LocalDate.parse(fromDateString, formatter).atStartOfDay();
 			Predicate fromDatePredicate = criteriaBuilder.greaterThanOrEqualTo(audit.get("dateIn"), fromDate);
 			predicates.add(fromDatePredicate);
 		}
-		if ( toDateString != null) {
+		if (toDateString != null) {
 			LocalDateTime toDate = LocalDate.parse(toDateString, formatter).atStartOfDay();
 			Predicate toDatePredicate = criteriaBuilder.lessThanOrEqualTo(audit.get("dateIn"), toDate);
 			predicates.add(toDatePredicate);
 		}
 
-		if (societe != null ) {			
+		if (societe != null) {
 
 			Predicate societePredicate = criteriaBuilder.like(audit.get("societe"), "%" + societe.toLowerCase() + "%");
 			predicates.add(societePredicate);
 		}
-		if (user != null ) {			
+		if (user != null) {
 
 			Predicate userPredicate = criteriaBuilder.like(audit.get("user"), "%" + user.toLowerCase() + "%");
 			predicates.add(userPredicate);
@@ -91,24 +113,25 @@ public class AuditServiceImpl implements IAuditService{
 		if (idDis != null) {
 			Predicate idDisPredicate = criteriaBuilder.equal(audit.get("idDis"), idDis);
 			predicates.add(idDisPredicate);
-		}	
-		
-		if (shortBankName != null) {
-			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
-			predicates.add(shortBankNamePredicate);
 		}
-		if (userName != null ) {			
 
-			Predicate userNamePredicate = criteriaBuilder.like(audit.get("userName"), "%" + userName.toLowerCase() + "%");
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(audit.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
+		}
+		if (userName != null) {
+
+			Predicate userNamePredicate = criteriaBuilder.like(audit.get("userName"),
+					"%" + userName.toLowerCase() + "%");
 			predicates.add(userNamePredicate);
 		}
-		
-		if (rights != null) {			
+
+		if (rights != null) {
 
 			Predicate rightsPredicate = criteriaBuilder.equal(audit.get("rights"), rights);
 			predicates.add(rightsPredicate);
 		}
-		
+
 		if (isJavaApp != null) {
 			Predicate applicationPredicate = criteriaBuilder.isNull(audit.get("application"));
 			if (isJavaApp == true) {
@@ -116,8 +139,6 @@ public class AuditServiceImpl implements IAuditService{
 			}
 			predicates.add(applicationPredicate);
 		}
-
-		
 
 		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
 		auditQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), audit, criteriaBuilder));
@@ -129,45 +150,97 @@ public class AuditServiceImpl implements IAuditService{
 		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Audit.class)));
-       TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-       long countResult = countQuery.getSingleResult();
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		long countResult = countQuery.getSingleResult();
 		List<Audit> resultList = query.getResultList();
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
+
 	@Override
 	public Optional<Audit> findByAuditId(int auditId) {
 		return AuditRepository.findById(auditId);
 	}
 
-
 	@Override
 	@Transactional
 	public void delete(int auditId) throws Exception {
 		AuditRepository.deleteById(auditId);
-		
+
 	}
 
-
 	@Override
-	public List<AuditReportDto> report(String shortBankName, String reportType) {
+	public List<AuditReportDto> report(String bankShortName, String fromDateString, String toDateString, String reportType) {
+		// to confuse the enemy bankShortName which is the field of banque is
+		// substituted here to bankShortName which is the audit class field
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<AuditReportDto> auditQuery = criteriaBuilder.createQuery(AuditReportDto.class);
 		Root<Audit> audit = auditQuery.from(Audit.class);
 		List<Predicate> predicates = new ArrayList<>();
-		Predicate applicationPredicate = criteriaBuilder.equal(audit.get("application"), "PHP");
-		predicates.add(applicationPredicate);
-		if (shortBankName != null) {
-			Predicate shortBankNamePredicate = criteriaBuilder.equal(audit.get("shortBankName"), shortBankName);
-			predicates.add(shortBankNamePredicate);
+
+		if (bankShortName != null && (reportType.equals( "general") ||reportType.equals( "history" ))) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(audit.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
 		}
-		auditQuery.where(predicates.stream().toArray(Predicate[]::new));		
-		auditQuery.groupBy(audit.get("societe"));
-		auditQuery.multiselect(audit.get("societe"), criteriaBuilder.count(audit));
-		List<AuditReportDto> results = entityManager.createQuery( auditQuery ).getResultList();
+		if (fromDateString != null) {
+			LocalDateTime fromDate = LocalDate.parse(fromDateString, formatter).atStartOfDay();
+			Predicate fromDatePredicate = criteriaBuilder.greaterThanOrEqualTo(audit.get("dateIn"), fromDate);
+			predicates.add(fromDatePredicate);
+		}
+		if (toDateString != null) {
+			LocalDateTime toDate = LocalDate.parse(toDateString, formatter).atStartOfDay();
+			Predicate toDatePredicate = criteriaBuilder.lessThanOrEqualTo(audit.get("dateIn"), toDate);
+			predicates.add(toDatePredicate);
+		}
+		switch(reportType) {
+		
+		case "history": 
+			auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+			Expression<String> expression = criteriaBuilder.function("DATE_FORMAT", String.class, audit.get("dateIn"),
+					criteriaBuilder.literal("%Y-%m-%d"));
+			auditQuery.groupBy(expression, audit.get("application"));
+			auditQuery.multiselect(expression.alias("key"), audit.get("application"), criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.desc(expression), criteriaBuilder.asc(audit.get("application")));
+			break;
+		case "usage":
+				Predicate idDisNotZeroPredicate = criteriaBuilder.notEqual(audit.get("idDis"), 0);
+				predicates.add(idDisNotZeroPredicate);
+				Predicate idDisNotNullPredicate = criteriaBuilder.isNotNull(audit.get("idDis"));
+				predicates.add(idDisNotNullPredicate);
+				auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+				auditQuery.groupBy(audit.get("bankShortName"),audit.get("idDis"), audit.get("societe"));
+				auditQuery.multiselect(audit.get("bankShortName"), audit.get("societe"), criteriaBuilder.count(audit));
+				auditQuery.orderBy(criteriaBuilder.asc(audit.get("bankShortName")),
+						criteriaBuilder.asc(audit.get("societe")));
+				break;
+		case "rights":
+			auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+			auditQuery.groupBy(audit.get("bankShortName"), audit.get("rights"));
+			auditQuery.multiselect(audit.get("bankShortName"), audit.get("rights"), criteriaBuilder.count(audit));
+			auditQuery.orderBy(criteriaBuilder.asc(audit.get("bankShortName")), criteriaBuilder.asc(audit.get("rights")));
+			
+			break;
+		default: // must be general	
+				auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+				if (bankShortName != null) {
+					auditQuery.groupBy(audit.get("societe"), audit.get("application"));
+					auditQuery.multiselect(audit.get("societe"), audit.get("application"),
+							criteriaBuilder.count(audit));
+					auditQuery.orderBy(criteriaBuilder.asc(audit.get("societe")),
+							criteriaBuilder.asc(audit.get("application")));
+				} else {
+					auditQuery.groupBy(audit.get("bankShortName"), audit.get("application"));
+					auditQuery.multiselect(audit.get("bankShortName"), audit.get("application"),
+							criteriaBuilder.count(audit));
+					auditQuery.orderBy(criteriaBuilder.asc(audit.get("bankShortName")),
+							criteriaBuilder.asc(audit.get("application")));
+				}
+			
+		}
+		List<AuditReportDto> results = entityManager.createQuery(auditQuery).getResultList();
 
 		return results;
-		
+
 	}
-	
 
 }

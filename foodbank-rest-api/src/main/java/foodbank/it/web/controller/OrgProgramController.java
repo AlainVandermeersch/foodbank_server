@@ -16,26 +16,26 @@ public class OrgProgramController {
         this.OrgProgramService = OrgProgramService;        
     }
 
-    @GetMapping("orgProgram/{lienDis}")
+    @GetMapping("orgprogram/{lienDis}")
     public OrgProgramDto findOne(@PathVariable Integer lienDis) {
         OrgProgram entity = OrgProgramService.findByLienDis(lienDis)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return convertToDto(entity);
     }
 
-    @PutMapping("orgProgram/{lienDis}")
+    @PutMapping("orgprogram/{lienDis}")
     public OrgProgramDto updateOrgProgram(@PathVariable("lienDis") Integer lienDis, @RequestBody OrgProgramDto updatedOrgProgram) {
         OrgProgram OrgProgramEntity = convertToEntity(updatedOrgProgram);
         return this.convertToDto(this.OrgProgramService.save(OrgProgramEntity));
     }
 
-    @DeleteMapping("orgProgram/{lienDis}")
+    @DeleteMapping("orgprogram/{lienDis}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrgProgram(@PathVariable("lienDis") Integer lienDis) {
         OrgProgramService.deleteByLienDis(lienDis);
     }
 
-    @PostMapping("orgProgram/")
+    @PostMapping("orgprogram/")
     @ResponseStatus(HttpStatus.CREATED)
     public OrgProgramDto create(@RequestBody OrgProgramDto newOrgProgram) {
         OrgProgram entity = convertToEntity(newOrgProgram);

@@ -255,6 +255,8 @@ public class Organisation implements Serializable {
     private String nomDepot;
     @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
     private String bankShortName;
+    @Formula("(select count(*) from audit a where a.id_dis = id_dis and year(a.date_in) > 2020)")
+    long nbLogins;
 
     
 
@@ -2426,6 +2428,11 @@ public class Organisation implements Serializable {
 
 	public String getBankShortName() {
 		return bankShortName;
+	}
+	
+	
+	public long getNbLogins() {
+		return nbLogins;
 	}
 
 	@Override

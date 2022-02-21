@@ -3,7 +3,7 @@ package foodbank.it.service;
 public class SearchAuditCriteria {
 	
 	private String user;
-	private String shortBankName;         
+	private String bankShortName;         
     private Integer idDis;    
     private String societe;
     private String userName;
@@ -11,11 +11,11 @@ public class SearchAuditCriteria {
     private String fromDate;
     private String toDate;
     private Boolean isJavaApp;
-	public SearchAuditCriteria(String user, String shortBankName, Integer idDis, String societe, String userName, 
+	public SearchAuditCriteria(String user, String bankShortName, Integer idDis, String societe, String userName, 
 			String rights, String fromDate, String toDate ,Boolean isJavaApp) {
 		super();
 		this.user = user;
-		this.shortBankName = shortBankName;
+		this.bankShortName = bankShortName;
 		this.idDis = idDis;
 		this.societe = societe;
 		this.userName = userName;
@@ -43,11 +43,12 @@ public class SearchAuditCriteria {
 	public void setSociete(String societe) {
 		this.societe = societe;
 	}
-	public String getShortBankName() {
-		return shortBankName;
+	
+	public String getBankShortName() {
+		return bankShortName;
 	}
-	public void setShortBankName(String shortBankName) {
-		this.shortBankName = shortBankName;
+	public void setBankShortName(String bankShortName) {
+		this.bankShortName = bankShortName;
 	}
 	public String getUserName() {
 		return userName;

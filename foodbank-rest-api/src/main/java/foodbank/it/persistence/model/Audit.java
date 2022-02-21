@@ -38,7 +38,7 @@ public class Audit implements Serializable {
     @Formula("(select d.societe from organisations d where d.id_dis = id_dis)")
     private String societe;
     @Formula("(select d.ID_COMPANY from t_user d where d.ID_USER = user)")
-    private String shortBankName; 
+    private String bankShortName; 
     @Formula("(select d.USER_NAME from t_user d where d.ID_USER = user)")
     private String userName;   
     @Formula("(select d.rights from t_user d where d.ID_USER = user)")
@@ -151,9 +151,9 @@ public class Audit implements Serializable {
 	public String getSociete() {
 		return societe;
 	}
-
-	public String getShortBankName() {
-		return shortBankName;
+	
+	public String getBankShortName() {
+		return bankShortName;
 	}
 
 	public String getUserName() {

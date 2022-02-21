@@ -100,6 +100,7 @@ public class TUserServiceImpl implements ITUserService {
 		Integer idOrg = searchCriteria.getIdOrg();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String idCompany = searchCriteria.getIdCompany();
+		Boolean hasLogins = searchCriteria.getHasLogins();
 
 		if (idUser != null) {			
 
@@ -212,6 +213,13 @@ public class TUserServiceImpl implements ITUserService {
 			Predicate isGestDonPredicate = criteriaBuilder.equal(tuser.get("gestDon"), intGestDon);
 			predicates.add(isGestDonPredicate);
 		} 
+		if (hasLogins != null) {
+			Predicate hasLoginsPredicate = criteriaBuilder.equal(tuser.get("nbLogins"), 0);
+			if (hasLogins== true) {
+				hasLoginsPredicate = criteriaBuilder.gt(tuser.get("nbLogins"), 0);				
+			}
+			predicates.add(hasLoginsPredicate);
+		}
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));
 
@@ -232,5 +240,23 @@ public class TUserServiceImpl implements ITUserService {
 		List<TUser> resultList = query.getResultList();
 		return new PageImpl<>(resultList, pageable, countResult);
 		
+	}
+
+
+	@Override
+	public Iterable<TUser> findAll() {
+		return TUserRepository.findAll();
+	}
+
+
+	@Override
+	public Iterable<TUser> findByLienBanque(Short lienBanque) {
+		return TUserRepository.findByLienBanque(lienBanque);
+	}
+
+
+	@Override
+	public Iterable<TUser> findByIdOrg(Integer idOrgInteger) {
+		return TUserRepository.findByIdOrg(idOrgInteger);
 	}
 }

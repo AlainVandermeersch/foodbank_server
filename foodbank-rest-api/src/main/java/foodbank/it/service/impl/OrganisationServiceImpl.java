@@ -21,6 +21,8 @@ import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.model.OrgProgram;
+import foodbank.it.persistence.repository.IOrgProgramRepository;
 import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
@@ -31,11 +33,14 @@ import foodbank.it.web.dto.OrgMemberReportDto;
 public class OrganisationServiceImpl implements IOrganisationService{
 
 	private IOrganisationRepository OrganisationRepository;
+	private IOrgProgramRepository OrgProgramRepository;
 	private final EntityManager entityManager;
 	
 	public OrganisationServiceImpl(IOrganisationRepository OrganisationRepository,
+			IOrgProgramRepository OrgProgramRepository,
 			EntityManager entityManager) {
         this.OrganisationRepository = OrganisationRepository;
+        this.OrgProgramRepository = OrgProgramRepository;
         this.entityManager = entityManager;
     }
 	@Override
@@ -72,6 +77,10 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			throw new Exception(errorMsg);
 		}
 		else {
+			Optional<OrgProgram> orgProgram = this.OrgProgramRepository.findByLienDis(idDis);
+   		    orgProgram.ifPresent( myOrgProg -> {
+   				 this.OrgProgramRepository.deleteByLienDis(idDis);
+   		 });
 			OrganisationRepository.deleteByIdDis(idDis);
 		}
         
@@ -103,6 +112,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Boolean gestBen = searchCriteria.getGestBen();
 		Boolean feadN = searchCriteria.getFeadN();
 		String bankShortName = searchCriteria.getBankShortName();
+		Boolean hasLogins = searchCriteria.getHasLogins();
 		
 		if (societe != null ) {			
 
@@ -228,6 +238,13 @@ public class OrganisationServiceImpl implements IOrganisationService{
 				Predicate classeFBBAPredicate = criteriaBuilder.and(criteriaBuilder.equal(organisation.get("classeFbba1"),0 ),criteriaBuilder.equal(organisation.get("classeFbba2"),0 ), criteriaBuilder.equal(organisation.get("classeFbba3"),0 ));
 				predicates.add(classeFBBAPredicate);
 			}
+		}
+		if (hasLogins != null) {
+			Predicate hasLoginsPredicate = criteriaBuilder.equal(organisation.get("nbLogins"), 0);
+			if (hasLogins== true) {
+				hasLoginsPredicate = criteriaBuilder.gt(organisation.get("nbLogins"), 0);				
+			}
+			predicates.add(hasLoginsPredicate);
 		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));
@@ -405,7 +422,15 @@ public class OrganisationServiceImpl implements IOrganisationService{
     		    List<OrgMemberReportDto> resultList = query.getResultList();
 
     			return resultList;
-    		}	
+    		}
+	@Override
+	public Iterable<Organisation> findAll() {
+		return OrganisationRepository.findAll();
+	}
+	@Override
+	public Iterable<Organisation> findByLienBanque(Short lienBanque) {
+		return OrganisationRepository.findByLienBanque(lienBanque);
+	}	
 	
 	
 }

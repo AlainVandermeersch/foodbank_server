@@ -20,11 +20,12 @@ public class SearchOrganisationCriteria {
 	private Boolean gestBen;
 	private Boolean feadN;
 	private String bankShortName;
+	private Boolean hasLogins;
 	
 	
 	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, 
 			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt, 
-			Boolean cotAnnuelle,Boolean cotSup,String statut,Boolean gestBen,Boolean feadN,String bankShortName) {
+			Boolean cotAnnuelle,Boolean cotSup,String statut,Boolean gestBen,Boolean feadN,String bankShortName,Boolean hasLogins) {
 		this.idDis = idDis;
 		this.regId = regId;
 		this.classeFBBA = classeFBBA;
@@ -44,6 +45,7 @@ public class SearchOrganisationCriteria {
 		this.gestBen = gestBen;
 		this.feadN = feadN;
 		this.bankShortName = bankShortName;
+		this.hasLogins = hasLogins;
 	}
 
 	
@@ -260,11 +262,15 @@ public class SearchOrganisationCriteria {
 		return bankShortName;
 	}
 
-
-
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
 	}
+	public Boolean getHasLogins() {
+		return hasLogins;
+	}
 
+	public void setHasLogins(Boolean hasLogins) {
+		this.hasLogins = hasLogins;
+	}
 	
 }

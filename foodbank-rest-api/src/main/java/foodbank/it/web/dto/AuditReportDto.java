@@ -1,77 +1,38 @@
 package foodbank.it.web.dto;
 
 public class AuditReportDto {
-  private String date; 
-  private String application;
-  private String shortBankName;
-  private String societe;
-  private String userName;
-  private String rights;
+  private String key; 
+  private String category;
   private Long loginCount;
   
-public AuditReportDto(String date, String application, String shortBankName, String societe, String userName,
-		String rights, Long loginCount) {
-	super();
-	this.date = date;
-	this.application = application;
-	this.shortBankName = shortBankName;
-	this.societe = societe;
-	this.userName = userName;
-	this.rights = rights;
-	this.loginCount = loginCount;
-}
-public AuditReportDto(String societe,  Long loginCount) {
-	this.societe = societe;
+
+public AuditReportDto(String key,String category,  Long loginCount) {
+	this.key = key;
+	this.category = category;
 	this.loginCount = loginCount;
 }
 
-public String getDate() {
-	return date;
+
+public String getKey() {
+	return key;
 }
 
-public void setDate(String date) {
-	this.date = date;
+
+public void setKey(String key) {
+	this.key = key;
 }
 
-public String getApplication() {
-	return application;
+
+public String getCategory() {
+	return category;
 }
 
-public void setApplication(String application) {
-	this.application = application;
+
+public void setCategory(String category) {
+	this.category = category;
 }
 
-public String getShortBankName() {
-	return shortBankName;
-}
 
-public void setShortBankName(String shortBankName) {
-	this.shortBankName = shortBankName;
-}
-
-public String getSociete() {
-	return societe;
-}
-
-public void setSociete(String societe) {
-	this.societe = societe;
-}
-
-public String getUserName() {
-	return userName;
-}
-
-public void setUserName(String userName) {
-	this.userName = userName;
-}
-
-public String getRights() {
-	return rights;
-}
-
-public void setRights(String rights) {
-	this.rights = rights;
-}
 public Long getLoginCount() {
 	return loginCount;
 }

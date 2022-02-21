@@ -250,6 +250,19 @@ public class MembreServiceImpl implements IMembreService{
 		List<Membre> resultList = query.getResultList();
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
+	@Override
+	public Iterable<Membre> findAll() {
+		return MembreRepository.findAll();
+	}
+	@Override
+	public Iterable<Membre> findByLienBanque(Short lienBanque) {
+		return MembreRepository.findByLienBanque(lienBanque);
+	}
+	@Override
+	public Iterable<Membre> findByLienDis(Integer lienDisInteger) {
+		return MembreRepository.findByLienDis(lienDisInteger);
+	}
+	
 	
 }
 	
