@@ -4,7 +4,7 @@ import foodbank.it.persistence.model.Banque;
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueDto;
 import foodbank.it.web.dto.BanqueOrgReportDto;
-import foodbank.it.web.dto.BanqueOrgCountDto;
+import foodbank.it.web.dto.BanqueCountDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -89,12 +89,28 @@ public class BanqueController {
         return this.convertToDto(Banque);
     }
     @GetMapping("banqueOrgCount/")
-    public List<BanqueOrgCountDto> AuditReport(
+    public List<BanqueCountDto> OrgReport(
     		@RequestParam(required = false) Boolean hasBirbCode) {
     	
-    	List<BanqueOrgCountDto> listBanqueOrgCount = this.BanqueService.reportOrgCount(hasBirbCode);
+    	List<BanqueCountDto> listBanqueCount = this.BanqueService.reportOrgCount(hasBirbCode);
     	    	
-		return listBanqueOrgCount;       	
+		return listBanqueCount;       	
+    	  
+    }
+    @GetMapping("banqueMembreCount/")
+    public List<BanqueCountDto> MembreReport() {
+    	
+    	List<BanqueCountDto> listBanqueCount = this.BanqueService.reportMembreCount();
+    	    	
+		return listBanqueCount;       	
+    	  
+    }
+    @GetMapping("banqueUserCount/")
+    public List<BanqueCountDto> UserReport() {
+    	
+    	List<BanqueCountDto> listBanqueCount = this.BanqueService.reportTUserCount();
+    	    	
+		return listBanqueCount;       	
     	  
     }
     @GetMapping("banqueOrgReport/")

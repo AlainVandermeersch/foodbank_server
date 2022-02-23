@@ -1,12 +1,12 @@
 package foodbank.it.web.dto;
 
-public class BanqueOrgCountDto {
+public class BanqueCountDto {
 	 private String bankShortName; 
-	 private Long orgCount;
-	public BanqueOrgCountDto(String bankShortName, Long orgCount) {
+	 private Long count;
+	public BanqueCountDto(String bankShortName, Long orgCount) {
 		super();
 		this.bankShortName = bankShortName;
-		this.orgCount = orgCount;
+		this.count = orgCount;
 	}
 	public String getBankShortName() {
 		return bankShortName;
@@ -14,11 +14,11 @@ public class BanqueOrgCountDto {
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
 	}
-	public Long getOrgCount() {
-		return orgCount;
+	public Long getCount() {
+		return count;
 	}
-	public void setOrgCount(Long orgCount) {
-		this.orgCount = orgCount;
+	public void setCount(Long orgCount) {
+		this.count = orgCount;
 	}
 	
 	 
