@@ -3,6 +3,7 @@ package foodbank.it.web.controller;
 import foodbank.it.persistence.model.Banque;
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueDto;
+import foodbank.it.web.dto.BanqueOrgReportDto;
 import foodbank.it.web.dto.BanqueOrgCountDto;
 
 import org.springframework.http.HttpStatus;
@@ -93,9 +94,15 @@ public class BanqueController {
     	
     	List<BanqueOrgCountDto> listBanqueOrgCount = this.BanqueService.reportOrgCount(hasBirbCode);
     	    	
-		return listBanqueOrgCount;
-    
+		return listBanqueOrgCount;       	
+    	  
+    }
+    @GetMapping("banqueOrgReport/")
+    public List<BanqueOrgReportDto> OrgReport() {
     	
+    	List<BanqueOrgReportDto> orgReports = this.BanqueService.reportOrgs();
+    	    	
+		return orgReports;       	
     	  
     }
     protected BanqueDto convertToDto(Banque entity) {

@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Optional;
 
 import foodbank.it.persistence.model.Banque;
+import foodbank.it.web.dto.BanqueOrgReportDto;
 import foodbank.it.web.dto.BanqueOrgCountDto;
 
 
@@ -17,4 +18,5 @@ public interface IBanqueService {
 
     void delete(int bankId) throws Exception;
 	List<BanqueOrgCountDto> reportOrgCount(Boolean hasBirbCode);
+	List<BanqueOrgReportDto> reportOrgs();
 }
