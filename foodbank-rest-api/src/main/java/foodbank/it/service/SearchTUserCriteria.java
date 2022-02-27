@@ -3,10 +3,10 @@ package foodbank.it.service;
 public class SearchTUserCriteria {
 	
 	private String idUser;
-	private String membreNom;
+	private String userName;
 	private Boolean actif;
-	private Integer  membreLangue;
-	private String membreEmail;
+	private String  idLanguage;
+	private String email;
 	private String rights;
 	private Boolean droit1;
 	private Boolean gestMemb;
@@ -18,15 +18,15 @@ public class SearchTUserCriteria {
 	private Integer lienDepot;
 	private String idCompany;
 	private Boolean hasLogins;
-	
-	public SearchTUserCriteria(String idUser, String membreNom,Boolean actif, Integer membreLangue,String membreEmail,String rights, 
+	private String hasAnomalies;
+	public SearchTUserCriteria(String idUser, String userName,Boolean actif, String  idLanguage,String email,String rights, 
 			Boolean droit1, Boolean gestMemb, Boolean gestBen, Boolean gestFead, Boolean gestDon,
-			Integer lienBanque, Integer idOrg,Integer lienDepot, String idCompany,Boolean hasLogins) {
+			Integer lienBanque, Integer idOrg,Integer lienDepot, String idCompany,Boolean hasLogins,String hasAnomalies) {
 		this.idUser = idUser;
-		this.membreNom = membreNom;		
+		this.userName = userName;		
 		this.actif = actif;
-		this.membreLangue = membreLangue;
-		this.membreEmail = membreEmail;
+		this.idLanguage = idLanguage;
+		this.email = email;
 		this.rights = rights;
 		this.droit1 = droit1;
 		this.gestMemb = gestMemb;
@@ -38,6 +38,7 @@ public class SearchTUserCriteria {
 		this.lienDepot = lienDepot;
 		this.idCompany = idCompany;
 		this.hasLogins = hasLogins;
+		this.hasAnomalies = hasAnomalies;
 	}
 
 	
@@ -53,15 +54,19 @@ public class SearchTUserCriteria {
 	}
 
 
-	public String getMembreNom() {
-		return membreNom;
+	
+
+	public String getUserName() {
+		return userName;
 	}
 
 
 
-	public void setMembreNom(String membreNom) {
-		this.membreNom = membreNom;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
+
+
 
 	public Boolean getActif() {
 		return actif;
@@ -73,28 +78,21 @@ public class SearchTUserCriteria {
 		this.actif = actif;
 	}
 
+	public String getIdLanguage() {
+		return idLanguage;
+	}
+	public void setIdLanguage(String idLanguage) {
+		this.idLanguage = idLanguage;
+	}
 
-
-	public Integer getMembreLangue() {
-		return membreLangue;
+	public String getEmail() {
+		return email;
 	}
 
 
 
-	public void setMembreLangue(Integer membreLangue) {
-		this.membreLangue = membreLangue;
-	}
-
-
-
-	public String getMembreEmail() {
-		return membreEmail;
-	}
-
-
-
-	public void setMembreEmail(String membreEmail) {
-		this.membreEmail = membreEmail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 
@@ -210,5 +208,19 @@ public class SearchTUserCriteria {
 	public void setHasLogins(Boolean hasLogins) {
 		this.hasLogins = hasLogins;
 	}
+
+
+
+	public String getHasAnomalies() {
+		return hasAnomalies;
+	}
+
+
+
+	public void setHasAnomalies(String hasAnomalies) {
+		this.hasAnomalies = hasAnomalies;
+	}
+
+	
 	
 }

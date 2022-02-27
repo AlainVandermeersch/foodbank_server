@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
@@ -27,107 +28,108 @@ import foodbank.it.service.SearchTUserCriteria;
 @Service
 public class TUserServiceImpl implements ITUserService {
 
-    private ITUserRepository TUserRepository;
-    private final EntityManager entityManager;
+	private ITUserRepository TUserRepository;
+	private final EntityManager entityManager;
 
-    public TUserServiceImpl(ITUserRepository TUserRepository,EntityManager entityManager) {
-        this.TUserRepository = TUserRepository;
-        this.entityManager = entityManager;
-        
-    }
+	public TUserServiceImpl(ITUserRepository TUserRepository, EntityManager entityManager) {
+		this.TUserRepository = TUserRepository;
+		this.entityManager = entityManager;
 
-    
-    @Override
-    public Optional<TUser> findByIdUser(String idUser) {
-        return TUserRepository.findByIdUser(idUser);
-    }
+	}
 
-    @Override
-    public TUser save(TUser tuser,  boolean booCreateMode) throws Exception {
-    	// backed Out   BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();    	
-    	if (booCreateMode == true) {    		
-    		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-        	Root<TUser> existingTUser = totalCriteriaQuery.from(TUser.class);
-    		List<Predicate> predicates = new ArrayList<>();
-    		Predicate idUserPredicate = criteriaBuilder.equal(existingTUser.get("idUser"), tuser.getIdUser());
-    		predicates.add(idUserPredicate);
-    	
-    		// System.out.printf("\nChecking If User exists with userId: %s", tuser.getIdUser());
-    		
-    		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
-    		totalCriteriaQuery.select(criteriaBuilder.count(existingTUser));
-    		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-    		Long countResult = countQuery.getSingleResult();
-    		
+	@Override
+	public Optional<TUser> findByIdUser(String idUser) {
+		return TUserRepository.findByIdUser(idUser);
+	}
 
-    		if (countResult > 0) {
-    			String errorMsg = String.format("a user exists with userId: %s", tuser.getIdUser());		
-    			throw new Exception(errorMsg);
-    		}
-    		// Backed Out tuser.setPassword(encoder.encode(tuser.getPassword()));
-    	}
-        return TUserRepository.save(tuser);
-    }
+	@Override
+	public TUser save(TUser tuser, boolean booCreateMode) throws Exception {
+		// backed Out BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		if (booCreateMode == true) {
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+			Root<TUser> existingTUser = totalCriteriaQuery.from(TUser.class);
+			List<Predicate> predicates = new ArrayList<>();
+			Predicate idUserPredicate = criteriaBuilder.equal(existingTUser.get("idUser"), tuser.getIdUser());
+			predicates.add(idUserPredicate);
 
-    @Override
-    @Transactional
-    public void delete(String idUser) {
-        TUserRepository.deleteByIdUser(idUser);
-    }
+			// System.out.printf("\nChecking If User exists with userId: %s",
+			// tuser.getIdUser());
 
+			totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+			totalCriteriaQuery.select(criteriaBuilder.count(existingTUser));
+			TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+			Long countResult = countQuery.getSingleResult();
 
-    @Override 
-    public Page<TUser> findAll(SearchTUserCriteria searchCriteria, Pageable pageable) {
+			if (countResult > 0) {
+				String errorMsg = String.format("a user exists with userId: %s", tuser.getIdUser());
+				throw new Exception(errorMsg);
+			}
+			// Backed Out tuser.setPassword(encoder.encode(tuser.getPassword()));
+		}
+		return TUserRepository.save(tuser);
+	}
+
+	@Override
+	@Transactional
+	public void delete(String idUser) {
+		TUserRepository.deleteByIdUser(idUser);
+	}
+
+	@Override
+	public Page<TUser> findAll(SearchTUserCriteria searchCriteria, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		
+
 		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
-		Root<TUser> tuser = tuserQuery.from(TUser.class);		
+		Root<TUser> tuser = tuserQuery.from(TUser.class);
 		List<Predicate> predicates = new ArrayList<>();
 
 		String idUser = searchCriteria.getIdUser();
-		String membreNom = searchCriteria.getMembreNom();
+		String userName = searchCriteria.getUserName();
 		Boolean actif = searchCriteria.getActif();
 		Boolean droit1 = searchCriteria.getDroit1();
 		Boolean gestMemb = searchCriteria.getGestMemb();
 		Boolean gestBen = searchCriteria.getGestBen();
 		Boolean gestFead = searchCriteria.getGestFead();
 		Boolean gestDon = searchCriteria.getGestDon();
-		Integer membreLangue = searchCriteria.getMembreLangue();
-		String membreEmail = searchCriteria.getMembreEmail();
+		String idLanguage = searchCriteria.getIdLanguage();
+		String email = searchCriteria.getEmail();
 		String rights = searchCriteria.getRights();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer idOrg = searchCriteria.getIdOrg();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String idCompany = searchCriteria.getIdCompany();
 		Boolean hasLogins = searchCriteria.getHasLogins();
+		String hasAnomalies = searchCriteria.getHasAnomalies();
 
-		if (idUser != null) {			
+		if (idUser != null) {
 
 			Predicate idUserPredicate = criteriaBuilder.like(tuser.get("idUser"), "%" + idUser.toLowerCase() + "%");
 			predicates.add(idUserPredicate);
 		}
-		if (membreNom != null) {			
+		if (userName != null) {
 
-			Predicate membreNomPredicate = criteriaBuilder.like(tuser.<String>get("membreNom"), "%" + membreNom.toLowerCase() + "%");
-			predicates.add(membreNomPredicate);
+			Predicate userNamePredicate = criteriaBuilder.like(tuser.<String>get("userName"),
+					"%" + userName.toLowerCase() + "%");
+			predicates.add(userNamePredicate);
 		}
-				
-		if (membreEmail != null) {			
 
-			Predicate emailPredicate = criteriaBuilder.like(tuser.<String>get("membreEmail"), "%" + membreEmail.toLowerCase() + "%");
+		if (email != null) {
+
+			Predicate emailPredicate = criteriaBuilder.like(tuser.<String>get("email"),
+					"%" + email.toLowerCase() + "%");
 			predicates.add(emailPredicate);
 		}
-		if (membreLangue != null) {
-			Predicate languePredicate = criteriaBuilder.equal(tuser.<Short>get("membreLangue"), membreLangue);
+		if (idLanguage != null) {
+			Predicate languePredicate = criteriaBuilder.equal(tuser.<Short>get("idLanguage"), idLanguage);
 			predicates.add(languePredicate);
 		}
-		if (rights != null) {			
+		if (rights != null) {
 
 			Predicate rightsPredicate = criteriaBuilder.equal(tuser.get("rights"), rights);
 			predicates.add(rightsPredicate);
 		}
-		if (idCompany != null) {			
+		if (idCompany != null) {
 
 			Predicate idCompanyPredicate = criteriaBuilder.equal(tuser.get("idCompany"), idCompany);
 			predicates.add(idCompanyPredicate);
@@ -142,18 +144,16 @@ public class TUserServiceImpl implements ITUserService {
 				// selecting bank members only
 				Predicate idOrgZero = criteriaBuilder.equal(tuser.get("idOrg"), 0);
 				Predicate idOrgNull = criteriaBuilder.isNull(tuser.get("idOrg"));
-				Predicate idOrgPredicate = criteriaBuilder.or(idOrgZero,idOrgNull);
+				Predicate idOrgPredicate = criteriaBuilder.or(idOrgZero, idOrgNull);
 				predicates.add(idOrgPredicate);
-			}
-			else {
-				if (idOrg == 999){
-				// exclude members of bank who have idOrg 0 or null
-				Predicate idOrgNotZero = criteriaBuilder.notEqual(tuser.get("idOrg"), 0);
-				Predicate idOrgNotNull = criteriaBuilder.isNotNull(tuser.get("idOrg"));
-				predicates.add(idOrgNotZero);
-				predicates.add(idOrgNotNull);
-				}
-				else {
+			} else {
+				if (idOrg == 999) {
+					// exclude members of bank who have idOrg 0 or null
+					Predicate idOrgNotZero = criteriaBuilder.notEqual(tuser.get("idOrg"), 0);
+					Predicate idOrgNotNull = criteriaBuilder.isNotNull(tuser.get("idOrg"));
+					predicates.add(idOrgNotZero);
+					predicates.add(idOrgNotNull);
+				} else {
 					Predicate idOrgPredicate = criteriaBuilder.equal(tuser.get("idOrg"), idOrg);
 					predicates.add(idOrgPredicate);
 				}
@@ -161,10 +161,10 @@ public class TUserServiceImpl implements ITUserService {
 		}
 
 		if (lienDepot != null) {
-				Predicate lienDepotPredicate = criteriaBuilder.equal(tuser.get("lienDepot"),lienDepot);
-				predicates.add(lienDepotPredicate);
+			Predicate lienDepotPredicate = criteriaBuilder.equal(tuser.get("lienDepot"), lienDepot);
+			predicates.add(lienDepotPredicate);
 		}
-	
+
 		if (actif != null) {
 			Integer intActive = 0;
 			if (actif == true) {
@@ -172,7 +172,7 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			Predicate isActifPredicate = criteriaBuilder.equal(tuser.get("actif"), intActive);
 			predicates.add(isActifPredicate);
-		} 
+		}
 		if (droit1 != null) {
 			Integer intDroit1 = 0;
 			if (droit1 == true) {
@@ -180,7 +180,7 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			Predicate isDroit1Predicate = criteriaBuilder.equal(tuser.get("droit1"), intDroit1);
 			predicates.add(isDroit1Predicate);
-		} 
+		}
 		if (gestMemb != null) {
 			Integer intGestMemb = 0;
 			if (gestMemb == true) {
@@ -188,7 +188,7 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			Predicate isGestMembPredicate = criteriaBuilder.equal(tuser.get("gestMemb"), intGestMemb);
 			predicates.add(isGestMembPredicate);
-		} 
+		}
 		if (gestBen != null) {
 			Integer intGestBen = 0;
 			if (gestBen == true) {
@@ -196,7 +196,7 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			Predicate isGestBenPredicate = criteriaBuilder.equal(tuser.get("gestBen"), intGestBen);
 			predicates.add(isGestBenPredicate);
-		} 
+		}
 		if (gestFead != null) {
 			Integer intGestFead = 0;
 			if (gestFead == true) {
@@ -212,51 +212,67 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			Predicate isGestDonPredicate = criteriaBuilder.equal(tuser.get("gestDon"), intGestDon);
 			predicates.add(isGestDonPredicate);
-		} 
+		}
 		if (hasLogins != null) {
 			Predicate hasLoginsPredicate = criteriaBuilder.equal(tuser.get("nbLogins"), 0);
-			if (hasLogins== true) {
-				hasLoginsPredicate = criteriaBuilder.gt(tuser.get("nbLogins"), 0);				
+			if (hasLogins == true) {
+				hasLoginsPredicate = criteriaBuilder.gt(tuser.get("nbLogins"), 0);
 			}
 			predicates.add(hasLoginsPredicate);
+		}
+		if (hasAnomalies != null) {
+			if (hasAnomalies.equals("2")) {
+				Predicate memberFoundPredicate = criteriaBuilder.isNotNull(tuser.get("membreNom"));
+				predicates.add(memberFoundPredicate);
+				Expression<String> e = criteriaBuilder.concat(tuser.get("membreNom"), " ");
+				e = criteriaBuilder.concat(e, tuser.get("membrePrenom"));
+				Predicate notEqualUserNamePredicate = criteriaBuilder.notEqual(tuser.get("userName"), e);
+				predicates.add(notEqualUserNamePredicate);
+			} else {
+				Predicate memberNotFoundPredicate = criteriaBuilder.isNull(tuser.get("membreNom"));
+				predicates.add(memberNotFoundPredicate);
+			}
+
 		}
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));
 
 		TypedQuery<TUser> query = entityManager.createQuery(tuserQuery);
-        long countResult =  query.getResultList().size(); // todo: delete this expensive statement and replace it by a count query
-        // as commented out below if I can make it work with a join
+		long countResult = query.getResultList().size(); // todo: delete this expensive statement and replace it by a
+															// count query
+		// as commented out below if I can make it work with a join
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
 
-	/* CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-	   tuser = totalCriteriaQuery.from(TUser.class);		
-	   membre = tuser.join("membreObject");
-		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
-		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(TUser.class)));
-		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		long countResult = countQuery.getSingleResult(); */
+		/*
+		 * CriteriaQuery<Long> totalCriteriaQuery =
+		 * criteriaBuilder.createQuery(Long.class); tuser =
+		 * totalCriteriaQuery.from(TUser.class); membre = tuser.join("membreObject");
+		 * totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		 * totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(TUser
+		 * .class))); TypedQuery<Long> countQuery =
+		 * entityManager.createQuery(totalCriteriaQuery); long countResult =
+		 * countQuery.getSingleResult();
+		 */
 
 		List<TUser> resultList = query.getResultList();
 		return new PageImpl<>(resultList, pageable, countResult);
-		
-	}
 
+	}
 
 	@Override
 	public Iterable<TUser> findAll() {
 		return TUserRepository.findAll();
 	}
 
-
 	@Override
 	public Iterable<TUser> findByLienBanque(Short lienBanque) {
 		return TUserRepository.findByLienBanque(lienBanque);
 	}
 
-
 	@Override
 	public Iterable<TUser> findByIdOrg(Integer idOrgInteger) {
 		return TUserRepository.findByIdOrg(idOrgInteger);
 	}
+
 }

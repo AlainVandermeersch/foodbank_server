@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.TUser;
-import foodbank.it.service.IBanqueService;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
 import foodbank.it.web.dto.TUserDto;
@@ -34,11 +32,9 @@ import foodbank.it.web.dto.TUserDto;
 public class TUserController {
 
 	private ITUserService TUserService;
-	private IBanqueService BanqueService;
-
-	public TUserController(ITUserService TUserService, IBanqueService BanqueService) {
-		this.TUserService = TUserService;
-		this.BanqueService = BanqueService;
+	
+	public TUserController(ITUserService TUserService) {
+		this.TUserService = TUserService;		
 	}
 
 	//
@@ -52,7 +48,8 @@ public class TUserController {
 
 	@GetMapping("usersall/")
 	public Collection<TUserDto> findAll(@RequestParam(required = false) String lienBanque,
-			@RequestParam(required = false) String idOrg) {
+			@RequestParam(required = false) String idOrg
+			) {
 		List<TUser> selectedTUsers;
 		Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort)
 				.orElse(null);
@@ -61,12 +58,12 @@ public class TUserController {
 				.orElse(null);
 		if (idOrg != null) {
 			selectedTUsers = (List<TUser>) this.TUserService.findByIdOrg(idOrgInteger);
-		} else {
-			if (lienBanque != null) {
+		} 
+		else if (lienBanque != null) {
 				selectedTUsers = (List<TUser>) this.TUserService.findByLienBanque(lienBanqueShort);
-			} else {
-				selectedTUsers = (List<TUser>) this.TUserService.findAll();
 			}
+		else {
+			selectedTUsers = (List<TUser>) this.TUserService.findAll();
 		}
 		long nbOfSelectedTusers = selectedTUsers.size();
 
@@ -77,13 +74,14 @@ public class TUserController {
 	@GetMapping("users/")
 	public Collection<TUserDto> find(@RequestParam String offset, @RequestParam String rows,
 			@RequestParam String sortField, @RequestParam String sortOrder,
-			@RequestParam(required = false) String idUser, @RequestParam(required = false) String membreNom,
-			@RequestParam(required = false) String membreLangue, @RequestParam(required = false) String idCompany,
-			@RequestParam(required = false) String membreEmail, @RequestParam(required = false) String rights,
+			@RequestParam(required = false) String idUser, @RequestParam(required = false) String userName,
+			@RequestParam(required = false) String idLanguage, @RequestParam(required = false) String idCompany,
+			@RequestParam(required = false) String email, @RequestParam(required = false) String rights,
 			@RequestParam(required = false) String lienDepot, @RequestParam(required = false) Boolean actif,
 			@RequestParam(required = false) Boolean droit1, @RequestParam(required = false) Boolean gestMemb,
 			@RequestParam(required = false) Boolean gestBen, @RequestParam(required = false) Boolean gestFead,
 			@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
+			@RequestParam(required = false) String hasAnomalies,
 			@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
@@ -103,11 +101,10 @@ public class TUserController {
 				.orElse(null);
 		Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
-		Integer membreLangueInteger = Optional.ofNullable(membreLangue).filter(str -> !str.isEmpty())
-				.map(Integer::parseInt).orElse(null);
-		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, membreNom, actif, membreLangueInteger,
-				membreEmail, rights, droit1, gestMemb, gestBen, gestFead, gestDon, lienBanqueInteger, idOrgInteger,
-				lienDepotInteger, idCompany, hasLogins);
+	
+		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, userName, actif, idLanguage,
+				email, rights, droit1, gestMemb, gestBen, gestFead, gestDon, lienBanqueInteger, idOrgInteger,
+				lienDepotInteger, idCompany, hasLogins, hasAnomalies);
 		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 
@@ -175,22 +172,13 @@ public class TUserController {
 
 		}
 
-		// for performance, query executed only for dto selection
-		String membreBankShortname = entity.getIdCompany();
-		Short membreLienBanque = entity.getMembreLienBanque();
-		if (membreLienBanque != null) {
-			Banque memberBanque = this.BanqueService.findByBankId(membreLienBanque).orElse(null);
-			if (memberBanque != null) {
-				membreBankShortname = memberBanque.getBankShortName();
-			}
-			;
-		}
+		
 		TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(),
 				entity.getIdLanguage(), entity.getLienBat(), booActif, caseCorrectedRights, entity.getPassword(),
 				entity.getDepot(), booDroit1, entity.getEmail(), booGestBen, booGestInv, booGestFead, booGestAsso,
 				booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(), entity.getSociete(),
 				entity.getMembreNom(), entity.getMembrePrenom(), entity.getMembreEmail(), entity.getMembreLangue(),
-				membreBankShortname, nbOfLogins, totalRecords);
+				entity.getMembreBankShortname(), nbOfLogins, totalRecords);
 		return dto;
 	}
 

@@ -78,8 +78,8 @@ public class TUser implements Serializable {
     private String membreEmail;
     @Formula("(select e.langue from bat e where e.bat_ID = lien_bat)")
     private Short membreLangue;
-    @Formula("(select e.lien_banque from bat e where e.bat_ID = lien_bat)")
-    private Short membreLienBanque;
+    @Formula("(select b.bank_short_name from banques b,bat e  where e.bat_ID = lien_bat and e.lien_banque = b.bank_id )")
+    private String membreBankShortname;
     @Formula("(select count(*) from audit a where a.user = ID_USER and year(a.date_in) > 2020)")
     long nbLogins;
     
@@ -192,10 +192,10 @@ public class TUser implements Serializable {
 		return membreLangue;
 	}
 
-	
+		
 
-	public Short getMembreLienBanque() {
-		return membreLienBanque;
+	public String getMembreBankShortname() {
+		return membreBankShortname;
 	}
 
 	/**

@@ -13,8 +13,7 @@ public interface ITUserService {
 		Iterable<TUser> findByLienBanque(Short lienBanque);
 		TUser save(TUser TUser,  boolean booCreateMode) throws Exception;
 	    void delete(String idUser);
-		Iterable<TUser> findByIdOrg(Integer idOrgInteger);	
-
+		Iterable<TUser> findByIdOrg(Integer idOrgInteger);			 
 	}
 	
 
