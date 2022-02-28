@@ -155,7 +155,7 @@ public class MembreController {
 				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
 				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),
-				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),totalRecords  );    
+				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),entity.getNbUsers(),totalRecords  );    
         return dto;
     }
 

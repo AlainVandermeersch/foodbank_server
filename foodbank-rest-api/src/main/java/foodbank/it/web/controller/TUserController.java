@@ -48,7 +48,8 @@ public class TUserController {
 
 	@GetMapping("usersall/")
 	public Collection<TUserDto> findAll(@RequestParam(required = false) String lienBanque,
-			@RequestParam(required = false) String idOrg
+			@RequestParam(required = false) String idOrg,
+			@RequestParam(required = false) String lienBat
 			) {
 		List<TUser> selectedTUsers;
 		Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort)
@@ -56,7 +57,12 @@ public class TUserController {
 
 		Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
-		if (idOrg != null) {
+		Integer lienBatInteger = Optional.ofNullable(lienBat).filter(str -> !str.isEmpty()).map(Integer::parseInt)
+				.orElse(null);
+		if (lienBat != null) {
+			selectedTUsers = (List<TUser>) this.TUserService.findByLienBat(lienBatInteger);
+		} 
+		else if (idOrg != null) {
 			selectedTUsers = (List<TUser>) this.TUserService.findByIdOrg(idOrgInteger);
 		} 
 		else if (lienBanque != null) {

@@ -228,7 +228,19 @@ public class TUserServiceImpl implements ITUserService {
 				e = criteriaBuilder.concat(e, tuser.get("membrePrenom"));
 				Predicate notEqualUserNamePredicate = criteriaBuilder.notEqual(tuser.get("userName"), e);
 				predicates.add(notEqualUserNamePredicate);
-			} else {
+			} else if (hasAnomalies.equals("3")) {
+				Predicate memberFoundPredicate = criteriaBuilder.isNotNull(tuser.get("membreNom"));
+				predicates.add(memberFoundPredicate);
+				Predicate notEqualEmailPredicate = criteriaBuilder.notEqual(tuser.get("email"), tuser.get("membreEmail"));
+				predicates.add(notEqualEmailPredicate);
+			}
+			else if (hasAnomalies.equals("4")) {
+				Predicate memberFoundPredicate = criteriaBuilder.isNotNull(tuser.get("membreNom"));
+				predicates.add(memberFoundPredicate);
+				Predicate notEqualCompanyPredicate = criteriaBuilder.notEqual(tuser.get("idCompany"), tuser.get("membreBankShortname"));
+				predicates.add(notEqualCompanyPredicate);
+			}
+			else { 
 				Predicate memberNotFoundPredicate = criteriaBuilder.isNull(tuser.get("membreNom"));
 				predicates.add(memberNotFoundPredicate);
 			}
@@ -268,6 +280,10 @@ public class TUserServiceImpl implements ITUserService {
 	@Override
 	public Iterable<TUser> findByLienBanque(Short lienBanque) {
 		return TUserRepository.findByLienBanque(lienBanque);
+	}
+	@Override
+	public Iterable<TUser> findByLienBat(int lienBat) {
+		return TUserRepository.findByLienBat(lienBat);
 	}
 
 	@Override

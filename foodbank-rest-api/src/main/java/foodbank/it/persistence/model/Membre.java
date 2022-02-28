@@ -112,6 +112,8 @@ public class Membre implements Serializable {
  private String lienDepot;
  @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
  private String bankShortName;
+ @Formula("(select count(*) from t_user u where u.lien_bat = bat_ID)")
+ long nbUsers;
 
 
  /** Default constructor. */
@@ -818,6 +820,11 @@ public String getLienDepot() {
 
 public String getBankShortName() {
 	return bankShortName;
+}
+
+
+public long getNbUsers() {
+	return nbUsers;
 }
 
 /**
