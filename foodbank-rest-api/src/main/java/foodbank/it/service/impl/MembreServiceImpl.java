@@ -256,6 +256,15 @@ public class MembreServiceImpl implements IMembreService{
 				Predicate emailNonUniquePredicate = criteriaBuilder.gt(membre.get("nbDuplicateEmails"), 1);
 				predicates.add(emailNonUniquePredicate);
 			}
+			/* else if (hasAnomalies.equals("3")) {
+				CriteriaQuery<Object[]> subQuery = criteriaBuilder.createQuery(Object[].class);
+				subQuery.multiselect(membre.get("nom"), membre.get("prenom"),criteriaBuilder.count(membre));
+				subQuery.groupBy(membre.get("nom"), membre.get("prenom"));
+				subQuery.having(criteriaBuilder.gt(criteriaBuilder.count(membre),1));
+				predicates.add((Predicate) subQuery);
+			}
+			*/
+		
 		}
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
 		membreQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), membre, criteriaBuilder));
