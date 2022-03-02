@@ -162,10 +162,12 @@ public class MembreServiceImpl implements IMembreService{
 		String address = searchCriteria.getAddress();
 		String zip = searchCriteria.getZip();
 		String city = searchCriteria.getCity();
+		String batmail = searchCriteria.getBatmail();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String bankShortName = searchCriteria.getBankShortName();
+		String hasAnomalies = searchCriteria.getHasAnomalies();
 
 		if (nom != null ) {			
 
@@ -186,6 +188,11 @@ public class MembreServiceImpl implements IMembreService{
 
 			Predicate cityPredicate = criteriaBuilder.like(membre.get("city"), "%" + city.toLowerCase() + "%");
 			predicates.add(cityPredicate);
+		}
+		if (batmail != null ) {			
+
+			Predicate batmailPredicate = criteriaBuilder.like(membre.get("batmail"), "%" + batmail.toLowerCase() + "%");
+			predicates.add(batmailPredicate);
 		}
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
@@ -234,7 +241,22 @@ public class MembreServiceImpl implements IMembreService{
 			Predicate isActifPredicate = criteriaBuilder.equal(membre.get("actif"), intActive);
 			predicates.add(isActifPredicate);
 		} 
-
+		if (hasAnomalies != null) {
+			if (hasAnomalies.equals("1")) {
+				Predicate emailNullPredicate = criteriaBuilder.isNull(membre.get("batmail"));
+				Predicate emailBlankPredicate = criteriaBuilder.equal(membre.get("batmail"), "");
+				Predicate emailAbsentPredicate = criteriaBuilder.or(emailNullPredicate,emailBlankPredicate);
+				predicates.add(emailAbsentPredicate);
+			}
+			else if (hasAnomalies.equals("2")) {
+				Predicate emailPresentPredicate = criteriaBuilder.isNotNull(membre.get("batmail"));
+				predicates.add(emailPresentPredicate);
+				Predicate emailNotBlankPredicate = criteriaBuilder.notEqual(membre.get("batmail"),"");
+				predicates.add(emailNotBlankPredicate);
+				Predicate emailNonUniquePredicate = criteriaBuilder.gt(membre.get("nbDuplicateEmails"), 1);
+				predicates.add(emailNonUniquePredicate);
+			}
+		}
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
 		membreQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), membre, criteriaBuilder));
 

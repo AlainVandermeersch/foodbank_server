@@ -10,18 +10,22 @@ public class SearchMembreCriteria {
 	private Integer lienDis;
 	private Integer lienDepot;
 	private String bankShortName;
+	private String batmail;
+	private String hasAnomalies;
 	
-	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, 
-			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName) {
+	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, String batmail,
+			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,String hasAnomalies) {
 		this.nom = nom;		
 		this.actif = actif;
 		this.address = address;
 		this.zip = zip;
 		this.city = city;
+		this.batmail = batmail;
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;
 		this.lienDepot = lienDepot;
 		this.bankShortName = bankShortName;
+		this.hasAnomalies = hasAnomalies;
 	}
 
 	
@@ -86,6 +90,18 @@ public class SearchMembreCriteria {
 
 
 
+	public String getBatmail() {
+		return batmail;
+	}
+
+
+
+	public void setBatmail(String batmail) {
+		this.batmail = batmail;
+	}
+
+
+
 	public Integer getLienBanque() {
 		return lienBanque;
 	}
@@ -120,6 +136,18 @@ public class SearchMembreCriteria {
 
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
+	}
+
+
+
+	public String getHasAnomalies() {
+		return hasAnomalies;
+	}
+
+
+
+	public void setHasAnomalies(String hasAnomalies) {
+		this.hasAnomalies = hasAnomalies;
 	}
 	
 
