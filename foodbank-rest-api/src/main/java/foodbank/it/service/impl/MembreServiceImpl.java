@@ -6,10 +6,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -256,17 +253,21 @@ public class MembreServiceImpl implements IMembreService{
 				Predicate emailNonUniquePredicate = criteriaBuilder.gt(membre.get("nbDuplicateEmails"), 1);
 				predicates.add(emailNonUniquePredicate);
 			}
-			/* else if (hasAnomalies.equals("3")) {
-				CriteriaQuery<Object[]> subQuery = criteriaBuilder.createQuery(Object[].class);
-				subQuery.multiselect(membre.get("nom"), membre.get("prenom"),criteriaBuilder.count(membre));
-				subQuery.groupBy(membre.get("nom"), membre.get("prenom"));
-				subQuery.having(criteriaBuilder.gt(criteriaBuilder.count(membre),1));
-				predicates.add((Predicate) subQuery);
+			else if (hasAnomalies.equals("3")) {
+				Subquery<Long> subQuery = membreQuery.subquery(Long.class);
+				Root<Membre> subqueryMembre = subQuery.from(Membre.class);
+
+				subQuery.select(criteriaBuilder.count(membre))
+						.where(criteriaBuilder.equal(subqueryMembre.get("nom"), membre.get("nom")),
+								criteriaBuilder.equal(subqueryMembre.get("prenom"), membre.get("prenom")))
+						.groupBy(subqueryMembre.get("nom"), subqueryMembre.get("prenom"));
+
+				predicates.add(criteriaBuilder.greaterThan(subQuery, 1L));
 			}
-			*/
+
 		
 		}
-		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
+		membreQuery.where(predicates.toArray(new Predicate[0]));
 		membreQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), membre, criteriaBuilder));
 
 		TypedQuery<Membre> query = entityManager.createQuery(membreQuery);
@@ -274,7 +275,7 @@ public class MembreServiceImpl implements IMembreService{
 		query.setMaxResults(pageable.getPageSize());
 
 		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.where(predicates.toArray(new Predicate[0]));
 		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Membre.class)));
         TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
         long countResult = countQuery.getSingleResult();
