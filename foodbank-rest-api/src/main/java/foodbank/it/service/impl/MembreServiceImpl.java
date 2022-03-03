@@ -246,12 +246,17 @@ public class MembreServiceImpl implements IMembreService{
 				predicates.add(emailAbsentPredicate);
 			}
 			else if (hasAnomalies.equals("2")) {
-				Predicate emailPresentPredicate = criteriaBuilder.isNotNull(membre.get("batmail"));
-				predicates.add(emailPresentPredicate);
-				Predicate emailNotBlankPredicate = criteriaBuilder.notEqual(membre.get("batmail"),"");
-				predicates.add(emailNotBlankPredicate);
-				Predicate emailNonUniquePredicate = criteriaBuilder.gt(membre.get("nbDuplicateEmails"), 1);
-				predicates.add(emailNonUniquePredicate);
+				Subquery<Long> subQuery = membreQuery.subquery(Long.class);
+				Root<Membre> subqueryMembre = subQuery.from(Membre.class);
+
+				subQuery.select(criteriaBuilder.count(membre))
+						.where(criteriaBuilder.isNotNull(membre.get("batmail")),
+								criteriaBuilder.notEqual(membre.get("batmail"),""),
+								criteriaBuilder.equal(subqueryMembre.get("batmail"), membre.get("batmail"))
+						)
+						.groupBy(subqueryMembre.get("batmail"));
+
+				predicates.add(criteriaBuilder.greaterThan(subQuery, 1L));
 			}
 			else if (hasAnomalies.equals("3")) {
 				Subquery<Long> subQuery = membreQuery.subquery(Long.class);

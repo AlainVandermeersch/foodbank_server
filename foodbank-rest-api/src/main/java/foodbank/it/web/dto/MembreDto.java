@@ -77,7 +77,6 @@ public class MembreDto {
 	 
 	 private String bankShortName;
 	 private long nbUsers;
-	 private long nbDuplicateEmails;
 	 
 	 private Long  totalRecords;
 	 
@@ -92,7 +91,7 @@ public class MembreDto {
 			Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
 			Integer lDep,LocalDateTime lastVisit, Short lienBanque,String societe,String bankShortName,
-			long nbUsers, long nbDuplicateEmails, Long  totalRecords) {
+			long nbUsers, Long  totalRecords) {
 		super();
 		this.batId = batId;
 		this.lienDis = lienDis;
@@ -140,7 +139,6 @@ public class MembreDto {
 		this.societe = societe;
 		this.bankShortName = bankShortName;
 		this.nbUsers = nbUsers;
-		this.nbDuplicateEmails = nbDuplicateEmails;
 		this.totalRecords = totalRecords;
 	}
 
@@ -465,16 +463,6 @@ public class MembreDto {
 
 	public void setNbUsers(long nbUsers) {
 		this.nbUsers = nbUsers;
-	}
-	
-	
-
-	public long getNbDuplicateEmails() {
-		return nbDuplicateEmails;
-	}
-
-	public void setNbDuplicateEmails(long nbDuplicateEmails) {
-		this.nbDuplicateEmails = nbDuplicateEmails;
 	}
 
 	public Long  getTotalRecords() {
