@@ -114,9 +114,6 @@ public class Membre implements Serializable {
  private String bankShortName;
  @Formula("(select count(*) from t_user u where u.lien_bat = bat_ID)")
  long nbUsers;
- @Formula("(select count(*) from bat b where b.batmail = batmail)")
- long nbDuplicateEmails;
-
 
  /** Default constructor. */
  public Membre() {
@@ -827,12 +824,6 @@ public String getBankShortName() {
 
 public long getNbUsers() {
 	return nbUsers;
-}
-
-
-
-public long getNbDuplicateEmails() {
-	return nbDuplicateEmails;
 }
 
 /**
