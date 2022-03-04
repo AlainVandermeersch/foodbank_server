@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +32,8 @@ import foodbank.it.web.dto.TUserDto;
 public class TUserController {
 
 	private ITUserService TUserService;
-	
+	private static final BCrypt.Hasher HASHER = BCrypt.with(BCrypt.Version.VERSION_2Y);
+	public static final int HASH_COST = 10;
 	public TUserController(ITUserService TUserService) {
 		this.TUserService = TUserService;		
 	}
@@ -140,9 +141,10 @@ public class TUserController {
 	@PostMapping("user/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public TUserDto create(@RequestBody TUserDto newTUser) {
-		TUser entity = convertToEntity(newTUser);
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		entity.setPassword(passwordEncoder.encode(newTUser.getPassword()));
+		TUser entity = convertToEntity(newTUser);		
+		String password = newTUser.getPassword();
+		String hashedPassword = HASHER.hashToString(HASH_COST, password.toCharArray());
+		entity.setPassword(hashedPassword);
 		boolean booCreateMode = true;
 		try {
 			TUser tuser = this.TUserService.save(entity, booCreateMode);
