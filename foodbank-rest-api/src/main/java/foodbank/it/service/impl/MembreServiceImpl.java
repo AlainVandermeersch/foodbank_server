@@ -192,8 +192,15 @@ public class MembreServiceImpl implements IMembreService{
 			predicates.add(batmailPredicate);
 		}
 		if (lienBanque != null) {
-			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
-			predicates.add(lienBanquePredicate);
+			if (lienBanque == 999)
+			{
+				Predicate lienBanqueNullPredicate = criteriaBuilder.isNull(membre.get("lienBanque"));
+				predicates.add(lienBanqueNullPredicate);
+			}
+			else {
+				Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
+				predicates.add(lienBanquePredicate);
+			}
 		}
 		if (bankShortName != null) {
 			Predicate lienBankShortNamePredicate = criteriaBuilder.equal(membre.get("bankShortName"), bankShortName);

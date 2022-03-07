@@ -130,9 +130,17 @@ public class TUserServiceImpl implements ITUserService {
 			predicates.add(rightsPredicate);
 		}
 		if (idCompany != null) {
-
-			Predicate idCompanyPredicate = criteriaBuilder.equal(tuser.get("idCompany"), idCompany);
-			predicates.add(idCompanyPredicate);
+			if (idCompany.equals("???"))
+			{
+				Predicate idCompanyNullPredicate = criteriaBuilder.isNull(tuser.get("idCompany"));
+				Predicate idCompanyEmptyPredicate = criteriaBuilder.equal(tuser.get("idCompany"),"");
+				Predicate idCompanyNullOrEmptyPredicate = criteriaBuilder.or(idCompanyNullPredicate,idCompanyEmptyPredicate);
+				predicates.add(idCompanyNullOrEmptyPredicate);
+			}
+			else {
+				Predicate idCompanyPredicate = criteriaBuilder.equal(tuser.get("idCompany"), idCompany);
+				predicates.add(idCompanyPredicate);
+			}
 		}
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), lienBanque);
