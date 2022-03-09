@@ -290,9 +290,10 @@ public class OrganisationController {
     }
 
     protected Organisation convertToEntity(OrganisationDto dto) {
-    	  // Note daten field means is reverse of Agreed	    
+    	  // Note daten field means is reverse of Agreed
+    	  // Organisation name field ( societe) is always converted to uppercase
     	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getBirbCode(), dto.getLienDepot(),
-				dto.getSociete(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
+				dto.getSociete().toUpperCase(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
 				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), (short) (dto.getAgreed() ? 0 : 1), dto.getBanque(),
 				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), (short) (dto.getActif() ? 1 : 0), dto.getCivilite(), dto.getNom(),
 				dto.getPrenom(), dto.getCiviliteVp(), dto.getPrenomVp(), dto.getNomVp(), dto.getTelVp(), dto.getGsmVp(),
