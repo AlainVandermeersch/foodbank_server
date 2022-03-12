@@ -1,10 +1,18 @@
 package foodbank.it.service.impl;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Service;
@@ -22,10 +30,19 @@ public class PopulationServiceImpl implements IPopulationService {
 
 	@Override
 	public List<PopulationReportDto> report() {
+		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<PopulationReportDto> populationQuery = criteriaBuilder.createQuery(PopulationReportDto.class);
 		Root<Population> population = populationQuery.from(Population.class);
+		List<Predicate> predicates = new ArrayList<>();
 		
+		Expression<Integer> expressionDate = criteriaBuilder.function("DAYOFMONTH", Integer.class, population.get("dateStat"));
+		Predicate firstDayOfMonthPredicate = criteriaBuilder.equal(expressionDate, 1);
+		predicates.add(firstDayOfMonthPredicate);
+		// LocalDate beginDate = LocalDate.of(2022, 2, 15);
+		// Predicate fromDatePredicate = criteriaBuilder.greaterThanOrEqualTo(population.get("dateStat"), beginDate);
+		// predicates.add(fromDatePredicate);
+		populationQuery.where(predicates.stream().toArray(Predicate[]::new));
 		populationQuery.groupBy(population.get("dateStat"), population.get("lienBanque"));
 		populationQuery.multiselect(population.get("dateStat"), population.get("lienBanque"),
 		criteriaBuilder.sum(population.get("nFam")),
@@ -39,7 +56,8 @@ public class PopulationServiceImpl implements IPopulationService {
 		);
 		populationQuery.orderBy(criteriaBuilder.asc(population.get("dateStat")),
 		  criteriaBuilder.asc(population.get("lienBanque")));
-		List<PopulationReportDto> results = entityManager.createQuery(populationQuery).getResultList();
+		TypedQuery<PopulationReportDto> query = entityManager.createQuery(populationQuery);
+		List<PopulationReportDto> results = query.getResultList();
 
 		return results;
 	}

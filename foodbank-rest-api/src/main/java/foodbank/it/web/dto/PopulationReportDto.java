@@ -5,26 +5,26 @@ import java.time.LocalDate;
 public class PopulationReportDto {
 	  private LocalDate dateStat;
 	  private Integer lienBanque;
-	  private long nFam;
+	  private Long nFam;
 	  
-	    private long nPers;
+	    private Long nPers;
 	    
-	    private long nNour;
+	    private Long nNour;
 	  
-	    private long nBebe;
+	    private Long nBebe;
 	    
-	    private long nEnf;
+	    private Long nEnf;
 	    
-	    private long nAdo;
+	    private Long nAdo;
 	   
-	    private long n1824;
+	    private Long n1824;
 	   
 	   
-	    private long nSen;
+	    private Long nSen;
 
 
-		public PopulationReportDto(LocalDate dateStat, Integer lienBanque, long nFam, long nPers, long nNour, long nBebe,
-				long nEnf, long nAdo, long n1824, long nSen) {
+		public PopulationReportDto(LocalDate dateStat, Integer lienBanque, Long nFam, Long nPers, Long nNour, Long nBebe,
+				Long nEnf, Long nAdo, Long n1824, Long nSen) {
 			super();
 			this.dateStat = dateStat;
 			this.lienBanque = lienBanque;
@@ -74,83 +74,131 @@ public class PopulationReportDto {
 
 
 
-		public long getnFam() {
+		public Long getnFam() {
 			return nFam;
 		}
 
 
-		public void setnFam(long nFam) {
+
+
+
+		public void setnFam(Long nFam) {
 			this.nFam = nFam;
 		}
 
 
-		public long getnPers() {
+
+
+
+		public Long getnPers() {
 			return nPers;
 		}
 
 
-		public void setnPers(long nPers) {
+
+
+
+		public void setnPers(Long nPers) {
 			this.nPers = nPers;
 		}
 
 
-		public long getnNour() {
+
+
+
+		public Long getnNour() {
 			return nNour;
 		}
 
 
-		public void setnNour(long nNour) {
+
+
+
+		public void setnNour(Long nNour) {
 			this.nNour = nNour;
 		}
 
 
-		public long getnBebe() {
+
+
+
+		public Long getnBebe() {
 			return nBebe;
 		}
 
 
-		public void setnBebe(long nBebe) {
+
+
+
+		public void setnBebe(Long nBebe) {
 			this.nBebe = nBebe;
 		}
 
 
-		public long getnEnf() {
+
+
+
+		public Long getnEnf() {
 			return nEnf;
 		}
 
 
-		public void setnEnf(long nEnf) {
+
+
+
+		public void setnEnf(Long nEnf) {
 			this.nEnf = nEnf;
 		}
 
 
-		public long getnAdo() {
+
+
+
+		public Long getnAdo() {
 			return nAdo;
 		}
 
 
-		public void setnAdo(long nAdo) {
+
+
+
+		public void setnAdo(Long nAdo) {
 			this.nAdo = nAdo;
 		}
 
 
-		public long getN1824() {
+
+
+
+		public Long getN1824() {
 			return n1824;
 		}
 
 
-		public void setN1824(long n1824) {
+
+
+
+		public void setN1824(Long n1824) {
 			this.n1824 = n1824;
 		}
 
 
-		public long getnSen() {
+
+
+
+		public Long getnSen() {
 			return nSen;
 		}
 
 
-		public void setnSen(long nSen) {
+
+
+
+		public void setnSen(Long nSen) {
 			this.nSen = nSen;
 		}
-	    
+
+
+
+
 }

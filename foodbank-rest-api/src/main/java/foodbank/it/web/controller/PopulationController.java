@@ -9,8 +9,10 @@ import foodbank.it.service.IPopulationService;
 @RestController
 public class PopulationController {
 	 private IPopulationService PopulationService;
-	
-	@GetMapping("PopulationReport/")
+	 public PopulationController(IPopulationService PopulationService) {
+	        this.PopulationService = PopulationService;
+	 }
+	@GetMapping("populationReport/")
     public List<PopulationReportDto> PopulationReport(    		
     		) {
     	
