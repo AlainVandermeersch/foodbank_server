@@ -183,7 +183,7 @@ public class MailServiceImpl implements IMailService {
 	}
 
 	protected MailAddressDto convertUserToMailAddress(TUser user, Organisation org) {
-		String orgName = user.getRights();
+		String orgName = user.getIdOrg() + " " + user.getSociete();
 		if (org != null) {
 			orgName = org.getIdDis() + " " + org.getSociete() ;
 		}
