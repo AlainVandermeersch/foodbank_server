@@ -13,6 +13,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import foodbank.it.persistence.model.Membre;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.persistence.model.Organisation;
@@ -32,11 +33,7 @@ public class MailServiceImpl implements IMailService {
 
 	@Override
 	public List<MailAddressDto> find(SearchMailListCriteria searchCriteria) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
-		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
 
-		List<Predicate> predicates = new ArrayList<>();
 
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
@@ -46,11 +43,23 @@ public class MailServiceImpl implements IMailService {
 		String target = searchCriteria.getTarget();
 		Boolean isDepot = searchCriteria.getIsDepot();
 		Integer langue = searchCriteria.getLangue();
-		if (target != null && (target.contains("3") || target.contains("4") )) {
-			// we want select Bank users
-			return this.retrieveMailAdressesOfBankUsers(lienBanque, target);
-		} else {
+		switch(target) {
 
+			case "0":  // applies to both bank users and org users
+				return this.retrieveMailAdressesOfBankOrgs(lienBanque);
+			case "4":
+			case "5":
+				return this.retrieveMailAdressesOfBankUsers(lienBanque, target);
+			case "6":
+				return this.retrieveMailAdressesOfBankMembers(lienBanque);
+			default:
+		}
+//  on target 1, 2,3 Org filters need to be applied
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
+		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
+
+		List<Predicate> predicates = new ArrayList<>();
 			if (lienBanque != null) {
 				Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 				predicates.add(lienBanquePredicate);
@@ -103,7 +112,7 @@ public class MailServiceImpl implements IMailService {
 
 			TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
 			List<Organisation> selectedOrganisations = query.getResultList();
-			if (target == null) {
+			if (target.equals("0")) {
 				return selectedOrganisations.stream().map(org -> convertOrganisationToMailAddressContactDto(org))
 						.collect(Collectors.toList());
 			} else {
@@ -113,12 +122,18 @@ public class MailServiceImpl implements IMailService {
 				// simple iteration
 				while (iterator.hasNext()) {
 					Organisation org = iterator.next();
-					returnedDtos.addAll(convertOrganisationToMailAddressPersonDto(org, target, langue));
+					if ((target.equals("1")) || (target.equals("2"))) {
+						returnedDtos.addAll(convertOrganisationToMailAddressUserDto(org, target, langue));
+					}
+					else { // must be target 3
+						returnedDtos.addAll(convertOrganisationToMailAddressMembreDto(org, langue));
+					}
 				}
 				return returnedDtos;
 			}
 		}
-	}
+
+
 
 	protected MailAddressDto convertOrganisationToMailAddressContactDto(Organisation org) {
 
@@ -127,8 +142,8 @@ public class MailServiceImpl implements IMailService {
 		return dto;
 	}
 
-	protected List<MailAddressDto> convertOrganisationToMailAddressPersonDto(Organisation org, String target,
-			Integer langue) {
+	protected List<MailAddressDto> convertOrganisationToMailAddressUserDto(Organisation org, String target,
+																		   Integer langue) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
@@ -155,6 +170,52 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedUsers.stream().map(user -> convertUserToMailAddress(user, org)).collect(Collectors.toList());
 	}
+	protected List<MailAddressDto> convertOrganisationToMailAddressMembreDto(Organisation org, Integer langue) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
+		Root<Membre> membre = membreQuery.from(Membre.class);
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate idOrgPredicate = criteriaBuilder.equal(membre.get("lienDis"), org.getIdDis());
+		predicates.add(idOrgPredicate);
+		Predicate isActifPredicate = criteriaBuilder.equal(membre.get("actif"), 1);
+		predicates.add(isActifPredicate);
+		if (langue != null) {
+			Predicate languePredicate = criteriaBuilder.equal(membre.get("langue"), langue);
+			predicates.add(languePredicate);
+		}
+
+
+		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
+		membreQuery.orderBy(criteriaBuilder.asc(membre.get("nom")),criteriaBuilder.asc(membre.get("prenom")));
+
+		TypedQuery<Membre> query = entityManager.createQuery(membreQuery);
+		List<Membre> selectedUsers = query.getResultList();
+
+		return selectedUsers.stream().map(mbr -> convertMembreToMailAddress(mbr,org)).collect(Collectors.toList());
+	}
+	protected List<MailAddressDto> retrieveMailAdressesOfBankOrgs(Integer lienBanque) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
+		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
+		List<Predicate> predicates = new ArrayList<>();
+		if (lienBanque != null) {
+			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
+			predicates.add(lienBanquePredicate);
+		}
+		Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), 1);
+		predicates.add(isActifPredicate);
+
+
+		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
+		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("idDis")));
+
+		TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
+		List<Organisation> selectedOrganisations = query.getResultList();
+
+		return selectedOrganisations.stream().map(org -> convertOrganisationToMailAddressContactDto(org)).collect(Collectors.toList());
+	}
 	protected List<MailAddressDto> retrieveMailAdressesOfBankUsers(Integer lienBanque, String target) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
@@ -169,7 +230,7 @@ public class MailServiceImpl implements IMailService {
 		predicates.add(isActifPredicate);
 		
 		Predicate rightsPredicate = criteriaBuilder.equal(tuser.get("rights"), "Admin_Banq");
-		if (target.equals("4")) {
+		if (target.equals("5")) {
 			rightsPredicate = criteriaBuilder.equal(tuser.get("idOrg"), 0);			
 		}
 		predicates.add(rightsPredicate);
@@ -181,6 +242,28 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedUsers.stream().map(user -> convertUserToMailAddress(user, null)).collect(Collectors.toList());
 	}
+	protected List<MailAddressDto> retrieveMailAdressesOfBankMembers(Integer lienBanque) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
+		Root<Membre> membre = membreQuery.from(Membre.class);
+		List<Predicate> predicates = new ArrayList<>();
+		if (lienBanque != null) {
+			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
+			predicates.add(lienBanquePredicate);
+		}
+		Predicate isActifPredicate = criteriaBuilder.equal(membre.get("actif"), 1);
+		predicates.add(isActifPredicate);
+
+
+		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
+		membreQuery.orderBy(criteriaBuilder.asc(membre.get("nom")),criteriaBuilder.asc(membre.get("prenom")));
+
+		TypedQuery<Membre> query = entityManager.createQuery(membreQuery);
+		List<Membre> selectedUsers = query.getResultList();
+
+		return selectedUsers.stream().map(user -> convertMembreToMailAddress(user, null)).collect(Collectors.toList());
+	}
 
 	protected MailAddressDto convertUserToMailAddress(TUser user, Organisation org) {
 		String orgName = user.getIdCompany();
@@ -189,6 +272,15 @@ public class MailServiceImpl implements IMailService {
 		}
 		MailAddressDto dto = new MailAddressDto(orgName, user.getMembreNom(),
 				user.getMembrePrenom(), user.getEmail());
+		return dto;
+	}
+	protected MailAddressDto convertMembreToMailAddress(Membre membre, Organisation org) {
+		String orgName = membre.getBankShortName();
+		if (org != null) {
+			orgName = org.getIdDis() + " " + org.getSociete() ;
+		}
+		MailAddressDto dto = new MailAddressDto(orgName, membre.getNom(),
+				membre.getPrenom(), membre.getBatmail());
 		return dto;
 	}
 }
