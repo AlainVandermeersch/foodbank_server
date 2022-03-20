@@ -13,9 +13,8 @@ public interface IBanqueService {
 
     Banque save(Banque Banque);
 
-    Iterable<Banque> findAll();
+    Iterable<Banque> findAll(Boolean classicBanks);
     Iterable<Banque> findByActif(short actif);
-
     void delete(int bankId) throws Exception;
 	List<BanqueCountDto> reportOrgCount(Boolean hasBirbCode);
 	List<BanqueOrgReportDto> reportOrgs();

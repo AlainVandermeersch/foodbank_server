@@ -101,6 +101,7 @@ public class TUserServiceImpl implements ITUserService {
 		String idCompany = searchCriteria.getIdCompany();
 		Boolean hasLogins = searchCriteria.getHasLogins();
 		String hasAnomalies = searchCriteria.getHasAnomalies();
+		Boolean classicBanks = searchCriteria.getClassicBanks();
 
 		if (idUser != null) {
 
@@ -227,6 +228,10 @@ public class TUserServiceImpl implements ITUserService {
 				hasLoginsPredicate = criteriaBuilder.gt(tuser.get("nbLogins"), 0);
 			}
 			predicates.add(hasLoginsPredicate);
+		}
+		if (classicBanks != null) {
+			Predicate lienBanqueClassicPredicate = criteriaBuilder.lessThan(tuser.get("lienBanque"), 11);
+			predicates.add(lienBanqueClassicPredicate);
 		}
 		if (hasAnomalies != null) {
 			if (hasAnomalies.equals("2")) {

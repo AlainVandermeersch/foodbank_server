@@ -88,7 +88,7 @@ public class TUserController {
 			@RequestParam(required = false) Boolean droit1, @RequestParam(required = false) Boolean gestMemb,
 			@RequestParam(required = false) Boolean gestBen, @RequestParam(required = false) Boolean gestFead,
 			@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
-			@RequestParam(required = false) String hasAnomalies,
+			@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
 			@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
@@ -111,7 +111,7 @@ public class TUserController {
 	
 		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, userName, actif, idLanguage,
 				email, rights, droit1, gestMemb, gestBen, gestFead, gestDon, lienBanqueInteger, idOrgInteger,
-				lienDepotInteger, idCompany, hasLogins, hasAnomalies);
+				lienDepotInteger, idCompany, hasLogins, hasAnomalies, classicBanks );
 		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 

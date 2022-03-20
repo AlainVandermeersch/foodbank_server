@@ -43,7 +43,7 @@ public class MembreServiceImpl implements IMembreService{
     @Transactional
     public Membre save(Membre membre, boolean booCreateMode) throws Exception {  
     	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    	if (booCreateMode == true) {    		
+    	if (booCreateMode) {
         	CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
         	Root<Membre> existingMembre = totalCriteriaQuery.from(Membre.class);
     		List<Predicate> predicates = new ArrayList<>();
@@ -165,6 +165,7 @@ public class MembreServiceImpl implements IMembreService{
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String bankShortName = searchCriteria.getBankShortName();
 		String hasAnomalies = searchCriteria.getHasAnomalies();
+		Boolean classicBanks = searchCriteria.getClassicBanks();
 
 		if (nom != null ) {			
 
@@ -239,12 +240,16 @@ public class MembreServiceImpl implements IMembreService{
 		}
 		if (actif != null) {
 			Integer intActive = 0;
-			if (actif == true) {
+			if (actif) {
 				intActive = 1;
 			}
 			Predicate isActifPredicate = criteriaBuilder.equal(membre.get("actif"), intActive);
 			predicates.add(isActifPredicate);
-		} 
+		}
+		if (classicBanks != null) {
+			Predicate lienBanqueClassicPredicate = criteriaBuilder.lessThan(membre.get("lienBanque"), 11);
+			predicates.add(lienBanqueClassicPredicate);
+		}
 		if (hasAnomalies != null) {
 			if (hasAnomalies.equals("1")) {
 				Predicate emailNullPredicate = criteriaBuilder.isNull(membre.get("batmail"));

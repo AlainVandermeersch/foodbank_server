@@ -12,9 +12,10 @@ public class SearchMembreCriteria {
 	private String bankShortName;
 	private String batmail;
 	private String hasAnomalies;
+	private Boolean classicBanks;
 	
 	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, String batmail,
-			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,String hasAnomalies) {
+			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,String hasAnomalies, Boolean classicBanks) {
 		this.nom = nom;		
 		this.actif = actif;
 		this.address = address;
@@ -26,6 +27,7 @@ public class SearchMembreCriteria {
 		this.lienDepot = lienDepot;
 		this.bankShortName = bankShortName;
 		this.hasAnomalies = hasAnomalies;
+		this.classicBanks = classicBanks;
 	}
 
 	
@@ -149,7 +151,12 @@ public class SearchMembreCriteria {
 	public void setHasAnomalies(String hasAnomalies) {
 		this.hasAnomalies = hasAnomalies;
 	}
-	
 
-	
+	public Boolean getClassicBanks() {
+		return classicBanks;
+	}
+
+	public void setClassicBanks(Boolean classicBanks) {
+		this.classicBanks = classicBanks;
+	}
 }

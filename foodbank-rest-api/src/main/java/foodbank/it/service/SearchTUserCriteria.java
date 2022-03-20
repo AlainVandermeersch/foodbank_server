@@ -19,9 +19,10 @@ public class SearchTUserCriteria {
 	private String idCompany;
 	private Boolean hasLogins;
 	private String hasAnomalies;
+	private Boolean classicBanks;
 	public SearchTUserCriteria(String idUser, String userName,Boolean actif, String  idLanguage,String email,String rights, 
 			Boolean droit1, Boolean gestMemb, Boolean gestBen, Boolean gestFead, Boolean gestDon,
-			Integer lienBanque, Integer idOrg,Integer lienDepot, String idCompany,Boolean hasLogins,String hasAnomalies) {
+			Integer lienBanque, Integer idOrg,Integer lienDepot, String idCompany,Boolean hasLogins,String hasAnomalies, Boolean classicBanks) {
 		this.idUser = idUser;
 		this.userName = userName;		
 		this.actif = actif;
@@ -39,6 +40,7 @@ public class SearchTUserCriteria {
 		this.idCompany = idCompany;
 		this.hasLogins = hasLogins;
 		this.hasAnomalies = hasAnomalies;
+		this.classicBanks = classicBanks;
 	}
 
 	
@@ -209,18 +211,20 @@ public class SearchTUserCriteria {
 		this.hasLogins = hasLogins;
 	}
 
-
-
 	public String getHasAnomalies() {
 		return hasAnomalies;
 	}
-
-
 
 	public void setHasAnomalies(String hasAnomalies) {
 		this.hasAnomalies = hasAnomalies;
 	}
 
-	
+	public Boolean getClassicBanks() {
+		return classicBanks;
+	}
+
+	public void setClassicBanks(Boolean classicBanks) {
+		this.classicBanks = classicBanks;
+	}
 	
 }

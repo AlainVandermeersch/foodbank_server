@@ -11,4 +11,5 @@ public interface IBanqueRepository extends CrudRepository<Banque, Integer>{
     Iterable<Banque> findByActif(short actif);
     void deleteByBankId(int bankId);
 
+    Iterable<Banque> findByBankIdLessThan(int i);
 }

@@ -45,11 +45,14 @@ public class BanqueController {
 
 
     @GetMapping("banques/")
-    public Collection<BanqueDto> find( @RequestParam(required = false) String bankShortName) {
+    public Collection<BanqueDto> find(
+            @RequestParam( required = false) String bankShortName,
+            @RequestParam( required = false) Boolean classicBanks
+    ) {
         List<BanqueDto> BanqueDtos = new ArrayList<>();
         if (bankShortName == null) {
-        	Iterable<Banque> selectedBanques = this.BanqueService.findAll();
-        	selectedBanques.forEach(p -> BanqueDtos.add(convertToDto(p)));
+               Iterable<Banque> selectedBanques = this.BanqueService.findAll(classicBanks);
+                selectedBanques.forEach(p -> BanqueDtos.add(convertToDto(p)));
         }
         else {
         	Optional<Banque> myBanque = this.BanqueService.findByBankShortName(bankShortName);
