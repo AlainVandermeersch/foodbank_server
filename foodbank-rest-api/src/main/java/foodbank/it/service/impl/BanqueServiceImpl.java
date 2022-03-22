@@ -103,7 +103,8 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(isValidBankPredicate);
 		Predicate lienBanqueClassicPredicate = criteriaBuilder.lessThan(membre.get("lienBanque"), 11);
 		predicates.add(lienBanqueClassicPredicate);
-		
+		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(membre.get("lienBanque"), 1);
+		predicates.add(lienBanqueNotNullPredicate);
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
 		membreQuery.groupBy(membre.get("lienBanque"));
 		membreQuery.multiselect(membre.get("bankShortName"), criteriaBuilder.count(membre));
@@ -126,6 +127,8 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(isValidBankPredicate);
 		Predicate lienBanqueClassicPredicate = criteriaBuilder.lessThan(tuser.get("lienBanque"), 11);
 		predicates.add(lienBanqueClassicPredicate);
+		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(tuser.get("lienBanque"), 1);
+		predicates.add(lienBanqueNotNullPredicate);
 		
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.groupBy(tuser.get("idCompany"));
@@ -149,6 +152,8 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(isValidBankPredicate);
 		Predicate lienBanqueClassicPredicate = criteriaBuilder.lessThan(organisation.get("lienBanque"), 11);
 		predicates.add(lienBanqueClassicPredicate);
+		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(organisation.get("lienBanque"), 1);
+		predicates.add(lienBanqueNotNullPredicate);
 		if (hasBirbCode != null) {
 			Predicate hasBirbCodePredicate = criteriaBuilder.greaterThan(organisation.get("birbCode"), 0);
 			predicates.add(hasBirbCodePredicate);
@@ -175,6 +180,8 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(isValidBankPredicate);
 		Predicate lienBanqueClassicPredicate = criteriaBuilder.lessThan(organisation.get("lienBanque"), 11);
 		predicates.add(lienBanqueClassicPredicate);
+		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(organisation.get("lienBanque"), 1);
+		predicates.add(lienBanqueNotNullPredicate);
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
 		organisationQuery.groupBy(organisation.get("lienBanque"));
 		organisationQuery.multiselect(organisation.get("bankShortName"), criteriaBuilder.count(organisation),
