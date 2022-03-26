@@ -9,5 +9,5 @@ public interface ITypeEmploiRepository extends CrudRepository<TypeEmploi, Intege
     Optional<TypeEmploi> findByJobNr(int jobNr);
     TypeEmploi save(TypeEmploi TypeEmploi);
     Iterable<TypeEmploi> findAll();
-    void delete(int jobNr) throws Exception;
+    void deleteByJobNr(int jobNr) throws Exception;
 }

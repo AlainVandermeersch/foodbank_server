@@ -17,7 +17,6 @@ import foodbank.it.service.IFunctionService;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -27,23 +26,25 @@ public class FunctionController {
     public FunctionController(IFunctionService functionService) {
         this.FunctionService = functionService;
     }
-    @GetMapping("function/{funcId}")
+
+    @GetMapping("membrefunction/{funcId}")
     public FunctionDto findOne(@PathVariable Integer funcId) {
         Function entity = FunctionService.findByFuncId(funcId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return convertToDto(entity);
     }
-    @GetMapping("functions/")
+    @GetMapping("membrefunctions/")
     public Collection<FunctionDto> find(
             @RequestParam(required = false) Boolean actif,
-            @RequestParam(required = false) String lienBanque) {
+            @RequestParam(required = false) String lienBanque,
+            @RequestParam String language) {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         List<FunctionDto> functionDtos = new ArrayList<>();
-        Iterable<Function> selectedFunctions = this.FunctionService.findAll(lienBanqueInteger,actif);
+        Iterable<Function> selectedFunctions = this.FunctionService.findAll(lienBanqueInteger,actif,language);
         selectedFunctions.forEach(p -> functionDtos.add(convertToDto(p)));
         return functionDtos;
     }
-    @PutMapping("function/{funcId}")
+    @PutMapping("membrefunction/{funcId}")
     public FunctionDto updateFunction(@PathVariable("funcId") Integer funcId, @RequestBody FunctionDto updatedFunction) {
         Function entity = convertToEntity(updatedFunction);
         boolean booCreateMode = false;
@@ -57,7 +58,7 @@ public class FunctionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    @PostMapping("function/")
+    @PostMapping("membrefunction/")
     @ResponseStatus(HttpStatus.CREATED)
     public FunctionDto create(@RequestBody FunctionDto newFunction) {
         Function entity = convertToEntity(newFunction);
@@ -73,11 +74,11 @@ public class FunctionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    @DeleteMapping("function/{funcId}")
+    @DeleteMapping("membrefunction/{funcId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMembre(@PathVariable("funcId") Integer funcId) {
         try {
-            this.FunctionService.delete(funcId);
+            this.FunctionService.deleteByFuncId(funcId);
         }
         catch (Exception ex) {
             String errorMsg = ex.getMessage();

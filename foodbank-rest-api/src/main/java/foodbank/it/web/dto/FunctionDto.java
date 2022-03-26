@@ -1,6 +1,5 @@
 package foodbank.it.web.dto;
 
-import javax.persistence.Column;
 
 public class FunctionDto {
     private int funcId;

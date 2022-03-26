@@ -37,7 +37,7 @@ public class FunctionServiceImpl implements IFunctionService {
     }
 
     @Override
-    public Iterable<Function> findAll(Integer lienBanque,Boolean actif) {
+    public Iterable<Function> findAll(Integer lienBanque,Boolean actif,String language) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Function> functionQuery = criteriaBuilder.createQuery(Function.class);
         Root<Function> function = functionQuery.from(Function.class);
@@ -55,14 +55,20 @@ public class FunctionServiceImpl implements IFunctionService {
             predicates.add(isActifPredicate);
         }
         functionQuery.where(predicates.stream().toArray(Predicate[]::new));
-        functionQuery.orderBy(criteriaBuilder.asc(function.get("funcId")));
+        if (language.equals("fr")) {
+            functionQuery.orderBy(criteriaBuilder.asc(function.get("fonctionName")));
+        }
+        else {
+            functionQuery.orderBy(criteriaBuilder.asc(function.get("fonctionNameNl")));
+        }
         TypedQuery<Function> query = entityManager.createQuery(functionQuery);
+
         List<Function> resultList = query.getResultList();
         return resultList;
     }
     @Override
     @Transactional
-    public void delete(int funcId) throws Exception {
-        this.FunctionRepository.delete(funcId);
+    public void deleteByFuncId(int funcId) throws Exception {
+        this.FunctionRepository.deleteByFuncId(funcId);
     }
 }

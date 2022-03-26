@@ -17,7 +17,6 @@ import foodbank.it.service.ITypeEmploiService;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -27,23 +26,24 @@ public class TypeEmploiController {
     public TypeEmploiController(ITypeEmploiService functionService) {
         this.TypeEmploiService = functionService;
     }
-    @GetMapping("function/{jobNr}")
+    @GetMapping("membretypeemploi/{jobNr}")
     public TypeEmploiDto findOne(@PathVariable Integer jobNr) {
         TypeEmploi entity = TypeEmploiService.findByJobNr(jobNr)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return convertToDto(entity);
     }
-    @GetMapping("functions/")
+    @GetMapping("membretypeemplois/")
     public Collection<TypeEmploiDto> find(
             @RequestParam(required = false) Boolean actif,
-            @RequestParam(required = false) String lienBanque) {
+            @RequestParam(required = false) String lienBanque,
+            @RequestParam String language) {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         List<TypeEmploiDto> functionDtos = new ArrayList<>();
-        Iterable<TypeEmploi> selectedTypeEmplois = this.TypeEmploiService.findAll(lienBanqueInteger,actif);
+        Iterable<TypeEmploi> selectedTypeEmplois = this.TypeEmploiService.findAll(lienBanqueInteger,actif,language);
         selectedTypeEmplois.forEach(p -> functionDtos.add(convertToDto(p)));
         return functionDtos;
     }
-    @PutMapping("function/{jobNr}")
+    @PutMapping("membretypeemploi/{jobNr}")
     public TypeEmploiDto updateTypeEmploi(@PathVariable("jobNr") Integer jobNr, @RequestBody TypeEmploiDto updatedTypeEmploi) {
         TypeEmploi entity = convertToEntity(updatedTypeEmploi);
         try {
@@ -56,7 +56,7 @@ public class TypeEmploiController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    @PostMapping("function/")
+    @PostMapping("membretypeemploi/")
     @ResponseStatus(HttpStatus.CREATED)
     public TypeEmploiDto create(@RequestBody TypeEmploiDto newTypeEmploi) {
         TypeEmploi entity = convertToEntity(newTypeEmploi);
@@ -71,11 +71,11 @@ public class TypeEmploiController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    @DeleteMapping("function/{jobNr}")
+    @DeleteMapping("membretypeemploi/{jobNr}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMembre(@PathVariable("jobNr") Integer jobNr) {
         try {
-            this.TypeEmploiService.delete(jobNr);
+            this.TypeEmploiService.deleteByJobNr(jobNr);
         }
         catch (Exception ex) {
             String errorMsg = ex.getMessage();

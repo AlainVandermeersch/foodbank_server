@@ -39,7 +39,7 @@ public class TypeEmploiServiceImpl implements ITypeEmploiService {
     }
 
     @Override
-    public Iterable<TypeEmploi> findAll(Integer lienBanque,Boolean actif) {
+    public Iterable<TypeEmploi> findAll(Integer lienBanque,Boolean actif,String language) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<TypeEmploi> typeEmploiQuery = criteriaBuilder.createQuery(TypeEmploi.class);
         Root<TypeEmploi> typeEmploi = typeEmploiQuery.from(TypeEmploi.class);
@@ -57,7 +57,12 @@ public class TypeEmploiServiceImpl implements ITypeEmploiService {
             predicates.add(isActifPredicate);
         }
         typeEmploiQuery.where(predicates.stream().toArray(Predicate[]::new));
-        typeEmploiQuery.orderBy(criteriaBuilder.asc(typeEmploi.get("jobNr")));
+        if (language.equals("fr")) {
+            typeEmploiQuery.orderBy(criteriaBuilder.asc(typeEmploi.get("jobNameFr")));
+        }
+        else {
+            typeEmploiQuery.orderBy(criteriaBuilder.asc(typeEmploi.get("jobNameNl")));
+        }
         TypedQuery<TypeEmploi> query = entityManager.createQuery(typeEmploiQuery);
         List<TypeEmploi> resultList = query.getResultList();
         return resultList;
@@ -67,7 +72,7 @@ public class TypeEmploiServiceImpl implements ITypeEmploiService {
 
     @Override
     @Transactional
-    public void delete(int jobNr) throws Exception {
-        this.TypeEmploiRepository.delete(jobNr);
+    public void deleteByJobNr(int jobNr) throws Exception {
+        this.TypeEmploiRepository.deleteByJobNr(jobNr);
     }
 }

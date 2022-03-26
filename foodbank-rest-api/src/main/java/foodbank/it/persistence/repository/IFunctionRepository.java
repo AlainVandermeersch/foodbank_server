@@ -9,5 +9,5 @@ public interface IFunctionRepository extends CrudRepository<Function, Integer> {
     Optional<Function> findByFuncId(int funcId);
     Function save(Function Function);
     Iterable<Function> findAll();
-    void delete(int funcId) throws Exception;
+    void deleteByFuncId(int funcId) throws Exception;
 }
