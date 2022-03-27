@@ -26,13 +26,13 @@ public class TypeEmploiController {
     public TypeEmploiController(ITypeEmploiService functionService) {
         this.TypeEmploiService = functionService;
     }
-    @GetMapping("membretypeemploi/{jobNr}")
+    @GetMapping("membreemploitype/{jobNr}")
     public TypeEmploiDto findOne(@PathVariable Integer jobNr) {
         TypeEmploi entity = TypeEmploiService.findByJobNr(jobNr)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return convertToDto(entity);
     }
-    @GetMapping("membretypeemplois/")
+    @GetMapping("membreemploitypes/")
     public Collection<TypeEmploiDto> find(
             @RequestParam(required = false) Boolean actif,
             @RequestParam(required = false) String lienBanque,
@@ -43,7 +43,7 @@ public class TypeEmploiController {
         selectedTypeEmplois.forEach(p -> functionDtos.add(convertToDto(p)));
         return functionDtos;
     }
-    @PutMapping("membretypeemploi/{jobNr}")
+    @PutMapping("membreemploitype/{jobNr}")
     public TypeEmploiDto updateTypeEmploi(@PathVariable("jobNr") Integer jobNr, @RequestBody TypeEmploiDto updatedTypeEmploi) {
         TypeEmploi entity = convertToEntity(updatedTypeEmploi);
         try {
@@ -56,7 +56,7 @@ public class TypeEmploiController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    @PostMapping("membretypeemploi/")
+    @PostMapping("membreemploitype/")
     @ResponseStatus(HttpStatus.CREATED)
     public TypeEmploiDto create(@RequestBody TypeEmploiDto newTypeEmploi) {
         TypeEmploi entity = convertToEntity(newTypeEmploi);
@@ -71,7 +71,7 @@ public class TypeEmploiController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
         }
     }
-    @DeleteMapping("membretypeemploi/{jobNr}")
+    @DeleteMapping("membreemploitype/{jobNr}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMembre(@PathVariable("jobNr") Integer jobNr) {
         try {

@@ -170,7 +170,9 @@ public class MembreServiceImpl implements IMembreService{
 		if (nom != null ) {			
 
 			Predicate nomPredicate = criteriaBuilder.like(membre.get("nom"), "%" + nom.toLowerCase() + "%");
-			predicates.add(nomPredicate);
+			Predicate prenomPredicate = criteriaBuilder.like(membre.get("prenom"), "%" + nom.toLowerCase() + "%");
+			Predicate fullNamePredicate = criteriaBuilder.or(nomPredicate,prenomPredicate);
+			predicates.add(fullNamePredicate);
 		}
 		if (address != null ) {			
 
