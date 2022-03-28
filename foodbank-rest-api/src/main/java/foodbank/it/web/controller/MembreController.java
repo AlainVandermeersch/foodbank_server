@@ -149,11 +149,15 @@ public class MembreController {
  
     protected MembreDto convertToDto(Membre entity,long totalRecords) {   
     	boolean booActif= entity.getActif() == 1;
+		boolean booBen= entity.getBen() == 1;
+		boolean booCa= entity.getCa() == 1;
+		boolean booAg= entity.getAg() == 1;
+		boolean booCg= entity.getCg() == 1;
     	
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
-				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), entity.getCa(), entity.getAg(), entity.getCg(),entity.getCivilite(), 
-				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  entity.getBen(),
+				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), booCa, booAg, booCg,entity.getCivilite(),
+				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  booBen,
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
 				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),
 				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),
@@ -166,10 +170,10 @@ public class MembreController {
     	    	    
     	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
-				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), dto.getCa(), dto.getAg(), dto.getCg(),dto.getCivilite(), 
-				dto.getPays(), (short) (dto.getActif() ? 1 : 0), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  dto.getBen(),
+				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), (short) (dto.isCa() ? 1 : 0), (short) (dto.isAg() ? 1 : 0), (short) (dto.isCg() ? 1 : 0),dto.getCivilite(),
+				dto.getPays(), (short) (dto.getActif() ? 1 : 0), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  (short) (dto.isBen() ? 1 : 0),
 				dto.getCodeAcces(), dto.getNrCodeAcces(), dto.getLangue(), dto.getDatedeb(), dto.getDateFin(), dto.getDeleted(),
-				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLDep(),dto.getLienBanque());       
+				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLdep(),dto.getLienBanque());
         if (!StringUtils.isEmpty(dto.getBatId())) {
             myMembre.setBatId(dto.getBatId());
         } 

@@ -32,11 +32,11 @@ public class MembreDto {
 	 
 	 private Integer fonction;
 	 
-	 private Short ca;
+	 private boolean ca;
 	 
-	 private Short ag;
+	 private boolean ag;
 	 
-	 private Short cg;
+	 private boolean cg;
 	 
 	 private Short civilite;
 	 
@@ -49,7 +49,7 @@ public class MembreDto {
 	 private String rem;
 	 private String lastVisit;
 	
-	 private Short ben;
+	 private boolean ben;
 	 
 	 private Short codeAcces;
 	 
@@ -70,7 +70,7 @@ public class MembreDto {
 	 
 	 private String dateContrat;
 	
-	 private Integer lDep;
+	 private Integer ldep;
 	 private Short lienBanque;
 	 
 	 private String societe; // calculated field from organisation object
@@ -86,11 +86,11 @@ public class MembreDto {
 	}
 
 	public MembreDto(Integer batId, Integer lienDis, String nom, String prenom, String address, String city, String zip,
-			String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction, Short ca,
-			Short ag, Short cg, Short civilite, Short pays, boolean actif, Short authority, String datmand, String rem,
-			Short ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
+			String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction, boolean ca,
+			boolean ag, boolean cg, Short civilite, Short pays, boolean actif, Short authority, String datmand, String rem,
+			boolean ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
-			Integer lDep,LocalDateTime lastVisit, Short lienBanque,String societe,String bankShortName,
+			Integer ldep,LocalDateTime lastVisit, Short lienBanque,String societe,String bankShortName,
 			long nbUsers, Long  totalRecords) {
 		super();
 		this.batId = batId;
@@ -134,7 +134,7 @@ public class MembreDto {
 		this.dateNaissance = dateNaissance;
 		this.nnat = nnat;
 		this.dateContrat = dateContrat;
-		this.lDep = lDep;
+		this.ldep = ldep;
 		this.lienBanque = lienBanque;
 		this.societe = societe;
 		this.bankShortName = bankShortName;
@@ -254,28 +254,40 @@ public class MembreDto {
 		this.fonction = fonction;
 	}
 
-	public Short getCa() {
+	public boolean isCa() {
 		return ca;
 	}
 
-	public void setCa(Short ca) {
+	public void setCa(boolean ca) {
 		this.ca = ca;
 	}
 
-	public Short getAg() {
+	public boolean isAg() {
 		return ag;
 	}
 
-	public void setAg(Short ag) {
+	public void setAg(boolean ag) {
 		this.ag = ag;
 	}
 
-	public Short getCg() {
+	public boolean isCg() {
 		return cg;
 	}
 
-	public void setCg(Short cg) {
+	public void setCg(boolean cg) {
 		this.cg = cg;
+	}
+
+	public boolean isActif() {
+		return actif;
+	}
+
+	public boolean isBen() {
+		return ben;
+	}
+
+	public void setBen(boolean ben) {
+		this.ben = ben;
 	}
 
 	public Short getCivilite() {
@@ -334,13 +346,7 @@ public class MembreDto {
 		this.lastVisit = lastVisit;
 	}
 
-	public Short getBen() {
-		return ben;
-	}
 
-	public void setBen(Short ben) {
-		this.ben = ben;
-	}
 
 	public Short getCodeAcces() {
 		return codeAcces;
@@ -422,12 +428,12 @@ public class MembreDto {
 		this.dateContrat = dateContrat;
 	}
 
-	public Integer getLDep() {
-		return lDep;
+	public Integer getLdep() {
+		return ldep;
 	}
 
 	public void setLDep(Integer lDep) {
-		this.lDep = lDep;
+		this.ldep = lDep;
 	}
 	
 	public Short getLienBanque() {
