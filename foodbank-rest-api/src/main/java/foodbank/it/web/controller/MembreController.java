@@ -173,7 +173,7 @@ public class MembreController {
 				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), (short) (dto.isCa() ? 1 : 0), (short) (dto.isAg() ? 1 : 0), (short) (dto.isCg() ? 1 : 0),dto.getCivilite(),
 				dto.getPays(), (short) (dto.getActif() ? 1 : 0), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  (short) (dto.isBen() ? 1 : 0),
 				dto.getCodeAcces(), dto.getNrCodeAcces(), dto.getLangue(), dto.getDatedeb(), dto.getDateFin(), dto.getDeleted(),
-				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getLdep(),dto.getLienBanque());
+				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getldep(),dto.getLienBanque());
         if (!StringUtils.isEmpty(dto.getBatId())) {
             myMembre.setBatId(dto.getBatId());
         } 

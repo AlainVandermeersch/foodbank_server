@@ -10,10 +10,10 @@ public class FunctionDto {
     private String rem;
     private Short lienBanque;
     private Integer lienDis;
-
+    private String bankShortName;
 
     public FunctionDto(int funcId, String fonctionName, String fonctionNameNl, String definitionFonction, boolean actif,
-                       String rem, Short lienBanque, Integer lienDis) {
+                       String rem, Short lienBanque, Integer lienDis, String bankShortName) {
         this.funcId = funcId;
         this.fonctionName = fonctionName;
         this.fonctionNameNl = fonctionNameNl;
@@ -22,6 +22,7 @@ public class FunctionDto {
         this.rem = rem;
         this.lienBanque = lienBanque;
         this.lienDis = lienDis;
+        this.bankShortName = bankShortName;
 
     }
 
@@ -89,5 +90,12 @@ public class FunctionDto {
         this.lienDis = lienDis;
     }
 
+    public String getBankShortName() {
+        return bankShortName;
+    }
+
+    public void setBankShortName(String bankShortName) {
+        this.bankShortName = bankShortName;
+    }
 
 }

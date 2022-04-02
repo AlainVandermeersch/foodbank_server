@@ -2,6 +2,8 @@
 
 package foodbank.it.persistence.model;
 
+import org.hibernate.annotations.Formula;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -34,6 +36,8 @@ public class Function implements Serializable {
     private Short lienBanque;
     @Column(name="lien_dis", precision=10)
     private Integer lienDis;
+    @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
+    private String bankShortName;
 
     public Function(int funcId, String fonctionName, String fonctionNameNl, String definitionFonction, short actif, String rem, Short lienBanque, Integer lienDis) {
         this.funcId = funcId;
@@ -172,5 +176,9 @@ public class Function implements Serializable {
 
     public void setLienDis(Integer lienDis) {
         this.lienDis = lienDis;
+    }
+    public String getBankShortName() {
+        if(bankShortName == null) return "STD";
+        return bankShortName;
     }
 }

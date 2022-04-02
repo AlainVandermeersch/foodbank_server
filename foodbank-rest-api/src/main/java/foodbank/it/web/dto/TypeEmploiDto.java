@@ -8,8 +8,10 @@ public class TypeEmploiDto {
     private boolean actif;
     private String jobNameEn;
     private String jobNameGe;
+    private String bankShortName;
 
-    public TypeEmploiDto(int jobNr, String jobNameFr, String jobNameNl, int lienBanque, boolean actif, String jobNameEn, String jobNameGe) {
+    public TypeEmploiDto(int jobNr, String jobNameFr, String jobNameNl, int lienBanque, boolean actif,
+                         String jobNameEn, String jobNameGe, String bankShortName) {
         this.jobNr = jobNr;
         this.jobNameFr = jobNameFr;
         this.jobNameNl = jobNameNl;
@@ -17,6 +19,7 @@ public class TypeEmploiDto {
         this.actif = actif;
         this.jobNameEn = jobNameEn;
         this.jobNameGe = jobNameGe;
+        this.bankShortName = bankShortName;
     }
 
     public int getJobNr() {
@@ -73,5 +76,13 @@ public class TypeEmploiDto {
 
     public void setJobNameGe(String jobNameGe) {
         this.jobNameGe = jobNameGe;
+    }
+
+    public String getBankShortName() {
+        return bankShortName;
+    }
+
+    public void setBankShortName(String bankShortName) {
+        this.bankShortName = bankShortName;
     }
 }

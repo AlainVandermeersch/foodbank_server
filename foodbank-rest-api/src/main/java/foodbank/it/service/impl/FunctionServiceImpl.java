@@ -43,14 +43,15 @@ public class FunctionServiceImpl implements IFunctionService {
         Root<Function> function = functionQuery.from(Function.class);
         List<Predicate> predicates = new ArrayList<>();
         if (lienBanque != null) {
-            Predicate lienBanqueSpecificPredicate = criteriaBuilder.equal(function.get("lienBanque"), lienBanque);
-            Predicate lienBanqueZeroPredicate = criteriaBuilder.equal(function.get("lienBanque"), 0);
-            Predicate lienBanquePredicate = criteriaBuilder.or(lienBanqueSpecificPredicate,lienBanqueZeroPredicate);
-            predicates.add(lienBanquePredicate);
-        }
-        else {
-            Predicate lienBanqueZeroPredicate = criteriaBuilder.equal(function.get("lienBanque"), 0);
-            predicates.add(lienBanqueZeroPredicate);
+            if (lienBanque > 0) {
+                Predicate lienBanqueSpecificPredicate = criteriaBuilder.equal(function.get("lienBanque"), lienBanque);
+                Predicate lienBanqueZeroPredicate = criteriaBuilder.equal(function.get("lienBanque"), 0);
+                Predicate lienBanquePredicate = criteriaBuilder.or(lienBanqueSpecificPredicate, lienBanqueZeroPredicate);
+                predicates.add(lienBanquePredicate);
+            } else {
+                Predicate lienBanqueZeroPredicate = criteriaBuilder.equal(function.get("lienBanque"), 0);
+                predicates.add(lienBanqueZeroPredicate);
+            }
         }
         if (actif != null) {
             Integer intActive = 0;

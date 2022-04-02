@@ -95,7 +95,7 @@ public class FunctionController {
     private FunctionDto convertToDto(Function entity) {
         boolean booActif= entity.getActif() == 1;
         FunctionDto dto = new FunctionDto(entity.getFuncId(), entity.getFonctionName(), entity.getFonctionNameNl(),
-        entity.getDefinitionFonction(),booActif, entity.getRem(), entity.getLienBanque(), entity.getLienDis());
+        entity.getDefinitionFonction(),booActif, entity.getRem(), entity.getLienBanque(), entity.getLienDis(), entity.getBankShortName());
         return dto;
     }
 }

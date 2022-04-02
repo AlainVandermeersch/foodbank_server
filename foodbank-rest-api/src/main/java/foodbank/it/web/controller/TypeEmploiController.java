@@ -92,7 +92,7 @@ public class TypeEmploiController {
     private TypeEmploiDto convertToDto(TypeEmploi entity) {
         boolean booActif= entity.getActif() == 1;
         TypeEmploiDto dto = new TypeEmploiDto(entity.getJobNr(), entity.getJobNameFr(), entity.getJobNameNl(),
-                entity.getLienBanque(),booActif, entity.getJobNameEn(), entity.getJobNameGe());
+                entity.getLienBanque(),booActif, entity.getJobNameEn(), entity.getJobNameGe(), entity.getBankShortName());
         return dto;
     }
 }

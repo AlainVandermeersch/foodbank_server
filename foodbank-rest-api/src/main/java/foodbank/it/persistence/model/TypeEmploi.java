@@ -2,6 +2,8 @@
 
 package foodbank.it.persistence.model;
 
+import org.hibernate.annotations.Formula;
+
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,6 +36,8 @@ public class TypeEmploi implements Serializable {
     private String jobNameEn;
     @Column(name="job_name_ge")
     private String jobNameGe;
+    @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
+    private String bankShortName;
     public TypeEmploi() {
         super();
     }
@@ -171,6 +175,11 @@ public class TypeEmploi implements Serializable {
      */
     public void setJobNameGe(String aJobNameGe) {
         jobNameGe = aJobNameGe;
+    }
+
+    public String getBankShortName() {
+        if(bankShortName == null) return "STD";
+        return bankShortName;
     }
 
     /**
