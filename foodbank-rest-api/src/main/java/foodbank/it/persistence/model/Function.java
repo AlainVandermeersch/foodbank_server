@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity(name="function")
-@javax.persistence.Table(name = "\"function\"")
+@javax.persistence.Table(name = "\"function\"" )
 // the escaping of table name function is needed because function is a reserved SQL keyword
 public class Function implements Serializable {
     /** Primary key. */

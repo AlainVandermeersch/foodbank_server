@@ -3,8 +3,11 @@ package foodbank.it.web.controller;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import foodbank.it.persistence.model.Function;
+import foodbank.it.persistence.repository.IFunctionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,11 +35,12 @@ import foodbank.it.web.dto.MembreDto;
 public class MembreController {
 	
 	private IMembreService MembreService;
+	private IFunctionRepository FunctionRepository;
 		
     
-    public MembreController(IMembreService MembreService) {
-        this.MembreService = MembreService;     
-       
+    public MembreController(IMembreService MembreService, IFunctionRepository FunctionRepository) {
+        this.MembreService = MembreService;
+		this.FunctionRepository = FunctionRepository;
     }
 
     @GetMapping("membre/{batId}")
@@ -75,6 +79,7 @@ public class MembreController {
      		@RequestParam(required = false) String city,@RequestParam(required = false) String lienDepot ,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String bankShortName,
      		@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
+	        @RequestParam(required = false) String fonctionName ,@RequestParam(required = false) String fonctionNameNl,
     		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -92,7 +97,7 @@ public class MembreController {
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, actif,address, zip,city, batmail,
-				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName, hasAnomalies, classicBanks );
+				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName,fonctionName,fonctionNameNl, hasAnomalies, classicBanks );
 		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 
@@ -153,6 +158,20 @@ public class MembreController {
 		boolean booCa= entity.getCa() == 1;
 		boolean booAg= entity.getAg() == 1;
 		boolean booCg= entity.getCg() == 1;
+		AtomicReference<String> functionNameFr = new AtomicReference<>("");
+		AtomicReference<String> functionNameNl = new AtomicReference<>("");
+        Integer fonction = entity.getFonction();
+		if (fonction != null) {
+			Optional<Function> myFunction = this.FunctionRepository.findByFuncId(fonction);
+			myFunction.ifPresent(
+					myFunc -> {
+						functionNameFr.set(myFunc.getBankShortName() + ' ' + myFunc.getFonctionName());
+						functionNameNl.set(myFunc.getBankShortName() + ' ' + myFunc.getFonctionNameNl());
+					}
+
+			);
+		}
+
     	
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
 				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
@@ -160,7 +179,7 @@ public class MembreController {
 				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  booBen,
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
 				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),
-				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),
+				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),String.valueOf(functionNameFr), String.valueOf(functionNameNl),
 				entity.getNbUsers(),totalRecords  );
         return dto;
     }

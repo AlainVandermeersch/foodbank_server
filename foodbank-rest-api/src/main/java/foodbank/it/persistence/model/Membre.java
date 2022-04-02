@@ -822,7 +822,8 @@ public String getBankShortName() {
 }
 
 
-public long getNbUsers() {
+
+ public long getNbUsers() {
 	return nbUsers;
 }
 

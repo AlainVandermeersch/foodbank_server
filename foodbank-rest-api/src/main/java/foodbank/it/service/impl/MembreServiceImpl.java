@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 
+import foodbank.it.persistence.model.Function;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,8 @@ public class MembreServiceImpl implements IMembreService{
 	private ITUserRepository TUserRepository;
 	private final EntityManager entityManager;
 	
-	public MembreServiceImpl(IMembreRepository MembreRepository,ITUserRepository TUserRepository, EntityManager entityManager) {
+	public MembreServiceImpl(IMembreRepository MembreRepository,ITUserRepository TUserRepository,
+							  EntityManager entityManager) {
         this.MembreRepository = MembreRepository;
         this.TUserRepository = TUserRepository;
         this.entityManager = entityManager;
@@ -152,6 +154,7 @@ public class MembreServiceImpl implements IMembreService{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
 		Root<Membre> membre = membreQuery.from(Membre.class);
+		// Join<Membre, Function> func = membre.join("fonction");
 		List<Predicate> predicates = new ArrayList<>();
 
 		String nom = searchCriteria.getNom();
@@ -164,6 +167,8 @@ public class MembreServiceImpl implements IMembreService{
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String bankShortName = searchCriteria.getBankShortName();
+		String fonctionName = searchCriteria.getFonctionName();
+		String fonctionNameNl = searchCriteria.getFonctionNameNl();
 		String hasAnomalies = searchCriteria.getHasAnomalies();
 		Boolean classicBanks = searchCriteria.getClassicBanks();
 
@@ -174,6 +179,7 @@ public class MembreServiceImpl implements IMembreService{
 			Predicate fullNamePredicate = criteriaBuilder.or(nomPredicate,prenomPredicate);
 			predicates.add(fullNamePredicate);
 		}
+
 		if (address != null ) {			
 
 			Predicate addressPredicate = criteriaBuilder.like(membre.get("address"), "%" + address.toLowerCase() + "%");
@@ -209,7 +215,17 @@ public class MembreServiceImpl implements IMembreService{
 			Predicate lienBankShortNamePredicate = criteriaBuilder.equal(membre.get("bankShortName"), bankShortName);
 			predicates.add(lienBankShortNamePredicate);
 		}
-		
+/*
+		if (fonctionName != null) {
+			Predicate fonctionNamePredicate = criteriaBuilder.like(func.get("fonctionName"), "%" + fonctionName.toLowerCase() + "%");
+			predicates.add(fonctionNamePredicate);
+		}
+		if (fonctionNameNl != null) {
+			Predicate fonctionNameNlPredicate = criteriaBuilder.like(func.get("fonctionNameNl"), "%" + fonctionNameNl.toLowerCase() + "%");
+			predicates.add(fonctionNameNlPredicate);
+		}
+
+ */
 
 		if (lienDis != null) {
 			System.out.printf("\nChecking Members with liendis: %d", lienDis);
@@ -299,6 +315,7 @@ public class MembreServiceImpl implements IMembreService{
         TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
         long countResult = countQuery.getSingleResult();
 		List<Membre> resultList = query.getResultList();
+
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
 	@Override

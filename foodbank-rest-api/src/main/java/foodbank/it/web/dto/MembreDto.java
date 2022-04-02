@@ -2,6 +2,7 @@ package foodbank.it.web.dto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MembreDto {
 	 private Integer batId;
@@ -76,6 +77,8 @@ public class MembreDto {
 	 private String societe; // calculated field from organisation object
 	 
 	 private String bankShortName;
+	 private String fonctionName;
+	 private String fonctionNameNl;
 	 private long nbUsers;
 	 
 	 private Long  totalRecords;
@@ -90,7 +93,7 @@ public class MembreDto {
 			boolean ag, boolean cg, Short civilite, Short pays, boolean actif, Short authority, String datmand, String rem,
 			boolean ben, Short codeAcces, Short nrCodeAcces, Short langue, String datedeb,
 			String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat, String dateContrat,
-			Integer ldep,LocalDateTime lastVisit, Short lienBanque,String societe,String bankShortName,
+			Integer ldep,LocalDateTime lastVisit, Short lienBanque,String societe,String bankShortName,String fonctionName,String fonctionNameNl,
 			long nbUsers, Long  totalRecords) {
 		super();
 		this.batId = batId;
@@ -138,11 +141,14 @@ public class MembreDto {
 		this.lienBanque = lienBanque;
 		this.societe = societe;
 		this.bankShortName = bankShortName;
+		this.fonctionName = fonctionName;
+		this.fonctionNameNl = fonctionNameNl;
 		this.nbUsers = nbUsers;
 		this.totalRecords = totalRecords;
 	}
 
-	public Integer getBatId() {
+
+    public Integer getBatId() {
 		return batId;
 	}
 
@@ -461,8 +467,23 @@ public class MembreDto {
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
 	}
-	
-	
+
+	public String getFonctionName() {
+		return fonctionName;
+	}
+
+	public void setFonctionName(String fonctionName) {
+		this.fonctionName = fonctionName;
+	}
+
+	public String getFonctionNameNl() {
+		return fonctionNameNl;
+	}
+
+	public void setFonctionNameNl(String fonctionNameNl) {
+		this.fonctionNameNl = fonctionNameNl;
+	}
+
 	public long getNbUsers() {
 		return nbUsers;
 	}
