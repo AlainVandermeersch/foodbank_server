@@ -10,14 +10,13 @@ public class SearchMembreCriteria {
 	private Integer lienDis;
 	private Integer lienDepot;
 	private String bankShortName;
-	private String fonctionName;
-	private String fonctionNameNl;
+	private Integer fonction;
 	private String batmail;
 	private String hasAnomalies;
 	private Boolean classicBanks;
 	
 	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, String batmail,
-			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,String fonctionName,String fonctionNameNl,
+			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,Integer fonction,
 								String hasAnomalies, Boolean classicBanks) {
 		this.nom = nom;		
 		this.actif = actif;
@@ -29,8 +28,7 @@ public class SearchMembreCriteria {
 		this.lienDis = lienDis;
 		this.lienDepot = lienDepot;
 		this.bankShortName = bankShortName;
-		this.fonctionName = fonctionName;
-		this.fonctionNameNl = fonctionNameNl;
+		this.fonction = fonction;
 		this.hasAnomalies = hasAnomalies;
 		this.classicBanks = classicBanks;
 	}
@@ -145,27 +143,17 @@ public class SearchMembreCriteria {
 		this.bankShortName = bankShortName;
 	}
 
-	public String getFonctionName() {
-		return fonctionName;
+	public Integer getFonction() {
+		return fonction;
 	}
 
-	public void setFonctionName(String fonctionName) {
-		this.fonctionName = fonctionName;
-	}
-
-	public String getFonctionNameNl() {
-		return fonctionNameNl;
-	}
-
-	public void setFonctionNameNl(String fonctionNameNl) {
-		this.fonctionNameNl = fonctionNameNl;
+	public void setFonction(Integer fonction) {
+		this.fonction = fonction;
 	}
 
 	public String getHasAnomalies() {
 		return hasAnomalies;
 	}
-
-
 
 	public void setHasAnomalies(String hasAnomalies) {
 		this.hasAnomalies = hasAnomalies;

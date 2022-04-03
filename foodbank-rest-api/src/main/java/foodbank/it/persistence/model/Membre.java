@@ -7,16 +7,11 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Formula;
-
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 @Entity
@@ -61,7 +56,7 @@ public class Membre implements Serializable {
  private String vehTyp;
  @Column(name="veh_imm", length=30)
  private String vehImm;
- @Column(precision=10)
+ @Column(precision=10,  insertable=false,updatable=false)
  private Integer fonction;
  @Column(precision=3)
  private Short ca;
@@ -114,6 +109,10 @@ public class Membre implements Serializable {
  private String bankShortName;
  @Formula("(select count(*) from t_user u where u.lien_bat = bat_ID)")
  long nbUsers;
+ @ManyToOne
+ @JoinColumn(name = "fonction")
+ @NotFound(action = NotFoundAction.IGNORE)
+ private Function fonctionObj;
 
  /** Default constructor. */
  public Membre() {
@@ -121,7 +120,7 @@ public class Membre implements Serializable {
  }
 
  public Membre(Integer batId, Integer lienDis, String nom, String prenom, String address, String city,
-		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Integer fonction,
+		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Function fonctionObj,
 		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand,
 		String rem, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
 		String datedeb, String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat,
@@ -140,7 +139,7 @@ public class Membre implements Serializable {
 	this.veh = veh;
 	this.vehTyp = vehTyp;
 	this.vehImm = vehImm;
-	this.fonction = fonction;
+	this.fonctionObj = fonctionObj;
 	this.ca = ca;
 	this.ag = ag;
 	this.cg = cg;
@@ -395,13 +394,12 @@ public class Membre implements Serializable {
      return fonction;
  }
 
- /**
-  * Setter method for fonction.
-  *
-  * @param aFonction the new value for fonction
-  */
- public void setFonction(Integer aFonction) {
-     fonction = aFonction;
+ public Function getFonctionObj() {
+  return fonctionObj;
+ }
+
+ public void setFonctionObj(Function fonctionObj) {
+  this.fonctionObj = fonctionObj;
  }
 
  /**

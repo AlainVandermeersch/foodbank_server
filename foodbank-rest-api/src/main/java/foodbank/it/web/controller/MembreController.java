@@ -79,7 +79,7 @@ public class MembreController {
      		@RequestParam(required = false) String city,@RequestParam(required = false) String lienDepot ,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String bankShortName,
      		@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
-	        @RequestParam(required = false) String fonctionName ,@RequestParam(required = false) String fonctionNameNl,
+	        @RequestParam(required = false) String fonction ,
     		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -96,8 +96,9 @@ public class MembreController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer fonctionInteger = Optional.ofNullable(fonction).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, actif,address, zip,city, batmail,
-				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName,fonctionName,fonctionNameNl, hasAnomalies, classicBanks );
+				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName,fonctionInteger, hasAnomalies, classicBanks );
 		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 
@@ -158,19 +159,16 @@ public class MembreController {
 		boolean booCa= entity.getCa() == 1;
 		boolean booAg= entity.getAg() == 1;
 		boolean booCg= entity.getCg() == 1;
-		AtomicReference<String> functionNameFr = new AtomicReference<>("");
-		AtomicReference<String> functionNameNl = new AtomicReference<>("");
-        Integer fonction = entity.getFonction();
-		if (fonction != null) {
-			Optional<Function> myFunction = this.FunctionRepository.findByFuncId(fonction);
-			myFunction.ifPresent(
-					myFunc -> {
-						functionNameFr.set(myFunc.getBankShortName() + ' ' + myFunc.getFonctionName());
-						functionNameNl.set(myFunc.getBankShortName() + ' ' + myFunc.getFonctionNameNl());
-					}
 
-			);
-		}
+		String functionNameFr = "";
+		String functionNameNl = "";
+		String functionType = "";
+		Function functionOfMember = entity.getFonctionObj();
+       if (functionOfMember != null) {
+		   functionNameFr = functionOfMember.getFonctionName();
+		   functionNameNl = functionOfMember.getFonctionNameNl();
+		   functionType = functionOfMember.getBankShortName();
+	   }
 
     	
         MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
@@ -179,17 +177,19 @@ public class MembreController {
 				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  booBen,
 				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
 				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),
-				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),String.valueOf(functionNameFr), String.valueOf(functionNameNl),
+				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),functionType,functionNameFr, functionNameNl,
 				entity.getNbUsers(),totalRecords  );
         return dto;
     }
 
-    protected Membre convertToEntity(MembreDto dto) {  
-    	
+    protected Membre convertToEntity(MembreDto dto) {
+		Function functionOfMembre = null;
+		Optional<Function> fonction = this.FunctionRepository.findByFuncId(dto.getFonction());
+		if (fonction.isPresent()) functionOfMembre = fonction.get();
     	    	    
     	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
-				dto.getVehTyp(), dto.getVehImm(), dto.getFonction(), (short) (dto.isCa() ? 1 : 0), (short) (dto.isAg() ? 1 : 0), (short) (dto.isCg() ? 1 : 0),dto.getCivilite(),
+				dto.getVehTyp(), dto.getVehImm(), functionOfMembre, (short) (dto.isCa() ? 1 : 0), (short) (dto.isAg() ? 1 : 0), (short) (dto.isCg() ? 1 : 0),dto.getCivilite(),
 				dto.getPays(), (short) (dto.getActif() ? 1 : 0), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  (short) (dto.isBen() ? 1 : 0),
 				dto.getCodeAcces(), dto.getNrCodeAcces(), dto.getLangue(), dto.getDatedeb(), dto.getDateFin(), dto.getDeleted(),
 				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getldep(),dto.getLienBanque());

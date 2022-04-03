@@ -154,7 +154,6 @@ public class MembreServiceImpl implements IMembreService{
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
 		Root<Membre> membre = membreQuery.from(Membre.class);
-		// Join<Membre, Function> func = membre.join("fonction");
 		List<Predicate> predicates = new ArrayList<>();
 
 		String nom = searchCriteria.getNom();
@@ -167,8 +166,7 @@ public class MembreServiceImpl implements IMembreService{
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String bankShortName = searchCriteria.getBankShortName();
-		String fonctionName = searchCriteria.getFonctionName();
-		String fonctionNameNl = searchCriteria.getFonctionNameNl();
+		Integer fonction = searchCriteria.getFonction();
 		String hasAnomalies = searchCriteria.getHasAnomalies();
 		Boolean classicBanks = searchCriteria.getClassicBanks();
 
@@ -215,17 +213,11 @@ public class MembreServiceImpl implements IMembreService{
 			Predicate lienBankShortNamePredicate = criteriaBuilder.equal(membre.get("bankShortName"), bankShortName);
 			predicates.add(lienBankShortNamePredicate);
 		}
-/*
-		if (fonctionName != null) {
-			Predicate fonctionNamePredicate = criteriaBuilder.like(func.get("fonctionName"), "%" + fonctionName.toLowerCase() + "%");
-			predicates.add(fonctionNamePredicate);
-		}
-		if (fonctionNameNl != null) {
-			Predicate fonctionNameNlPredicate = criteriaBuilder.like(func.get("fonctionNameNl"), "%" + fonctionNameNl.toLowerCase() + "%");
-			predicates.add(fonctionNameNlPredicate);
-		}
 
- */
+		if (fonction != null) {
+			Predicate fonctionPredicate = criteriaBuilder.equal(membre.get("fonction"), fonction);
+			predicates.add(fonctionPredicate);
+		}
 
 		if (lienDis != null) {
 			System.out.printf("\nChecking Members with liendis: %d", lienDis);
