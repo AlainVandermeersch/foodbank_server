@@ -184,9 +184,11 @@ public class MembreController {
 
     protected Membre convertToEntity(MembreDto dto) {
 		Function functionOfMembre = null;
-		Optional<Function> fonction = this.FunctionRepository.findByFuncId(dto.getFonction());
-		if (fonction.isPresent()) functionOfMembre = fonction.get();
-    	    	    
+		Integer funcId = dto.getFonction();
+		if (funcId != null) {
+			Optional<Function> fonction = this.FunctionRepository.findByFuncId(funcId);
+			if (fonction.isPresent()) functionOfMembre = fonction.get();
+		}
     	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
 				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
 				dto.getVehTyp(), dto.getVehImm(), functionOfMembre, (short) (dto.isCa() ? 1 : 0), (short) (dto.isAg() ? 1 : 0), (short) (dto.isCg() ? 1 : 0),dto.getCivilite(),
