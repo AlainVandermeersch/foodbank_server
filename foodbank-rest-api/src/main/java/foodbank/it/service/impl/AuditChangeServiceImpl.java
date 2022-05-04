@@ -102,7 +102,7 @@ public class AuditChangeServiceImpl implements IAuditChangeService {
 
         if (entity != null) {
 
-            Predicate entityPredicate = criteriaBuilder.like(auditChange.get("entity"), "%" + entity.toLowerCase() + "%");
+            Predicate entityPredicate = criteriaBuilder.equal(auditChange.get("entity"), entity);
             predicates.add(entityPredicate);
         }
         if (entity_key != null) {
@@ -112,7 +112,7 @@ public class AuditChangeServiceImpl implements IAuditChangeService {
         }
         if (action != null) {
 
-            Predicate actionPredicate = criteriaBuilder.like(auditChange.get("action"), "%" + action.toLowerCase() + "%");
+            Predicate actionPredicate = criteriaBuilder.equal(auditChange.get("action"),action);
             predicates.add(actionPredicate);
         }
 
