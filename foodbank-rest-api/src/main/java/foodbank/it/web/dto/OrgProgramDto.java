@@ -53,14 +53,14 @@ public class OrgProgramDto {
 	    private boolean congel;
 	    private String congelCap;
 	    
-	    private int auditor;
+	    private Integer auditor;
 	    private String dateAudit;
 	    private Long lastAudit;
 		public OrgProgramDto(int lienDis, int lienBanque, int lienDepot, boolean luam, boolean lupm, boolean tuam, boolean tupm,
 				boolean weam, boolean wepm, boolean tham, boolean thpm, boolean fram, boolean frpm, boolean saam, boolean sapm, boolean sunam, boolean sunpm,
 				String reluam, String relupm, String retuam, String retupm, String reweam, String rewepm, String retham,
 				String rethpm, String refram, String refrpm, String resaam, String resapm, String resunam,
-				String resunpm, boolean porc, boolean legFrais, boolean congel, String congelCap, int auditor, String dateAudit,
+				String resunpm, boolean porc, boolean legFrais, boolean congel, String congelCap, Integer auditor, String dateAudit,
 				Long lastAudit) {
 			super();
 			this.lienDis = lienDis;
@@ -312,10 +312,10 @@ public class OrgProgramDto {
 		public void setCongelCap(String congelCap) {
 			this.congelCap = congelCap;
 		}
-		public int getAuditor() {
+		public Integer getAuditor() {
 			return auditor;
 		}
-		public void setAuditor(int auditor) {
+		public void setAuditor(Integer auditor) {
 			this.auditor = auditor;
 		}
 		public String getDateAudit() {
