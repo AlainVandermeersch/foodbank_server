@@ -11,7 +11,7 @@ mkdir target
 cd target && \
     git clone https://github.com/AlainVandermeersch/foodbank-client.git && \
     cd foodbank-client && \
-    docker build -t foodbank-client --build-arg=prod .
+    docker build -t foodbank-client --build-arg=ovh-dev .
 
 cd $CURRENT_DIRECTORY
 rm -rf target/foodbank-client
@@ -28,12 +28,12 @@ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "$PWD:$PWD" \
     -w="$PWD" \
-    docker/compose:1.29.1 --env-file=.env.ovh-dev up -d --build backend
+    docker/compose:1.29.1 --env-file=.env.ovh-prod up -d --build backend
 docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "$PWD:$PWD" \
     -w="$PWD" \
-    docker/compose:1.29.1 --env-file=.env.ovh-dev up -d
+    docker/compose:1.29.1 --env-file=.env.ovh-prod up -d
 
 cd target/food-it && \
     /bin/bash deploy.sh --libext /home/ubuntu/lib-ext --password $WILDFLY_ADMIN_PASS
