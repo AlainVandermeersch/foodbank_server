@@ -28,12 +28,12 @@ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "$PWD:$PWD" \
     -w="$PWD" \
-    docker/compose:1.29.1 --env-file=.env.ovh-prod up -d --build backend
+    docker/compose:1.29.1 --env-file=.env.ovh-dev up -d --build backend
 docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "$PWD:$PWD" \
     -w="$PWD" \
-    docker/compose:1.29.1 --env-file=.env.ovh-prod up -d
+    docker/compose:1.29.1 --env-file=.env.ovh-dev up -d
 
 cd target/food-it && \
     /bin/bash deploy.sh --libext /home/ubuntu/lib-ext --password $WILDFLY_ADMIN_PASS
