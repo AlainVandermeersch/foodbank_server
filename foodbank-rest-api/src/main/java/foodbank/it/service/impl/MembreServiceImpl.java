@@ -9,7 +9,8 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 
-import foodbank.it.persistence.model.Function;
+import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.repository.IOrganisationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +29,14 @@ public class MembreServiceImpl implements IMembreService{
 
 	private IMembreRepository MembreRepository;
 	private ITUserRepository TUserRepository;
+	private IOrganisationRepository OrganisationRepository;
 	private final EntityManager entityManager;
 	
-	public MembreServiceImpl(IMembreRepository MembreRepository,ITUserRepository TUserRepository,
-							  EntityManager entityManager) {
+	public MembreServiceImpl(IMembreRepository MembreRepository, ITUserRepository TUserRepository, IOrganisationRepository OrganisationRepository,
+							 EntityManager entityManager) {
         this.MembreRepository = MembreRepository;
         this.TUserRepository = TUserRepository;
+		this.OrganisationRepository = OrganisationRepository;
         this.entityManager = entityManager;
     }
 	@Override
@@ -80,6 +83,15 @@ public class MembreServiceImpl implements IMembreService{
 
     	}
     	else {
+			// if lienbanque is null, pick lienbanque from organisation if there
+			if (membre.getLienBanque() == null) {
+				Integer idDis = membre.getLienDis();
+				Optional<Organisation> o = this.OrganisationRepository.findByIdDis(idDis);
+				o.ifPresent(myOrg -> {
+					membre.setLienBanque(myOrg.getLienBanque());
+					System.out.printf("\nReplacing in membre %s %s null value lienBanque with org lienbanque: %d", membre.getNom(),membre.getPrenom(),myOrg.getLienBanque());
+				});
+			}
     		// updating members we must update the duplicate User Name, E-Mail and Language fields in the Users pointing to the Member
     		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
     		Root<TUser> tuser = tuserQuery.from(TUser.class);		
