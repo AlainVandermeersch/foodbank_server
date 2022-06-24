@@ -13,7 +13,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.TUser;
+import foodbank.it.persistence.repository.IBanqueRepository;
 import foodbank.it.persistence.repository.ITUserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,10 +31,12 @@ import foodbank.it.service.SearchTUserCriteria;
 public class TUserServiceImpl implements ITUserService {
 
 	private ITUserRepository TUserRepository;
+	private IBanqueRepository BanqueRepository;
 	private final EntityManager entityManager;
 
-	public TUserServiceImpl(ITUserRepository TUserRepository, EntityManager entityManager) {
+	public TUserServiceImpl(ITUserRepository TUserRepository,IBanqueRepository BanqueRepository, EntityManager entityManager) {
 		this.TUserRepository = TUserRepository;
+		this.BanqueRepository = BanqueRepository;
 		this.entityManager = entityManager;
 
 	}
@@ -67,6 +71,8 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			// Backed Out tuser.setPassword(encoder.encode(tuser.getPassword()));
 		}
+		Optional<Banque> userBanque= BanqueRepository.findByBankShortName(tuser.getIdCompany());
+		userBanque.ifPresent(myBanque ->tuser.setLienBanque((short) myBanque.getBankId()));
 		return TUserRepository.save(tuser);
 	}
 
