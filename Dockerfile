@@ -9,4 +9,4 @@ RUN mvn -f /app/pom.xml clean install
 FROM openjdk:16-alpine
 ARG JAR_FILE=*.jar
 COPY --from=build /app/foodbank-rest-api/target/*.jar app.jar
-ENTRYPOINT ["java","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000","-jar","/app.jar"]
+ENTRYPOINT ["java","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000","-jar","/app.jar"]
