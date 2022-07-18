@@ -46,7 +46,7 @@ public class MailServiceImpl implements IMailService {
 		switch(target) {
 
 			case "0":  // applies to both bank users and org users
-				return this.retrieveMailAdressesOfBankOrgs(lienBanque);
+				return this.retrieveMailAdressesOfBankOrgs(lienBanque,lienDis);
 			case "4":
 			case "5":
 				return this.retrieveMailAdressesOfBankUsers(lienBanque, target);
@@ -194,7 +194,7 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedUsers.stream().map(mbr -> convertMembreToMailAddress(mbr,org)).collect(Collectors.toList());
 	}
-	protected List<MailAddressDto> retrieveMailAdressesOfBankOrgs(Integer lienBanque) {
+	protected List<MailAddressDto> retrieveMailAdressesOfBankOrgs(Integer lienBanque,Integer lienDis) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
@@ -203,6 +203,10 @@ public class MailServiceImpl implements IMailService {
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
+		}
+		if (lienDis != null) {
+			Predicate lienDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), lienDis);
+			predicates.add(lienDisPredicate);
 		}
 		Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), 1);
 		predicates.add(isActifPredicate);
