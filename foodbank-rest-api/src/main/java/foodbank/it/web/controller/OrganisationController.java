@@ -64,7 +64,8 @@ public class OrganisationController {
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
      		@RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
-     		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isBirb,
+			@RequestParam(required = false) String birbCode,
+     		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isFead,
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
      		@RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
@@ -100,7 +101,7 @@ public class OrganisationController {
         }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot,isBirb,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
+				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot, isFead,birbCode,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        

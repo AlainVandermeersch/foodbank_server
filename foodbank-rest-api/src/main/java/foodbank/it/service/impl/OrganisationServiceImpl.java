@@ -102,7 +102,8 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDepot = searchCriteria.getlienDepot();
 		Boolean isDepot = searchCriteria.getIsDepot();
-		Boolean isBirb = searchCriteria.getIsBirb();
+		Boolean isFead = searchCriteria.getIsFead();
+		String birbCode = searchCriteria.getBirbCode();
 		Boolean isAgreed = searchCriteria.getIsAgreed();
 		Boolean isCotAnnuelle = searchCriteria.getCotAnnuelle();
 		Boolean isCotSup = searchCriteria.getCotSup();
@@ -132,6 +133,11 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate nomDepotPredicate = criteriaBuilder.like(organisation.get("nomDepot"), "%" + nomDepot.toLowerCase() + "%");
 			predicates.add(nomDepotPredicate);
 		}
+		if (birbCode != null ) {
+
+			Predicate birbCodePredicate = criteriaBuilder.like(organisation.get("birbCode"), "%" + birbCode.toLowerCase() + "%");
+			predicates.add(birbCodePredicate);
+		}
 			
 		if (isDepot != null) {
 			Integer intDepot = 0;
@@ -142,13 +148,27 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			predicates.add(isDepotPredicate);
 		}
 		
-		if (isBirb != null) {
+		if (isFead != null) {
 			Integer intBirb = 0;
-			if (isBirb== true) {
+			if (isFead== true) {
 				intBirb = 1;
 			}
-			Predicate isBirbPredicate = criteriaBuilder.equal(organisation.get("birbyN"), intBirb);
-			predicates.add(isBirbPredicate);
+			if (isFead == false) {
+				Predicate birbCodeBlank = criteriaBuilder.equal(organisation.get("birbCode"), "");
+				Predicate birbCodeZero = criteriaBuilder.equal(organisation.get("birbCode"), "0");
+				Predicate birbCodeNull = criteriaBuilder.isNull(organisation.get("birbCode"));
+				Predicate birbCodePredicate = criteriaBuilder.or(birbCodeZero,birbCodeNull,birbCodeBlank);
+				predicates.add(birbCodePredicate);
+			}
+			else {
+				Predicate birbCodeNotBlank = criteriaBuilder.notEqual(organisation.get("birbCode"), "");
+				Predicate birbCodeNotZero = criteriaBuilder.notEqual(organisation.get("birbCode"), "0");
+				Predicate birbCodeNotNull = criteriaBuilder.isNotNull(organisation.get("birbCode"));
+				predicates.add(birbCodeNotBlank);
+				predicates.add(birbCodeNotZero);
+				predicates.add(birbCodeNotNull);
+
+			}
 		} 
 		
 	    if (isAgreed != null) {

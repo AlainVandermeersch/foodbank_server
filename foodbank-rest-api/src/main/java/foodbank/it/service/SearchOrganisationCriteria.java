@@ -10,7 +10,9 @@ public class SearchOrganisationCriteria {
 	private Integer lienBanque;
 	private Integer lienDepot;
 	private Boolean isDepot;
-	private Boolean isBirb;
+	private Boolean isFead;
+
+	private String birbCode;
 	private Boolean isAgreed;
 	private Boolean actif;
 	private String refInt;
@@ -24,7 +26,7 @@ public class SearchOrganisationCriteria {
 	
 	
 	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, 
-			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isBirb, String refInt, 
+			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isFead, String birbCode, String refInt,
 			Boolean cotAnnuelle,Boolean cotSup,String statut,Boolean gestBen,Boolean feadN,String bankShortName,Boolean hasLogins) {
 		this.idDis = idDis;
 		this.regId = regId;
@@ -36,7 +38,8 @@ public class SearchOrganisationCriteria {
 		this.lienBanque = lienBanque;
 		this.lienDepot = lienDepot;
 		this.isDepot = isDepot;
-		this.isBirb = isBirb;
+		this.isFead = isFead;
+		this.birbCode = birbCode;
 		this.actif = actif;
 		this.refInt = refInt;
 		this.cotAnnuelle = cotAnnuelle;
@@ -157,16 +160,23 @@ public class SearchOrganisationCriteria {
 
 
 
-	public Boolean getIsBirb() {
-		return isBirb;
+	public Boolean getIsFead() {
+		return isFead;
 	}
 
 
 
-	public void setIsBirb(Boolean isBirb) {
-		this.isBirb = isBirb;
+	public void setIsFead(Boolean isFead) {
+		this.isFead = isFead;
 	}
 
+	public String getBirbCode() {
+		return birbCode;
+	}
+
+	public void setBirbCode(String birbCode) {
+		this.birbCode = birbCode;
+	}
 
 	public String getRefInt() {
 		return refInt;
