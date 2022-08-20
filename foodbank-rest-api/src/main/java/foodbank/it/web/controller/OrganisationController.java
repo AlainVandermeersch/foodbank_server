@@ -261,7 +261,11 @@ public class OrganisationController {
 		if ( entity.getStatut() != null) {
 			strStatut = entity.getStatut().trim();
 		}
-	
+	  String antenneOrgName ="";
+	  if (entity.getBirbCode().equals("1") ) {
+		  Optional<Organisation> org = this.OrganisationService.findByIdDis(entity.getAntenne());
+		  if (org.isPresent()) antenneOrgName = org.get().getIdDis() + " " + org.get().getSociete();
+	  }
 		
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), strStatut , entity.getEmail(),  entity.getCp(), entity.getLocalite(),
@@ -285,8 +289,9 @@ public class OrganisationController {
 				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),
 				
     			entity.getBankShortName(),
+				antenneOrgName,
     			entity.getNbLogins(),
-    			totalRecords);   
+    			totalRecords);
         return dto;
     }
 

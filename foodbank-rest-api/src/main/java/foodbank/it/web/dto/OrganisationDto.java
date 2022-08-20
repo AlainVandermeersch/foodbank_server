@@ -232,9 +232,13 @@ public class OrganisationDto {
 	    private String nomDepot; // calculated field
 	   
 	    private String bankShortName;
-	    private long nbLogins;
+
+		private String antenneOrgName; // generated when creating dto in controller
+
+		private long nbLogins;
 	    private Long  totalRecords;
-		
+
+
 	    
 	    protected OrganisationDto() {
 	    	
@@ -260,7 +264,7 @@ public class OrganisationDto {
 				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, boolean feadN,
 				String remLivr, boolean cotAnnuelle, Integer  cotMonths, boolean cotSup, Integer  cotMonthsSup, Integer  depotram,
 				String lupdUserName, LocalDateTime lupdTs,Short lienBanque, String nomDepot,
-				String bankShortName,long nbLogins, Long  totalRecords
+				String bankShortName, String antenneOrgName, long nbLogins, Long  totalRecords
 				) {
 			super();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -394,7 +398,7 @@ public class OrganisationDto {
 			this.bankShortName = bankShortName;
 		    this.nbLogins = nbLogins;
 			this.totalRecords = totalRecords;
-			
+			this.antenneOrgName = antenneOrgName;
 		}
 
 		public int getIdDis() {
@@ -1332,6 +1336,14 @@ public class OrganisationDto {
 
 		public void setBankShortName(String bankShortName) {
 			this.bankShortName = bankShortName;
+		}
+
+		public String getAntenneOrgName() {
+			return antenneOrgName;
+		}
+
+		public void setAntenneOrgName(String antenneOrgName) {
+			this.antenneOrgName = antenneOrgName;
 		}
 
 		public long getNbLogins() {
