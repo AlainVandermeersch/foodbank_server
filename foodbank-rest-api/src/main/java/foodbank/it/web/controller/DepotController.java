@@ -67,7 +67,16 @@ public class DepotController {
     @PutMapping("depot/{idDepot}")
     public DepotDto updateDepot(@PathVariable("idDepot") Integer idDepot, @RequestBody DepotDto updatedDepot) {
         Depot DepotEntity = convertToEntity(updatedDepot);
-        return this.convertToDto(this.DepotService.save(DepotEntity),1);
+        try {
+           Depot returnedDepot=  this.DepotService.save(DepotEntity);
+            return this.convertToDto(returnedDepot,1);
+        }
+        catch (Exception ex) {
+            String errorMsg = ex.getMessage();
+            System.out.println(errorMsg);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+        }
+
     }
 
     @DeleteMapping("depot/{idDepot}")
@@ -80,19 +89,26 @@ public class DepotController {
     @ResponseStatus(HttpStatus.CREATED)
     public DepotDto create(@RequestBody DepotDto newDepot) {
         Depot entity = convertToEntity(newDepot);
-        // Alain todo later entity.setDateCreated(LocalDate.now());
-        Depot Depot = this.DepotService.save(entity);        
-        return this.convertToDto(Depot,1);
+        try {
+            Depot returnedDepot=  this.DepotService.save(entity);
+            return this.convertToDto(returnedDepot,1);
+        }
+        catch (Exception ex) {
+            String errorMsg = ex.getMessage();
+            System.out.println(errorMsg);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+        }
     }
     protected DepotDto convertToDto(Depot entity,long totalRecords) {
     	
     	boolean booDepPrinc= entity.getDepPrinc() == 1;
     	boolean booActif= entity.getActif() == 1;
     	boolean booDepFead= entity.getDepFead() == 1;
+        String anomalies = DepotService.getAnomalies(entity);
     	
         DepotDto dto = new DepotDto(entity.getIdDepot(), entity.getNom(), entity.getAdresse(), entity.getAdresse2(), entity.getCp(), entity.getVille(),
     			entity.getIdCompany(),entity.getTelephone(), entity.getContact(), entity.getEmail(), entity.getMemo(), booDepPrinc, booActif, booDepFead,
-    			entity.getLienBanque() ,totalRecords );    
+    			entity.getLienBanque() ,anomalies,totalRecords );
         return dto;
     }
 

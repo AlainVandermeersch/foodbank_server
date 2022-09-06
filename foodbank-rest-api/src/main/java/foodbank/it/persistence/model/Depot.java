@@ -125,7 +125,8 @@ public class Depot implements Serializable {
   * @return the current value of adresse
   */
  public String getAdresse() {
-     return adresse;
+     if (adresse == null) return "";
+     else return adresse;
  }
 
  /**
@@ -143,7 +144,8 @@ public class Depot implements Serializable {
   * @return the current value of adresse2
   */
  public String getAdresse2() {
-     return adresse2;
+     if (adresse2 == null) return "";
+     else return adresse2;
  }
 
  /**
@@ -161,7 +163,8 @@ public class Depot implements Serializable {
   * @return the current value of cp
   */
  public String getCp() {
-     return cp;
+     if (cp == null) return "";
+     else return cp;
  }
 
  /**
@@ -179,7 +182,9 @@ public class Depot implements Serializable {
   * @return the current value of ville
   */
  public String getVille() {
-     return ville;
+
+     if (ville == null) return "";
+     else return ville;
  }
 
  /**
@@ -207,7 +212,9 @@ public void setIdCompany(String idCompany) {
   * @return the current value of telephone
   */
  public String getTelephone() {
-     return telephone;
+
+     if (telephone == null) return "";
+     else return telephone;
  }
 
  /**
@@ -225,7 +232,9 @@ public void setIdCompany(String idCompany) {
   * @return the current value of contact
   */
  public String getContact() {
-     return contact;
+
+     if (contact == null) return "";
+     else return contact;
  }
 
  /**
@@ -243,7 +252,9 @@ public void setIdCompany(String idCompany) {
   * @return the current value of email
   */
  public String getEmail() {
-     return email;
+
+     if (email == null) return "";
+     else return email;
  }
 
  /**
@@ -261,7 +272,9 @@ public void setIdCompany(String idCompany) {
   * @return the current value of memo
   */
  public String getMemo() {
-     return memo;
+
+     if (memo == null) return "";
+     else return memo;
  }
 
  /**

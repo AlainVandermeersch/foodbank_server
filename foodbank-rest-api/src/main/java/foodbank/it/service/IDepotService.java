@@ -10,11 +10,12 @@ import org.springframework.data.domain.Pageable;
 public interface IDepotService {
 	Optional<Depot> findByIdDepot(String idDepot);
 	
-	Depot save(Depot Depot);
+	Depot save(Depot Depot) throws Exception;
 
 	Page<Depot> findAll(SearchDepotCriteria searchCriteria, Pageable pageable);
 
     void delete(String idDepot);
+	String getAnomalies(Depot Depot);
 
 
 }

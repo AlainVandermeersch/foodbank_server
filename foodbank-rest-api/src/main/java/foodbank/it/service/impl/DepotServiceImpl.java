@@ -31,6 +31,7 @@ public class DepotServiceImpl implements IDepotService{
 	private IDepotRepository DepotRepository;
 	private IOrganisationRepository OrganisationRepository;
 	private final EntityManager entityManager;
+	private String anomalies;
 	
 	public DepotServiceImpl(
 			IDepotRepository DepotRepository,
@@ -48,31 +49,42 @@ public class DepotServiceImpl implements IDepotService{
 
     @Override
     @Transactional
-    public Depot save(Depot Depot) { 
-    	// save depot but also update matching organisation fields for this depot
+    public Depot save(Depot Depot) throws Exception {
+    	// save depot by copying copy matching organisation fields for this depot
     	 Integer lienDepotInteger = Optional.ofNullable(Depot.getIdDepot()).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
     	 if (lienDepotInteger != null) {
     		 Optional<Organisation> depotOrg = this.OrganisationRepository.findById(lienDepotInteger);
     		 depotOrg.ifPresentOrElse(myOrg->  {
-    			 myOrg.setSociete(Depot.getNom());
-    			 myOrg.setAdresse(Depot.getAdresse()) ;
-    			 myOrg.setAdresse2(Depot.getAdresse2());
-    			 myOrg.setCp(Depot.getCp());
-    			 myOrg.setLocalite(Depot.getVille());
-    			 myOrg.setTel(Depot.getTelephone());
-    			 myOrg.setEmail(Depot.getEmail());
-    			 myOrg.setDepPrinc(Depot.getDepPrinc());
-    			 myOrg.setActif(Depot.getActif());
-    			 // Note we do not synchronize lien_banque from ID_company, dep_FEAD, memo and contact fields
-    			 System.out.printf("\nSynchronizing entries between depot and organisation entries for depot %s %s\n",Depot.getIdDepot(), Depot.getNom());
-    			 OrganisationRepository.save(myOrg);
+    			 Depot.setNom(myOrg.getSociete());
+    			 Depot.setAdresse(myOrg.getAdresse()) ;
+    			 Depot.setAdresse2(myOrg.getAdresse2());
+    			 Depot.setCp(myOrg.getCp());
+    			 Depot.setVille(myOrg.getLocalite());
+    			 Depot.setTelephone(myOrg.getTel());
+    			 Depot.setEmail(myOrg.getEmail());
+    			 Depot.setDepPrinc(myOrg.getDepPrinc());
+    			 Depot.setActif(myOrg.getActif());
+    			
     			
     		 },
-    		 ()-> { 
-    			 	System.out.printf("\nCould not synchronize depot: organisation not found for depot %s %s\n",Depot.getIdDepot(),Depot.getNom());
-    			}
+    		 ()-> {
+				 String errorMsg = String.format("Could not synchronize depot: organisation not found for depot %s %s",Depot.getIdDepot(),Depot.getNom());
+				 try {
+					 throw new Exception(errorMsg);
+				 } catch (Exception e) {
+					 throw new RuntimeException(e);
+				 }
+			 }
     		);
     	 }
+		 else {
+			 String errorMsg = String.format("Could not save Depot  with empty or non numeric id '%s' and name '%s'",Depot.getIdDepot(),Depot.getNom());
+			 try {
+				 throw new Exception(errorMsg);
+			 } catch (Exception e) {
+				 throw new RuntimeException(e);
+			 }
+		 }
         return DepotRepository.save(Depot);
     }
     
@@ -134,5 +146,53 @@ public class DepotServiceImpl implements IDepotService{
         DepotRepository.deleteByIdDepot(idDepot);
         
     }
+
+	@Override
+	public String getAnomalies(Depot Depot) {
+		this.anomalies ="";
+		Integer lienDepotInteger = Optional.ofNullable(Depot.getIdDepot()).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		if (lienDepotInteger != null) {
+			Optional<Organisation> depotOrg = this.OrganisationRepository.findById(lienDepotInteger);
+			depotOrg.ifPresentOrElse(myOrg -> {
+						if (!myOrg.getSociete().equals(Depot.getNom())) {
+							this.anomalies += String.format("nom: %s;", myOrg.getSociete());
+						}
+						if (!myOrg.getAdresse().equals(Depot.getAdresse())) {
+							this.anomalies += String.format("adresse: %s;", myOrg.getAdresse());
+						}
+						if (!myOrg.getAdresse2().equals(Depot.getAdresse2())) {
+							this.anomalies += String.format("adresse2: %s;", myOrg.getAdresse2());
+						}
+						if (!myOrg.getCp().equals(Depot.getCp())) {
+							this.anomalies += String.format("cp: %s;", myOrg.getCp());
+						}
+						if (!myOrg.getLocalite().equals(Depot.getVille())) {
+							this.anomalies += String.format("ville: %s;", myOrg.getLocalite());
+						}
+						if (!myOrg.getTel().equals(Depot.getTelephone())) {
+							this.anomalies += String.format("tel: %s;", myOrg.getTel());
+						}
+						if (!myOrg.getEmail().equals(Depot.getEmail())) {
+							this.anomalies += String.format("email: %s;", myOrg.getEmail());
+						}
+						if (!myOrg.getDepPrinc().equals(Depot.getDepPrinc())) {
+							this.anomalies += String.format("depPrinc: %s;", myOrg.getDepPrinc());
+						}
+						if (!myOrg.getActif().equals(Depot.getActif())) {
+							this.anomalies += String.format("actif: %d;", myOrg.getActif());
+						}
+					},
+					() -> {
+						this.anomalies += String.format("idDepot: %s;",Depot.getIdDepot());
+
+					}
+			);
+		}
+		else {
+			this.anomalies += String.format("idDepot: %s;",Depot.getIdDepot());
+		}
+		return this.anomalies;
+	}
+	
 
 }

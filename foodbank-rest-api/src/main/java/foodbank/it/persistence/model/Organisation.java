@@ -485,7 +485,9 @@ public class Organisation implements Serializable {
      * @return the current value of adresse
      */
     public String getAdresse() {
-        return adresse;
+
+        if (adresse == null) return "";
+        else return adresse;
     }
 
     /**
@@ -540,7 +542,9 @@ public class Organisation implements Serializable {
      * @return the current value of cp
      */
     public String getCp() {
-        return cp;
+
+        if (cp == null) return "";
+        else return cp;
     }
 
     /**
@@ -558,7 +562,9 @@ public class Organisation implements Serializable {
      * @return the current value of localite
      */
     public String getLocalite() {
-        return localite;
+
+        if (localite == null) return "";
+        else return localite;
     }
 
     /**
@@ -630,7 +636,9 @@ public class Organisation implements Serializable {
      * @return the current value of tel
      */
     public String getTel() {
-        return tel;
+
+        if (tel == null) return "";
+        else return tel;
     }
 
     /**
@@ -648,7 +656,8 @@ public class Organisation implements Serializable {
      * @return the current value of gsm
      */
     public String getGsm() {
-        return gsm;
+        if (gsm == null) return "";
+        else return gsm;
     }
 
     /**
@@ -2151,7 +2160,9 @@ public class Organisation implements Serializable {
      * @return the current value of adresse2
      */
     public String getAdresse2() {
-        return adresse2;
+
+        if (adresse2 == null) return "";
+        else return adresse2;
     }
 
     /**
