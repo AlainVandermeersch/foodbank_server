@@ -32,6 +32,8 @@ public class DepotDto {
 	 private Integer lienBanque;
 
 	 private String anomalies;
+
+	 private boolean sync; // sync request with matching organisation - used when saving depot
 	 
 	 private Long  totalRecords;
 	 
@@ -62,6 +64,7 @@ public class DepotDto {
 		this.depFead = depFead;
 		this.lienBanque = lienBanque;
 		this.anomalies = anomalies;
+		this.sync = false;
 		this.totalRecords = totalRecords;
 		
 	}
@@ -194,6 +197,14 @@ public class DepotDto {
 
 	public void setAnomalies(String anomalies) {
 		this.anomalies = anomalies;
+	}
+
+	public boolean isSync() {
+		return sync;
+	}
+
+	public void setSync(boolean sync) {
+		this.sync = sync;
 	}
 
 	public Long getTotalRecords() {

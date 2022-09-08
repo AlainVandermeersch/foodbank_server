@@ -107,7 +107,9 @@ public class Depot implements Serializable {
   * @return the current value of nom
   */
  public String getNom() {
-     return nom;
+
+     if (nom == null) return "";
+     else return nom;
  }
 
  /**

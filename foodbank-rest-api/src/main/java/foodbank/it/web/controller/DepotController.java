@@ -65,10 +65,12 @@ public class DepotController {
     }
 
     @PutMapping("depot/{idDepot}")
-    public DepotDto updateDepot(@PathVariable("idDepot") Integer idDepot, @RequestBody DepotDto updatedDepot) {
+    public DepotDto updateDepot(@PathVariable("idDepot") Integer idDepot,
+                                @RequestBody DepotDto updatedDepot) {
         Depot DepotEntity = convertToEntity(updatedDepot);
+        Boolean sync = updatedDepot.isSync();
         try {
-           Depot returnedDepot=  this.DepotService.save(DepotEntity);
+           Depot returnedDepot=  this.DepotService.save(DepotEntity, sync);
             return this.convertToDto(returnedDepot,1);
         }
         catch (Exception ex) {
@@ -90,7 +92,7 @@ public class DepotController {
     public DepotDto create(@RequestBody DepotDto newDepot) {
         Depot entity = convertToEntity(newDepot);
         try {
-            Depot returnedDepot=  this.DepotService.save(entity);
+            Depot returnedDepot=  this.DepotService.save(entity,true); //syncing with org when creating a new depot
             return this.convertToDto(returnedDepot,1);
         }
         catch (Exception ex) {

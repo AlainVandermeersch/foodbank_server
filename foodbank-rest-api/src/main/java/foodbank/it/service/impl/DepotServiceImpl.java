@@ -49,42 +49,43 @@ public class DepotServiceImpl implements IDepotService{
 
     @Override
     @Transactional
-    public Depot save(Depot Depot) throws Exception {
+    public Depot save(Depot Depot, Boolean sync) throws Exception {
     	// save depot by copying copy matching organisation fields for this depot
-    	 Integer lienDepotInteger = Optional.ofNullable(Depot.getIdDepot()).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
-    	 if (lienDepotInteger != null) {
-    		 Optional<Organisation> depotOrg = this.OrganisationRepository.findById(lienDepotInteger);
-    		 depotOrg.ifPresentOrElse(myOrg->  {
-    			 Depot.setNom(myOrg.getSociete());
-    			 Depot.setAdresse(myOrg.getAdresse()) ;
-    			 Depot.setAdresse2(myOrg.getAdresse2());
-    			 Depot.setCp(myOrg.getCp());
-    			 Depot.setVille(myOrg.getLocalite());
-    			 Depot.setTelephone(myOrg.getTel());
-    			 Depot.setEmail(myOrg.getEmail());
-    			 Depot.setDepPrinc(myOrg.getDepPrinc());
-    			 Depot.setActif(myOrg.getActif());
-    			
-    			
-    		 },
-    		 ()-> {
-				 String errorMsg = String.format("Could not synchronize depot: organisation not found for depot %s %s",Depot.getIdDepot(),Depot.getNom());
-				 try {
-					 throw new Exception(errorMsg);
-				 } catch (Exception e) {
-					 throw new RuntimeException(e);
-				 }
-			 }
-    		);
-    	 }
-		 else {
-			 String errorMsg = String.format("Could not save Depot  with empty or non numeric id '%s' and name '%s'",Depot.getIdDepot(),Depot.getNom());
-			 try {
-				 throw new Exception(errorMsg);
-			 } catch (Exception e) {
-				 throw new RuntimeException(e);
-			 }
-		 }
+		if (sync == true) {
+			Integer lienDepotInteger = Optional.ofNullable(Depot.getIdDepot()).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+			if (lienDepotInteger != null) {
+				Optional<Organisation> depotOrg = this.OrganisationRepository.findById(lienDepotInteger);
+				depotOrg.ifPresentOrElse(myOrg -> {
+							Depot.setNom(myOrg.getSociete());
+							Depot.setAdresse(myOrg.getAdresse());
+							Depot.setAdresse2(myOrg.getAdresse2());
+							Depot.setCp(myOrg.getCp());
+							Depot.setVille(myOrg.getLocalite());
+							Depot.setTelephone(myOrg.getTel());
+							Depot.setEmail(myOrg.getEmail());
+							Depot.setDepPrinc(myOrg.getDepPrinc());
+							Depot.setActif(myOrg.getActif());
+
+
+						},
+						() -> {
+							String errorMsg = String.format("Could not synchronize depot: organisation not found for depot %s %s", Depot.getIdDepot(), Depot.getNom());
+							try {
+								throw new Exception(errorMsg);
+							} catch (Exception e) {
+								throw new RuntimeException(e);
+							}
+						}
+				);
+			} else {
+				String errorMsg = String.format("Could not save Depot  with empty or non numeric id '%s' and name '%s'", Depot.getIdDepot(), Depot.getNom());
+				try {
+					throw new Exception(errorMsg);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
         return DepotRepository.save(Depot);
     }
     

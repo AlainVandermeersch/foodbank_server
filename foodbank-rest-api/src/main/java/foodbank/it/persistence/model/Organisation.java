@@ -467,7 +467,9 @@ public class Organisation implements Serializable {
      * @return the current value of societe
      */
     public String getSociete() {
-        return societe;
+
+        if (societe == null) return "";
+        else return societe;
     }
 
     /**
@@ -523,7 +525,9 @@ public class Organisation implements Serializable {
      * @return the current value of email
      */
     public String getEmail() {
-        return email;
+
+        if (email == null) return "";
+        else return email;
     }
 
     /**

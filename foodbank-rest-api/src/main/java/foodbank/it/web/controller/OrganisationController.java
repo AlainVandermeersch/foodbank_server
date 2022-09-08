@@ -1,6 +1,7 @@
 package foodbank.it.web.controller;
 
 import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.repository.IDepotRepository;
 import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
@@ -30,6 +31,8 @@ public class OrganisationController {
 	
 	private final IOrganisationService OrganisationService;
 	private final IOrgProgramService OrgProgramService;
+
+	private final IDepotRepository DepotRepository;
 	private  boolean isNumeric(String strNum) {
 	    if (strNum == null) {
 	        return false;
@@ -44,9 +47,11 @@ public class OrganisationController {
 	    
     public OrganisationController(
     		IOrganisationService OrganisationService,
-    		IOrgProgramService OrgProgramService ) {
+    		IOrgProgramService OrgProgramService ,
+			IDepotRepository DepotRepository) {
         this.OrganisationService = OrganisationService;  
         this.OrgProgramService = OrgProgramService;
+		this.DepotRepository = DepotRepository;
     }
 
     @GetMapping("organisation/{idDis}")
@@ -131,6 +136,7 @@ public class OrganisationController {
     		@RequestParam(required = false) Boolean agreed,
     		@RequestParam(required = false) Boolean actif,
     		@RequestParam(required = false) Boolean isDepot,
+			@RequestParam(required = false)  Boolean depotMissing,
     		@RequestParam(required = false) Boolean cotType,
     		@RequestParam(required = false) String regId,
     		@RequestParam(required = false) Boolean feadN
@@ -140,16 +146,31 @@ public class OrganisationController {
         Pageable pageRequest = PageRequest.of(0, 300, Sort.by("societe").ascending());
        
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);  
-        Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null); 
-        Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Boolean isDepotGlobal = isDepot;
+		if (depotMissing.booleanValue() == true)
+		{
+			isDepotGlobal = true;
+		}
 		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger,
-				isDepot,agreed,actif,cotType,regIdInteger,feadN,bankShortName);
+				isDepotGlobal,agreed,actif,cotType,regIdInteger,feadN,bankShortName);
 		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);
 		
 		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();
 		{
 			selectedOrganisations.forEach(o -> {
-				organisationSummaryDtos.add(convertToSummaryDto(o));
+				if (depotMissing.booleanValue() == true) {
+					String depotId = String.valueOf(o.getIdDis());
+					boolean depotPresent = this.DepotRepository.findByIdDepot(depotId).isPresent();
+					if (depotPresent == false) {
+						organisationSummaryDtos.add(convertToSummaryDto(o));
+					}
+
+				}
+				else {
+					organisationSummaryDtos.add(convertToSummaryDto(o));
+				}
 			});
 	
 		}

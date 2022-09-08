@@ -16,7 +16,8 @@ public class SearchOrganisationSummariesCriteria {
 			Boolean actif, Boolean cotType,Integer regId,Boolean feadN, String bankShortName) {
 		super();
 		this.societe = societe;
-		this.lienBanque = lienBanque;	
+		this.lienBanque = lienBanque;
+		this.bankShortName = bankShortName;
 		this.lienDepot = lienDepot;
 		this.isDepot = isDepot;
 		this.agreed = agreed;
