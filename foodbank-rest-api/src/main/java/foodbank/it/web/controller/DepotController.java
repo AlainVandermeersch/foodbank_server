@@ -5,6 +5,7 @@ import foodbank.it.persistence.model.Depot;
 import foodbank.it.service.IDepotService;
 import foodbank.it.service.SearchDepotCriteria;
 import foodbank.it.web.dto.DepotDto;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -84,7 +85,22 @@ public class DepotController {
     @DeleteMapping("depot/{idDepot}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDepot(@PathVariable("idDepot") String idDepot) {
-        DepotService.delete(idDepot);
+
+        try {
+            DepotService.delete(idDepot);
+        }
+        catch ( DataIntegrityViolationException ex) {
+            String errorMsg =  ex.getRootCause().getMessage();
+            System.out.println(errorMsg);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+        }
+        catch (Exception ex) {
+            String errorMsg = ex.getMessage();
+            System.out.println(errorMsg);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg);
+        }
+
+
     }
 
     @PostMapping("depot/")
