@@ -149,7 +149,7 @@ public class OrganisationController {
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Boolean isDepotGlobal = isDepot;
-		if (depotMissing.booleanValue() == true)
+		if (depotMissing != null)
 		{
 			isDepotGlobal = true;
 		}
@@ -160,7 +160,7 @@ public class OrganisationController {
 		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();
 		{
 			selectedOrganisations.forEach(o -> {
-				if (depotMissing.booleanValue() == true) {
+				if (depotMissing != null) {
 					String depotId = String.valueOf(o.getIdDis());
 					boolean depotPresent = this.DepotRepository.findByIdDepot(depotId).isPresent();
 					if (depotPresent == false) {
