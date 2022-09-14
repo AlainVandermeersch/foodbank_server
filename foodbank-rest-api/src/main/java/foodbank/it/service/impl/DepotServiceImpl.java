@@ -58,7 +58,6 @@ public class DepotServiceImpl implements IDepotService{
 				depotOrg.ifPresentOrElse(myOrg -> {
 							Depot.setNom(myOrg.getSociete());
 							Depot.setAdresse(myOrg.getAdresse());
-							Depot.setAdresse2(myOrg.getAdresse2());
 							Depot.setCp(myOrg.getCp());
 							Depot.setVille(myOrg.getLocalite());
 							Depot.setTelephone(myOrg.getTel());
@@ -160,9 +159,6 @@ public class DepotServiceImpl implements IDepotService{
 						}
 						if (!myOrg.getAdresse().equals(Depot.getAdresse())) {
 							this.anomalies += String.format("adresse: %s;", myOrg.getAdresse());
-						}
-						if (!myOrg.getAdresse2().equals(Depot.getAdresse2())) {
-							this.anomalies += String.format("adresse2: %s;", myOrg.getAdresse2());
 						}
 						if (!myOrg.getCp().equals(Depot.getCp())) {
 							this.anomalies += String.format("cp: %s;", myOrg.getCp());
