@@ -291,7 +291,11 @@ public class OrganisationController {
 			  if (org.isPresent()) antenneOrgName = org.get().getIdDis() + " " + org.get().getSociete();
 		  }
 	  }
-		
+		boolean isDepotMissing = false;
+	    if ( booDepyN) {  // calculated field when an organisation is a depot, the matching depot entity must be created
+			String depotId = String.valueOf(entity.getIdDis());
+			isDepotMissing = !this.DepotRepository.findByIdDepot(depotId).isPresent();
+		}
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), strStatut , entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), booAgreed,entity.getBanque(), 
@@ -301,7 +305,7 @@ public class OrganisationController {
 				entity.getPrenomTres(), entity.getNomTres(), entity.getTelTres(), entity.getGsmTres(), entity.getEmailPres(), entity.getEmailVp(),
 				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
 				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(),booCpasyN, entity.getLienCpas(),
-				booBirbyN,booDepyN, entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
+				booBirbyN,booDepyN, isDepotMissing,entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
 				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), booSusp,
 				entity.getStopSusp(), entity.getRem(), booIsMsonac, entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
 				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getN1824(),

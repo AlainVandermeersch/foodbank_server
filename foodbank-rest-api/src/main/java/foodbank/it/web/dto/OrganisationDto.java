@@ -110,6 +110,8 @@ public class OrganisationDto {
 	    private boolean birbyN;
 	      
 	    private boolean depyN;
+
+		private boolean depotMissing; // calculated field when an organisation is a depot, the matching depot entity must be created
 	  
 	    private Short logBirb;
 	   
@@ -253,7 +255,7 @@ public class OrganisationDto {
 				String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp,
 				String emailSec, String emailTres, String telPres, String gsmPres, String disprog, String afsca,
 				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, boolean cpasyN, Short lienCpas,
-				boolean birbyN,boolean depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
+				boolean birbyN,boolean depyN, boolean depotMissing,Short logBirb, Short actComp1, Short actComp2, Short actComp3,
 				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, boolean susp,
 				String stopSusp, String rem, boolean isMsonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
 				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer nAdo, Integer n1824,
@@ -329,6 +331,7 @@ public class OrganisationDto {
 			this.lienCpas = lienCpas;
 			this.birbyN = birbyN;
 			this.depyN = depyN;
+			this.depotMissing = depotMissing;
 			this.logBirb = logBirb;
 			this.actComp1 = actComp1;
 			this.actComp2 = actComp2;
@@ -850,7 +853,15 @@ public class OrganisationDto {
 			this.depyN = depyN;
 		}
 
-		public Short getLogBirb() {
+		public boolean isDepotMissing() {
+			return depotMissing;
+		}
+
+		public void setDepotMissing(boolean depotMissing) {
+			this.depotMissing = depotMissing;
+		}
+
+	public Short getLogBirb() {
 			return logBirb;
 		}
 
