@@ -79,7 +79,7 @@ public class MembreController {
      		@RequestParam(required = false) String city,@RequestParam(required = false) String lienDepot ,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String bankShortName,
      		@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
-	        @RequestParam(required = false) String fonction ,
+	        @RequestParam(required = false) String fonction ,@RequestParam(required = false) String telgsm ,
     		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -98,7 +98,7 @@ public class MembreController {
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer fonctionInteger = Optional.ofNullable(fonction).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, actif,address, zip,city, batmail,
-				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName,fonctionInteger, hasAnomalies, classicBanks );
+				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName,telgsm,fonctionInteger, hasAnomalies, classicBanks );
 		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 

@@ -178,6 +178,7 @@ public class MembreServiceImpl implements IMembreService{
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienDepot = searchCriteria.getLienDepot();
 		String bankShortName = searchCriteria.getBankShortName();
+		String telgsm = searchCriteria.getTelgsm();
 		Integer fonction = searchCriteria.getFonction();
 		String hasAnomalies = searchCriteria.getHasAnomalies();
 		Boolean classicBanks = searchCriteria.getClassicBanks();
@@ -188,6 +189,13 @@ public class MembreServiceImpl implements IMembreService{
 			Predicate prenomPredicate = criteriaBuilder.like(membre.get("prenom"), "%" + nom.toLowerCase() + "%");
 			Predicate fullNamePredicate = criteriaBuilder.or(nomPredicate,prenomPredicate);
 			predicates.add(fullNamePredicate);
+		}
+		if (telgsm != null ) {
+
+			Predicate telPredicate = criteriaBuilder.like(membre.get("tel"), "%" + telgsm + "%");
+			Predicate gsmPredicate = criteriaBuilder.like(membre.get("gsm"), "%" + telgsm + "%");
+		    Predicate telgsmPredicate = criteriaBuilder.or(telPredicate,gsmPredicate);
+			predicates.add(telgsmPredicate);
 		}
 
 		if (address != null ) {			

@@ -185,7 +185,7 @@ public class TUserController {
 				entity.getIdLanguage(), entity.getLienBat(), booActif, caseCorrectedRights, entity.getPassword(),
 				entity.getDepot(), booDroit1, entity.getEmail(), booGestBen, booGestInv, booGestFead, booGestAsso,
 				booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(), entity.getSociete(),
-				entity.getMembreNom(), entity.getMembrePrenom(), entity.getMembreEmail(), entity.getMembreLangue(),
+				entity.getMembreNom(), entity.getMembrePrenom(), entity.getMembreEmail(), entity.getMembreLangue(),entity.getMembreActif(),
 				entity.getMembreBankShortname(), nbOfLogins, totalRecords);
 		return dto;
 	}

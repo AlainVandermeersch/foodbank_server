@@ -12,11 +12,13 @@ public class SearchMembreCriteria {
 	private String bankShortName;
 	private Integer fonction;
 	private String batmail;
+
+	private String telgsm;
 	private String hasAnomalies;
 	private Boolean classicBanks;
 	
 	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, String batmail,
-			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,Integer fonction,
+			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,String telgsm,Integer fonction,
 								String hasAnomalies, Boolean classicBanks) {
 		this.nom = nom;		
 		this.actif = actif;
@@ -28,6 +30,7 @@ public class SearchMembreCriteria {
 		this.lienDis = lienDis;
 		this.lienDepot = lienDepot;
 		this.bankShortName = bankShortName;
+		this.telgsm = telgsm;
 		this.fonction = fonction;
 		this.hasAnomalies = hasAnomalies;
 		this.classicBanks = classicBanks;
@@ -142,6 +145,10 @@ public class SearchMembreCriteria {
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
 	}
+
+	public String getTelgsm() {	return telgsm;	}
+
+	public void setTelgsm(String telgsm) { 	this.telgsm = telgsm; }
 
 	public Integer getFonction() {
 		return fonction;
