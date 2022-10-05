@@ -192,8 +192,12 @@ public class MembreServiceImpl implements IMembreService{
 		}
 		if (telgsm != null ) {
 
-			Predicate telPredicate = criteriaBuilder.like(membre.get("tel"), "%" + telgsm + "%");
-			Predicate gsmPredicate = criteriaBuilder.like(membre.get("gsm"), "%" + telgsm + "%");
+			Predicate telPredicate = criteriaBuilder.like(criteriaBuilder.function("REPLACE"
+					, String.class,membre.get("tel"), criteriaBuilder.literal(" ")
+					, criteriaBuilder.literal("")),"%" + telgsm + "%");
+			Predicate gsmPredicate = criteriaBuilder.like(criteriaBuilder.function("REPLACE"
+					, String.class,membre.get("gsm"), criteriaBuilder.literal(" ")
+					, criteriaBuilder.literal("")),"%" + telgsm + "%");
 		    Predicate telgsmPredicate = criteriaBuilder.or(telPredicate,gsmPredicate);
 			predicates.add(telgsmPredicate);
 		}
