@@ -194,7 +194,10 @@ public class TUser implements Serializable {
 		return membreLangue;
 	}
 
-    public Short getMembreActif() {  return membreActif; }
+    public Short getMembreActif() {
+        if (membreActif != null) return membreActif;
+        return 1 ; // default actif
+    }
 
 	public String getMembreBankShortname() {
 		return membreBankShortname;
