@@ -1592,7 +1592,7 @@
     "starttls": "true",
     "auth": "true",
     "host": "in-v3.mailjet.com",
-    "from": "noreply@foodbankit.org",
+    "from": "noreply@foodbanksit.be",
     "ssl": "true",
     "user": "###SMTP_USER###"
   },
