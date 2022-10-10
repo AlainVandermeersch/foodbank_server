@@ -132,8 +132,8 @@ private IMailService MailService;
 	public static MimeMessage createEmail(String to, String from, String subject, String bodyText, String attachmentFileNames)
 			throws MessagingException {
 		Path root = Paths.get("uploads");
-		String username = "contact@foodbanksit.be";
-		String password = "kjxzqjnuowflboyg";
+		String username = System.getenv("BACKEND_SMTP_USER");
+		String password = System.getenv("BACKEND_SMTP_PASSWORD");
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
