@@ -76,8 +76,8 @@ services:
     environment:
       - DEBUG_PORT=*:8787
       - DEBUG=true
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_USER=${KEYCLOAK_USER}
+      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
       - DB_VENDOR=h2
       - KEYCLOAK_IMPORT=/tmp/import/realm/foodbank-realm.json
       - MYSQL_HOST=${MYSQL_HOST}
