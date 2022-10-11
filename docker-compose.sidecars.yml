@@ -11,8 +11,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - SMTP_USER=${SMTP_USER}
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_USER=${BACKEND_SMTP_USER}
+      - SMTP_PASSWORD=${BACKEND_SMTP_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
