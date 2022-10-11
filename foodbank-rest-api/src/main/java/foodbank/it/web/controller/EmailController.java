@@ -134,6 +134,7 @@ private IMailService MailService;
 		Path root = Paths.get("uploads");
 		String username = System.getenv("BACKEND_SMTP_USER");
 		String password = System.getenv("BACKEND_SMTP_PASSWORD");
+		System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username,password);
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
