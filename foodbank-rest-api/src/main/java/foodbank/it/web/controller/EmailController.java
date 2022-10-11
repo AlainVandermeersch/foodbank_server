@@ -26,6 +26,7 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -56,11 +57,14 @@ import foodbank.it.web.dto.MailAddressDto;
 @RestController
 public class EmailController {
 private IMailService MailService;
-		
-    
+
+	@Value("${smtpuser}")
+	private String smtpUser;
+	@Value("${smtppassword}")
+	private String smtpPassword;
+
     public EmailController(IMailService MailService) {
-        this.MailService = MailService;     
-       
+        this.MailService = MailService;
     }
 	
 	@Autowired
@@ -116,7 +120,7 @@ private IMailService MailService;
 			String subject = newEmail.getSubject();
 			String bodyText = newEmail.getBodyText();
 			String attachmentFileNames = newEmail.getAttachmentFileNames();
-			MimeMessage newMimeMessage = createEmail(to, from, subject, bodyText,attachmentFileNames);
+			MimeMessage newMimeMessage = createEmail(smtpUser, smtpPassword, to, from, subject, bodyText,attachmentFileNames);
 			// Todo Alain Use Google Message Type Message newMessage =
 			// createMessageWithEmail(newMimeMessage);
 			Transport.send(newMimeMessage);	
@@ -129,12 +133,10 @@ private IMailService MailService;
 		}
 	}
 
-	public static MimeMessage createEmail(String to, String from, String subject, String bodyText, String attachmentFileNames)
+	public static MimeMessage createEmail(String username, String password, String to, String from, String subject, String bodyText, String attachmentFileNames)
 			throws MessagingException {
 		Path root = Paths.get("uploads");
-		String username = System.getenv("BACKEND_SMTP_USER");
-		String password = System.getenv("BACKEND_SMTP_PASSWORD");
-		System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username,password);
+		System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username, password);
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
