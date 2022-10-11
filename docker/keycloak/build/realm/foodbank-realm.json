@@ -1029,10 +1029,7 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
-      "redirectUris": [
-        "https://fead.foodbanksit.be/isis/*",
-        "https://auth.foodbanksit.be/isis/*"
-      ],
+      "redirectUris": [ "###REDIRECT_URIS_ISIS###" ],
       "webOrigins": [
         "*"
       ],
