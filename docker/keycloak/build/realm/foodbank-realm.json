@@ -1591,8 +1591,9 @@
     "password": "###SMTP_PASSWORD###",
     "starttls": "true",
     "auth": "true",
-    "host": "in-v3.mailjet.com",
-    "from": "noreply@foodbanksit.be",
+    "port": "465",
+    "host": "smtp.gmail.com",
+    "from": "contact@foodbanksit.be",
     "ssl": "true",
     "user": "###SMTP_USER###"
   },
