@@ -46,12 +46,12 @@ public class MailServiceImpl implements IMailService {
 		switch(target) {
 
 			case "0":  // applies to both bank users and org users
-				return this.retrieveMailAdressesOfBankOrgs(lienBanque,lienDis);
+				return this.retrieveMailAdressesOfBankOrgs(lienBanque,lienDis,regId,feadN,isAgreed);
 			case "4":
 			case "5":
-				return this.retrieveMailAdressesOfBankUsers(lienBanque, target);
+				return this.retrieveMailAdressesOfBankUsers(lienBanque, target,langue);
 			case "6":
-				return this.retrieveMailAdressesOfBankMembers(lienBanque);
+				return this.retrieveMailAdressesOfBankMembers(lienBanque, langue);
 			default:
 		}
 //  on target 1, 2,3 Org filters need to be applied
@@ -194,7 +194,8 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedUsers.stream().map(mbr -> convertMembreToMailAddress(mbr,org)).collect(Collectors.toList());
 	}
-	protected List<MailAddressDto> retrieveMailAdressesOfBankOrgs(Integer lienBanque,Integer lienDis) {
+	protected List<MailAddressDto> retrieveMailAdressesOfBankOrgs(Integer lienBanque,Integer lienDis,
+					  Integer regId,Boolean feadN,Boolean isAgreed) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
@@ -208,6 +209,30 @@ public class MailServiceImpl implements IMailService {
 			Predicate lienDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), lienDis);
 			predicates.add(lienDisPredicate);
 		}
+		else {
+			if (regId != null) {
+				Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId);
+				predicates.add(regIdPredicate);
+			}
+			if (feadN != null) {
+				Integer intfeadN = 0;
+				if (feadN == true) {
+					intfeadN = 1;
+				}
+				Predicate isfeadNPredicate = criteriaBuilder.equal(organisation.get("feadN"), intfeadN);
+				predicates.add(isfeadNPredicate);
+			}
+
+			if (isAgreed != null) {
+				// Note daten field means is reverse of Agreed
+				Integer intDaten = 1;
+				if (isAgreed == true) {
+					intDaten = 0;
+				}
+				Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intDaten);
+				predicates.add(isAgreedPredicate);
+			}
+		}
 		Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), 1);
 		predicates.add(isActifPredicate);
 
@@ -220,7 +245,7 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedOrganisations.stream().map(org -> convertOrganisationToMailAddressContactDto(org)).collect(Collectors.toList());
 	}
-	protected List<MailAddressDto> retrieveMailAdressesOfBankUsers(Integer lienBanque, String target) {
+	protected List<MailAddressDto> retrieveMailAdressesOfBankUsers(Integer lienBanque, String target,Integer langue) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
@@ -238,6 +263,26 @@ public class MailServiceImpl implements IMailService {
 			rightsPredicate = criteriaBuilder.equal(tuser.get("idOrg"), 0);			
 		}
 		predicates.add(rightsPredicate);
+		if (langue != null) {
+			String idLanguage = "nl";
+			switch(langue) {
+				case 1:
+					idLanguage = "fr";
+					break;
+				case 2:
+					idLanguage = "nl";
+					break;
+				case 3:
+					idLanguage = "en";
+					break;
+				case 4:
+					idLanguage = "ge";
+					break;
+				default:
+			}
+			Predicate languePredicate = criteriaBuilder.equal(tuser.<Short>get("idLanguage"), idLanguage);
+			predicates.add(languePredicate);
+		}
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(criteriaBuilder.asc(tuser.get("membreNom")));
 
@@ -246,7 +291,7 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedUsers.stream().map(user -> convertUserToMailAddress(user, null)).collect(Collectors.toList());
 	}
-	protected List<MailAddressDto> retrieveMailAdressesOfBankMembers(Integer lienBanque) {
+	protected List<MailAddressDto> retrieveMailAdressesOfBankMembers(Integer lienBanque,Integer langue) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
@@ -255,6 +300,14 @@ public class MailServiceImpl implements IMailService {
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(membre.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
+		}
+		Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);
+		Predicate lienDisNull = criteriaBuilder.isNull(membre.get("lienDis"));
+		Predicate lienDisPredicate = criteriaBuilder.or(lienDisZero,lienDisNull);
+		predicates.add(lienDisPredicate);
+		if (langue != null) {
+			Predicate languePredicate = criteriaBuilder.equal(membre.get("langue"), langue);
+			predicates.add(languePredicate);
 		}
 		Predicate isActifPredicate = criteriaBuilder.equal(membre.get("actif"), 1);
 		predicates.add(isActifPredicate);

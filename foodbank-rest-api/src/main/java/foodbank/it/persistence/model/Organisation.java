@@ -253,6 +253,8 @@ public class Organisation implements Serializable {
     private Short lienBanque; 
     @Formula("(select d.societe from organisations d where d.id_dis = lien_depot)")
     private String nomDepot;
+    @Formula("(select d.societe from organisations d where d.id_dis = depotram)")
+    private String nomDepotRamasse;
     @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
     private String bankShortName;
     @Formula("(select count(*) from audit a where a.id_dis = id_dis and year(a.date_in) > 2020)")
@@ -273,7 +275,7 @@ public class Organisation implements Serializable {
         Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,Integer  n1824,
         BigDecimal nEq, Integer  nSen, Short depPrinc, Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs, BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead, Short tourneeMois,
         Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres, String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN, String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup,
-        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, Short lienBanque, String nomDepot) {
+        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, Short lienBanque) {
         super();
         this.idDis = idDis;
         this.refInt = refInt;
@@ -390,7 +392,6 @@ public class Organisation implements Serializable {
         this.lupdUserName = lupdUserName;
         this.lupdTs =  LocalDateTime.now(); // do not use lupdTs from DTO we need to update the time
         this.lienBanque = lienBanque;
-        this.nomDepot = nomDepot;
     }
     
     
@@ -399,7 +400,9 @@ public class Organisation implements Serializable {
 		return nomDepot;
 	}
 
-	/**
+    public String getNomDepotRamasse() { return nomDepotRamasse; }
+
+    /**
      * Access method for idDis.
      *
      * @return the current value of idDis

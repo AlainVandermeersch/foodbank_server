@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Join;
 
+import foodbank.it.persistence.repository.IDepotRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,14 +33,17 @@ import foodbank.it.web.dto.OrgMemberReportDto;
 @Service
 public class OrganisationServiceImpl implements IOrganisationService{
 
-	private IOrganisationRepository OrganisationRepository;
-	private IOrgProgramRepository OrgProgramRepository;
+	private final IOrganisationRepository OrganisationRepository;
+	private final IOrgProgramRepository OrgProgramRepository;
+	private final IDepotRepository DepotRepository;
 	private final EntityManager entityManager;
 	
 	public OrganisationServiceImpl(IOrganisationRepository OrganisationRepository,
 			IOrgProgramRepository OrgProgramRepository,
+			IDepotRepository DepotRepository,
 			EntityManager entityManager) {
         this.OrganisationRepository = OrganisationRepository;
+		this.DepotRepository = DepotRepository;
         this.OrgProgramRepository = OrgProgramRepository;
         this.entityManager = entityManager;
     }
@@ -99,6 +103,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		String societe = searchCriteria.getSociete();
 		String adresse = searchCriteria.getAdresse();
 		String nomDepot = searchCriteria.getNomDepot();
+		String nomDepotRamasse = searchCriteria.getNomDepotRamasse();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDepot = searchCriteria.getlienDepot();
 		Boolean isDepot = searchCriteria.getIsDepot();
@@ -132,6 +137,11 @@ public class OrganisationServiceImpl implements IOrganisationService{
 
 			Predicate nomDepotPredicate = criteriaBuilder.like(organisation.get("nomDepot"), "%" + nomDepot.toLowerCase() + "%");
 			predicates.add(nomDepotPredicate);
+		}
+		if (nomDepotRamasse != null ) {
+
+			Predicate nomDepotRamassePredicate = criteriaBuilder.like(organisation.get("nomDepotRamasse"), "%" + nomDepotRamasse.toLowerCase() + "%");
+			predicates.add(nomDepotRamassePredicate);
 		}
 		if (birbCode != null ) {
 
@@ -443,6 +453,35 @@ public class OrganisationServiceImpl implements IOrganisationService{
 
     			return resultList;
     		}
+
+	@Override
+	public String getAnomalies(Organisation organisation) {
+		String anomalies = "";
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> totalCriteriaQuery = cb.createQuery(Long.class);
+		Root<Organisation> org = totalCriteriaQuery.from(Organisation.class);
+		List<Predicate> predicates = new ArrayList<>();
+		Predicate lienBanquePredicate = cb.equal(org.get("lienBanque"), organisation.getLienBanque());
+		predicates.add(lienBanquePredicate);
+		Predicate societePredicate = cb.equal(org.get("societe"), organisation.getSociete());
+		predicates.add(societePredicate);
+		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
+		totalCriteriaQuery.select(cb.count(org));
+		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+		Long countResult = countQuery.getSingleResult();
+		if (countResult != 1) {
+			anomalies += String.format("duplicates: %d;", countResult);
+		}
+		if ( organisation.getDepyN() == 1) {  // calculated field when an organisation is a depot, the matching depot entity must be created
+			String depotId = String.valueOf(organisation.getIdDis());
+			boolean isDepotMissing = !this.DepotRepository.findByIdDepot(depotId).isPresent();
+			if (isDepotMissing) {
+				anomalies += String.format("depotMissing: %s;", depotId);
+			}
+		}
+		return anomalies;
+	}
+
 	@Override
 	public Iterable<Organisation> findAll() {
 		return OrganisationRepository.findAll();

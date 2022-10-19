@@ -7,6 +7,7 @@ public class SearchOrganisationCriteria {
 	private String societe;
 	private String adresse;
 	private String nomDepot;
+	private String nomDepotRamasse;
 	private Integer lienBanque;
 	private Integer lienDepot;
 	private Boolean isDepot;
@@ -25,7 +26,8 @@ public class SearchOrganisationCriteria {
 	private Boolean hasLogins;
 	
 	
-	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif, String nomDepot, 
+	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif,
+									  String nomDepot, String nomDepotRamasse,
 			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isFead, String birbCode, String refInt,
 			Boolean cotAnnuelle,Boolean cotSup,String statut,Boolean gestBen,Boolean feadN,String bankShortName,Boolean hasLogins) {
 		this.idDis = idDis;
@@ -34,7 +36,8 @@ public class SearchOrganisationCriteria {
 		this.societe = societe;
 		this.adresse = adresse;
 		this.isAgreed = isAgreed;
-		this.nomDepot = nomDepot;		
+		this.nomDepot = nomDepot;
+		this.nomDepotRamasse = nomDepotRamasse;
 		this.lienBanque = lienBanque;
 		this.lienDepot = lienDepot;
 		this.isDepot = isDepot;
@@ -146,7 +149,13 @@ public class SearchOrganisationCriteria {
 		this.nomDepot = nomDepot;
 	}
 
+	public String getNomDepotRamasse() {
+		return nomDepotRamasse;
+	}
 
+	public void setNomDepotRamasse(String nomDepotRamasse) {
+		this.nomDepotRamasse = nomDepotRamasse;
+	}
 
 	public Boolean getIsDepot() {
 		return isDepot;

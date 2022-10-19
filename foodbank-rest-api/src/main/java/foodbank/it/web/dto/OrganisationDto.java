@@ -111,8 +111,6 @@ public class OrganisationDto {
 	      
 	    private boolean depyN;
 
-		private boolean depotMissing; // calculated field when an organisation is a depot, the matching depot entity must be created
-	  
 	    private Short logBirb;
 	   
 	    private Short actComp1;
@@ -232,12 +230,15 @@ public class OrganisationDto {
 	    private Short lienBanque; 
 	    
 	    private String nomDepot; // calculated field
+		private String nomDepotRamasse; // calculated field
 	   
 	    private String bankShortName;
 
 		private String antenneOrgName; // generated when creating dto in controller
 
 		private long nbLogins;
+
+		private String anomalies; // generated when creating dto in controller
 	    private Long  totalRecords;
 
 
@@ -255,7 +256,7 @@ public class OrganisationDto {
 				String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp,
 				String emailSec, String emailTres, String telPres, String gsmPres, String disprog, String afsca,
 				boolean webauthority, Short langue, LocalDateTime lastvisit, Integer  nbrefix, boolean cpasyN, Short lienCpas,
-				boolean birbyN,boolean depyN, boolean depotMissing,Short logBirb, Short actComp1, Short actComp2, Short actComp3,
+				boolean birbyN,boolean depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3,
 				Short actComp4, Short actComp5, Short actComp6, String actComp7, Short nrTournee, boolean susp,
 				String stopSusp, String rem, boolean isMsonac, Short classeFbba1, Short classeFbba2, Short classeFbba3,
 				Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer nAdo, Integer n1824,
@@ -265,8 +266,8 @@ public class OrganisationDto {
 				Short tourneeMois, boolean distrListPdt, boolean distrListVp, boolean distrListSec, boolean distrListTres,
 				String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, boolean feadN,
 				String remLivr, boolean cotAnnuelle, Integer  cotMonths, boolean cotSup, Integer  cotMonthsSup, Integer  depotram,
-				String lupdUserName, LocalDateTime lupdTs,Short lienBanque, String nomDepot,
-				String bankShortName, String antenneOrgName, long nbLogins, Long  totalRecords
+				String lupdUserName, LocalDateTime lupdTs,Short lienBanque, String nomDepot,String nomDepotRamasse,
+				String bankShortName, String antenneOrgName, long nbLogins,String anomalies, Long  totalRecords
 				) {
 			super();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -331,7 +332,6 @@ public class OrganisationDto {
 			this.lienCpas = lienCpas;
 			this.birbyN = birbyN;
 			this.depyN = depyN;
-			this.depotMissing = depotMissing;
 			this.logBirb = logBirb;
 			this.actComp1 = actComp1;
 			this.actComp2 = actComp2;
@@ -397,11 +397,12 @@ public class OrganisationDto {
 			}
 			this.lienBanque = lienBanque;
 			this.nomDepot = nomDepot;
-			
+			this.nomDepotRamasse = nomDepotRamasse;
 			this.bankShortName = bankShortName;
 		    this.nbLogins = nbLogins;
 			this.totalRecords = totalRecords;
 			this.antenneOrgName = antenneOrgName;
+			this.anomalies = anomalies;
 		}
 
 		public int getIdDis() {
@@ -853,15 +854,7 @@ public class OrganisationDto {
 			this.depyN = depyN;
 		}
 
-		public boolean isDepotMissing() {
-			return depotMissing;
-		}
-
-		public void setDepotMissing(boolean depotMissing) {
-			this.depotMissing = depotMissing;
-		}
-
-	public Short getLogBirb() {
+		public Short getLogBirb() {
 			return logBirb;
 		}
 
@@ -1341,7 +1334,15 @@ public class OrganisationDto {
 			this.nomDepot = nomDepot;
 		}
 
-		public String getBankShortName() {
+	public String getNomDepotRamasse() {
+		return nomDepotRamasse;
+	}
+
+	public void setNomDepotRamasse(String nomDepotRamasse) {
+		this.nomDepotRamasse = nomDepotRamasse;
+	}
+
+	public String getBankShortName() {
 			return bankShortName;
 		}
 
@@ -1365,7 +1366,15 @@ public class OrganisationDto {
 			this.nbLogins = nbLogins;
 		}
 
-		public Long getTotalRecords() {
+	public String getAnomalies() {
+		return anomalies;
+	}
+
+	public void setAnomalies(String anomalies) {
+		this.anomalies = anomalies;
+	}
+
+	public Long getTotalRecords() {
 			return totalRecords;
 		}
 

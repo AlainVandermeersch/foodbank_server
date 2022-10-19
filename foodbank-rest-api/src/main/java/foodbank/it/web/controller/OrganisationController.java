@@ -69,7 +69,7 @@ public class OrganisationController {
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
      		@RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
-			@RequestParam(required = false) String birbCode,
+			 @RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isFead,
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
@@ -106,7 +106,7 @@ public class OrganisationController {
         }
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, lienBanqueInteger, lienDepotInteger,isDepot, isFead,birbCode,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
+				nomDepot, nomDepotRamasse,lienBanqueInteger, lienDepotInteger,isDepot, isFead,birbCode,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
 		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
@@ -291,11 +291,8 @@ public class OrganisationController {
 			  if (org.isPresent()) antenneOrgName = org.get().getIdDis() + " " + org.get().getSociete();
 		  }
 	  }
-		boolean isDepotMissing = false;
-	    if ( booDepyN) {  // calculated field when an organisation is a depot, the matching depot entity must be created
-			String depotId = String.valueOf(entity.getIdDis());
-			isDepotMissing = !this.DepotRepository.findByIdDepot(depotId).isPresent();
-		}
+
+		String anomalies = this.OrganisationService.getAnomalies(entity);
         OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
 				entity.getSociete(), entity.getAdresse(), strStatut , entity.getEmail(),  entity.getCp(), entity.getLocalite(),
 				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), booAgreed,entity.getBanque(), 
@@ -305,7 +302,7 @@ public class OrganisationController {
 				entity.getPrenomTres(), entity.getNomTres(), entity.getTelTres(), entity.getGsmTres(), entity.getEmailPres(), entity.getEmailVp(),
 				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
 				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(),booCpasyN, entity.getLienCpas(),
-				booBirbyN,booDepyN, isDepotMissing,entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
+				booBirbyN,booDepyN, entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
 				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), booSusp,
 				entity.getStopSusp(), entity.getRem(), booIsMsonac, entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
 				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getN1824(),
@@ -315,11 +312,11 @@ public class OrganisationController {
 				entity.getTourneeMois(), booDistrListPdt, booDistrListVp, booDistrListSec, booDistrListTres,
 				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), booFeadN,
 				entity.getRemLivr(), booCotAnnuelle, entity.getCotMonths(), booCotSup, entity.getCotMonthsSup(), entity.getDepotram(),
-				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),
-				
+				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),entity.getNomDepotRamasse(),
     			entity.getBankShortName(),
 				antenneOrgName,
     			entity.getNbLogins(),
+				anomalies,
     			totalRecords);
         return dto;
     }
@@ -346,7 +343,7 @@ public class OrganisationController {
 				dto.getTourneeMois(), (short) (dto.getDistrListPdt() ? 1 : 0), (short) (dto.getDistrListVp() ? 1 : 0), (short) (dto.getDistrListSec() ? 1 : 0),(short) (dto.getDistrListTres() ? 1 : 0),
 				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), (short) (dto.isFeadN() ? 1 : 0),
 				dto.getRemLivr(), (short) (dto.isCotAnnuelle() ? 1 : 0), dto.getCotMonths(),(int) (dto.isCotSup() ? 1 : 0), dto.getCotMonthsSup(), dto.getDepotram(),
-				dto.getLupdUserName(),dto.getLienBanque(),dto.getNomDepot());       
+				dto.getLupdUserName(),dto.getLienBanque());
         if (!StringUtils.isEmpty(dto.getIdDis())) {
             myOrganisation.setIdDis(dto.getIdDis());
         }

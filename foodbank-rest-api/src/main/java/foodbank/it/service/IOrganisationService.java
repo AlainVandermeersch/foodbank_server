@@ -23,5 +23,6 @@ public interface IOrganisationService {
 	Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable);
 	List<Organisation> OrgClientReport(Integer lienBanque);
 	List<OrgMemberReportDto> OrgMemberReport(Integer lienBanque);
+	String getAnomalies(Organisation organisation);
 
 }
