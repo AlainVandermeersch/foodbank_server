@@ -78,7 +78,7 @@ private IMailService MailService;
 	    		@RequestParam(required = false) Boolean feadN,
 	    		@RequestParam(required = false) Boolean isDepot,
 	    		@RequestParam(required = false) String langue,
-	    		@RequestParam(required = false) String target
+	    		@RequestParam(required = false) String mailGroup
 	    		) {
 	    	
 	        
@@ -86,7 +86,7 @@ private IMailService MailService;
 	        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 	        Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 	        Integer langueInteger = Optional.ofNullable(langue).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-			SearchMailListCriteria criteria = new SearchMailListCriteria(lienBanqueInteger, lienDisInteger,regIdInteger,agreed,feadN,isDepot,langueInteger,target);
+			SearchMailListCriteria criteria = new SearchMailListCriteria(lienBanqueInteger, lienDisInteger,regIdInteger,agreed,feadN,isDepot,langueInteger, mailGroup);
 			List<MailAddressDto> mailAddressDtos = this.MailService.find(criteria);			
 
 			return mailAddressDtos;

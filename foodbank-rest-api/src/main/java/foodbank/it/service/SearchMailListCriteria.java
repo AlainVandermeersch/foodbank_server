@@ -8,9 +8,9 @@ public class SearchMailListCriteria {
 	private Boolean feadN;
 	private Boolean isDepot;
 	private Integer langue;
-	private String target;
+	private String mailGroup;
 	public SearchMailListCriteria(Integer lienBanque, Integer lienDis,Integer regId,Boolean agreed,Boolean feadN,
-			Boolean isDepot,Integer langue,String target) {
+			Boolean isDepot,Integer langue,String mailGroup) {
 		this.lienBanque = lienBanque;
 		this.lienDis = lienDis;	 
 		this.regId = regId;
@@ -18,7 +18,7 @@ public class SearchMailListCriteria {
 		this.feadN = feadN;
 		this.isDepot = isDepot;
 		this.langue = langue;
-		this.target = target;
+		this.mailGroup = mailGroup;
 	}
 	public Integer getLienBanque() {
 		return lienBanque;
@@ -64,11 +64,11 @@ public class SearchMailListCriteria {
 	public void setLangue(Integer langue) {
 		this.langue = langue;
 	}
-	public String getTarget() {
-		return target;
+	public String getMailGroup() {
+		return mailGroup;
 	}
-	public void setTarget(String target) {
-		this.target = target;
+	public void setMailGroup(String mailGroup) {
+		this.mailGroup = mailGroup;
 	}
 	
 	

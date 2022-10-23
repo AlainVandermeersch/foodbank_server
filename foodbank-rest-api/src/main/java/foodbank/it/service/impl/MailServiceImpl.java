@@ -40,21 +40,21 @@ public class MailServiceImpl implements IMailService {
 		Integer regId = searchCriteria.getRegId();
 		Boolean feadN = searchCriteria.getFeadN();
 		Boolean isAgreed = searchCriteria.getAgreed();
-		String target = searchCriteria.getTarget();
+		String mailGroup = searchCriteria.getMailGroup();
 		Boolean isDepot = searchCriteria.getIsDepot();
 		Integer langue = searchCriteria.getLangue();
-		switch(target) {
+		switch(mailGroup) {
 
-			case "0":  // applies to both bank users and org users
+			case MailGroupConstants.ORGANISATIONS:  // applies to both bank users and org users
 				return this.retrieveMailAdressesOfBankOrgs(lienBanque,lienDis,regId,feadN,isAgreed);
-			case "4":
-			case "5":
-				return this.retrieveMailAdressesOfBankUsers(lienBanque, target,langue);
-			case "6":
+			case MailGroupConstants.BANKMANAGERSIT:
+			case MailGroupConstants.BANKUSERSIT:
+				return this.retrieveMailAdressesOfBankUsers(lienBanque, mailGroup,langue);
+			case MailGroupConstants.BANKMEMBERS:
 				return this.retrieveMailAdressesOfBankMembers(lienBanque, langue);
 			default:
 		}
-//  on target 1, 2,3 Org filters need to be applied
+//  we continue with mailGroups ORGANISATIONMANAGERSIT, ORGANISATIONUSERSIT and ORGANISATIONMEMBERS where Org  filters need to be applied
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
@@ -112,7 +112,7 @@ public class MailServiceImpl implements IMailService {
 
 			TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
 			List<Organisation> selectedOrganisations = query.getResultList();
-			if (target.equals("0")) {
+			if (mailGroup.equals(MailGroupConstants.ORGANISATIONS)) {
 				return selectedOrganisations.stream().map(org -> convertOrganisationToMailAddressContactDto(org))
 						.collect(Collectors.toList());
 			} else {
@@ -122,10 +122,10 @@ public class MailServiceImpl implements IMailService {
 				// simple iteration
 				while (iterator.hasNext()) {
 					Organisation org = iterator.next();
-					if ((target.equals("1")) || (target.equals("2"))) {
-						returnedDtos.addAll(convertOrganisationToMailAddressUserDto(org, target, langue));
+					if ((mailGroup.equals(MailGroupConstants.ORGANISATIONMANAGERSIT)) || (mailGroup.equals(MailGroupConstants.ORGANISATIONUSERSIT))) {
+						returnedDtos.addAll(convertOrganisationToMailAddressUserDto(org, mailGroup, langue));
 					}
-					else { // must be target 3
+					else { // must be MailGroupConstants.ORGANISATIONMEMBERS
 						returnedDtos.addAll(convertOrganisationToMailAddressMembreDto(org, langue));
 					}
 				}
@@ -142,7 +142,7 @@ public class MailServiceImpl implements IMailService {
 		return dto;
 	}
 
-	protected List<MailAddressDto> convertOrganisationToMailAddressUserDto(Organisation org, String target,
+	protected List<MailAddressDto> convertOrganisationToMailAddressUserDto(Organisation org, String mailGroup,
 																		   Integer langue) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
@@ -158,7 +158,7 @@ public class MailServiceImpl implements IMailService {
 			predicates.add(languePredicate);
 		}
 
-		if (target.equals("1")) {
+		if (mailGroup.equals(MailGroupConstants.ORGANISATIONMANAGERSIT)) {
 			Predicate rightsPredicate = criteriaBuilder.equal(tuser.get("rights"), "Admin_Asso");
 			predicates.add(rightsPredicate);
 		}
@@ -245,7 +245,7 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedOrganisations.stream().map(org -> convertOrganisationToMailAddressContactDto(org)).collect(Collectors.toList());
 	}
-	protected List<MailAddressDto> retrieveMailAdressesOfBankUsers(Integer lienBanque, String target,Integer langue) {
+	protected List<MailAddressDto> retrieveMailAdressesOfBankUsers(Integer lienBanque, String mailGroup,Integer langue) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
@@ -259,7 +259,7 @@ public class MailServiceImpl implements IMailService {
 		predicates.add(isActifPredicate);
 		
 		Predicate rightsPredicate = criteriaBuilder.equal(tuser.get("rights"), "Admin_Banq");
-		if (target.equals("5")) {
+		if (mailGroup.equals(MailGroupConstants.BANKUSERSIT)) {
 			rightsPredicate = criteriaBuilder.equal(tuser.get("idOrg"), 0);			
 		}
 		predicates.add(rightsPredicate);
