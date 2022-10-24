@@ -13,8 +13,8 @@
     <artifactId>foodbank-keycloak-user-provider</artifactId>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <version.hibernate.javax.persistence>1.0.2.Final</version.hibernate.javax.persistence>
         <version.jboss-ejb-api>2.0.0.Final</version.jboss-ejb-api>
         <database.mysql.host>mysql</database.mysql.host>
@@ -23,8 +23,8 @@
         <database.mysql.additionalparams>?zeroDateTimeBehavior=convertToNull&amp;serverTimezone=Europe/Brussels</database.mysql.additionalparams>
         <database.mysql.username>root</database.mysql.username>
         <database.mysql.password>password</database.mysql.password>
-        <version.wildfly.maven.plugin>2.0.2.Final</version.wildfly.maven.plugin>
-        <version.wildfly>14.0.1.Final</version.wildfly>
+        <version.wildfly.maven.plugin>3.0.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly>25.0.1.Final</version.wildfly>
     </properties>
 
     <dependencies>
