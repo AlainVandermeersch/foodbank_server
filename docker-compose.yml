@@ -68,7 +68,7 @@ services:
       args:
         - REDIRECT_URIS=${REDIRECT_URIS}
         - REDIRECT_URIS_ISIS=${REDIRECT_URIS_ISIS}
-        - FRONTEND_URL=${AUTH_SERVER_BASE_URL}/auth
+        - FRONTEND_URL=${AUTH_SERVER_BASE_URL_FRONTEND}
         - SMTP_USER=${SMTP_USER}
         - SMTP_PASSWORD=${SMTP_PASSWORD}
     ports:
