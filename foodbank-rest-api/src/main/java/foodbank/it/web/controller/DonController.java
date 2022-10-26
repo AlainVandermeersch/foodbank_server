@@ -70,10 +70,6 @@ public class DonController {
 		return selectedDons.stream()
 				.map(Don -> convertToDto(Don, totalElements))
 				.collect(Collectors.toList());
-
-        
-        
-       
     }
 
    
@@ -81,8 +77,6 @@ public class DonController {
     public DonDto updateDon(@PathVariable("idDon") Integer idDon, @RequestBody DonDto updatedDonDto) throws Exception {
         Don donEntity = convertToEntity(updatedDonDto);
         Don savedDon = this.DonService.save(donEntity);
-        savedDon.setDonateurNom(donEntity.getDonateurNom());
-        savedDon.setDonateurPrenom(donEntity.getDonateurPrenom());
         return this.convertToDto(savedDon,1);
     }
 
@@ -97,8 +91,6 @@ public class DonController {
     public DonDto create(@RequestBody DonDto newDonDto) throws Exception {
         Don donEntity = convertToEntity(newDonDto);
         Don createdDon = this.DonService.save(donEntity);  
-        createdDon.setDonateurNom(donEntity.getDonateurNom());
-        createdDon.setDonateurPrenom(donEntity.getDonateurPrenom());
         return this.convertToDto(createdDon,1);
     }
     private Don convertToEntity(DonDto dto) {
