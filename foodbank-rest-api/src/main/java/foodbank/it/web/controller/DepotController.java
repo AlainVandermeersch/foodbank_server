@@ -126,7 +126,7 @@ public class DepotController {
     	
         DepotDto dto = new DepotDto(entity.getIdDepot(), entity.getNom(), entity.getAdresse(), entity.getAdresse2(), entity.getCp(), entity.getVille(),
     			entity.getIdCompany(),entity.getTelephone(), entity.getContact(), entity.getEmail(), entity.getMemo(), booDepPrinc, booActif, booDepFead,
-    			entity.getLienBanque() ,anomalies,totalRecords );
+                entity.getIpMainAddress(), entity.getLienBanque() ,anomalies,totalRecords );
         return dto;
     }
 
@@ -134,7 +134,8 @@ public class DepotController {
     	    	    
     	Depot myDepot = new Depot( dto.getIdDepot(), dto.getNom(), dto.getAdresse(), dto.getAdresse2(), dto.getCp(), dto.getVille(),
     			dto.getIdCompany(),dto.getTelephone(), dto.getContact(), dto.getEmail(), dto.getMemo(), 
-    			(short) (dto.getDepPrinc() ? 1 : 0), (short) (dto.getActif() ? 1 : 0) , (short) (dto.getDepFead() ? 1 : 0),dto.getLienBanque());  
+    			(short) (dto.getDepPrinc() ? 1 : 0), (short) (dto.getActif() ? 1 : 0) , (short) (dto.getDepFead() ? 1 : 0),
+                dto.getIpMainAddress(), dto.getLienBanque());
     	
         if (!StringUtils.isEmpty(dto.getIdDepot())) {
             myDepot.setIdDepot(dto.getIdDepot());

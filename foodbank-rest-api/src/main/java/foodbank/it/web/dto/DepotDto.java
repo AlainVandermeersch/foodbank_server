@@ -28,6 +28,8 @@ public class DepotDto {
 	 private boolean actif;
 	
 	 private boolean depFead;
+
+	 private String ipMainAddress;
 	 
 	 private Integer lienBanque;
 
@@ -46,7 +48,7 @@ public class DepotDto {
 
 	public DepotDto(String idDepot, String nom, String adresse, String adresse2, String cp, String ville,String idCompany,
 			String telephone, String contact, String email, String memo, boolean depPrinc, boolean actif, boolean depFead,
-			Integer lienBanque, String anomalies, Long  totalRecords) {
+			String ipMainAddress, Integer lienBanque, String anomalies, Long  totalRecords) {
 		super();
 		this.idDepot = idDepot;
 		this.nom = nom;
@@ -62,6 +64,7 @@ public class DepotDto {
 		this.depPrinc = depPrinc;
 		this.actif = actif ;
 		this.depFead = depFead;
+		this.ipMainAddress = ipMainAddress;
 		this.lienBanque = lienBanque;
 		this.anomalies = anomalies;
 		this.sync = false;
@@ -181,6 +184,14 @@ public class DepotDto {
 
 	public void setDepFead(boolean depFead) {
 		this.depFead = depFead;
+	}
+
+	public String getIpMainAddress() {
+		return ipMainAddress;
+	}
+
+	public void setIpMainAddress(String ipMainAddress) {
+		this.ipMainAddress = ipMainAddress;
 	}
 
 	public Integer getLienBanque() {

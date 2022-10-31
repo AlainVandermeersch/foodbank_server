@@ -52,6 +52,8 @@ public class Depot implements Serializable {
  private short actif;
  @Column(name="DEP_FEAD", precision=3)
  private short depFead;
+ @Column(name="IP_MAIN_ADDRESS", length=30)
+ private String ipMainAddress;
  @Column(name="lien_banque")
  private Integer lienBanque;
  
@@ -63,7 +65,7 @@ public class Depot implements Serializable {
 
  
  public Depot(String idDepot, String nom, String adresse, String adresse2, String cp, String ville, String idCompany,String telephone,
-		String contact, String email, String memo, short depPrinc, short actif, short depFead, Integer lienBanque) {
+		String contact, String email, String memo, short depPrinc, short actif, short depFead,String ipMainAddress, Integer lienBanque) {
 	super();
 	this.idDepot = idDepot;
 	this.nom = nom;
@@ -79,6 +81,7 @@ public class Depot implements Serializable {
 	this.depPrinc = depPrinc;
 	this.actif = actif;
 	this.depFead = depFead;
+    this.ipMainAddress = ipMainAddress;
 	this.lienBanque = lienBanque;
 }
 
@@ -342,8 +345,15 @@ public void setIdCompany(String idCompany) {
      depFead = aDepFead;
  }
 
- 
- public Integer getLienBanque() {
+    public String getIpMainAddress() {
+        return ipMainAddress;
+    }
+
+    public void setIpMainAddress(String ipMainAddress) {
+        this.ipMainAddress = ipMainAddress;
+    }
+
+    public Integer getLienBanque() {
 	return lienBanque;
 }
 
