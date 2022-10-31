@@ -54,7 +54,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ADDITIONAL_PARAMS=${MYSQL_ADDITIONAL_PARAMS}
-      - JAVA_OPTS_APPEND="-Dkeycloak.userCache.enabled=false"
+      - JAVA_OPTS_APPEND=-Dkeycloak.userCache.enabled=false
     networks:
       - foodbank
 
