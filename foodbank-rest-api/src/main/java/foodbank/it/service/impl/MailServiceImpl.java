@@ -51,7 +51,10 @@ public class MailServiceImpl implements IMailService {
 			case MailGroupConstants.BANKUSERSIT:
 				return this.retrieveMailAdressesOfBankUsers(lienBanque, mailGroup,langue);
 			case MailGroupConstants.BANKMEMBERS:
-				return this.retrieveMailAdressesOfBankMembers(lienBanque, langue);
+			case MailGroupConstants.CAMEMBERS:
+			case MailGroupConstants.AGMEMBERS:
+			case MailGroupConstants.CGMEMBERS:
+				return this.retrieveMailAdressesOfBankMembers(lienBanque, mailGroup,langue);
 			default:
 		}
 //  we continue with mailGroups ORGANISATIONMANAGERSIT, ORGANISATIONUSERSIT and ORGANISATIONMEMBERS where Org  filters need to be applied
@@ -291,7 +294,7 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedUsers.stream().map(user -> convertUserToMailAddress(user, null)).collect(Collectors.toList());
 	}
-	protected List<MailAddressDto> retrieveMailAdressesOfBankMembers(Integer lienBanque,Integer langue) {
+	protected List<MailAddressDto> retrieveMailAdressesOfBankMembers(Integer lienBanque,String mailGroup,Integer langue) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
@@ -312,6 +315,18 @@ public class MailServiceImpl implements IMailService {
 		Predicate isActifPredicate = criteriaBuilder.equal(membre.get("actif"), 1);
 		predicates.add(isActifPredicate);
 
+		if (mailGroup.equals(MailGroupConstants.CAMEMBERS)) {
+			Predicate isCaPredicate = criteriaBuilder.equal(membre.get("ca"), 1);
+			predicates.add(isCaPredicate);
+		}
+		if (mailGroup.equals(MailGroupConstants.AGMEMBERS)) {
+			Predicate isAgPredicate = criteriaBuilder.equal(membre.get("ag"), 1);
+			predicates.add(isAgPredicate);
+		}
+		if (mailGroup.equals(MailGroupConstants.CGMEMBERS)) {
+			Predicate isCgPredicate = criteriaBuilder.equal(membre.get("cg"), 1);
+			predicates.add(isCgPredicate);
+		}
 
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
 		membreQuery.orderBy(criteriaBuilder.asc(membre.get("nom")),criteriaBuilder.asc(membre.get("prenom")));

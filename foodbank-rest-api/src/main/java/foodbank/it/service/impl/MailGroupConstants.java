@@ -8,4 +8,8 @@ public class MailGroupConstants {
     public static final String BANKMANAGERSIT = "4";
     public static final String BANKUSERSIT = "5";
     public static final String BANKMEMBERS = "6";
+    public static final String CAMEMBERS = "7";
+    public static final String AGMEMBERS = "8";
+
+    public static final String CGMEMBERS = "9";
 }

@@ -119,11 +119,10 @@ private IMailService MailService;
 			String from = newEmail.getFrom();
 			String subject = newEmail.getSubject();
 			String bodyText = newEmail.getBodyText();
+			boolean bccMode = newEmail.isBccMode();
 			String attachmentFileNames = newEmail.getAttachmentFileNames();
-			MimeMessage newMimeMessage = createEmail(smtpUser, smtpPassword, to, from, subject, bodyText,attachmentFileNames);
-			// Todo Alain Use Google Message Type Message newMessage =
-			// createMessageWithEmail(newMimeMessage);
-			Transport.send(newMimeMessage);	
+			MimeMessage newMimeMessage = createEmail(smtpUser, smtpPassword, to, from, subject, bodyText,attachmentFileNames,bccMode);
+			Transport.send(newMimeMessage);
 			newEmail.setBodyText(" ");
 			return newEmail;
 		} catch (Exception ex) {
@@ -133,7 +132,7 @@ private IMailService MailService;
 		}
 	}
 
-	public static MimeMessage createEmail(String username, String password, String to, String from, String subject, String bodyText, String attachmentFileNames)
+	public static MimeMessage createEmail(String username, String password, String to, String from, String subject, String bodyText, String attachmentFileNames, boolean bccMode)
 			throws MessagingException {
 		Path root = Paths.get("uploads");
 		System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username, password);
@@ -149,10 +148,17 @@ private IMailService MailService;
 		});
 
 		MimeMessage email = new MimeMessage(session);
-// from becomes cc and to becomes username
+// from becomes cc and from  becomes username
 		email.setFrom(new InternetAddress(username));
 		email.addRecipient(javax.mail.Message.RecipientType.CC, new InternetAddress(from));
-		email.addRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(to));
+		if (bccMode) {
+			email.addRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(to));
+		}
+		else {
+			email.addRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(to));
+		}
+		email.setReplyTo(InternetAddress.parse(from));
+
 		email.setSubject(subject);
 		if (attachmentFileNames.length()==0) {
 		email.setContent(bodyText, "text/html; charset=utf-8");

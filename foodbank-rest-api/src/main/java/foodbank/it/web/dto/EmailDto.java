@@ -7,6 +7,8 @@ public class EmailDto {
 	private String subject;
 	private String bodyText;
 	private String attachmentFileNames;
+
+	private boolean bccMode;
 	
 	public String getSentDate() {
 		return sentDate;
@@ -44,5 +46,12 @@ public class EmailDto {
 	public void setAttachmentFileNames(String attachmentFileNames) {
 		this.attachmentFileNames = attachmentFileNames;
 	}
-	
+
+	public boolean isBccMode() {
+		return bccMode;
+	}
+
+	public void setBccMode(boolean bccMode) {
+		this.bccMode = bccMode;
+	}
 }
