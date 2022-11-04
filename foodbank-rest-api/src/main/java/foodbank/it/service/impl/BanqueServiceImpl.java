@@ -1,8 +1,6 @@
 package foodbank.it.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -12,16 +10,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
-import foodbank.it.persistence.model.Banque;
-import foodbank.it.persistence.model.Membre;
-import foodbank.it.persistence.model.TUser;
-import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.model.*;
 import foodbank.it.persistence.repository.IBanqueRepository;
+import foodbank.it.web.dto.BanqueOrgCountDto;
 import org.springframework.stereotype.Service;
 
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueOrgReportDto;
-import foodbank.it.web.dto.BanqueCountDto;
 
 @Service
 public class BanqueServiceImpl implements IBanqueService {
@@ -90,10 +85,10 @@ public class BanqueServiceImpl implements IBanqueService {
 		return BanqueRepository.findByBankShortName(bankShortName);
 	}
 	
-	@Override
-	public List<BanqueCountDto> reportMembreCount() {
+
+	private List<BanqueCount> countMembers(boolean bankCount) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<BanqueCountDto> membreQuery = criteriaBuilder.createQuery(BanqueCountDto.class);
+		CriteriaQuery<BanqueCount> membreQuery = criteriaBuilder.createQuery(BanqueCount.class);
 		Root<Membre> membre = membreQuery.from(Membre.class);
 
 		List<Predicate> predicates = new ArrayList<>();
@@ -105,44 +100,109 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(lienBanqueClassicPredicate);
 		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(membre.get("lienBanque"), 1);
 		predicates.add(lienBanqueNotNullPredicate);
+		if (bankCount == true) {
+			// selecting bank members only
+			Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);
+			Predicate lienDisNull = criteriaBuilder.isNull(membre.get("lienDis"));
+			Predicate lienDisPredicate = criteriaBuilder.or(lienDisZero,lienDisNull);
+			predicates.add(lienDisPredicate);
+		}
+		else {
+			Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
+			Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
+			predicates.add(lienDisNotZero);
+			predicates.add(lienDisNotNull);
+		}
 		membreQuery.where(predicates.stream().toArray(Predicate[]::new));
 		membreQuery.groupBy(membre.get("lienBanque"));
 		membreQuery.multiselect(membre.get("bankShortName"), criteriaBuilder.count(membre));
 		membreQuery.orderBy(criteriaBuilder.asc(membre.get("bankShortName")));
-		List<BanqueCountDto> results = entityManager.createQuery(membreQuery).getResultList();
+		List<BanqueCount> results = entityManager.createQuery(membreQuery).getResultList();
 
 		return results;
 	}
-	
-	@Override
-	public List<BanqueCountDto> reportTUserCount() {
+	private List<UserCount> countUsers(boolean bankCount) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<BanqueCountDto> tuserQuery = criteriaBuilder.createQuery(BanqueCountDto.class);
-		Root<TUser> tuser = tuserQuery.from(TUser.class);
+		CriteriaQuery<UserCount> userQuery = criteriaBuilder.createQuery(UserCount.class);
+		Root<TUser> user = userQuery.from(TUser.class);
 
 		List<Predicate> predicates = new ArrayList<>();
-		Predicate isActifPredicate = criteriaBuilder.equal(tuser.get("actif"), 1);
+		Predicate isActifPredicate = criteriaBuilder.equal(user.get("actif"), 1);
 		predicates.add(isActifPredicate);
-		Predicate isValidBankPredicate = criteriaBuilder.isNotNull(tuser.get("idCompany"));
+		Predicate isValidBankPredicate = criteriaBuilder.isNotNull(user.get("idCompany"));
 		predicates.add(isValidBankPredicate);
-		Predicate lienBanqueClassicPredicate = criteriaBuilder.lessThan(tuser.get("lienBanque"), 11);
-		predicates.add(lienBanqueClassicPredicate);
-		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(tuser.get("lienBanque"), 1);
-		predicates.add(lienBanqueNotNullPredicate);
-		
-		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
-		tuserQuery.groupBy(tuser.get("idCompany"));
-		tuserQuery.multiselect(tuser.get("idCompany"), criteriaBuilder.count(tuser));
-		tuserQuery.orderBy(criteriaBuilder.asc(tuser.get("idCompany")));
-		List<BanqueCountDto> results = entityManager.createQuery(tuserQuery).getResultList();
+
+		if (bankCount == true) {
+			// selecting bank members only
+			Predicate idOrgZero = criteriaBuilder.equal(user.get("idOrg"), 0);
+			Predicate idOrgNull = criteriaBuilder.isNull(user.get("idOrg"));
+			Predicate idOrgPredicate = criteriaBuilder.or(idOrgZero,idOrgNull);
+			predicates.add(idOrgPredicate);
+		}
+		else {
+			Predicate idOrgNotZero = criteriaBuilder.notEqual(user.get("idOrg"), 0);
+			Predicate idOrgNotNull = criteriaBuilder.isNotNull(user.get("idOrg"));
+			predicates.add(idOrgNotZero);
+			predicates.add(idOrgNotNull);
+		}
+		userQuery.where(predicates.stream().toArray(Predicate[]::new));
+		userQuery.groupBy(user.get("idCompany"));
+		userQuery.multiselect(user.get("idCompany"), criteriaBuilder.count(user));
+		userQuery.orderBy(criteriaBuilder.asc(user.get("idCompany")));
+		List<UserCount> results = entityManager.createQuery(userQuery).getResultList();
 
 		return results;
 	}
+	@Override
+	public List<BanqueOrgCountDto> reportMembreCount() {
+	    List<BanqueCount> bankCounts = this.countMembers(true);
+		List<BanqueCount> orgCounts = this.countMembers(false);
+		List<BanqueOrgCountDto> bankOrgcounts = new ArrayList<BanqueOrgCountDto>();
+		for (BanqueCount bankCount : bankCounts) {
+			boolean foundMatch = false;
+			for (BanqueCount orgCount : orgCounts) {
+				if (bankCount.getBankShortName().equals(orgCount.getBankShortName())) {
+					bankOrgcounts.add(new BanqueOrgCountDto(bankCount.getBankShortName(), bankCount.getCount(), orgCount.getCount()));
+					foundMatch = true;
+					break;
+				}
+			}
+			if (foundMatch == false) {
+				bankOrgcounts.add(new BanqueOrgCountDto(bankCount.getBankShortName(), bankCount.getCount(), 0L));
+			}
+		}
+
+		return bankOrgcounts;
+
+	}
+	@Override
+	public List<BanqueOrgCountDto> reportTUserCount() {
+		List<UserCount> bankCounts = this.countUsers(true);
+		List<UserCount> orgCounts = this.countUsers(false);
+		List<BanqueOrgCountDto> bankOrgcounts = new ArrayList<BanqueOrgCountDto>();
+		for (UserCount bankCount : bankCounts) {
+			boolean foundMatch = false;
+			for (UserCount orgCount : orgCounts) {
+				if (bankCount.getIdCompany().equals(orgCount.getIdCompany())) {
+					bankOrgcounts.add(new BanqueOrgCountDto(bankCount.getIdCompany(), bankCount.getCount(), orgCount.getCount()));
+					foundMatch = true;
+					break;
+				}
+			}
+			if (foundMatch == false) {
+				bankOrgcounts.add(new BanqueOrgCountDto(bankCount.getIdCompany(), bankCount.getCount(), 0L));
+			}
+		}
+
+		return bankOrgcounts;
+
+	}
+
 
 	@Override
-	public List<BanqueCountDto> reportOrgCount(Boolean hasBirbCode) {
+	public List<BanqueCount> reportOrgCount(Boolean hasBirbCode) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<BanqueCountDto> organisationQuery = criteriaBuilder.createQuery(BanqueCountDto.class);
+		CriteriaQuery<BanqueCount> organisationQuery = criteriaBuilder.createQuery(BanqueCount.class);
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
 
 		List<Predicate> predicates = new ArrayList<>();
@@ -162,7 +222,7 @@ public class BanqueServiceImpl implements IBanqueService {
 		organisationQuery.groupBy(organisation.get("lienBanque"));
 		organisationQuery.multiselect(organisation.get("bankShortName"), criteriaBuilder.count(organisation));
 		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("bankShortName")));
-		List<BanqueCountDto> results = entityManager.createQuery(organisationQuery).getResultList();
+		List<BanqueCount> results = entityManager.createQuery(organisationQuery).getResultList();
 
 		return results;
 	}

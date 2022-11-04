@@ -3,15 +3,15 @@ package foodbank.it.web.controller;
 import foodbank.it.persistence.model.Banque;
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueDto;
+import foodbank.it.web.dto.BanqueOrgCountDto;
 import foodbank.it.web.dto.BanqueOrgReportDto;
-import foodbank.it.web.dto.BanqueCountDto;
+import foodbank.it.persistence.model.BanqueCount;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -92,26 +92,26 @@ public class BanqueController {
         return this.convertToDto(Banque);
     }
     @GetMapping("banqueOrgCount/")
-    public List<BanqueCountDto> OrgReport(
+    public List<BanqueCount> OrgReport(
     		@RequestParam(required = false) Boolean hasBirbCode) {
     	
-    	List<BanqueCountDto> listBanqueCount = this.BanqueService.reportOrgCount(hasBirbCode);
+    	List<BanqueCount> listBanqueCount = this.BanqueService.reportOrgCount(hasBirbCode);
     	    	
 		return listBanqueCount;       	
     	  
     }
     @GetMapping("banqueMembreCount/")
-    public List<BanqueCountDto> MembreReport() {
+    public List<BanqueOrgCountDto> MembreReport() {
     	
-    	List<BanqueCountDto> listBanqueCount = this.BanqueService.reportMembreCount();
+    	List<BanqueOrgCountDto> listBanqueCount = this.BanqueService.reportMembreCount();
     	    	
 		return listBanqueCount;       	
     	  
     }
     @GetMapping("banqueUserCount/")
-    public List<BanqueCountDto> UserReport() {
+    public List<BanqueOrgCountDto> UserReport() {
     	
-    	List<BanqueCountDto> listBanqueCount = this.BanqueService.reportTUserCount();
+    	List<BanqueOrgCountDto> listBanqueCount = this.BanqueService.reportTUserCount();
     	    	
 		return listBanqueCount;       	
     	  

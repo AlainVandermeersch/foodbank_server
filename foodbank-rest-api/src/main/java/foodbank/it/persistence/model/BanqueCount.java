@@ -1,9 +1,9 @@
-package foodbank.it.web.dto;
+package foodbank.it.persistence.model;
 
-public class BanqueCountDto {
+public class BanqueCount {
 	 private String bankShortName; 
 	 private Long count;
-	public BanqueCountDto(String bankShortName, Long orgCount) {
+	public BanqueCount(String bankShortName, Long orgCount) {
 		super();
 		this.bankShortName = bankShortName;
 		this.count = orgCount;
