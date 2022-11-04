@@ -3,10 +3,10 @@ package foodbank.it.persistence.model;
 public class BanqueCount {
 	 private String bankShortName; 
 	 private Long count;
-	public BanqueCount(String bankShortName, Long orgCount) {
+	public BanqueCount(String bankShortName, Long count) {
 		super();
 		this.bankShortName = bankShortName;
-		this.count = orgCount;
+		this.count = count;
 	}
 	public String getBankShortName() {
 		return bankShortName;

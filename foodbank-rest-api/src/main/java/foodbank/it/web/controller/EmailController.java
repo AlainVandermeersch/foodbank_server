@@ -113,6 +113,9 @@ private IMailService MailService;
 	@ResponseStatus(HttpStatus.CREATED)
 	public EmailDto create(@RequestBody EmailDto newEmail) throws MessagingException {
 		 System.out.println("Mailing Send was called");
+		 if (smtpUser.equals("dummy")) {
+			 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not Supported on Test System");
+		 }
 		try {
 
 			String to = newEmail.getTo();
