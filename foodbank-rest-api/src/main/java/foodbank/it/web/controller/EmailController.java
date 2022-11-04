@@ -111,8 +111,8 @@ private IMailService MailService;
 
 	@PostMapping("mailing/")
 	@ResponseStatus(HttpStatus.CREATED)
-	public EmailDto create(@RequestBody EmailDto newEmail) throws MessagingException {
-		 System.out.println("Mailing Send was called");
+	public EmailDto create(@RequestBody EmailDto newEmail) throws Exception {
+		 System.out.printf("\nMailing Send was called from smtp user '%s'\n",smtpUser);
 		 if (smtpUser.equals("dummy")) {
 			 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not Supported on Test System");
 		 }
