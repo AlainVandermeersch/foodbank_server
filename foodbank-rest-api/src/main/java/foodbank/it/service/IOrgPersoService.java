@@ -1,8 +1,8 @@
 package foodbank.it.service;
 
-import java.util.Optional;
-
 import foodbank.it.persistence.model.OrgPerso;
+
+import java.util.Optional;
 
 public interface IOrgPersoService {
 	Optional<OrgPerso> findByOrgPersId(int orgPersId);

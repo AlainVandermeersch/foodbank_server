@@ -1,8 +1,10 @@
 package foodbank.it.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import foodbank.it.persistence.model.ClientDependent;
+import foodbank.it.persistence.repository.IClientDependentRepository;
+import foodbank.it.service.IClientDependentService;
+import foodbank.it.service.SearchClientDependentCriteria;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -11,13 +13,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-
-import org.springframework.stereotype.Service;
-
-import foodbank.it.persistence.model.ClientDependent;
-import foodbank.it.persistence.repository.IClientDependentRepository;
-import foodbank.it.service.IClientDependentService;
-import foodbank.it.service.SearchClientDependentCriteria;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 @Service
 public class ClientDependentServiceImpl implements IClientDependentService{
 	

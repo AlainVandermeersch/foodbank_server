@@ -1,19 +1,14 @@
 
 package foodbank.it.persistence.model;
 
+import org.hibernate.annotations.Formula;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import org.hibernate.annotations.Formula;
 
 @Entity(name="dons")
 public class Don implements Serializable {

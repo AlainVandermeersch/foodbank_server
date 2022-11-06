@@ -1,11 +1,10 @@
 package foodbank.it.persistence.repository;
 
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.Organisation;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import foodbank.it.persistence.model.Organisation;
+import java.util.Optional;
 
 public interface IOrganisationRepository extends PagingAndSortingRepository<Organisation, Integer>{
     Optional<Organisation> findByIdDis(int idDis);

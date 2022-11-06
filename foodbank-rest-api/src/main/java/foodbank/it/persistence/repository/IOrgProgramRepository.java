@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.OrgProgram;
 import org.springframework.data.repository.CrudRepository;
 
-import foodbank.it.persistence.model.OrgProgram;
+import java.util.Optional;
 
 public interface IOrgProgramRepository extends CrudRepository<OrgProgram, Integer>{
 	

@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.Notification;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import foodbank.it.persistence.model.Notification;
+import java.util.Optional;
 
 public interface INotificationRepository extends PagingAndSortingRepository<Notification, Integer>{ 
 	Optional<Notification> findByNotificationId(int notificationId);

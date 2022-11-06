@@ -1,6 +1,11 @@
 package foodbank.it.service.impl;
 
-import java.util.*;
+import foodbank.it.persistence.model.*;
+import foodbank.it.persistence.repository.IBanqueRepository;
+import foodbank.it.service.IBanqueService;
+import foodbank.it.web.dto.BanqueOrgCountDto;
+import foodbank.it.web.dto.BanqueOrgReportDto;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -9,14 +14,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-
-import foodbank.it.persistence.model.*;
-import foodbank.it.persistence.repository.IBanqueRepository;
-import foodbank.it.web.dto.BanqueOrgCountDto;
-import org.springframework.stereotype.Service;
-
-import foodbank.it.service.IBanqueService;
-import foodbank.it.web.dto.BanqueOrgReportDto;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BanqueServiceImpl implements IBanqueService {

@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.Don;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import foodbank.it.persistence.model.Don;
+import java.util.Optional;
 
 public interface IDonRepository  extends PagingAndSortingRepository<Don, Integer>{
 	Optional<Don> findByIdDon(int idDon);

@@ -2,16 +2,11 @@
 
 package foodbank.it.persistence.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity(name="banques")
 public class Banque implements Serializable {

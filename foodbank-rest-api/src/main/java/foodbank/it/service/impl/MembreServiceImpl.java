@@ -1,28 +1,26 @@
 package foodbank.it.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import javax.transaction.Transactional;
-
+import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.model.TUser;
+import foodbank.it.persistence.repository.IMembreRepository;
 import foodbank.it.persistence.repository.IOrganisationRepository;
+import foodbank.it.persistence.repository.ITUserRepository;
+import foodbank.it.service.IMembreService;
+import foodbank.it.service.SearchMembreCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
-import foodbank.it.persistence.model.Membre;
-import foodbank.it.persistence.model.TUser;
-import foodbank.it.persistence.repository.IMembreRepository;
-import foodbank.it.persistence.repository.ITUserRepository;
-import foodbank.it.service.IMembreService;
-import foodbank.it.service.SearchMembreCriteria;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MembreServiceImpl implements IMembreService{

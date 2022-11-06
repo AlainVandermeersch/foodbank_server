@@ -1,12 +1,17 @@
 package foodbank.it.service.impl;
 
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.List;
 import foodbank.it.persistence.model.Depot;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.repository.IDepotRepository;
 import foodbank.it.persistence.repository.IOrganisationRepository;
+import foodbank.it.service.IDepotService;
+import foodbank.it.service.SearchDepotCriteria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,16 +19,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.query.QueryUtils;
-import org.springframework.stereotype.Service;
-
-
-import foodbank.it.service.IDepotService;
-import foodbank.it.service.SearchDepotCriteria;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepotServiceImpl implements IDepotService{

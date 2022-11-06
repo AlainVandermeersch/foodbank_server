@@ -1,11 +1,10 @@
 package foodbank.it.service;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.Membre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import foodbank.it.persistence.model.Membre;
+import java.util.Optional;
 
 public interface IMembreService {
 	

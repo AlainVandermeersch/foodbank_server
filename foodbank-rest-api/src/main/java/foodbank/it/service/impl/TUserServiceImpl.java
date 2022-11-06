@@ -1,31 +1,24 @@
 package foodbank.it.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
-
 import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.persistence.repository.IBanqueRepository;
 import foodbank.it.persistence.repository.ITUserRepository;
+import foodbank.it.service.ITUserService;
+import foodbank.it.service.SearchTUserCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
-// backed out import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import foodbank.it.service.ITUserService;
-import foodbank.it.service.SearchTUserCriteria;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TUserServiceImpl implements ITUserService {

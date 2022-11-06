@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.Donateur;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import foodbank.it.persistence.model.Donateur;
+import java.util.Optional;
 
 public interface IDonateurRepository  extends PagingAndSortingRepository<Donateur, Integer>{
 	Optional<Donateur> findByDonateurId(int donateurId);

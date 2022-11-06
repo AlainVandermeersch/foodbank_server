@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.OrgPerso;
 import org.springframework.data.repository.CrudRepository;
 
-import foodbank.it.persistence.model.OrgPerso;
+import java.util.Optional;
 
 public interface IOrgPersoRepository extends CrudRepository<OrgPerso, Integer>{
 	Optional<OrgPerso> findByOrgPersId(int orgPersId);

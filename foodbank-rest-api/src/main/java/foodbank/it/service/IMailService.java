@@ -1,8 +1,8 @@
 package foodbank.it.service;
 
-import java.util.List;
-
 import foodbank.it.web.dto.MailAddressDto;
+
+import java.util.List;
 
 
 public interface IMailService {

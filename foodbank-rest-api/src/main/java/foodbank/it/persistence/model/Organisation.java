@@ -2,17 +2,12 @@
 
 package foodbank.it.persistence.model;
 
+import org.hibernate.annotations.Formula;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import org.hibernate.annotations.Formula;
 
 @Entity(name="organisations")
 public class Organisation implements Serializable {

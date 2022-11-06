@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.ClientDependent;
 import org.springframework.data.repository.CrudRepository;
 
-import foodbank.it.persistence.model.ClientDependent;
+import java.util.Optional;
 
 public interface IClientDependentRepository extends CrudRepository<ClientDependent, Integer>{
 	    Optional<ClientDependent> findByIdDep(int idDep);

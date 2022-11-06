@@ -1,28 +1,25 @@
 package foodbank.it.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.stereotype.Service;
-import org.springframework.data.jpa.repository.query.QueryUtils;
-
 import foodbank.it.persistence.model.Trip;
 import foodbank.it.persistence.repository.ITripRepository;
-
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
 import foodbank.it.service.ITripService;
 import foodbank.it.service.SearchTripCriteria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TripServiceImpl implements ITripService {

@@ -1,9 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
+import foodbank.it.persistence.model.Depot;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import foodbank.it.persistence.model.Depot;
+import java.util.Optional;
 
 public interface IDepotRepository  extends PagingAndSortingRepository<Depot, String>{
 	Optional<Depot> findByIdDepot(String idDepot);

@@ -1,6 +1,8 @@
 package foodbank.it.service;
-import java.util.List;
+
 import foodbank.it.web.dto.PopulationReportDto;
+
+import java.util.List;
 public interface IPopulationService {
 	List<PopulationReportDto> report();
 

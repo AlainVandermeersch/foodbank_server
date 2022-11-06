@@ -1,8 +1,8 @@
 package foodbank.it.service;
 
-import java.util.Optional;
-
 import foodbank.it.persistence.model.Region;
+
+import java.util.Optional;
 
 public interface IRegionService {
 	Optional<Region> findByRegId(int regId);

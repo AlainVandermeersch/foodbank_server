@@ -1,26 +1,20 @@
 package foodbank.it.service.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import foodbank.it.persistence.model.Membre;
-import org.springframework.stereotype.Service;
-
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.service.IMailService;
 import foodbank.it.service.SearchMailListCriteria;
 import foodbank.it.web.dto.MailAddressDto;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MailServiceImpl implements IMailService {

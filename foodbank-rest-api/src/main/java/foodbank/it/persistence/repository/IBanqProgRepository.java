@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.BanqProg;
 import org.springframework.data.repository.CrudRepository;
 
-import foodbank.it.persistence.model.BanqProg;
+import java.util.Optional;
 
 public interface IBanqProgRepository extends CrudRepository<BanqProg, Integer> {
 	 Optional<BanqProg> findByLienBanque(int lienBanque);

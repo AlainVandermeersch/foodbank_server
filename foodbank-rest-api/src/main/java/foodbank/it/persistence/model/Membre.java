@@ -2,16 +2,15 @@
 
 package foodbank.it.persistence.model;
 
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.persistence.*;
-
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 
 @Entity

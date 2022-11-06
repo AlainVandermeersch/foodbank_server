@@ -1,8 +1,15 @@
 package foodbank.it.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import foodbank.it.persistence.model.Don;
+import foodbank.it.persistence.model.Donateur;
+import foodbank.it.persistence.repository.IDonateurRepository;
+import foodbank.it.service.IDonateurService;
+import foodbank.it.service.SearchDonateurCriteria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -11,19 +18,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.query.QueryUtils;
-import org.springframework.stereotype.Service;
-
-import foodbank.it.persistence.model.Don;
-import foodbank.it.persistence.model.Donateur;
-
-import foodbank.it.persistence.repository.IDonateurRepository;
-import foodbank.it.service.IDonateurService;
-import foodbank.it.service.SearchDonateurCriteria;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service

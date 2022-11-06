@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.Membre;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import foodbank.it.persistence.model.Membre;
+import java.util.Optional;
 
 public interface IMembreRepository  extends PagingAndSortingRepository<Membre, Integer>{
 	Optional<Membre> findByBatId(int batId);

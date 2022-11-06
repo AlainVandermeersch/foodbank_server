@@ -2,15 +2,14 @@ package foodbank.it.persistence.model;
 //Generated with g9.
 
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import org.hibernate.annotations.Formula;
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Entity(name="banqprogr")
 public class BanqProg implements Serializable {

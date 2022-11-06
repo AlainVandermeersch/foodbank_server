@@ -1,10 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
+import foodbank.it.persistence.model.Client;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import foodbank.it.persistence.model.Client;
+import java.util.Optional;
 
 public interface IClientRepository extends PagingAndSortingRepository<Client, Integer>{
     Optional<Client> findByIdClient(int idClient);

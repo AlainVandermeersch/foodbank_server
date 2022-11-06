@@ -1,16 +1,14 @@
 package foodbank.it.service.impl;
 
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
+import foodbank.it.persistence.model.Cpas;
+import foodbank.it.persistence.repository.ICpasRepository;
+import foodbank.it.service.ICpasService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import foodbank.it.persistence.model.Cpas;
-import foodbank.it.persistence.repository.ICpasRepository;
-import foodbank.it.service.ICpasService;
+import javax.transaction.Transactional;
+import java.util.Optional;
 @Service
 public class CpasServiceImpl implements ICpasService{
     

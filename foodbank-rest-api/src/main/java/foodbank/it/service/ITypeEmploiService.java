@@ -1,6 +1,7 @@
 package foodbank.it.service;
 
 import foodbank.it.persistence.model.TypeEmploi;
+
 import java.util.Optional;
 
 public interface ITypeEmploiService {

@@ -2,13 +2,12 @@
 
 package foodbank.it.persistence.model;
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Entity(name="assoprogr")
 public class OrgProgram implements Serializable {

@@ -1,10 +1,10 @@
 package foodbank.it.service;
-import java.util.Optional;
 
+import foodbank.it.persistence.model.TUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import foodbank.it.persistence.model.TUser;
+import java.util.Optional;
 
 public interface ITUserService {
 		Optional<TUser> findByIdUser(String idUser);	

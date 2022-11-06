@@ -1,11 +1,12 @@
 package foodbank.it.service;
-import java.util.List;
-import java.util.Optional;
 
 import foodbank.it.persistence.model.Banque;
+import foodbank.it.persistence.model.BanqueCount;
 import foodbank.it.web.dto.BanqueOrgCountDto;
 import foodbank.it.web.dto.BanqueOrgReportDto;
-import foodbank.it.persistence.model.BanqueCount;
+
+import java.util.List;
+import java.util.Optional;
 
 
 public interface IBanqueService {

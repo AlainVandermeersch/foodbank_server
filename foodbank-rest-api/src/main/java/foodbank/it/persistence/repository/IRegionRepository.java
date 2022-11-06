@@ -1,9 +1,9 @@
 package foodbank.it.persistence.repository;
 
-import java.util.Optional;
-
 import foodbank.it.persistence.model.Region;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
 
 public interface IRegionRepository extends CrudRepository<Region, Integer>{
     Optional<Region> findByRegId(int regId);
