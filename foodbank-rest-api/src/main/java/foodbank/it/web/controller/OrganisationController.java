@@ -282,13 +282,18 @@ public class OrganisationController {
 		if ( entity.getStatut() != null) {
 			strStatut = entity.getStatut().trim();
 		}
+	 // antenneOrgName is the name of the parent organisation
 	  String antenneOrgName ="";
+		// birb is the old name for fead - we are retrieving the organisation Fead Code here
 	  String birbCode = entity.getBirbCode();
+	  // the Fead Code 1 has a special meaning: this organisation is a "Antenne" aka a subsidiary of a parent organisation
 	  if ((birbCode != null ) && (birbCode.equals("1")  )) {
 		  Integer antenne = entity.getAntenne();
+		  // antenne field should contain the Fead code of the parent organisation
 		  if ((antenne != null) && (antenne > 1)) {
-			  Optional<Organisation> org = this.OrganisationService.findByIdDis(antenne);
-			  if (org.isPresent()) antenneOrgName = org.get().getIdDis() + " " + org.get().getSociete();
+			  // find the parent organisation
+			  Optional<Organisation> orgAntenne = this.OrganisationService.findByIdDis(antenne);
+			  if (orgAntenne.isPresent()) antenneOrgName = orgAntenne.get().getIdDis() + " " + orgAntenne.get().getSociete();
 		  }
 	  }
 
