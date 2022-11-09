@@ -1,10 +1,12 @@
 package foodbank.it.service.impl;
 
 import foodbank.it.persistence.model.Membre;
+import foodbank.it.persistence.model.OrgPerso;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.service.IMailService;
 import foodbank.it.service.SearchMailListCriteria;
+import foodbank.it.service.SearchOrgPersoCriteria;
 import foodbank.it.web.dto.MailAddressDto;
 import org.springframework.stereotype.Service;
 
@@ -109,12 +111,15 @@ public class MailServiceImpl implements IMailService {
 
 			TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
 			List<Organisation> selectedOrganisations = query.getResultList();
+			List<MailAddressDto> returnedDtos = new ArrayList<MailAddressDto>();
+			Iterator<Organisation> iterator = selectedOrganisations.iterator();
 			if (mailGroup.equals(MailGroupConstants.ORGANISATIONS)) {
-				return selectedOrganisations.stream().map(org -> convertOrganisationToMailAddressContactDto(org))
-						.collect(Collectors.toList());
+				while (iterator.hasNext()) {
+					Organisation org = iterator.next();
+					returnedDtos.addAll(convertOrganisationToMailAddressContactDto(org));
+				}
 			} else {
-				List<MailAddressDto> returnedDtos = new ArrayList<MailAddressDto>();
-				Iterator<Organisation> iterator = selectedOrganisations.iterator();
+
 
 				// simple iteration
 				while (iterator.hasNext()) {
@@ -126,17 +131,48 @@ public class MailServiceImpl implements IMailService {
 						returnedDtos.addAll(convertOrganisationToMailAddressMembreDto(org, langue));
 					}
 				}
-				return returnedDtos;
+
 			}
+		return returnedDtos;
+		}
+
+		private List<MailAddressDto>  addOrgContactsToMailAddresses(Organisation myOrg) {
+		List<MailAddressDto> orgContactMailAddressesDtos = new ArrayList<MailAddressDto>();
+			// now add interested parties of mailings to organisations
+			// they are specified  in the orgperso entity and have a CC value in the fonction field
+			// this is legacy  - not a very elegant design
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<OrgPerso> orgPersoQuery = criteriaBuilder.createQuery(OrgPerso.class);
+			Root<OrgPerso> orgPerso = orgPersoQuery.from(OrgPerso.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+			Predicate lienAssoPredicate = criteriaBuilder.equal(orgPerso.get("lienAsso"), myOrg.getIdDis());
+			predicates.add(lienAssoPredicate);
+			Predicate lienDeletedPredicate = criteriaBuilder.equal(orgPerso.get("deleted"),0);
+			predicates.add(lienDeletedPredicate);
+			Predicate inMailingPredicate = criteriaBuilder.like(orgPerso.get("fonction"), "%CC%");
+			predicates.add(inMailingPredicate);
+			orgPersoQuery.where(predicates.stream().toArray(Predicate[]::new));
+
+			TypedQuery<OrgPerso> query = entityManager.createQuery(orgPersoQuery);
+
+			List<OrgPerso> selectedOrgPersos = query.getResultList();
+			selectedOrgPersos.forEach(p ->
+				orgContactMailAddressesDtos.add(new MailAddressDto(myOrg.getIdDis() + " " + myOrg.getSociete(), "Organisation", "Contact CC",
+						p.getEmail())));
+
+
+		return orgContactMailAddressesDtos ;
 		}
 
 
-
-	protected MailAddressDto convertOrganisationToMailAddressContactDto(Organisation org) {
-
+	protected List<MailAddressDto> convertOrganisationToMailAddressContactDto(Organisation org) {
+		List<MailAddressDto> dtos = new ArrayList<MailAddressDto>();
 		MailAddressDto dto = new MailAddressDto(org.getIdDis() + " " + org.getSociete(), "Organisation", "Contact",
 				org.getEmail());
-		return dto;
+		dtos.add(dto);
+		dtos.addAll(this.addOrgContactsToMailAddresses(org));
+		return dtos;
 	}
 
 	protected List<MailAddressDto> convertOrganisationToMailAddressUserDto(Organisation org, String mailGroup,
@@ -191,8 +227,8 @@ public class MailServiceImpl implements IMailService {
 
 		return selectedUsers.stream().map(mbr -> convertMembreToMailAddress(mbr,org)).collect(Collectors.toList());
 	}
-	protected List<MailAddressDto> retrieveMailAdressesOfBankOrgs(Integer lienBanque,Integer lienDis,
-					  Integer regId,Boolean feadN,Boolean isAgreed) {
+	protected List<MailAddressDto> retrieveMailAdressesOfBankOrgs(Integer lienBanque, Integer lienDis,
+																  Integer regId, Boolean feadN, Boolean isAgreed) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
 		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
@@ -240,7 +276,13 @@ public class MailServiceImpl implements IMailService {
 		TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
 		List<Organisation> selectedOrganisations = query.getResultList();
 
-		return selectedOrganisations.stream().map(org -> convertOrganisationToMailAddressContactDto(org)).collect(Collectors.toList());
+		List<MailAddressDto> returnedDtos = new ArrayList<MailAddressDto>();
+		Iterator<Organisation> iterator = selectedOrganisations.iterator();
+		while (iterator.hasNext()) {
+			Organisation org = iterator.next();
+			returnedDtos.addAll(convertOrganisationToMailAddressContactDto(org));
+		}
+		return returnedDtos;
 	}
 	protected List<MailAddressDto> retrieveMailAdressesOfBankUsers(Integer lienBanque, String mailGroup,Integer langue) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

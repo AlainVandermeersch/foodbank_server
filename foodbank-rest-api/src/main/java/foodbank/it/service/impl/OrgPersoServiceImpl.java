@@ -48,6 +48,7 @@ public class OrgPersoServiceImpl implements IOrgPersoService{
 		List<Predicate> predicates = new ArrayList<>();
 		Integer lienAsso = searchCriteria.getLienAsso();
 		Integer intIsDeleted = searchCriteria.isDeleted();
+		Boolean inMailing = searchCriteria.getInMailing();
 		Predicate lienAssoPredicate = criteriaBuilder.equal(orgPerso.get("lienAsso"), lienAsso);
 			predicates.add(lienAssoPredicate);
 	
@@ -55,6 +56,11 @@ public class OrgPersoServiceImpl implements IOrgPersoService{
 		if (intIsDeleted != null) {
 			Predicate lienDeletedPredicate = criteriaBuilder.equal(orgPerso.get("deleted"),intIsDeleted);
 			predicates.add(lienDeletedPredicate);
+		}
+		if (inMailing != null) {
+
+			Predicate inMailingPredicate = criteriaBuilder.like(orgPerso.get("fonction"), "%CC%");
+			predicates.add(inMailingPredicate);
 		}
 
 		orgPersoQuery.where(predicates.stream().toArray(Predicate[]::new));		

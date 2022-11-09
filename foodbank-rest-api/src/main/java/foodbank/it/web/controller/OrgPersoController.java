@@ -36,12 +36,13 @@ public class OrgPersoController {
    @GetMapping("orgcontacts/")
    public Iterable<OrgPersoDto> find(
 			@RequestParam String lienAsso,
-			@RequestParam(required = false) String deleted
+			@RequestParam(required = false) String deleted,
+            @RequestParam(required = false) Boolean inMailing
 			) {
    	List<OrgPersoDto> orgPersoDtos = new ArrayList<>();
 		Integer lienAssoInteger = Integer.parseInt(lienAsso);
 		Integer deletedInteger = Optional.ofNullable(deleted).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchOrgPersoCriteria criteria = new SearchOrgPersoCriteria(lienAssoInteger, deletedInteger);
+		SearchOrgPersoCriteria criteria = new SearchOrgPersoCriteria(lienAssoInteger, deletedInteger,inMailing);
 		Iterable<OrgPerso> selectedOrgPersos = this.OrgPersoService.findAll(criteria);
 		selectedOrgPersos.forEach(p -> orgPersoDtos.add(convertToDto(p)));
 		return orgPersoDtos;

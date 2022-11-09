@@ -3,9 +3,12 @@ package foodbank.it.service;
 public class SearchOrgPersoCriteria {
 	private Integer lienAsso;
 	private Integer deleted;
-	public SearchOrgPersoCriteria(Integer lienAsso, Integer deleted) {
+
+	private Boolean inMailing;
+	public SearchOrgPersoCriteria(Integer lienAsso, Integer deleted, Boolean inMailing) {
 		this.lienAsso = lienAsso;
 		this.deleted = deleted;
+		this.inMailing = inMailing;
 	}
 	
 	
@@ -20,5 +23,13 @@ public class SearchOrgPersoCriteria {
 	}
 	public void setDeleted(Integer deleted) {
 		this.deleted = deleted;
+	}
+
+	public Boolean getInMailing() {
+		return inMailing;
+	}
+
+	public void setInMailing(Boolean inMailing) {
+		this.inMailing = inMailing;
 	}
 }
