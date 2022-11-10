@@ -6,7 +6,6 @@ import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.model.TUser;
 import foodbank.it.service.IMailService;
 import foodbank.it.service.SearchMailListCriteria;
-import foodbank.it.service.SearchOrgPersoCriteria;
 import foodbank.it.web.dto.MailAddressDto;
 import org.springframework.stereotype.Service;
 
@@ -136,9 +135,9 @@ public class MailServiceImpl implements IMailService {
 		return returnedDtos;
 		}
 
-		private List<MailAddressDto>  addOrgContactsToMailAddresses(Organisation myOrg) {
-		List<MailAddressDto> orgContactMailAddressesDtos = new ArrayList<MailAddressDto>();
-			// now add interested parties of mailings to organisations
+		private List<MailAddressDto> addOrgInterestedPartiesToMailing(Organisation myOrg,MailAddressDto dtoContact) {
+			List<MailAddressDto> orgContactMailAddressesDtos = new ArrayList<MailAddressDto>();
+			//  add interested parties of mailings to organisations
 			// they are specified  in the orgperso entity and have a CC value in the fonction field
 			// this is legacy  - not a very elegant design
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -157,21 +156,30 @@ public class MailServiceImpl implements IMailService {
 			TypedQuery<OrgPerso> query = entityManager.createQuery(orgPersoQuery);
 
 			List<OrgPerso> selectedOrgPersos = query.getResultList();
-			selectedOrgPersos.forEach(p ->
-				orgContactMailAddressesDtos.add(new MailAddressDto(myOrg.getIdDis() + " " + myOrg.getSociete(), "Organisation", "Contact CC",
-						p.getEmail())));
-
-
-		return orgContactMailAddressesDtos ;
+			for (OrgPerso p : selectedOrgPersos) {
+				 if (p.getEmail().equals(dtoContact.getEmail())) {
+					 dtoContact.setNom(p.getNom());
+					 dtoContact.setPrenom(p.getPrenom() + " Org Contact");
+				 }
+				 else {
+					orgContactMailAddressesDtos.add(new MailAddressDto(myOrg.getIdDis() + " " + myOrg.getSociete(), p.getNom(), p.getPrenom(),
+						p.getEmail()));
+				}
+			}
+			return orgContactMailAddressesDtos ;
 		}
 
 
 	protected List<MailAddressDto> convertOrganisationToMailAddressContactDto(Organisation org) {
 		List<MailAddressDto> dtos = new ArrayList<MailAddressDto>();
-		MailAddressDto dto = new MailAddressDto(org.getIdDis() + " " + org.getSociete(), "Organisation", "Contact",
+		List<MailAddressDto> dtoscc = new ArrayList<MailAddressDto>();
+		MailAddressDto dtoContact = new MailAddressDto(org.getIdDis() + " " + org.getSociete(), "Organisation", "Contact",
 				org.getEmail());
-		dtos.add(dto);
-		dtos.addAll(this.addOrgContactsToMailAddresses(org));
+		dtoscc = this.addOrgInterestedPartiesToMailing(org,dtoContact);
+		dtos.add(dtoContact);
+		if (!dtoscc.isEmpty()) {
+			dtos.addAll(dtoscc);
+		}
 		return dtos;
 	}
 
