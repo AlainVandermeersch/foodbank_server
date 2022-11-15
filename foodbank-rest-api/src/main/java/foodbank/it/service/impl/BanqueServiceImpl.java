@@ -3,8 +3,9 @@ package foodbank.it.service.impl;
 import foodbank.it.persistence.model.*;
 import foodbank.it.persistence.repository.IBanqueRepository;
 import foodbank.it.service.IBanqueService;
+import foodbank.it.web.dto.BanqueFeadReportDto;
 import foodbank.it.web.dto.BanqueOrgCountDto;
-import foodbank.it.web.dto.BanqueOrgReportDto;
+import foodbank.it.web.dto.BanqueClientReportDto;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -198,9 +199,44 @@ public class BanqueServiceImpl implements IBanqueService {
 
 	}
 
+	@Override
+	public List<BanqueFeadReportDto> reportOrgFead() {
+		List<BanqueCount> bankOrgCounts = this.reportOrgCount(null);
+		List<BanqueCount> bankAgreedCounts = this.reportOrgCount("AGREED");
+		List<BanqueCount> bankFeadCounts = this.reportOrgCount("FEAD");
+		List<BanqueCount> bankFeadFromUsCounts = this.reportOrgCount("FEADFROMUS");
+		List<BanqueFeadReportDto> bankFeadReports = new ArrayList<BanqueFeadReportDto>();
+		for (BanqueCount bankOrgCount : bankOrgCounts) {
+			BanqueFeadReportDto bankFeadReport = new BanqueFeadReportDto(bankOrgCount.getBankShortName());
+            bankFeadReport.setOrgCount(bankOrgCount.getCount());
+			for (BanqueCount bankAgreedCount : bankAgreedCounts) {
+				if (bankOrgCount.getBankShortName().equals(bankAgreedCount.getBankShortName())) {
+					bankFeadReport.setOrgAgreedCount(bankAgreedCount.getCount());
+					break;
+				}
+			}
+			for (BanqueCount bankFeadCount : bankFeadCounts) {
+				if (bankOrgCount.getBankShortName().equals(bankFeadCount.getBankShortName())) {
+					bankFeadReport.setOrgFeadCount(bankFeadCount.getCount());
+					break;
+				}
+			}
+			for (BanqueCount bankFeadFromUsCount : bankFeadFromUsCounts) {
+				if (bankOrgCount.getBankShortName().equals(bankFeadFromUsCount.getBankShortName())) {
+					bankFeadReport.setOrgFeadFromUsCount(bankFeadFromUsCount.getCount());
+					break;
+				}
+			}
+			bankFeadReports.add( bankFeadReport);
+
+		}
+
+		return bankFeadReports;
+	}
+
 
 	@Override
-	public List<BanqueCount> reportOrgCount(Boolean hasBirbCode) {
+	public List<BanqueCount> reportOrgCount(String filter) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<BanqueCount> organisationQuery = criteriaBuilder.createQuery(BanqueCount.class);
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
@@ -214,9 +250,23 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(lienBanqueClassicPredicate);
 		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(organisation.get("lienBanque"), 1);
 		predicates.add(lienBanqueNotNullPredicate);
-		if (hasBirbCode != null) {
-			Predicate hasBirbCodePredicate = criteriaBuilder.greaterThan(organisation.get("birbCode"), 0);
-			predicates.add(hasBirbCodePredicate);
+		// exclude depots
+		Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), 0);
+		predicates.add(isDepotPredicate);
+		if (filter != null) {
+			if (filter.equals("FEAD")) {
+				Predicate hasBirbCodePredicate = criteriaBuilder.greaterThan(organisation.get("birbCode"), 0);
+				predicates.add(hasBirbCodePredicate);
+			}
+			// Agreed if field daten 0
+			if (filter.equals("AGREED")) {
+				Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), 0);
+				predicates.add(isAgreedPredicate);
+			}
+			if (filter.equals("FEADFROMUS")) {
+				Predicate isfeadNPredicate = criteriaBuilder.equal(organisation.get("feadN"), 1);
+				predicates.add(isfeadNPredicate);
+			}
 		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
 		organisationQuery.groupBy(organisation.get("lienBanque"));
@@ -228,9 +278,9 @@ public class BanqueServiceImpl implements IBanqueService {
 	}
 
 	@Override
-	public List<BanqueOrgReportDto> reportOrgs() {
+	public List<BanqueClientReportDto> reportOrgClients() {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<BanqueOrgReportDto> organisationQuery = criteriaBuilder.createQuery(BanqueOrgReportDto.class);
+		CriteriaQuery<BanqueClientReportDto> organisationQuery = criteriaBuilder.createQuery(BanqueClientReportDto.class);
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
 
 		List<Predicate> predicates = new ArrayList<>();
@@ -255,7 +305,7 @@ public class BanqueServiceImpl implements IBanqueService {
 				criteriaBuilder.sum(organisation.get("nSen"))
 				);
 		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("bankShortName")));
-		List<BanqueOrgReportDto> results = entityManager.createQuery(organisationQuery).getResultList();
+		List<BanqueClientReportDto> results = entityManager.createQuery(organisationQuery).getResultList();
 
 		return results;
 	}

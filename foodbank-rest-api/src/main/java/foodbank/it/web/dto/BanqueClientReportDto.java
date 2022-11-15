@@ -1,6 +1,6 @@
 package foodbank.it.web.dto;
 
-public class BanqueOrgReportDto {
+public class BanqueClientReportDto {
 	private String bankShortName;
 	private Long orgCount;
 
@@ -20,15 +20,15 @@ public class BanqueOrgReportDto {
 	
 	private Long nSen;
 
-	public BanqueOrgReportDto(String bankShortName, Long orgCount,
-			Long nFam,   
-			Long nPers,   
-			Long nNour,    
-			Long nBebe,   
-			Long nEnf,   
-			Long nAdo,    
-			Long n1824,  	       
-			Long nSen) {
+	public BanqueClientReportDto(String bankShortName, Long orgCount,
+								 Long nFam,
+								 Long nPers,
+								 Long nNour,
+								 Long nBebe,
+								 Long nEnf,
+								 Long nAdo,
+								 Long n1824,
+								 Long nSen) {
 		super();
 		this.bankShortName = bankShortName;
 		this.orgCount = orgCount;

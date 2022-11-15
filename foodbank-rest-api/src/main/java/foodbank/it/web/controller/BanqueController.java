@@ -4,8 +4,9 @@ import foodbank.it.persistence.model.Banque;
 import foodbank.it.persistence.model.BanqueCount;
 import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueDto;
+import foodbank.it.web.dto.BanqueFeadReportDto;
 import foodbank.it.web.dto.BanqueOrgCountDto;
-import foodbank.it.web.dto.BanqueOrgReportDto;
+import foodbank.it.web.dto.BanqueClientReportDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -92,9 +93,9 @@ public class BanqueController {
     }
     @GetMapping("banqueOrgCount/")
     public List<BanqueCount> OrgReport(
-    		@RequestParam(required = false) Boolean hasBirbCode) {
+    		@RequestParam(required = false) String filter) {
     	
-    	List<BanqueCount> listBanqueCount = this.BanqueService.reportOrgCount(hasBirbCode);
+    	List<BanqueCount> listBanqueCount = this.BanqueService.reportOrgCount(filter);
     	    	
 		return listBanqueCount;       	
     	  
@@ -115,13 +116,21 @@ public class BanqueController {
 		return listBanqueCount;       	
     	  
     }
-    @GetMapping("banqueOrgReport/")
-    public List<BanqueOrgReportDto> OrgReport() {
+    @GetMapping("banqueOrgClientReport/")
+    public List<BanqueClientReportDto> OrgClientReport() {
     	
-    	List<BanqueOrgReportDto> orgReports = this.BanqueService.reportOrgs();
+    	List<BanqueClientReportDto> orgReports = this.BanqueService.reportOrgClients();
     	    	
 		return orgReports;       	
     	  
+    }
+    @GetMapping("banqueOrgFeadReport/")
+    public List<BanqueFeadReportDto> OrgFeadeport() {
+
+        List<BanqueFeadReportDto> orgReports = this.BanqueService.reportOrgFead();
+
+        return orgReports;
+
     }
     protected BanqueDto convertToDto(Banque entity) {
         BanqueDto dto = new BanqueDto(entity.getBankId(), entity.getBankShortName(), entity.getBankName(), entity.getNrEntr(), entity.getBankMail(), entity.getActif(), entity.getComGest(), entity.getLastvisit(), entity.getIdMemberPres(), entity.getIdMemberVp(), entity.getIdMemberSec(), entity.getIdMemberTres(), entity.getIdMemberIt(), entity.getIdMemberLog(), entity.getIdMemberRh(),
