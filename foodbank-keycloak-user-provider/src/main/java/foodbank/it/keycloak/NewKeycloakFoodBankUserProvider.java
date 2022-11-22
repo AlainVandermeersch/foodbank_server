@@ -171,9 +171,12 @@ public class NewKeycloakFoodBankUserProvider implements UserStorageProvider,
 
 		String password = cred.getValue();
 		Matcher matcher = pattern.matcher(password);
-		if( matcher.matches() == false) {
+		logger.info("Checking password policy for password: " + password);
+		if(!matcher.matches()) {
+			logger.info("Password policy invalidates password: " + password);
 			return false;
 		};
+		logger.info("Password policy has validated password: " + password);
 		String hashedPassword = HASHER.hashToString(HASH_COST, password.toCharArray());
 		adapter.setPassword(hashedPassword);
 
