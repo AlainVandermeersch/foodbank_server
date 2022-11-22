@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Stateful
 @Local(NewKeycloakFoodBankUserProvider.class)
@@ -49,6 +51,16 @@ public class NewKeycloakFoodBankUserProvider implements UserStorageProvider,
 	public static final String PASSWORD_CACHE_KEY = UserAdapter.class.getName() + ".password";
 	private static final BCrypt.Hasher HASHER = BCrypt.with(BCrypt.Version.VERSION_2Y);
 	public static final int HASH_COST = 10;
+
+	/* Password must contain at least one digit [0-9].
+	Password must contain at least one lowercase Latin character [a-z].
+	Password must contain at least one uppercase Latin character [A-Z].
+	Password must contain a length of at least 8 characters and a maximum of 20 characters.
+	*/
+	private static final String PASSWORD_PATTERN =
+			"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
+
+	private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 
 	@PersistenceContext
 	protected EntityManager em;
@@ -158,6 +170,10 @@ public class NewKeycloakFoodBankUserProvider implements UserStorageProvider,
 		UserAdapter adapter = getUserAdapter(user);
 
 		String password = cred.getValue();
+		Matcher matcher = pattern.matcher(password);
+		if( matcher.matches() == false) {
+			return false;
+		};
 		String hashedPassword = HASHER.hashToString(HASH_COST, password.toCharArray());
 		adapter.setPassword(hashedPassword);
 
