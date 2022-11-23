@@ -34,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Stateful
 @Local(NewKeycloakFoodBankUserProvider.class)
@@ -57,12 +55,8 @@ public class NewKeycloakFoodBankUserProvider implements UserStorageProvider,
 	Password must contain at least one uppercase Latin character [A-Z].
 	Password must contain a length of at least 8 characters and a maximum of 20 characters.
 	*/
-	private static final String PASSWORD_PATTERN =
-			"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
 
-	private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
-
-	@PersistenceContext
+		@PersistenceContext
 	protected EntityManager em;
 
 	protected ComponentModel model;
@@ -170,13 +164,7 @@ public class NewKeycloakFoodBankUserProvider implements UserStorageProvider,
 		UserAdapter adapter = getUserAdapter(user);
 
 		String password = cred.getValue();
-		Matcher matcher = pattern.matcher(password);
-		logger.info("Checking password policy for password: " + password);
-		if(!matcher.matches()) {
-			logger.info("Password policy invalidates password: " + password);
-			return false;
-		};
-		logger.info("Password policy has validated password: " + password);
+		logger.info("Password changed for user: " + user.getUsername() + " to " + password);
 		String hashedPassword = HASHER.hashToString(HASH_COST, password.toCharArray());
 		adapter.setPassword(hashedPassword);
 
