@@ -609,7 +609,7 @@
   "requiredCredentials": [
     "password"
   ],
-  "passwordPolicy": "upperCase(1) and lowerCase(1) and digits(1) and length(8) and maxLength(20) and notUsername(undefined) and notEmail(undefined)",
+  "passwordPolicy": "upperCase(1) and lowerCase(1)",
   "otpPolicyType": "totp",
   "otpPolicyAlgorithm": "HmacSHA1",
   "otpPolicyInitialCounter": 0,
