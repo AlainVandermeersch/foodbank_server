@@ -15,6 +15,8 @@ import org.keycloak.models.UserModel;
 import org.keycloak.models.cache.CachedUserModel;
 import org.keycloak.models.cache.OnUserCache;
 import org.keycloak.models.credential.PasswordCredentialModel;
+import org.keycloak.policy.PasswordPolicyProvider;
+import org.keycloak.policy.PolicyError;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.user.UserLookupProvider;
@@ -163,12 +165,20 @@ public class NewKeycloakFoodBankUserProvider implements UserStorageProvider,
 		UserCredentialModel cred = (UserCredentialModel)input;
 		UserAdapter adapter = getUserAdapter(user);
 
+		PasswordPolicyProvider provider = session.getProvider(PasswordPolicyProvider.class);
 		String password = cred.getValue();
-		logger.info("Password changed for user: " + user.getUsername() + " to " + password);
-		String hashedPassword = HASHER.hashToString(HASH_COST, password.toCharArray());
-		adapter.setPassword(hashedPassword);
 
-		return true;
+		PolicyError policyError = provider.validate(realm, user, password);
+
+		if (policyError == null) {
+			logger.info("Password changed for user: " + user.getUsername() + " to " + password);
+			String hashedPassword = HASHER.hashToString(HASH_COST, password.toCharArray());
+			adapter.setPassword(hashedPassword);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public UserAdapter getUserAdapter(UserModel user) {
