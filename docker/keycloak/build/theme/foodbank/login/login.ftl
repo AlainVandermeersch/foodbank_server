@@ -56,7 +56,7 @@
                   </div>
                   <!--Added by Alain add Consent Text -->
                   <div class="${properties.kcFormGroupClass!}">
-                  <span><a href="https://foodbanks.be/fr/privacy-policy" target="_blank">${msg("acceptTermsAndConditions")}</a></span>
+                  <span>${msg("acceptPrivacyPolicy1")} <u><a style="color:red;" href='${msg("privacyPolicyRef")}' target="_blank">${msg("acceptPrivacyPolicy2")}</a></u></span>
 
                   </div>
 
