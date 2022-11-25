@@ -10,6 +10,8 @@ import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
 import foodbank.it.service.SearchOrganisationSummariesCriteria;
 import foodbank.it.web.dto.OrgMemberReportDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,8 @@ public class OrganisationServiceImpl implements IOrganisationService{
 	private final IOrgProgramRepository OrgProgramRepository;
 	private final IDepotRepository DepotRepository;
 	private final EntityManager entityManager;
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	public OrganisationServiceImpl(IOrganisationRepository OrganisationRepository,
 			IOrgProgramRepository OrgProgramRepository,
@@ -61,7 +65,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), idDis);
 		predicates.add(lienDisPredicate);
 	
-		System.out.printf("\nChecking Membre References to Organisation with id: %d", idDis);
+		log.debug("Checking Member References to Organisation with id: %d", idDis);
 		
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(membre));

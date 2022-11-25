@@ -6,6 +6,8 @@ import foodbank.it.service.IBanqueService;
 import foodbank.it.web.dto.BanqueFeadReportDto;
 import foodbank.it.web.dto.BanqueOrgCountDto;
 import foodbank.it.web.dto.BanqueClientReportDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -24,6 +26,8 @@ public class BanqueServiceImpl implements IBanqueService {
 
 	private IBanqueRepository BanqueRepository;
 	private final EntityManager entityManager;
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public BanqueServiceImpl(IBanqueRepository BanqueRepository, EntityManager entityManager) {
 		this.BanqueRepository = BanqueRepository;
@@ -64,7 +68,7 @@ public class BanqueServiceImpl implements IBanqueService {
 		Predicate lienBankPredicate = criteriaBuilder.equal(organisation.get("lienBanque"), bankId);
 		predicates.add(lienBankPredicate);
 
-		System.out.printf("\nChecking Organisation References to Banque with id: %d", bankId);
+		log.debug("Checking Organisation References to Banque with id: %d", bankId);
 
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(organisation));

@@ -5,6 +5,8 @@ import foodbank.it.persistence.model.Donateur;
 import foodbank.it.persistence.repository.IDonateurRepository;
 import foodbank.it.service.IDonateurService;
 import foodbank.it.service.SearchDonateurCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,7 @@ public class DonateurServiceImpl implements IDonateurService{
 
 	private IDonateurRepository DonateurRepository;
 	private final EntityManager entityManager;
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	public DonateurServiceImpl(IDonateurRepository DonateurRepository,EntityManager entityManager) {
         this.DonateurRepository = DonateurRepository;
@@ -52,7 +55,7 @@ public class DonateurServiceImpl implements IDonateurService{
 		Predicate donateurPredicate = criteriaBuilder.equal(don.get("donateurId"), donateurId);
 		predicates.add(donateurPredicate);
 	
-		System.out.printf("\nChecking Don References to Donateur with id: %d", donateurId);
+		log.debug("Checking Don References to Donateur with id: %d", donateurId);
 		
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(don));

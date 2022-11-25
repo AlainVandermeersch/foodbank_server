@@ -8,6 +8,8 @@ import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.persistence.repository.ITUserRepository;
 import foodbank.it.service.IMembreService;
 import foodbank.it.service.SearchMembreCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,8 @@ public class MembreServiceImpl implements IMembreService{
 	private ITUserRepository TUserRepository;
 	private IOrganisationRepository OrganisationRepository;
 	private final EntityManager entityManager;
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	public MembreServiceImpl(IMembreRepository MembreRepository, ITUserRepository TUserRepository, IOrganisationRepository OrganisationRepository,
 							 EntityManager entityManager) {
@@ -58,14 +62,14 @@ public class MembreServiceImpl implements IMembreService{
     		if (lienDis != null && lienDis != 0 ) {
     			Predicate lienDisPredicate = criteriaBuilder.equal(existingMembre.get("lienDis"), lienDis);
     			predicates.add(lienDisPredicate);    			
-    			System.out.printf("Checking If Member exists with nom: %s prenom %s in Organisation %d\n", membre.getNom(), membre.getPrenom(), lienDis);
+    			log.debug("Checking If Member exists with nom: %s prenom %s in Organisation %d", membre.getNom(), membre.getPrenom(), lienDis);
     		}
     		else {
     			Predicate lienBanquePredicate = criteriaBuilder.equal(existingMembre.get("lienBanque"), membre.getLienBanque());
     			predicates.add(lienBanquePredicate);
     			Predicate lienDisPredicate = criteriaBuilder.or((criteriaBuilder.equal(existingMembre.get("lienDis"),0 )),criteriaBuilder.isNull(existingMembre.get("lienDis")));
     			predicates.add(lienDisPredicate); 
-    			System.out.printf("Checking If Member exists with nom: %s prenom %s in Bank %d\n", membre.getNom(), membre.getPrenom(),membre.getLienBanque());
+    			log.debug("Checking If Member exists with nom: %s prenom %s in Bank %d", membre.getNom(), membre.getPrenom(),membre.getLienBanque());
     		}
     		
     		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
@@ -87,7 +91,7 @@ public class MembreServiceImpl implements IMembreService{
 				Optional<Organisation> o = this.OrganisationRepository.findByIdDis(idDis);
 				o.ifPresent(myOrg -> {
 					membre.setLienBanque(myOrg.getLienBanque());
-					System.out.printf("\nReplacing in membre %s %s null value lienBanque with org lienbanque: %d", membre.getNom(),membre.getPrenom(),myOrg.getLienBanque());
+					log.debug("Replacing in membre %s %s null value lienBanque with org lienbanque: %d", membre.getNom(),membre.getPrenom(),myOrg.getLienBanque());
 				});
 			}
     		// updating members we must update the duplicate User Name, E-Mail and Language fields in the Users pointing to the Member
@@ -118,7 +122,6 @@ public class MembreServiceImpl implements IMembreService{
                 default:
                 	tUser.setIdLanguage("??");
             }
-				// System.out.printf("\nSynchronizing User with id: %s with data from to Member with id: %d", tUser.getIdUser(),membre.getBatId());
 				TUserRepository.save(tUser);
 	        });
 			
@@ -141,7 +144,7 @@ public class MembreServiceImpl implements IMembreService{
 		Predicate lienBatPredicate = criteriaBuilder.equal(tuser.get("lienBat"), batId);
 		predicates.add(lienBatPredicate);
 	
-		System.out.printf("\nChecking User References to Member with id: %d", batId);
+		log.debug("Checking User References to Member with id: %d", batId);
 		
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(tuser));
@@ -242,7 +245,7 @@ public class MembreServiceImpl implements IMembreService{
 		}
 
 		if (lienDis != null) {
-			System.out.printf("\nChecking Members with liendis: %d", lienDis);
+			log.debug("Checking Members with liendis: %d", lienDis);
 			if (lienDis == 0) {
 				// selecting bank members only
 				Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);

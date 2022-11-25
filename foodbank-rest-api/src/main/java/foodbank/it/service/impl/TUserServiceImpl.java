@@ -6,6 +6,8 @@ import foodbank.it.persistence.repository.IBanqueRepository;
 import foodbank.it.persistence.repository.ITUserRepository;
 import foodbank.it.service.ITUserService;
 import foodbank.it.service.SearchTUserCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,8 @@ public class TUserServiceImpl implements ITUserService {
 	private ITUserRepository TUserRepository;
 	private IBanqueRepository BanqueRepository;
 	private final EntityManager entityManager;
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public TUserServiceImpl(ITUserRepository TUserRepository,IBanqueRepository BanqueRepository, EntityManager entityManager) {
 		this.TUserRepository = TUserRepository;
@@ -49,10 +53,6 @@ public class TUserServiceImpl implements ITUserService {
 			List<Predicate> predicates = new ArrayList<>();
 			Predicate idUserPredicate = criteriaBuilder.equal(existingTUser.get("idUser"), tuser.getIdUser());
 			predicates.add(idUserPredicate);
-
-			// System.out.printf("\nChecking If User exists with userId: %s",
-			// tuser.getIdUser());
-
 			totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 			totalCriteriaQuery.select(criteriaBuilder.count(existingTUser));
 			TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
@@ -147,7 +147,7 @@ public class TUserServiceImpl implements ITUserService {
 			predicates.add(lienBanquePredicate);
 		}
 		if (idOrg != null) {
-			System.out.printf("\nChecking Users with idOrg: %d", idOrg);
+			log.debug("Checking Users with idOrg: %d", idOrg);
 			if (idOrg == 0) {
 				// selecting bank members only
 				Predicate idOrgZero = criteriaBuilder.equal(tuser.get("idOrg"), 0);

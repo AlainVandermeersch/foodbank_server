@@ -5,6 +5,8 @@ import foodbank.it.persistence.repository.IAuditRepository;
 import foodbank.it.service.IAuditService;
 import foodbank.it.service.SearchAuditCriteria;
 import foodbank.it.web.dto.AuditReportDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,7 @@ import java.util.Optional;
 
 @Service
 public class AuditServiceImpl implements IAuditService {
-
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private IAuditRepository AuditRepository;
 	private final EntityManager entityManager;
 
@@ -52,16 +54,16 @@ public class AuditServiceImpl implements IAuditService {
 		Predicate hasLoggedinTodayPredicate = criteriaBuilder.equal(parentExpression,today);
 		predicates.add(hasLoggedinTodayPredicate);
 		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
-		System.out.printf("\nQuerying if  User %s logged on today %s\n",userId,today);
+		log.debug("Querying if  User %s logged on today %s",userId,today);
 		TypedQuery<Audit> query = entityManager.createQuery(auditQuery);
 		
 		List<Audit> resultList = query.getResultList();
 				
 		if (resultList.size() >0 ) {
-			System.out.printf("\nUser %s logged on already today %d times - not recording\n",userId, resultList.size());
+			log.debug("User %s logged on already today %d times - not recording",userId, resultList.size());
 			return auditnew;
 		}
-		System.out.printf("\nRecording  User %s logged on today %s\n",userId,today);
+		log.debug("Recording  User %s logged on today %s\n",userId,today);
 		return AuditRepository.save(auditnew);
 	}
 

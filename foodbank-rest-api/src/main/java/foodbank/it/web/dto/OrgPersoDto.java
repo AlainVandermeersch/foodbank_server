@@ -12,26 +12,6 @@ public class OrgPersoDto {
 	 private String fonction;
 	 private boolean deleted;
 	 private boolean distr;
-	 
-	public OrgPersoDto() {
-		super();	
-	}
-
-	public OrgPersoDto(int orgPersId, int civilite, int lienAsso, String nom, String prenom, String email, String tel,
-			String gsm, String fonction, boolean deleted, boolean distr) {
-		super();
-		this.orgPersId = orgPersId;
-		this.civilite = civilite;
-		this.lienAsso = lienAsso;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.email = email;
-		this.tel = tel;
-		this.gsm = gsm;
-		this.fonction = fonction;
-		this.deleted = deleted;
-		this.distr = distr;
-	}
 
 	public int getOrgPersId() {
 		return orgPersId;

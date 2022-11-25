@@ -71,18 +71,35 @@ public class OrgPersoController {
    protected OrgPersoDto convertToDto(OrgPerso entity) {
 	   boolean deleted = entity.getDeleted() == 1;;
 	   boolean distr = entity.getDistr() == 1;;;
-       OrgPersoDto dto = new OrgPersoDto(entity.getOrgPersId(),entity.getCivilite(), entity.getLienAsso(), entity.getNom(), entity.getPrenom(), entity.getEmail(),
-    		   entity.getTel(),entity.getGsm(),entity.getFonction(), deleted, distr);
+       OrgPersoDto dto = new OrgPersoDto();
+       dto.setOrgPersId(entity.getOrgPersId());
+       dto.setCivilite(entity.getCivilite());
+       dto.setLienAsso(entity.getLienAsso());
+       dto.setNom(entity.getNom());
+       dto.setPrenom(entity.getPrenom());
+       dto.setEmail(entity.getEmail());
+       dto.setTel(entity.getTel());
+       dto.setGsm(entity.getGsm());
+       dto.setFonction(entity.getFonction());
+       dto.setDeleted(deleted);
+       dto.setDistr(distr);
 			
        return dto;
    }
 
    protected OrgPerso convertToEntity(OrgPersoDto dto) {
-       OrgPerso orgPerso = new OrgPerso( dto.getOrgPersId(),dto.getCivilite(), dto.getLienAsso(), dto.getNom(), dto.getPrenom(), dto.getEmail(),
-    		   dto.getTel(),dto.getGsm(),dto.getFonction(), (int) (dto.isDeleted() ? 1 : 0),(int) (dto.isDistr() ? 1 : 0));       
-       if (!StringUtils.isEmpty(dto.getOrgPersId())) {
-           orgPerso.setOrgPersId(dto.getOrgPersId());
-       }
+       OrgPerso orgPerso = new OrgPerso();
+       orgPerso.setOrgPersId( dto.getOrgPersId());
+       orgPerso.setCivilite(dto.getCivilite());
+       orgPerso.setLienAsso(dto.getLienAsso());
+       orgPerso.setNom(dto.getNom());
+       orgPerso.setPrenom(dto.getPrenom());
+       orgPerso.setEmail(dto.getEmail());
+       orgPerso.setTel(dto.getTel());
+       orgPerso.setGsm(dto.getGsm());
+       orgPerso.setFonction(dto.getFonction());
+       orgPerso.setDeleted((int) (dto.isDeleted() ? 1 : 0));
+       orgPerso.setDistr((int) (dto.isDistr() ? 1 : 0));
        return orgPerso;
    }
 
