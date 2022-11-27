@@ -553,6 +553,7 @@ public class OrganisationController {
 		org.setCotMonthsSup(dto.getCotMonthsSup());
 		org.setDepotram(dto.getDepotram());
 		org.setLupdUserName(dto.getLupdUserName());
+		org.setLupdTs(LocalDateTime.now());
 		org.setLienBanque(dto.getLienBanque());
 
         return org;
