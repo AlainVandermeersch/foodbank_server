@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -298,31 +299,130 @@ public class OrganisationController {
 	  }
 
 		String anomalies = this.OrganisationService.getAnomalies(entity);
-        OrganisationDto dto = new OrganisationDto(entity.getIdDis(), entity.getRefInt(), entity.getBirbCode(), entity.getLienDepot(),
-				entity.getSociete(), entity.getAdresse(), strStatut , entity.getEmail(),  entity.getCp(), entity.getLocalite(),
-				entity.getPays(), entity.getTva(), entity.getWebsite(), entity.getTel(), entity.getGsm(), booAgreed,entity.getBanque(), 
-				entity.getRegion(), entity.getIban(), entity.getClassique(), entity.getBic(), booActif, entity.getCivilite(), entity.getNom(),
-				entity.getPrenom(), entity.getCiviliteVp(), entity.getPrenomVp(), entity.getNomVp(), entity.getTelVp(), entity.getGsmVp(),
-				entity.getCiviliteSec(), entity.getPrenomSec(), entity.getNomSec(), entity.getTelSec(), entity.getGsmSec(), entity.getCiviliteTres(),
-				entity.getPrenomTres(), entity.getNomTres(), entity.getTelTres(), entity.getGsmTres(), entity.getEmailPres(), entity.getEmailVp(),
-				entity.getEmailSec(), entity.getEmailTres(), entity.getTelPres(), entity.getGsmPres(), entity.getDisprog(), entity.getAfsca(),
-				entity.getWebauthority(), entity.getLangue(), entity.getLastvisit(), entity.getNbrefix(),booCpasyN, entity.getLienCpas(),
-				booBirbyN,booDepyN, entity.getLogBirb(), entity.getActComp1(), entity.getActComp2(), entity.getActComp3(),
-				entity.getActComp4(), entity.getActComp5(), entity.getActComp6(), entity.getActComp7(), entity.getNrTournee(), booSusp,
-				entity.getStopSusp(), entity.getRem(), booIsMsonac, entity.getClasseFbba1(), entity.getClasseFbba2(), entity.getClasseFbba3(),
-				entity.getNFam(), entity.getNPers(), entity.getNNour(), entity.getNBebe(), entity.getNEnf(), entity.getNAdo(), entity.getN1824(),
-				entity.getNEq(), entity.getNSen(), booDepPrinc,
-				booGestBen, entity.getTourneeJour(), entity.getTourneeSem(), entity.getColdis(), entity.getLienGd(), entity.getLienGs(),
-				entity.getMontCot(), entity.getAntenne(), entity.getAfsca1(), entity.getAfsca2(), entity.getAfsca3(), entity.getNrFead(),
-				entity.getTourneeMois(), booDistrListPdt, booDistrListVp, booDistrListSec, booDistrListTres,
-				entity.getAdresse2(), entity.getCp2(), entity.getLocalite2(), entity.getPays2(), entity.getDateReg(), entity.getFax(), booFeadN,
-				entity.getRemLivr(), booCotAnnuelle, entity.getCotMonths(), booCotSup, entity.getCotMonthsSup(), entity.getDepotram(),
-				entity.getLupdUserName(), entity.getLupdTs(),entity.getLienBanque(),entity.getNomDepot(),entity.getNomDepotRamasse(),
-    			entity.getBankShortName(),
-				antenneOrgName,
-    			entity.getNbLogins(),
-				anomalies,
-    			totalRecords);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        OrganisationDto dto = new OrganisationDto();
+				dto.setIdDis(entity.getIdDis());
+				dto.setRefInt(entity.getRefInt());
+				dto.setBirbCode(entity.getBirbCode());
+				dto.setLienDepot(entity.getLienDepot());
+				dto.setSociete(entity.getSociete());
+				dto.setAdresse(entity.getAdresse());
+				dto.setStatut(strStatut);
+				dto.setEmail(entity.getEmail());
+				dto.setCp(entity.getCp());
+				dto.setLocalite(entity.getLocalite());
+				dto.setPays(entity.getPays());
+				dto.setTva(entity.getTva());
+				dto.setWebsite(entity.getWebsite());
+				dto.setTel(entity.getTel());
+				dto.setGsm(entity.getGsm());
+				dto.setAgreed(booAgreed);
+				dto.setBanque(entity.getBanque());
+				dto.setRegion(entity.getRegion());
+				dto.setIban(entity.getIban());
+				dto.setClassique(entity.getClassique());
+				dto.setBic(entity.getBic());
+				dto.setActif(booActif);
+				dto.setCivilite(entity.getCivilite());
+				dto.setNom(entity.getNom());
+				dto.setPrenom(entity.getPrenom());
+				dto.setCiviliteVp(entity.getCiviliteVp());
+				dto.setPrenomVp(entity.getPrenomVp());
+				dto.setNomVp(entity.getNomVp());
+				dto.setTelVp(entity.getTelVp());
+				dto.setGsmVp(entity.getGsmVp());
+				dto.setCiviliteSec(entity.getCiviliteSec());
+				dto.setPrenomSec(entity.getPrenomSec());
+				dto.setNomSec(entity.getNomSec());
+				dto.setTelSec(entity.getTelSec());
+				dto.setGsmSec(entity.getGsmSec());
+				dto.setCiviliteTres(entity.getCiviliteTres());
+				dto.setPrenomTres(entity.getPrenomTres());
+				dto.setNomTres(entity.getNomTres());
+				dto.setTelPres(entity.getTelTres());
+				dto.setGsmTres(entity.getGsmTres());
+				dto.setEmailPres(entity.getEmailPres());
+				dto.setEmailVp(	entity.getEmailVp());
+				dto.setEmailSec(entity.getEmailSec());
+				dto.setEmailTres(entity.getEmailTres());
+				dto.setTelPres(entity.getTelPres());
+				dto.setGsmPres(entity.getGsmPres());
+				dto.setDisprog(entity.getDisprog());
+				dto.setAfsca(entity.getAfsca());
+				dto.setWebauthority(entity.getWebauthority());
+				dto.setLangue(entity.getLangue());
+				dto.setLastvisit(entity.getLastvisit().format(formatter));
+				dto.setNbrefix(entity.getNbrefix());
+				dto.setCpasyN(booCpasyN);
+				dto.setLienCpas(entity.getLienCpas());
+				dto.setBirbyN(booBirbyN);
+				dto.setDepyN(booDepyN);
+				dto.setLogBirb(entity.getLogBirb());
+				dto.setActComp1(entity.getActComp1());
+				dto.setActComp2(entity.getActComp2());
+				dto.setActComp3(entity.getActComp3());
+				dto.setActComp4(entity.getActComp4());
+				dto.setActComp5(entity.getActComp5());
+				dto.setActComp6(entity.getActComp6());
+				dto.setActComp7(entity.getActComp7());
+				dto.setNrTournee(entity.getNrTournee());
+				dto.setSusp(booSusp);
+				dto.setStopSusp(entity.getStopSusp());
+				dto.setRem(entity.getRem());
+				dto.setMsonac(booIsMsonac);
+				dto.setClasseFbba1(entity.getClasseFbba1());
+				dto.setClasseFbba2(entity.getClasseFbba2());
+				dto.setClasseFbba3(entity.getClasseFbba3());
+				dto.setnFam(entity.getNFam());
+				dto.setnPers(entity.getNPers());
+				dto.setnNour(entity.getNNour());
+				dto.setnBebe(entity.getNBebe());
+				dto.setnEnf(entity.getNEnf());
+				dto.setnAdo(entity.getNAdo());
+				dto.setN1824(entity.getN1824());
+				dto.setnEq(entity.getNEq());
+				dto.setnSen(entity.getNSen());
+				dto.setDepPrinc(booDepPrinc);
+				dto.setGestBen(booGestBen);
+				dto.setTourneeJour(entity.getTourneeJour());
+				dto.setTourneeSem(entity.getTourneeSem());
+				dto.setColdis(entity.getColdis());
+				dto.setLienGd(entity.getLienGd());
+				dto.setLienGs(entity.getLienGs());
+				dto.setMontCot(entity.getMontCot());
+				dto.setAntenne(entity.getAntenne());
+				dto.setAfsca1(entity.getAfsca1());
+				dto.setAfsca2(entity.getAfsca2());
+				dto.setAfsca3(entity.getAfsca3());
+				dto.setNrFead(entity.getNrFead());
+				dto.setTourneeMois(entity.getTourneeMois());
+				dto.setDistrListPdt(booDistrListPdt);
+				dto.setDistrListVp(booDistrListVp);
+				dto.setDistrListSec(booDistrListSec);
+				dto.setDistrListTres(booDistrListTres);
+				dto.setAdresse2(entity.getAdresse2());
+				dto.setCp2(entity.getCp2());
+				dto.setLocalite2(entity.getLocalite2());
+				dto.setPays2(entity.getPays2());
+				dto.setDateReg(entity.getDateReg());
+				dto.setFax(entity.getFax());
+				dto.setFeadN(booFeadN);
+				dto.setRemLivr(entity.getRemLivr());
+				dto.setCotAnnuelle(booCotAnnuelle);
+				dto.setCotMonths(entity.getCotMonths());
+				dto.setCotSup(booCotSup);
+				dto.setCotMonthsSup(entity.getCotMonthsSup());
+				dto.setDepotram(entity.getDepotram());
+				dto.setLupdUserName(entity.getLupdUserName());
+				dto.setLupdTs(entity.getLupdTs().format(formatter));
+				dto.setLienBanque(entity.getLienBanque());
+				dto.setNomDepot(entity.getNomDepot());
+				dto.setNomDepotRamasse(entity.getNomDepotRamasse());
+    			dto.setBankShortName(entity.getBankShortName());
+				dto.setAntenneOrgName(antenneOrgName);
+    			dto.setNbLogins(entity.getNbLogins());
+				dto.setAnomalies(anomalies);
+    			dto.setTotalRecords(totalRecords);
         return dto;
     }
 

@@ -1,3 +1,4 @@
+<--! modified version of https://github.com/keycloak/keycloak/blob/12.0.4/themes/src/main/resources/theme/base/login/login.ftl -->
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('username','password') displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
     <#if section = "header">
