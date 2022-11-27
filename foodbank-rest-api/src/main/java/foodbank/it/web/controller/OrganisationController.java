@@ -283,6 +283,15 @@ public class OrganisationController {
 		if ( entity.getStatut() != null) {
 			strStatut = entity.getStatut().trim();
 		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		String lastVisit = "";
+		if (entity.getLastvisit() != null) {
+			lastVisit = entity.getLastvisit().format(formatter);
+		}
+		String lupTs = "";
+		if (entity.getLupdTs() != null) {
+			lupTs = entity.getLupdTs().format(formatter);
+		}
 	 // antenneOrgName is the name of the parent organisation
 	  String antenneOrgName ="";
 		// birb is the old name for fead - we are retrieving the organisation Fead Code here
@@ -299,7 +308,7 @@ public class OrganisationController {
 	  }
 
 		String anomalies = this.OrganisationService.getAnomalies(entity);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
         OrganisationDto dto = new OrganisationDto();
 				dto.setIdDis(entity.getIdDis());
 				dto.setRefInt(entity.getRefInt());
@@ -351,7 +360,7 @@ public class OrganisationController {
 				dto.setAfsca(entity.getAfsca());
 				dto.setWebauthority(entity.getWebauthority());
 				dto.setLangue(entity.getLangue());
-				dto.setLastvisit(entity.getLastvisit().format(formatter));
+				dto.setLastvisit(lastVisit);
 				dto.setNbrefix(entity.getNbrefix());
 				dto.setCpasyN(booCpasyN);
 				dto.setLienCpas(entity.getLienCpas());
@@ -414,7 +423,7 @@ public class OrganisationController {
 				dto.setCotMonthsSup(entity.getCotMonthsSup());
 				dto.setDepotram(entity.getDepotram());
 				dto.setLupdUserName(entity.getLupdUserName());
-				dto.setLupdTs(entity.getLupdTs().format(formatter));
+				dto.setLupdTs(lupTs);
 				dto.setLienBanque(entity.getLienBanque());
 				dto.setNomDepot(entity.getNomDepot());
 				dto.setNomDepotRamasse(entity.getNomDepotRamasse());
