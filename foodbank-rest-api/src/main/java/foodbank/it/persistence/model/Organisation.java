@@ -5,6 +5,7 @@ package foodbank.it.persistence.model;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +16,8 @@ public class Organisation implements Serializable {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 8424510676206873844L;
+	@Serial
+    private static final long serialVersionUID = 8424510676206873844L;
 
 
 	/** Primary key. */
@@ -255,147 +257,6 @@ public class Organisation implements Serializable {
     @Formula("(select count(*) from audit a where a.id_dis = id_dis and year(a.date_in) > 2020)")
     long nbLogins;
 
-    
-
-	/** Default constructor. */
-    public Organisation() {
-        super();
-    }
-
-    public Organisation(int idDis, String refInt,String birbCode, int lienDepot, String societe, String adresse, String statut, String email, String cp, String localite, Short pays, String tva, String website, String tel,
-        String gsm, Short daten, String banque, Short region, String iban, String classique, String bic, Short actif, Short civilite, String nom, String prenom, Short civiliteVp, String prenomVp, String nomVp, String telVp, String gsmVp, Short civiliteSec,
-        String prenomSec, String nomSec, String telSec, String gsmSec, Short civiliteTres, String prenomTres, String nomTres, String telTres, String gsmTres, String emailPres, String emailVp, String emailSec, String emailTres, String telPres, String gsmPres,
-        String disprog, String afsca, boolean webauthority, Short langue, Integer  nbrefix, Short cpasyN, Short lienCpas, Short birbyN,Short depyN, Short logBirb, Short actComp1, Short actComp2, Short actComp3, Short actComp4,
-        Short actComp5, Short actComp6, String actComp7, Short nrTournee, Short susp, String stopSusp, String rem, Short msonac, Short classeFbba1, Short classeFbba2, Short classeFbba3, 
-        Integer  nFam, Integer  nPers, Integer  nNour, Integer  nBebe, Integer  nEnf, Integer  nAdo,Integer  n1824,
-        BigDecimal nEq, Integer  nSen, Short depPrinc, Short gestBen, Short tourneeJour, Short tourneeSem, Short coldis, Short lienGd, Short lienGs, BigDecimal montCot, Integer  antenne, String afsca1, String afsca2, String afsca3, Integer  nrFead, Short tourneeMois,
-        Short distrListPdt, Short distrListVp, Short distrListSec, Short distrListTres, String adresse2, String cp2, String localite2, Short pays2, String dateReg, String fax, Short feadN, String remLivr, Short cotAnnuelle, Integer  cotMonths, Integer cotSup,
-        Integer  cotMonthsSup, Integer  depotram, String lupdUserName, Short lienBanque) {
-        super();
-        this.idDis = idDis;
-        this.refInt = refInt;
-        this.birbCode = birbCode;
-        this.lienDepot = lienDepot;
-        this.societe = societe;
-        this.adresse = adresse;
-        this.statut = statut;
-        this.email = email;
-        this.cp = cp;
-        this.localite = localite;
-        this.pays = pays;
-        this.tva = tva;
-        this.website = website;
-        this.tel = tel;
-        this.gsm = gsm;
-        this.daten = daten;
-        this.banque = banque;
-        this.region = region;
-        this.iban = iban;
-        this.classique = classique;
-        this.bic = bic;
-        this.actif = actif;
-        this.civilite = civilite;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.civiliteVp = civiliteVp;
-        this.prenomVp = prenomVp;
-        this.nomVp = nomVp;
-        this.telVp = telVp;
-        this.gsmVp = gsmVp;
-        this.civiliteSec = civiliteSec;
-        this.prenomSec = prenomSec;
-        this.nomSec = nomSec;
-        this.telSec = telSec;
-        this.gsmSec = gsmSec;
-        this.civiliteTres = civiliteTres;
-        this.prenomTres = prenomTres;
-        this.nomTres = nomTres;
-        this.telTres = telTres;
-        this.gsmTres = gsmTres;
-        this.emailPres = emailPres;
-        this.emailVp = emailVp;
-        this.emailSec = emailSec;
-        this.emailTres = emailTres;
-        this.telPres = telPres;
-        this.gsmPres = gsmPres;
-        this.disprog = disprog;
-        this.afsca = afsca;
-        this.webauthority = webauthority;
-        this.langue = langue;
-        this.lastvisit = LocalDateTime.now(); // do not use lupdTs from DTO we need to update the time;
-        this.nbrefix = nbrefix;
-        this.cpasyN = cpasyN;
-        this.lienCpas = lienCpas;
-        this.birbyN = birbyN;
-        this.depyN = depyN;
-        this.logBirb = logBirb;
-        this.actComp1 = actComp1;
-        this.actComp2 = actComp2;
-        this.actComp3 = actComp3;
-        this.actComp4 = actComp4;
-        this.actComp5 = actComp5;
-        this.actComp6 = actComp6;
-        this.actComp7 = actComp7;
-        this.nrTournee = nrTournee;
-        this.susp = susp;
-        this.stopSusp = stopSusp;
-        this.rem = rem;
-        this.msonac = msonac;
-        this.classeFbba1 = classeFbba1;
-        this.classeFbba2 = classeFbba2;
-        this.classeFbba3 = classeFbba3;
-        this.nFam = nFam;
-        this.nPers = nPers;
-        this.nNour = nNour;
-        this.nBebe = nBebe;
-        this.nEnf = nEnf;
-        this.nAdo = nAdo;
-        this.n1824 = n1824;
-        this.nEq = nEq;
-        this.nSen = nSen;
-        this.depPrinc = depPrinc;
-        this.gestBen = gestBen;
-        this.tourneeJour = tourneeJour;
-        this.tourneeSem = tourneeSem;
-        this.coldis = coldis;
-        this.lienGd = lienGd;
-        this.lienGs = lienGs;
-        this.montCot = montCot;
-        this.antenne = antenne;
-        this.afsca1 = afsca1;
-        this.afsca2 = afsca2;
-        this.afsca3 = afsca3;
-        this.nrFead = nrFead;
-        this.tourneeMois = tourneeMois;
-        this.distrListPdt = distrListPdt;
-        this.distrListVp = distrListVp;
-        this.distrListSec = distrListSec;
-        this.distrListTres = distrListTres;
-        this.adresse2 = adresse2;
-        this.cp2 = cp2;
-        this.localite2 = localite2;
-        this.pays2 = pays2;
-        this.dateReg = dateReg;
-        this.fax = fax;
-        this.feadN = feadN;
-        this.remLivr = remLivr;
-        this.cotAnnuelle = cotAnnuelle;
-        this.cotMonths = cotMonths;
-        this.cotSup = cotSup;
-        this.cotMonthsSup = cotMonthsSup;
-        this.depotram = depotram;
-        this.lupdUserName = lupdUserName;
-        this.lupdTs =  LocalDateTime.now(); // do not use lupdTs from DTO we need to update the time
-        this.lienBanque = lienBanque;
-    }
-    
-    
-
-    public String getNomDepot() {
-		return nomDepot;
-	}
-
-    public String getNomDepotRamasse() { return nomDepotRamasse; }
 
     /**
      * Access method for idDis.
@@ -2447,8 +2308,16 @@ public class Organisation implements Serializable {
 	public long getNbLogins() {
 		return nbLogins;
 	}
+    public String getNomDepot() {
+        return nomDepot;
+    }
 
-	@Override
+    public String getNomDepotRamasse() {
+        return nomDepotRamasse;
+    }
+
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

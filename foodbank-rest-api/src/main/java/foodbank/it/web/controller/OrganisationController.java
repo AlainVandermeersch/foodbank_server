@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -438,30 +439,123 @@ public class OrganisationController {
     protected Organisation convertToEntity(OrganisationDto dto) {
     	  // Note daten field means is reverse of Agreed
     	  // Organisation name field ( societe) is always converted to uppercase
-    	Organisation myOrganisation = new Organisation( dto.getIdDis(), dto.getRefInt(),  dto.getBirbCode(), dto.getLienDepot(),
-				dto.getSociete().toUpperCase(), dto.getAdresse(), dto.getStatut(), dto.getEmail(), dto.getCp(), dto.getLocalite(),
-				dto.getPays(), dto.getTva(), dto.getWebsite(), dto.getTel(), dto.getGsm(), (short) (dto.getAgreed() ? 0 : 1), dto.getBanque(),
-				dto.getRegion(), dto.getIban(), dto.getClassique(), dto.getBic(), (short) (dto.getActif() ? 1 : 0), dto.getCivilite(), dto.getNom(),
-				dto.getPrenom(), dto.getCiviliteVp(), dto.getPrenomVp(), dto.getNomVp(), dto.getTelVp(), dto.getGsmVp(),
-				dto.getCiviliteSec(), dto.getPrenomSec(), dto.getNomSec(), dto.getTelSec(), dto.getGsmSec(), dto.getCiviliteTres(),
-				dto.getPrenomTres(), dto.getNomTres(), dto.getTelTres(), dto.getGsmTres(), dto.getEmailPres(), dto.getEmailVp(),
-				dto.getEmailSec(), dto.getEmailTres(), dto.getTelPres(), dto.getGsmPres(), dto.getDisprog(), dto.getAfsca(),
-				dto.isWebauthority(), dto.getLangue(),  dto.getNbrefix(),(short) (dto.getCpasyN() ? 1 : 0), dto.getLienCpas(),
-				(short) (dto.isBirbyN() ? 1 : 0), (short) (dto.getDepyN() ? 1 : 0), dto.getLogBirb(), dto.getActComp1(), dto.getActComp2(), dto.getActComp3(),
-				dto.getActComp4(), dto.getActComp5(), dto.getActComp6(), dto.getActComp7(), dto.getNrTournee(), (short) (dto.getSusp() ? 1 : 0),
-				dto.getStopSusp(), dto.getRem(), (short) (dto.getMsonac() ? 1 : 0), dto.getClasseFbba1(), dto.getClasseFbba2(), dto.getClasseFbba3(),
-				dto.getnFam(), dto.getnPers(), dto.getnNour(), dto.getnBebe(), dto.getnEnf(), dto.getnAdo(), dto.getN1824(),
-				dto.getnEq(), dto.getnSen(), (short) (dto.getDepPrinc() ? 1 : 0),
-				(short) (dto.getGestBen() ? 1 : 0), dto.getTourneeJour(), dto.getTourneeSem(), dto.getColdis(), dto.getLienGd(), dto.getLienGs(),
-				dto.getMontCot(), dto.getAntenne(), dto.getAfsca1(), dto.getAfsca2(), dto.getAfsca3(), dto.getNrFead(),
-				dto.getTourneeMois(), (short) (dto.getDistrListPdt() ? 1 : 0), (short) (dto.getDistrListVp() ? 1 : 0), (short) (dto.getDistrListSec() ? 1 : 0),(short) (dto.getDistrListTres() ? 1 : 0),
-				dto.getAdresse2(), dto.getCp2(), dto.getLocalite2(), dto.getPays2(), dto.getDateReg(), dto.getFax(), (short) (dto.isFeadN() ? 1 : 0),
-				dto.getRemLivr(), (short) (dto.isCotAnnuelle() ? 1 : 0), dto.getCotMonths(),(int) (dto.isCotSup() ? 1 : 0), dto.getCotMonthsSup(), dto.getDepotram(),
-				dto.getLupdUserName(),dto.getLienBanque());
-        if (!StringUtils.isEmpty(dto.getIdDis())) {
-            myOrganisation.setIdDis(dto.getIdDis());
-        }
-        return myOrganisation;
+		Organisation org = new Organisation();
+		org.setIdDis(dto.getIdDis());
+		org.setRefInt(dto.getRefInt());
+		org.setBirbCode(dto.getBirbCode());
+		org.setLienDepot(dto.getLienDepot());
+		org.setSociete(dto.getSociete());
+		org.setAdresse(dto.getAdresse());
+		org.setStatut(dto.getStatut());
+		org.setEmail(dto.getEmail());
+		org.setCp(dto.getCp());
+		org.setLocalite(dto.getLocalite());
+		org.setPays(dto.getPays());
+		org.setTva(dto.getTva());
+		org.setWebsite(dto.getWebsite());
+		org.setTel(dto.getTel());
+		org.setGsm(dto.getGsm());
+		org.setDaten((short) (dto.getAgreed() ? 0 : 1));
+		org.setBanque(dto.getBanque());
+		org.setRegion(dto.getRegion());
+		org.setIban(dto.getIban());
+		org.setClassique(dto.getClassique());
+		org.setBic(dto.getBic());
+		org.setActif((short) (dto.getActif() ? 1 : 0));
+		org.setCivilite(dto.getCivilite());
+		org.setNom(dto.getNom());
+		org.setPrenom(dto.getPrenom());
+		org.setCiviliteVp(dto.getCiviliteVp());
+		org.setPrenomVp(dto.getPrenomVp());
+		org.setNomVp(dto.getNomVp());
+		org.setTelVp(dto.getTelVp());
+		org.setGsmVp(dto.getGsmVp());
+		org.setCiviliteSec(dto.getCiviliteSec());
+		org.setPrenomSec(dto.getPrenomSec());
+		org.setNomSec(dto.getNomSec());
+		org.setTelSec(dto.getTelSec());
+		org.setGsmSec(dto.getGsmSec());
+		org.setCiviliteTres(dto.getCiviliteTres());
+		org.setPrenomTres(dto.getPrenomTres());
+		org.setNomTres(dto.getNomTres());
+		org.setTelPres(dto.getTelTres());
+		org.setGsmTres(dto.getGsmTres());
+		org.setEmailPres(dto.getEmailPres());
+		org.setEmailVp(	dto.getEmailVp());
+		org.setEmailSec(dto.getEmailSec());
+		org.setEmailTres(dto.getEmailTres());
+		org.setTelPres(dto.getTelPres());
+		org.setGsmPres(dto.getGsmPres());
+		org.setDisprog(dto.getDisprog());
+		org.setAfsca(dto.getAfsca());
+		org.setWebauthority(dto.isWebauthority());
+		org.setLastvisit(LocalDateTime.now());
+		org.setLangue(dto.getLangue());
+		org.setNbrefix(dto.getNbrefix());
+		org.setCpasyN((short) (dto.getCpasyN() ? 1 : 0));
+		org.setLienCpas(dto.getLienCpas());
+		org.setBirbyN((short) (dto.isBirbyN() ? 1 : 0));
+		org.setDepyN((short) (dto.getDepyN() ? 1 : 0));
+		org.setLogBirb(dto.getLogBirb());
+		org.setActComp1(dto.getActComp1());
+		org.setActComp2(dto.getActComp2());
+		org.setActComp3(dto.getActComp3());
+		org.setActComp4(dto.getActComp4());
+		org.setActComp5(dto.getActComp5());
+		org.setActComp6(dto.getActComp6());
+		org.setActComp7(dto.getActComp7());
+		org.setNrTournee(dto.getNrTournee());
+		org.setSusp((short) (dto.getSusp() ? 1 : 0));
+		org.setStopSusp(dto.getStopSusp());
+		org.setRem(dto.getRem());
+		org.setMsonac((short) (dto.getMsonac() ? 1 : 0));
+		org.setClasseFbba1(dto.getClasseFbba1());
+		org.setClasseFbba2(dto.getClasseFbba2());
+		org.setClasseFbba3(dto.getClasseFbba3());
+		org.setNFam(dto.getnFam());
+		org.setNPers(dto.getnPers());
+		org.setNNour(dto.getnNour());
+		org.setNBebe(dto.getnBebe());
+		org.setNEnf(dto.getnEnf());
+		org.setNAdo(dto.getnAdo());
+		org.setN1824(dto.getN1824());
+		org.setNEq(dto.getnEq());
+		org.setNSen(dto.getnSen());
+		org.setDepPrinc((short) (dto.getDepPrinc() ? 1 : 0));
+		org.setGestBen((short) (dto.getGestBen() ? 1 : 0));
+		org.setTourneeJour(dto.getTourneeJour());
+		org.setTourneeSem(dto.getTourneeSem());
+		org.setColdis(dto.getColdis());
+		org.setLienGd(dto.getLienGd());
+		org.setLienGs(dto.getLienGs());
+		org.setMontCot(dto.getMontCot());
+		org.setAntenne(dto.getAntenne());
+		org.setAfsca1(dto.getAfsca1());
+		org.setAfsca2(dto.getAfsca2());
+		org.setAfsca3(dto.getAfsca3());
+		org.setNrFead(dto.getNrFead());
+		org.setTourneeMois(dto.getTourneeMois());
+		org.setDistrListPdt((short) (dto.getDistrListPdt() ? 1 : 0));
+		org.setDistrListVp((short) (dto.getDistrListVp() ? 1 : 0));
+		org.setDistrListSec((short) (dto.getDistrListSec() ? 1 : 0));
+		org.setDistrListTres((short) (dto.getDistrListTres() ? 1 : 0));
+		org.setAdresse2(dto.getAdresse2());
+		org.setCp2(dto.getCp2());
+		org.setLocalite2(dto.getLocalite2());
+		org.setPays2(dto.getPays2());
+		org.setDateReg(dto.getDateReg());
+		org.setFax(dto.getFax());
+		org.setFeadN((short) (dto.isFeadN() ? 1 : 0));
+		org.setRemLivr(dto.getRemLivr());
+		org.setCotAnnuelle((short) (dto.isCotAnnuelle() ? 1 : 0));
+		org.setCotMonths(dto.getCotMonths());
+		org.setCotSup((int) (dto.isCotSup() ? 1 : 0));
+		org.setCotMonthsSup(dto.getCotMonthsSup());
+		org.setDepotram(dto.getDepotram());
+		org.setLupdUserName(dto.getLupdUserName());
+		org.setLienBanque(dto.getLienBanque());
+
+        return org;
     }
     
 
