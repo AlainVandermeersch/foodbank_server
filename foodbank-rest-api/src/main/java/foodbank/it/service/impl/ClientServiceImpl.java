@@ -13,13 +13,11 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -56,6 +54,7 @@ public class ClientServiceImpl implements IClientService{
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer actif = searchCriteria.getActif();
 		Boolean isSuspect = searchCriteria.getSuspect();
+		Boolean duplicate = searchCriteria.getDuplicate();
 
 		if (nom != null ) {			
 
@@ -98,29 +97,71 @@ public class ClientServiceImpl implements IClientService{
 		
 		if (isSuspect != null) {
 			Predicate isSuspectPredicate = criteriaBuilder.equal(client.get("coeff"), 1);	
-			if (isSuspect== true) {
+			if (isSuspect) {
 				isSuspectPredicate = criteriaBuilder.notEqual(client.get("coeff"), 1);	
 			}
 			predicates.add(isSuspectPredicate);
 		}
 
-		clientQuery.where(predicates.stream().toArray(Predicate[]::new));
-		clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
+		clientQuery.where(predicates.toArray(Predicate[]::new));
 
-		TypedQuery<Client> query = entityManager.createQuery(clientQuery);
-		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
-		query.setMaxResults(pageable.getPageSize());
+		if (duplicate == null ) {
+			clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
 
-		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
-		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Client.class)));
-		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		long countResult = countQuery.getSingleResult();
+			TypedQuery<Client> query = entityManager.createQuery(clientQuery);
+			query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+			query.setMaxResults(pageable.getPageSize());
 
-		List<Client> clients = query.getResultList();	
-		
-		
-		return new PageImpl<>(clients, pageable, countResult);
+			CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+			totalCriteriaQuery.where(predicates.toArray(Predicate[]::new));
+			totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Client.class)));
+			TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
+			long countResult = countQuery.getSingleResult();
+
+			List<Client> clients = query.getResultList();
+
+
+			return new PageImpl<>(clients, pageable, countResult);
+		}
+		else {
+			// clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
+			clientQuery.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(client.get("nom"))));
+			TypedQuery<Client> query = entityManager.createQuery(clientQuery);
+			List<Client> clients = query.getResultList();
+			List<Client> duplicateClients = new ArrayList<>();
+			Client previousClient = null;
+			Client currentClient = null;
+			for (Client nextClient : clients) {
+				currentClient = nextClient;
+				if (previousClient == null || !previousClient.getNom().equalsIgnoreCase(nextClient.getNom())) {
+					previousClient = nextClient;
+					continue;
+				}
+				duplicateClients.add(previousClient);
+				previousClient = nextClient;
+
+			}
+			if (previousClient != null && previousClient.getNom().equalsIgnoreCase(currentClient.getNom())) {
+				duplicateClients.add(currentClient);
+			}
+			int total = duplicateClients.size();
+			int start = (int) pageable.getOffset();
+			int end = Math.min((start + pageable.getPageSize()), total);
+
+			List<Client> output = new ArrayList<>();
+
+			if (start <= end) {
+				output = duplicateClients.subList(start, end);
+			}
+
+			return new PageImpl<>(
+					output,
+					pageable,
+					total
+			);
+
+
+		}
 	}
 
 	@Override

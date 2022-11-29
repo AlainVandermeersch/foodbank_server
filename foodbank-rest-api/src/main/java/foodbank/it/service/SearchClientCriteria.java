@@ -11,9 +11,11 @@ public class SearchClientCriteria {
 	private Integer lienDis;
 	private Integer actif;
 	private Boolean suspect;
+
+	private Boolean duplicate;
     
 	public SearchClientCriteria(String nom, String prenom, String adresse, String cp,String localite,
-			Integer lienBanque, Integer lienDis, Integer actif, Boolean suspect) {
+			Integer lienBanque, Integer lienDis, Integer actif, Boolean suspect, Boolean duplicate) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.adresse = adresse;
@@ -23,6 +25,7 @@ public class SearchClientCriteria {
 		this.lienDis = lienDis;
 		this.actif = actif;
 		this.suspect = suspect;
+		this.duplicate = duplicate;
 	}
 
 	
@@ -116,5 +119,12 @@ public class SearchClientCriteria {
 	public void setSuspect(Boolean suspect) {
 		this.suspect = suspect;
 	}
-	
+
+	public Boolean getDuplicate() {
+		return duplicate;
+	}
+
+	public void setDuplicate(Boolean duplicate) {
+		this.duplicate = duplicate;
+	}
 }
