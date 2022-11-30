@@ -125,7 +125,8 @@ public class ClientServiceImpl implements IClientService{
 		}
 		else {
 			// clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
-			clientQuery.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(client.get("nom"))));
+			clientQuery.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(client.get("nom"))),
+					criteriaBuilder.asc(criteriaBuilder.upper(client.get("prenom"))));
 			TypedQuery<Client> query = entityManager.createQuery(clientQuery);
 			List<Client> clients = query.getResultList();
 			List<Client> duplicateClients = new ArrayList<>();
