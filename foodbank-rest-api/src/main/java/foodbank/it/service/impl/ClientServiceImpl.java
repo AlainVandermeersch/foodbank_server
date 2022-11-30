@@ -130,20 +130,20 @@ public class ClientServiceImpl implements IClientService{
 			List<Client> clients = query.getResultList();
 			List<Client> duplicateClients = new ArrayList<>();
 			Client previousClient = null;
-			Client currentClient = null;
+
 			for (Client nextClient : clients) {
-				currentClient = nextClient;
 				if (previousClient == null || !previousClient.getNom().equalsIgnoreCase(nextClient.getNom())) {
 					previousClient = nextClient;
 					continue;
 				}
-				duplicateClients.add(previousClient);
+				if (!duplicateClients.contains(previousClient)) {
+					duplicateClients.add(previousClient);
+				}
+				duplicateClients.add(nextClient);
 				previousClient = nextClient;
 
 			}
-			if (previousClient != null && previousClient.getNom().equalsIgnoreCase(currentClient.getNom())) {
-				duplicateClients.add(currentClient);
-			}
+
 			int total = duplicateClients.size();
 			int start = (int) pageable.getOffset();
 			int end = Math.min((start + pageable.getPageSize()), total);
