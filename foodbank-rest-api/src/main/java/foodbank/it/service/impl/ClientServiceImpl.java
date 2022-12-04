@@ -8,6 +8,7 @@ import foodbank.it.service.SearchClientCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
 
@@ -106,8 +107,30 @@ public class ClientServiceImpl implements IClientService{
 		clientQuery.where(predicates.toArray(Predicate[]::new));
 
 		if (duplicate == null ) {
-			clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
-
+			Sort sort = pageable.getSort();
+			boolean isSortOnDaten= false;
+			Sort.Direction sortDatenDirection = null;
+			for (Sort.Order order : sort)
+			{
+				if (order.getProperty().equals("daten")) {
+					isSortOnDaten= true;
+					sortDatenDirection = order.getDirection();
+					break;
+				}
+				System.out.println("Direction: " + order.getDirection());
+			}
+			if (isSortOnDaten) {
+				Expression<String> timeStr = criteriaBuilder.function("STR_TO_DATE", String.class, client.get("daten"), criteriaBuilder.literal("%d/%m/%Y"));
+				if (sortDatenDirection.isAscending()) {
+					clientQuery.orderBy(criteriaBuilder.asc(timeStr));
+				}
+				else {
+					clientQuery.orderBy(criteriaBuilder.desc(timeStr));
+				}
+			}
+			else {
+				clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
+			}
 			TypedQuery<Client> query = entityManager.createQuery(clientQuery);
 			query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 			query.setMaxResults(pageable.getPageSize());
