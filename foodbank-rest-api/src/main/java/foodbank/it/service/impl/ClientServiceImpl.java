@@ -55,7 +55,8 @@ public class ClientServiceImpl implements IClientService{
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer actif = searchCriteria.getActif();
 		Boolean isSuspect = searchCriteria.getSuspect();
-		Boolean duplicate = searchCriteria.getDuplicate();
+		String daten = searchCriteria.getDaten();
+		String duplicate = searchCriteria.getDuplicate();
 
 		if (nom != null ) {			
 
@@ -82,6 +83,11 @@ public class ClientServiceImpl implements IClientService{
 			Predicate localitePredicate = criteriaBuilder.like(client.get("localite"), "%" + localite.toLowerCase() + "%");
 			predicates.add(localitePredicate);
 		}
+		if (daten != null ) {
+
+			Predicate datenPredicate = criteriaBuilder.like(client.get("daten"), "%" + daten + "%");
+			predicates.add(datenPredicate);
+		}
 		// Alain in Client table field is lbanque		
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(client.get("lbanque"), lienBanque);
@@ -105,7 +111,7 @@ public class ClientServiceImpl implements IClientService{
 		}
 
 		clientQuery.where(predicates.toArray(Predicate[]::new));
-
+		Expression<String> stringToDateConverter = criteriaBuilder.function("STR_TO_DATE", String.class, client.get("daten"), criteriaBuilder.literal("%d/%m/%Y"));
 		if (duplicate == null ) {
 			Sort sort = pageable.getSort();
 			boolean isSortOnDaten= false;
@@ -120,12 +126,12 @@ public class ClientServiceImpl implements IClientService{
 				System.out.println("Direction: " + order.getDirection());
 			}
 			if (isSortOnDaten) {
-				Expression<String> timeStr = criteriaBuilder.function("STR_TO_DATE", String.class, client.get("daten"), criteriaBuilder.literal("%d/%m/%Y"));
+
 				if (sortDatenDirection.isAscending()) {
-					clientQuery.orderBy(criteriaBuilder.asc(timeStr));
+					clientQuery.orderBy(criteriaBuilder.asc(stringToDateConverter));
 				}
 				else {
-					clientQuery.orderBy(criteriaBuilder.desc(timeStr));
+					clientQuery.orderBy(criteriaBuilder.desc(stringToDateConverter));
 				}
 			}
 			else {
@@ -147,18 +153,33 @@ public class ClientServiceImpl implements IClientService{
 			return new PageImpl<>(clients, pageable, countResult);
 		}
 		else {
-			// clientQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), client, criteriaBuilder));
-			clientQuery.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(client.get("nom"))),
-					criteriaBuilder.asc(criteriaBuilder.upper(client.get("prenom"))));
+			if (duplicate.equals("name") ) {
+
+				clientQuery.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(client.get("nom"))),
+						criteriaBuilder.asc(criteriaBuilder.upper(client.get("prenom"))));
+			}
+			else {
+				// must be search on duplicate birth dates
+				clientQuery.orderBy(criteriaBuilder.asc(stringToDateConverter));
+			}
 			TypedQuery<Client> query = entityManager.createQuery(clientQuery);
 			List<Client> clients = query.getResultList();
 			List<Client> duplicateClients = new ArrayList<>();
 			Client previousClient = null;
 
 			for (Client nextClient : clients) {
-				if (previousClient == null || !previousClient.getNom().equalsIgnoreCase(nextClient.getNom())) {
-					previousClient = nextClient;
-					continue;
+				if (duplicate.equals("name") ) {
+					if (previousClient == null || !previousClient.getNom().equalsIgnoreCase(nextClient.getNom())) {
+						previousClient = nextClient;
+						continue;
+					}
+				}
+				else {
+					// must be search on duplicate birth dates
+					if (previousClient == null || !previousClient.getDaten().equalsIgnoreCase(nextClient.getDaten())) {
+						previousClient = nextClient;
+						continue;
+					}
 				}
 				if (!duplicateClients.contains(previousClient)) {
 					duplicateClients.add(previousClient);

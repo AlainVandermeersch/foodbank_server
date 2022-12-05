@@ -49,7 +49,7 @@ public class ClientController {
 			@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
      		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
      		@RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
-			@RequestParam(required = false) Boolean duplicate,
+			@RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
      		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
@@ -70,7 +70,7 @@ public class ClientController {
 		}
 
 		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite,
-				lienBanqueInteger, lienDisInteger,actifInteger,suspect,duplicate);
+				lienBanqueInteger, lienDisInteger,actifInteger,suspect,daten,duplicate);
 		Page<Client> selectedClients = this.ClientService.findAll(criteria, pageRequest);
 		long totalElements = selectedClients.getTotalElements();
 
