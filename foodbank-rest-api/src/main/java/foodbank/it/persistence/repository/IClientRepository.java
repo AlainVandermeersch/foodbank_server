@@ -7,5 +7,9 @@ import java.util.Optional;
 
 public interface IClientRepository extends PagingAndSortingRepository<Client, Integer>{
     Optional<Client> findByIdClient(int idClient);
-    void deleteByIdClient(int idClient);    
+    void deleteByIdClient(int idClient);
+
+    Iterable<Client> findByLbanque(Short lienBanque);
+
+    Iterable<Client> findByLienDis(Integer lienDisInteger);
 }

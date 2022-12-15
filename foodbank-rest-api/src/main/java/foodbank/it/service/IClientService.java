@@ -11,6 +11,9 @@ public interface IClientService {
 	Page<Client> findAll(SearchClientCriteria searchCriteria, Pageable pageable);	    
     Client save(Client Client);
     void delete(int idClient);
-	
 
+
+    Iterable<Client> findByLienDis(Integer lienDisInteger);
+
+    Iterable<Client> findByLienBanque(Short lienBanqueShort);
 }

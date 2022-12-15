@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,23 @@ public class ClientController {
 
 		return selectedClients.stream()
 				.map(client -> convertToDto(client, totalElements))
+				.collect(Collectors.toList());
+	}
+
+	@GetMapping("beneficiairesall/")
+	public Collection<ClientDto> findAll(@RequestParam(required = false) String lienBanque,
+										 @RequestParam(required = false) 	String lienDis) {
+		List<Client> selectedClients;
+		Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
+		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		if (lienDis != null) {
+			selectedClients = (List<Client>) this.ClientService.findByLienDis(lienDisInteger);
+		}
+		else {
+			selectedClients = (List<Client>) this.ClientService.findByLienBanque(lienBanqueShort);
+		}
+		return selectedClients.stream()
+				.map(Client -> convertToDto(Client, selectedClients.size()))
 				.collect(Collectors.toList());
 	}
 

@@ -227,6 +227,13 @@ public class ClientServiceImpl implements IClientService{
         
     }
 
-	
+	@Override
+	public Iterable<Client> findByLienBanque(Short lienBanque) {
+		return ClientRepository.findByLbanque(lienBanque);
+	}
+	@Override
+	public Iterable<Client> findByLienDis(Integer lienDisInteger) {
+		return ClientRepository.findByLienDis(lienDisInteger);
+	}
 	
 }
