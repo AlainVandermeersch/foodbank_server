@@ -172,10 +172,10 @@ public class TUserController {
 
 		}
 
-		
+		// field LienDepot is correct , field depot is erratic
 		TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(),
 				entity.getIdLanguage(), entity.getLienBat(), booActif, caseCorrectedRights, entity.getPassword(),
-				entity.getDepot(), booDroit1, entity.getEmail(), booGestBen, booGestInv, booGestFead, booGestAsso,
+				entity.getLienDepot(), booDroit1, entity.getEmail(), booGestBen, booGestInv, booGestFead, booGestAsso,
 				booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(), entity.getSociete(),
 				entity.getMembreNom(), entity.getMembrePrenom(), entity.getMembreEmail(), entity.getMembreLangue(),booMembreActif,
 				entity.getMembreBankShortname(), nbOfLogins, totalRecords);
@@ -183,10 +183,10 @@ public class TUserController {
 	}
 
 	protected TUser convertToEntity(TUserDto dto) {
-
+       // feed erratic field depot from field liendepot derived from idDis
 		TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(),
 				dto.getIdLanguage(), dto.getLienBat(), (short) (dto.getActif() ? 1 : 0), dto.getRights(),
-				dto.getPassword(), dto.getDepot(), (short) (dto.getDroit1() ? 1 : 0), dto.getEmail(),
+				dto.getPassword(), dto.getLienDepot(), (short) (dto.getDroit1() ? 1 : 0), dto.getEmail(),
 				(short) (dto.getGestBen() ? 1 : 0), (short) (dto.getGestInv() ? 1 : 0),
 				(short) (dto.getGestFead() ? 1 : 0), (short) (dto.getGestAsso() ? 1 : 0),
 				(short) (dto.getGestCpas() ? 1 : 0), (short) (dto.getGestMemb() ? 1 : 0),

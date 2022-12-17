@@ -20,7 +20,7 @@ public class TUserDto {
     
     private String password;
      
-    private String depot;
+    private String lienDepot; // calculated field
      
     private boolean droit1;
      
@@ -61,7 +61,7 @@ public class TUserDto {
     protected TUserDto() {
       
     }
-    public TUserDto(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String depot, 
+    public TUserDto(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String lienDepot,
     		boolean droit1, String email, boolean gestBen, boolean gestInv, boolean gestFead, boolean gestAsso,
         boolean gestCpas, boolean gestMemb, boolean gestDon, Short lienBanque, int lienCpas,String societe,
         String membreNom, String membrePrenom, String membreEmail, Short membreLangue,boolean membreActif, String membreBankShortname,
@@ -76,7 +76,7 @@ public class TUserDto {
         this.actif = actif;
         this.rights = rights;
         this.password = password;
-        this.depot = depot;
+        this.lienDepot = lienDepot;
         this.droit1 = droit1;
         this.email = email;
         this.gestBen = gestBen;
@@ -172,12 +172,12 @@ public class TUserDto {
         this.password = password;
     }
 
-    public String getDepot() {
-        return depot;
+    public String getLienDepot() {
+        return lienDepot;
     }
 
-    public void setDepot(String depot) {
-        this.depot = depot;
+    public void setLienDepot(String lienDepot) {
+        this.lienDepot = lienDepot;
     }
 
     public boolean getDroit1() {

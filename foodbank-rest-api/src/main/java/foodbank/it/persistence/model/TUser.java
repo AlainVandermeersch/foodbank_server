@@ -90,7 +90,7 @@ public class TUser implements Serializable {
     protected TUser() {
         super();
     }
-
+    // feed erratic field depot from field liendepot derived from idDis see in controller method convertToEntity
     public TUser(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
         int gestAsso, int gestCpas, int gestMemb, int gestDon, Short lienBanque, int lienCpas) {
         super();
