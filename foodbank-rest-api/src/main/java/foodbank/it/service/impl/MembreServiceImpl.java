@@ -347,7 +347,12 @@ public class MembreServiceImpl implements IMembreService{
 	public Iterable<Membre> findByLienDis(Integer lienDisInteger) {
 		return MembreRepository.findByLienDis(lienDisInteger);
 	}
-	
-	
+
+	@Override
+	public Iterable<Membre> findByLienDepot(String lienDepot) {
+		return MembreRepository.findByLienDepot(lienDepot);
+	}
+
+
 }
 	

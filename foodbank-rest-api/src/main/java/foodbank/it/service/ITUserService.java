@@ -14,7 +14,8 @@ public interface ITUserService {
 		TUser save(TUser TUser,  boolean booCreateMode) throws Exception;
 	    void delete(String idUser);
 		Iterable<TUser> findByIdOrg(Integer idOrgInteger);
-		Iterable<TUser> findByLienBat(int lienBat);			 
-	}
+		Iterable<TUser> findByLienBat(int lienBat);
+		Iterable<TUser> findByLienDepot(String lienDepot);
+}
 	
 

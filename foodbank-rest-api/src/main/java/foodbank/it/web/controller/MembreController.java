@@ -40,22 +40,26 @@ public class MembreController {
         return convertToDto(entity,1);
     }
     @GetMapping("membresall/")
-    public Collection<MembreDto> findAll(@RequestParam(required = false) String lienBanque,
-    		@RequestParam(required = false) 	String lienDis) {
+    public Collection<MembreDto> findAll(
+			@RequestParam(required = false) String lienBanque,
+			@RequestParam(required = false) String lienDepot,
+    		@RequestParam(required = false) String lienDis) {
     	List<Membre> selectedMembres;
     	Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
     	Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
     	if (lienDis != null) {
     		selectedMembres = (List<Membre>) this.MembreService.findByLienDis(lienDisInteger);
     	}
-    	else {
-    	if (lienBanque != null) {
+		else if (lienDepot != null) {
+			selectedMembres = (List<Membre>) this.MembreService.findByLienDepot(lienDepot);
+		}
+    	else if (lienBanque != null) {
     		selectedMembres = (List<Membre>) this.MembreService.findByLienBanque(lienBanqueShort);
     	}
     	else {
     		selectedMembres = (List<Membre>) this.MembreService.findAll();
     	}
-    	}
+
     	return selectedMembres.stream()
 				.map(Membre -> convertToDto(Membre, selectedMembres.size()))
 				.collect(Collectors.toList());

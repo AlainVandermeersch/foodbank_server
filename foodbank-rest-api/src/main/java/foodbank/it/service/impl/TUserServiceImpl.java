@@ -299,6 +299,11 @@ public class TUserServiceImpl implements ITUserService {
 	}
 
 	@Override
+	public Iterable<TUser> findByLienDepot(String lienDepot) {
+		return TUserRepository.findByLienDepot(lienDepot);
+	}
+
+	@Override
 	public Iterable<TUser> findByIdOrg(Integer idOrgInteger) {
 		return TUserRepository.findByIdOrg(idOrgInteger);
 	}

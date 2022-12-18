@@ -20,5 +20,5 @@ public interface IMembreService {
 
 	Iterable<Membre> findByLienDis(Integer lienDisInteger);
 
-	
+    Iterable<Membre> findByLienDepot(String lienDepot);
 }
