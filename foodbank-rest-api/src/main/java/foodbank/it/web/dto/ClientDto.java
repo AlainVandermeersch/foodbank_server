@@ -1,8 +1,4 @@
 package foodbank.it.web.dto;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class ClientDto {
 	 private int idClient;
 	
@@ -273,7 +269,11 @@ public class ClientDto {
 	public Long getNbDep() {
 		return nbDep;
 	}
-	
+
+	public void setNbDep(Long nbDep) {
+		this.nbDep = nbDep;
+	}
+
 	public String getSociete() {
 		return societe;
 	}
@@ -288,59 +288,7 @@ public class ClientDto {
 	public void setTotalRecords(Long totalRecords) {
 		this.totalRecords = totalRecords;
 	}
-	protected ClientDto() {
-		super();
-		
-	}
-	public ClientDto(int idClient, String idInt, Integer lienDis, String nom, String prenom, String nomconj,
-			String prenomconj, short civilite, String daten, String datenConj, short civiliteconj, String adresse,
-			String cp, String localite, String pays, String email, String tel, String gsm, String connu, int genre,
-			boolean actif, short birb, String natnr, LocalDateTime dateUpd, String regio, short lCpas, String datUpdBirb,
-			short critBirb, short coeff, String nomsav, String prenomsav, int genreconj, short lbanque, Long nbDep, String societe, Long  totalRecords) {
-		super();
-		this.idClient = idClient;
-		this.idInt = idInt;
-		this.lienDis = lienDis;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.nomconj = nomconj;
-		this.prenomconj = prenomconj;
-		this.civilite = civilite;
-		this.daten = daten;
-		this.datenConj = datenConj;
-		this.civiliteconj = civiliteconj;
-		this.adresse = adresse;
-		this.cp = cp;
-		this.localite = localite;
-		this.pays = pays;
-		this.email = email;
-		this.tel = tel;
-		this.gsm = gsm;
-		this.connu = connu;
-		this.genre = genre;
-		this.actif = actif;
-		this.birb = birb;
-		this.natnr = natnr;
-		if (dateUpd == null) {
-			this.dateUpd = "";
-		}
-		else {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-			this.dateUpd = dateUpd.format(formatter);
-		}
-		this.regio = regio;
-		this.lCpas = lCpas;
-		this.datUpdBirb = datUpdBirb;
-		this.critBirb = critBirb;
-		this.coeff = coeff;
-		this.nomsav = nomsav;
-		this.prenomsav = prenomsav;
-		this.genreconj = genreconj;
-		this.lbanque = lbanque;
-		this.nbDep = nbDep;
-		this.societe = societe;
-		this.totalRecords = totalRecords;
-	}
+
 	
 	 
 	 

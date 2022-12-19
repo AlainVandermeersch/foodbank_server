@@ -11,10 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -130,15 +131,50 @@ public class ClientController {
     		societe = orgOfClient.getSociete();
 
     	}
-
 		boolean booActif = entity.getActif() == 1;
 		
-		ClientDto dto = new ClientDto(entity.getIdClient(), entity.getIdInt(), liendis, entity.getNom(), entity.getPrenom(),
-				entity.getNomconj(), entity.getPrenomconj(), entity.getCivilite(), entity.getDaten(), entity.getDatenConj(), entity.getCiviliteconj(),
-				entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getPays(), entity.getEmail(), entity.getTel(), entity.getGsm(),
-				entity.getConnu(), entity.getGenre(),booActif, entity.getBirb(), entity.getNatnr(), entity.getDateUpd(), entity.getRegio(),
-				entity.getLCpas(), entity.getDatUpdBirb(), entity.getCritBirb(), entity.getCoeff(), entity.getNomsav(), entity.getPrenomsav(),
-				entity.getGenreconj(), entity.getLbanque(), entity.getNbDep(),societe,totalRecords);
+		ClientDto dto = new ClientDto();
+		String dtoDateUpd = "";
+		if (entity.getDateUpd() != null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			dtoDateUpd = entity.getDateUpd().format(formatter);
+		}
+		dto.setIdClient(entity.getIdClient());
+		dto.setIdInt(entity.getIdInt());
+		dto.setLienDis(liendis);
+		dto.setNom(entity.getNom());
+		dto.setPrenom(entity.getPrenom());
+		dto.setNomconj(entity.getNomconj());
+		dto.setPrenomconj(entity.getPrenomconj());
+		dto.setCivilite(entity.getCivilite());
+		dto.setDaten(entity.getDaten());
+		dto.setDatenConj(entity.getDatenConj());
+		dto.setCiviliteconj(entity.getCiviliteconj());
+		dto.setAdresse(entity.getAdresse());
+		dto.setCp(entity.getCp());
+		dto.setLocalite(entity.getLocalite());
+		dto.setPays(entity.getPays());
+		dto.setEmail(entity.getEmail());
+		dto.setTel(entity.getTel());
+		dto.setGsm(entity.getGsm());
+		dto.setConnu(entity.getConnu());
+		dto.setGenre(entity.getGenre());
+		dto.setActif(booActif);
+		dto.setBirb(entity.getBirb());
+		dto.setNatnr(entity.getNatnr());
+		dto.setDateUpd(dtoDateUpd);
+		dto.setRegio(entity.getRegio());
+		dto.setLCpas(entity.getLCpas());
+		dto.setDatUpdBirb(entity.getDatUpdBirb());
+		dto.setCritBirb(entity.getCritBirb());
+		dto.setCoeff(entity.getCoeff());
+		dto.setNomsav(entity.getNomsav());
+		dto.setPrenomsav(entity.getPrenomsav());
+		dto.setGenreconj(entity.getGenreconj());
+		dto.setLbanque(entity.getLbanque());
+		dto.setNbDep(entity.getNbDep());
+		dto.setSociete(societe);
+		dto.setTotalRecords(totalRecords);
 		return dto;
 	}
 
@@ -147,17 +183,43 @@ public class ClientController {
 		Organisation orgOfClient = null;
 
     	Optional<Organisation> org = this.OrganisationService.findByIdDis(dto.getLienDis());
-    		if (org.isPresent() == true) orgOfClient = org.get() ;
+    		if (org.isPresent()) orgOfClient = org.get() ;
 		
-		Client myClient = new Client(dto.getIdClient(), dto.getIdInt(), orgOfClient, dto.getLbanque(), dto.getNom(), dto.getPrenom(),
-				dto.getNomconj(), dto.getPrenomconj(), dto.getCivilite(), dto.getDaten(), dto.getDatenConj(), dto.getCiviliteconj(),
-				dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getPays(), dto.getEmail(), dto.getTel(), dto.getGsm(),
-				dto.getConnu(), dto.getGenre(), (short) (dto.getActif() ? 1 : 0) , dto.getBirb(), dto.getNatnr(),  dto.getRegio(),
-				dto.getLCpas(), dto.getDatUpdBirb(), dto.getCritBirb(), dto.getCoeff(), dto.getNomsav(), dto.getPrenomsav(),
-				dto.getGenreconj());
-		if (!StringUtils.isEmpty(dto.getIdClient())) {
-			myClient.setIdClient(dto.getIdClient());
-		}
+		Client myClient = new Client();
+		 myClient.setIdClient(dto.getIdClient());
+		 myClient.setIdInt(dto.getIdInt());
+		 myClient.setDateUpd(LocalDateTime.now()); // do not use dateUpd from DTO we need to update the time
+		 myClient.setOrganisationObject(orgOfClient);
+		 myClient.setLbanque(dto.getLbanque());
+		 myClient.setNom(dto.getNom());
+		 myClient.setPrenom(dto.getPrenom());
+		 myClient.setNomconj(dto.getNomconj());
+		 myClient.setPrenomconj(dto.getPrenomconj());
+		 myClient.setCivilite(dto.getCivilite());
+		 myClient.setDaten(dto.getDaten());
+		 myClient.setDatenConj(dto.getDatenConj());
+		 myClient.setCiviliteconj(dto.getCiviliteconj());
+		 myClient.setAdresse(dto.getAdresse());
+		 myClient.setCp(dto.getCp());
+		 myClient.setLocalite(dto.getLocalite());
+		 myClient.setPays(dto.getPays());
+		 myClient.setEmail(dto.getEmail());
+		 myClient.setTel(dto.getTel());
+		 myClient.setGsm(dto.getGsm());
+		 myClient.setConnu(dto.getConnu());
+		 myClient.setGenre(dto.getGenre());
+		 myClient.setActif((short) (dto.getActif() ? 1 : 0) );
+		 myClient.setBirb(dto.getBirb());
+		 myClient.setNatnr(dto.getNatnr());
+		 myClient.setRegio(dto.getRegio());
+		 myClient.setLCpas(dto.getLCpas());
+		 myClient.setDatUpdBirb(dto.getDatUpdBirb());
+		 myClient.setCritBirb(dto.getCritBirb());
+		 myClient.setCoeff(dto.getCoeff());
+		 myClient.setNomsav(dto.getNomsav());
+		 myClient.setPrenomsav(dto.getPrenomsav());
+		 myClient.setGenreconj(dto.getGenreconj());
+
 		return myClient;
 	}
 }

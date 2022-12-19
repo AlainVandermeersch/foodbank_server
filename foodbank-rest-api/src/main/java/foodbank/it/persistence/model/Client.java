@@ -99,53 +99,6 @@ private static final long serialVersionUID = -8518218294613491486L;
  @NotFound(action = NotFoundAction.IGNORE)
  private Organisation organisationObject;
 
- /** Default constructor. */
- public Client() {
-     super();
- }
- 
-
- public Client(int idClient,String idInt, Organisation organisationObject, short lbanque, String nom, String prenom, String nomconj, String prenomconj,
-		short civilite, String daten, String datenConj, short civiliteconj, String adresse, String cp, String localite,
-		String pays, String email, String tel, String gsm, String connu, int genre, short actif, short birb,
-		String natnr, String regio, short lCpas, String datUpdBirb, short critBirb, short coeff,
-		String nomsav, String prenomsav, int genreconj) {
-	super();
-	this.idClient = idClient;
-	this.idInt = idInt;
-	this.organisationObject = organisationObject;
-	this.lbanque = lbanque;
-	this.nom = nom;
-	this.prenom = prenom;
-	this.nomconj = nomconj;
-	this.prenomconj = prenomconj;
-	this.civilite = civilite;
-	this.daten = daten;
-	this.datenConj = datenConj;
-	this.civiliteconj = civiliteconj;
-	this.adresse = adresse;
-	this.cp = cp;
-	this.localite = localite;
-	this.pays = pays;
-	this.email = email;
-	this.tel = tel;
-	this.gsm = gsm;
-	this.connu = connu;
-	this.genre = genre;
-	this.actif = actif;
-	this.birb = birb;
-	this.natnr = natnr;
-	this.dateUpd = LocalDateTime.now(); // do not use dateUpd from DTO we need to update the time
-	this.regio = regio;
-	this.lCpas = lCpas;
-	this.datUpdBirb = datUpdBirb;
-	this.critBirb = critBirb;
-	this.coeff = coeff;
-	this.nomsav = nomsav;
-	this.prenomsav = prenomsav;
-	this.genreconj = genreconj;
-}
-
 
 public Long getNbDep() {
 	return nbDep;
@@ -746,6 +699,10 @@ public Long getNbDep() {
  public Organisation getOrganisationObject() {
 		return organisationObject;
 	}
+
+ public void setOrganisationObject(Organisation organisationObject) {
+  this.organisationObject = organisationObject;
+ }
 
  /**
   * Setter method for genreconj.
