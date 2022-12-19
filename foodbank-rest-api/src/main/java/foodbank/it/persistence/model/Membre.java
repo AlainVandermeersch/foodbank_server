@@ -113,58 +113,6 @@ public class Membre implements Serializable {
  @NotFound(action = NotFoundAction.IGNORE)
  private Function fonctionObj;
 
- /** Default constructor. */
- public Membre() {
-     super();
- }
-
- public Membre(Integer batId, Integer lienDis, String nom, String prenom, String address, String city,
-		String zip, String tel, String gsm, String batmail, String veh, String vehTyp, String vehImm, Function fonctionObj,
-		Short ca, Short ag, Short cg, Short civilite, Short pays, Short actif, Short authority, String datmand,
-		String rem, Short ben, Short codeAcces, Short nrCodeAcces, Short langue,
-		String datedeb, String dateFin, Short deleted, Short typEmploi, String dateNaissance, String nnat,
-		String dateContrat, Integer lDep, Short lienBanque) {
-	super();	
-	this.batId = batId;
-	this.lienDis = lienDis;
-	this.nom = nom;
-	this.prenom = prenom;
-	this.address = address;
-	this.city = city;
-	this.zip = zip;
-	this.tel = tel;
-	this.gsm = gsm;
-	this.batmail = batmail;
-	this.veh = veh;
-	this.vehTyp = vehTyp;
-	this.vehImm = vehImm;
-	this.fonctionObj = fonctionObj;
-	this.ca = ca;
-	this.ag = ag;
-	this.cg = cg;
-	this.civilite = civilite;
-	this.pays = pays;
-	this.actif = actif;
-	this.authority = authority;
-	this.datmand = datmand;
-	this.rem = rem;
-	this.ben = ben;
-	this.codeAcces = codeAcces;
-	this.nrCodeAcces = nrCodeAcces;
-	this.langue = langue;
-	this.datedeb = datedeb;
-	this.dateFin = dateFin;
-	this.deleted = deleted;
-	this.typEmploi = typEmploi;
-	this.dateNaissance = dateNaissance;
-	this.nnat = nnat;
-	this.dateContrat = dateContrat;
-	this.lDep = lDep;
-	this.lastVisit = LocalDateTime.now(); // do not use lastVisit from DTO we need to update the time
-	this.lienBanque = lienBanque;
-}
-
-
 
 /**
   * Access method for batId.

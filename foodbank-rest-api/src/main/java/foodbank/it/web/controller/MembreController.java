@@ -11,10 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -163,17 +164,58 @@ public class MembreController {
 		   functionNameNl = functionOfMember.getFonctionNameNl();
 		   functionType = functionOfMember.getBankShortName();
 	   }
+	   MembreDto dto = new MembreDto();
+	   String dtoLastVisit = "";
+		if (entity.getLastVisit() != null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			dtoLastVisit = entity.getLastVisit().format(formatter);
+		}
+	   dto.setBatId(entity.getBatId());
+	   dto.setBatId(entity.getLienDis());
+	   dto.setNom(entity.getNom());
+	   dto.setPrenom(entity.getPrenom());
+	   dto.setAddress(entity.getAddress());
+	   dto.setCity(entity.getCity());
+	   dto.setZip(entity.getZip());
+	   dto.setTel(entity.getTel());
+	   dto.setGsm(entity.getGsm());
+	   dto.setBatmail(entity.getBatmail());
+	   dto.setVeh(entity.getVeh());
+	   dto.setVehTyp(entity.getVehTyp());
+	   dto.setVehImm(entity.getVehImm());
+	   dto.setFonction(entity.getFonction());
+	   dto.setCa(booCa);
+	   dto.setAg(booAg);
+	   dto.setCg(booCg);
+	   dto.setCivilite(entity.getCivilite());
+	   dto.setPays(entity.getPays());
+	   dto.setActif(booActif);
+	   dto.setAuthority(entity.getAuthority());
+	   dto.setDatmand(entity.getDatmand());
+	   dto.setRem(entity.getRem());
+	   dto.setBen(booBen);
+	   dto.setCodeAcces(entity.getCodeAcces());
+	   dto.setNrCodeAcces(entity.getNrCodeAcces());
+	   dto.setLangue(entity.getLangue());
+	   dto.setDatedeb(entity.getDatedeb());
+	   dto.setDateFin(entity.getDateFin());
+	   dto.setDeleted(entity.getDeleted());
+	   dto.setTypEmploi(entity.getTypEmploi());
+	   dto.setDateNaissance(entity.getDateNaissance());
+	   dto.setNnat(entity.getNnat());
+	   dto.setDateContrat(entity.getDateContrat());
+	   dto.setLDep(entity.getLDep());
+	   dto.setLastVisit(dtoLastVisit);
+	   dto.setLienBanque(entity.getLienBanque());
+	   dto.setSociete(entity.getSociete());
+	   dto.setBankShortName(entity.getBankShortName());
+	   dto.setFonctionType(functionType);
+	   dto.setFonctionName(functionNameFr);
+	   dto.setFonctionNameNl(functionNameNl);
+	   dto.setNbUsers(entity.getNbUsers());
+	   dto.setTotalRecords(totalRecords  );
 
-    	
-        MembreDto dto = new MembreDto(entity.getBatId(),entity.getLienDis(), entity.getNom(), entity.getPrenom(), entity.getAddress(),
-				entity.getCity(), entity.getZip(), entity.getTel(), entity.getGsm(),  entity.getBatmail(), entity.getVeh(),
-				entity.getVehTyp(), entity.getVehImm(), entity.getFonction(), booCa, booAg, booCg,entity.getCivilite(),
-				entity.getPays(), booActif, entity.getAuthority(), entity.getDatmand(), entity.getRem(),  booBen,
-				entity.getCodeAcces(), entity.getNrCodeAcces(), entity.getLangue(), entity.getDatedeb(), entity.getDateFin(), entity.getDeleted(),
-				entity.getTypEmploi(), entity.getDateNaissance(), entity.getNnat(), entity.getDateContrat(), entity.getLDep(),entity.getLastVisit(),
-				entity.getLienBanque(),entity.getSociete(),entity.getBankShortName(),functionType,functionNameFr, functionNameNl,
-				entity.getNbUsers(),totalRecords  );
-        return dto;
+	   return dto;
     }
 
     protected Membre convertToEntity(MembreDto dto) {
@@ -183,15 +225,45 @@ public class MembreController {
 			Optional<Function> fonction = this.FunctionRepository.findByFuncId(funcId);
 			if (fonction.isPresent()) functionOfMembre = fonction.get();
 		}
-    	Membre myMembre = new Membre( dto.getBatId(),dto.getLienDis(), dto.getNom(), dto.getPrenom(), dto.getAddress(),
-				dto.getCity(), dto.getZip(), dto.getTel(), dto.getGsm(),  dto.getBatmail(), dto.getVeh(),
-				dto.getVehTyp(), dto.getVehImm(), functionOfMembre, (short) (dto.isCa() ? 1 : 0), (short) (dto.isAg() ? 1 : 0), (short) (dto.isCg() ? 1 : 0),dto.getCivilite(),
-				dto.getPays(), (short) (dto.getActif() ? 1 : 0), dto.getAuthority(), dto.getDatmand(), dto.getRem(),  (short) (dto.isBen() ? 1 : 0),
-				dto.getCodeAcces(), dto.getNrCodeAcces(), dto.getLangue(), dto.getDatedeb(), dto.getDateFin(), dto.getDeleted(),
-				dto.getTypEmploi(), dto.getDateNaissance(), dto.getNnat(), dto.getDateContrat(), dto.getldep(),dto.getLienBanque());
-        if (!StringUtils.isEmpty(dto.getBatId())) {
-            myMembre.setBatId(dto.getBatId());
-        } 
+    	Membre myMembre = new Membre();
+			myMembre.setBatId(dto.getBatId());
+			myMembre.setLienDis(dto.getLienDis());
+			myMembre.setNom(dto.getNom());
+			myMembre.setPrenom(dto.getPrenom());
+			myMembre.setAddress(dto.getAddress());
+			myMembre.setCity(dto.getCity());
+			myMembre.setZip(dto.getZip());
+			myMembre.setTel(dto.getTel());
+			myMembre.setGsm(dto.getGsm());
+			myMembre.setBatmail(dto.getBatmail());
+			myMembre.setVeh(dto.getVeh());
+			myMembre.setVehTyp(dto.getVehTyp());
+			myMembre.setVehImm(dto.getVehImm());
+			myMembre.setFonctionObj(functionOfMembre);
+			myMembre.setCa((short) (dto.isCa() ? 1 : 0));
+			myMembre.setAg((short) (dto.isAg() ? 1 : 0));
+			myMembre.setCg((short) (dto.isCg() ? 1 : 0));
+			myMembre.setCivilite(dto.getCivilite());
+			myMembre.setPays(dto.getPays());
+			myMembre.setActif((short) (dto.getActif() ? 1 : 0));
+			myMembre.setAuthority(dto.getAuthority());
+			myMembre.setDatmand(dto.getDatmand());
+			myMembre.setRem(dto.getRem());
+			myMembre.setBen((short) (dto.isBen() ? 1 : 0));
+			myMembre.setCodeAcces(dto.getCodeAcces());
+			myMembre.setNrCodeAcces(dto.getNrCodeAcces());
+			myMembre.setLangue(dto.getLangue());
+			myMembre.setDatedeb(dto.getDatedeb());
+			myMembre.setDateFin(dto.getDateFin());
+			myMembre.setDeleted(dto.getDeleted());
+			myMembre.setTypEmploi(dto.getTypEmploi());
+			myMembre.setDateNaissance(dto.getDateNaissance());
+			myMembre.setNnat(dto.getNnat());
+			myMembre.setDateContrat(dto.getDateContrat());
+			myMembre.setLDep(dto.getldep());
+			myMembre.setLienBanque(dto.getLienBanque());
+			myMembre.setLastVisit(LocalDateTime.now()); // ignore last visit from dto, we need to update with current time
+
         return myMembre;
     }
 
