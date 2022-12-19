@@ -178,8 +178,8 @@ public class TUserController {
 
 		// field LienDepot is correct , field depot is erratic
 		TUserDto dto = new TUserDto();
-		dto.setIdUser(entity.getIdUser());
-				dto.setIdUser(entity.getUserName());
+				dto.setIdUser(entity.getIdUser());
+				dto.setUserName(entity.getUserName());
 				dto.setIdCompany(entity.getIdCompany());
 				dto.setIdOrg(entity.getIdOrg());
 				dto.setIdLanguage(entity.getIdLanguage());
