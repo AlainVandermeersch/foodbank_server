@@ -86,36 +86,9 @@ public class TUser implements Serializable {
     
 	//  and (a.date_in >= (now() - interval 60 DAY))
 
-	/** Default constructor. */
-    protected TUser() {
-        super();
-    }
-    // feed erratic field depot from field liendepot derived from idDis see in controller method convertToEntity
-    public TUser(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, int actif, String rights, String password, String depot, int droit1, String email, int gestBen, int gestInv, int gestFead,
-        int gestAsso, int gestCpas, int gestMemb, int gestDon, Short lienBanque, int lienCpas) {
-        super();
-        this.idUser = idUser;
-        this.userName = userName;
-        this.idCompany = idCompany;
-        this.idOrg = idOrg;
-        this.idLanguage = idLanguage;
-        this.lienBat = lienBat;
-        this.actif = actif;
-        this.rights = rights;
-        this.password = password;
-        this.depot = depot;
-        this.droit1 = droit1;
-        this.email = email;
-        this.gestBen = gestBen;
-        this.gestInv = gestInv;
-        this.gestFead = gestFead;
-        this.gestAsso = gestAsso;
-        this.gestCpas = gestCpas;
-        this.gestMemb = gestMemb;
-        this.gestDon = gestDon;
-        this.lienBanque = lienBanque;
-        this.lienCpas = lienCpas;        
-    }
+
+
+
 
     /**
      * Access method for idUser.

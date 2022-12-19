@@ -57,48 +57,6 @@ public class TUserDto {
      
     
 
-    /** Default constructor. */
-    protected TUserDto() {
-      
-    }
-    public TUserDto(String idUser, String userName, String idCompany, Integer idOrg, String idLanguage, int lienBat, boolean actif, String rights, String password, String lienDepot,
-    		boolean droit1, String email, boolean gestBen, boolean gestInv, boolean gestFead, boolean gestAsso,
-        boolean gestCpas, boolean gestMemb, boolean gestDon, Short lienBanque, int lienCpas,String societe,
-        String membreNom, String membrePrenom, String membreEmail, Short membreLangue,boolean membreActif, String membreBankShortname,
-        long nbLogins,Long  totalRecords) {
-        super();
-        this.idUser = idUser;
-        this.userName = userName;
-        this.idCompany = idCompany;
-        this.idOrg = idOrg;
-        this.idLanguage = idLanguage;
-        this.lienBat = lienBat;
-        this.actif = actif;
-        this.rights = rights;
-        this.password = password;
-        this.lienDepot = lienDepot;
-        this.droit1 = droit1;
-        this.email = email;
-        this.gestBen = gestBen;
-        this.gestInv = gestInv;
-        this.gestFead = gestFead;
-        this.gestAsso = gestAsso;
-        this.gestCpas = gestCpas;
-        this.gestMemb = gestMemb;
-        this.gestDon = gestDon;
-        this.lienBanque = lienBanque;
-        this.lienCpas = lienCpas;
-        this.societe = societe;
-        this.membreNom = membreNom;
-        this.membrePrenom = membrePrenom;
-        this.membreEmail = membreEmail;
-        this.membreLangue = membreLangue;
-        this.membreActif = membreActif;
-        this.membreBankShortname = membreBankShortname;
-        this.nbLogins = nbLogins;
-        this.totalRecords = totalRecords;
-        
-    }
 
     public String getIdUser() {
         return idUser;
@@ -270,29 +228,54 @@ public class TUserDto {
     public String getSociete() {
 		return societe;
 	}
-    
-	public String getMembreNom() {
+
+    public void setSociete(String societe) {
+        this.societe = societe;
+    }
+    public String getMembreNom() {
 		return membreNom;
 	}
-	public String getMembrePrenom() {
+
+    public void setMembreNom(String membreNom) {
+        this.membreNom = membreNom;
+    }
+
+    public String getMembrePrenom() {
 		return membrePrenom;
 	}
+
+    public void setMembrePrenom(String membrePrenom) {
+        this.membrePrenom = membrePrenom;
+    }
 	
 	public String getMembreEmail() {
 		return membreEmail;
 	}
+
+    public void setMembreEmail(String membreEmail) {
+        this.membreEmail = membreEmail;
+    }
 	public Short getMembreLangue() {
 		return membreLangue;
 	}
+    public void setMembreLangue(Short membreLangue) {
+        this.membreLangue = membreLangue;
+    }
 
     public boolean getMembreActif() { return membreActif; }
-
+    public void setMembreActif(boolean membreActif) {
+        this.membreActif = membreActif;
+    }
     public String getMembreBankShortname() {
 		return membreBankShortname;
 	}
-	public long getNbLogins() {
-		return nbLogins;
-	}
+
+    public void setMembreBankShortname(String membreBankShortname) {
+        this.membreBankShortname = membreBankShortname;
+    }
+    public long getNbLogins() {
+        return nbLogins;
+    }
 	public void setNbLogins(long nbLogins) {
 		this.nbLogins = nbLogins;
 	}

@@ -177,24 +177,64 @@ public class TUserController {
 		}
 
 		// field LienDepot is correct , field depot is erratic
-		TUserDto dto = new TUserDto(entity.getIdUser(), entity.getUserName(), entity.getIdCompany(), entity.getIdOrg(),
-				entity.getIdLanguage(), entity.getLienBat(), booActif, caseCorrectedRights, entity.getPassword(),
-				entity.getLienDepot(), booDroit1, entity.getEmail(), booGestBen, booGestInv, booGestFead, booGestAsso,
-				booGestCpas, booGestMemb, booGestDon, entity.getLienBanque(), entity.getLienCpas(), entity.getSociete(),
-				entity.getMembreNom(), entity.getMembrePrenom(), entity.getMembreEmail(), entity.getMembreLangue(),booMembreActif,
-				entity.getMembreBankShortname(), nbOfLogins, totalRecords);
+		TUserDto dto = new TUserDto();
+		dto.setIdUser(entity.getIdUser());
+				dto.setIdUser(entity.getUserName());
+				dto.setIdCompany(entity.getIdCompany());
+				dto.setIdOrg(entity.getIdOrg());
+				dto.setIdLanguage(entity.getIdLanguage());
+				dto.setLienBat(entity.getLienBat());
+				dto.setActif(booActif);
+				dto.setRights(caseCorrectedRights);
+				dto.setPassword(entity.getPassword());
+				dto.setLienDepot(entity.getLienDepot());
+				dto.setDroit1(booDroit1);
+				dto.setEmail(entity.getEmail());
+				dto.setGestBen(booGestBen);
+				dto.setGestInv(booGestInv);
+				dto.setGestFead(booGestFead);
+				dto.setGestAsso(booGestAsso);
+				dto.setGestCpas(booGestCpas);
+				dto.setGestMemb(booGestMemb);
+				dto.setGestDon(booGestDon);
+				dto.setLienBanque(entity.getLienBanque());
+				dto.setLienCpas(entity.getLienCpas());
+				dto.setSociete(entity.getSociete());
+				dto.setMembreNom(entity.getMembreNom());
+				dto.setMembrePrenom(entity.getMembrePrenom());
+				dto.setMembreEmail(entity.getMembreEmail());
+				dto.setMembreLangue(entity.getMembreLangue());
+				dto.setMembreActif(booMembreActif);
+				dto.setMembreBankShortname(entity.getMembreBankShortname());
+				dto.setNbLogins(nbOfLogins);
+				dto.setTotalRecords(totalRecords);
 		return dto;
 	}
 
 	protected TUser convertToEntity(TUserDto dto) {
-       // feed erratic field depot from field liendepot derived from idDis
-		TUser tUser = new TUser(dto.getIdUser(), dto.getUserName(), dto.getIdCompany(), dto.getIdOrg(),
-				dto.getIdLanguage(), dto.getLienBat(), (short) (dto.getActif() ? 1 : 0), dto.getRights(),
-				dto.getPassword(), dto.getLienDepot(), (short) (dto.getDroit1() ? 1 : 0), dto.getEmail(),
-				(short) (dto.getGestBen() ? 1 : 0), (short) (dto.getGestInv() ? 1 : 0),
-				(short) (dto.getGestFead() ? 1 : 0), (short) (dto.getGestAsso() ? 1 : 0),
-				(short) (dto.getGestCpas() ? 1 : 0), (short) (dto.getGestMemb() ? 1 : 0),
-				(short) (dto.getGestDon() ? 1 : 0), (short) dto.getLienBanque(), dto.getLienCpas());
+
+		TUser tUser = new TUser();
+		tUser.setIdUser(dto.getIdUser());
+		tUser.setUserName(dto.getUserName());
+		tUser.setIdCompany(dto.getIdCompany());
+		tUser.setIdOrg(dto.getIdOrg());
+		tUser.setIdLanguage(dto.getIdLanguage());
+		tUser.setLienBat(dto.getLienBat());
+		tUser.setActif((short) (dto.getActif() ? 1 : 0));
+		tUser.setRights(dto.getRights());
+		tUser.setPassword(dto.getPassword());
+		tUser.setDepot(dto.getLienDepot()); // feed erratic field depot from field liendepot derived from idDis
+		tUser.setDroit1((short) (dto.getDroit1() ? 1 : 0));
+		tUser.setEmail(dto.getEmail());
+		tUser.setGestBen((short) (dto.getGestBen() ? 1 : 0));
+		tUser.setGestInv((short) (dto.getGestInv() ? 1 : 0));
+		tUser.setGestFead((short) (dto.getGestFead() ? 1 : 0));
+		tUser.setGestAsso((short) (dto.getGestAsso() ? 1 : 0));
+		tUser.setGestCpas((short) (dto.getGestCpas() ? 1 : 0));
+		tUser.setGestMemb((short) (dto.getGestMemb() ? 1 : 0));
+		tUser.setGestDon((short) (dto.getGestDon() ? 1 : 0));
+		tUser.setLienBanque((short) dto.getLienBanque());
+		tUser.setLienCpas(dto.getLienCpas());
 
 		return tUser;
 	}
