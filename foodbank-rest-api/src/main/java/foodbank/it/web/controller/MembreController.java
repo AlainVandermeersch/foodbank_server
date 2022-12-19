@@ -171,7 +171,7 @@ public class MembreController {
 			dtoLastVisit = entity.getLastVisit().format(formatter);
 		}
 	   dto.setBatId(entity.getBatId());
-	   dto.setBatId(entity.getLienDis());
+	   dto.setLienDis(entity.getLienDis());
 	   dto.setNom(entity.getNom());
 	   dto.setPrenom(entity.getPrenom());
 	   dto.setAddress(entity.getAddress());
