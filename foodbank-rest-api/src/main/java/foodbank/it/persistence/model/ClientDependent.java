@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 @Entity(name="dep")
 public class ClientDependent implements Serializable {
-	
-	
+
 	/**
 	 * 
 	 */
@@ -43,29 +42,6 @@ public class ClientDependent implements Serializable {
 	private Short civilite;
 	@Column(nullable=false, precision=10)
 	private int eq;
-
-	/** Default constructor. */
-	public ClientDependent() {
-		super();
-	}
-
-	public ClientDependent(int idDep, int lienDis, int lienMast, String prenom, String nom, String datenais,
-			Short depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq) {
-		super();
-		this.idDep = idDep;
-		this.lienDis = lienDis;
-		this.lienMast = lienMast;
-		this.prenom = prenom;
-		this.nom = nom;
-		this.datenais = datenais;
-		this.depTyp = depTyp;
-		this.actif = actif;
-		this.deleted = deleted;
-		this.lienBanque = lienBanque;
-		this.regio = regio;
-		this.civilite = civilite;
-		this.eq = eq;
-	}
 
 	/**
 	 * Access method for idDep.

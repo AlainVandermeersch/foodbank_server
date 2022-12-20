@@ -15,28 +15,6 @@ public class ClientDependentDto {
 	private Short regio;
 	private Short civilite;
 	private int eq;
-	
-	public ClientDependentDto() {
-		super();
-	}
-	public ClientDependentDto(int idDep, int lienDis, int lienMast, String prenom, String nom, String datenais,
-			Short depTyp, boolean actif, boolean deleted, Short lienBanque, Short regio, Short civilite, int eq) {
-		super();
-		this.idDep = idDep;
-		this.lienDis = lienDis;
-		this.lienMast = lienMast;
-		this.prenom = prenom;
-		this.nom = nom;
-		this.datenais = datenais;
-		this.depTyp = depTyp;
-		this.actif = actif;
-		this.deleted = deleted;
-		this.lienBanque = lienBanque;
-		this.regio = regio;
-		this.civilite = civilite;
-		this.eq = eq;
-		
-	}
 	public int getIdDep() {
 		return idDep;
 	}

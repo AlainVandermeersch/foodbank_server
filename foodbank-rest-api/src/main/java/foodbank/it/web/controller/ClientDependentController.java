@@ -68,19 +68,41 @@ public class ClientDependentController {
         return this.convertToDto(ClientDependent);
     }
     protected ClientDependentDto convertToDto(ClientDependent entity) {
-        ClientDependentDto dto = new ClientDependentDto(entity.getIdDep(),entity.getLienDis(), entity.getLienMast(),entity.getPrenom(), entity.getNom(), entity.getDatenais(),
-    			entity.getDepTyp(), entity.getActif(), entity.getDeleted(), entity.getLienBanque(), entity.getRegio(), entity.getCivilite(), entity.getEq()
-	);		
+        ClientDependentDto dto = new ClientDependentDto();
+            dto.setIdDep(entity.getIdDep());
+            dto.setLienDis(entity.getLienDis());
+            dto.setLienMast(entity.getLienMast());
+            dto.setPrenom(entity.getPrenom());
+            dto.setNom(entity.getNom());
+            dto.setDatenais(entity.getDatenais());
+            dto.setDepTyp(entity.getDepTyp());
+            dto.setActif(entity.getActif());
+            dto.setDeleted(entity.getDeleted());
+            dto.setLienBanque(entity.getLienBanque());
+            dto.setRegio(entity.getRegio());
+            dto.setCivilite(entity.getCivilite());
+            dto.setEq(entity.getEq());
+
         return dto;
     }
 
     protected ClientDependent convertToEntity(ClientDependentDto dto) {
-        ClientDependent clientDependent = new ClientDependent( dto.getIdDep(),dto.getLienDis(), dto.getLienMast(),dto.getPrenom(), dto.getNom(), dto.getDatenais(),
-    			dto.getDepTyp(), dto.isActif(), dto.isDeleted(), dto.getLienBanque(), dto.getRegio(), dto.getCivilite(), dto.getEq());       
-        if (!StringUtils.isEmpty(dto.getIdDep())) {
-            clientDependent.setIdDep(dto.getIdDep());
-        }
-        return clientDependent;
+        ClientDependent cDep = new ClientDependent();
+            cDep.setIdDep(dto.getIdDep());
+            cDep.setLienDis(dto.getLienDis());
+            cDep.setLienMast(dto.getLienMast());
+            cDep.setPrenom(dto.getPrenom());
+            cDep.setNom(dto.getNom());
+            cDep.setDatenais(dto.getDatenais());
+            cDep.setDepTyp(dto.getDepTyp());
+            cDep.setActif(dto.isActif());
+            cDep.setDeleted(dto.isDeleted());
+            cDep.setLienBanque(dto.getLienBanque());
+            cDep.setRegio(dto.getRegio());
+            cDep.setCivilite(dto.getCivilite());
+            cDep.setEq(dto.getEq());
+
+        return cDep;
     }
 
 }

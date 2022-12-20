@@ -12,6 +12,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -133,23 +135,96 @@ public class BanqueController {
 
     }
     protected BanqueDto convertToDto(Banque entity) {
-        BanqueDto dto = new BanqueDto(entity.getBankId(), entity.getBankShortName(), entity.getBankName(), entity.getNrEntr(), entity.getBankMail(), entity.getActif(), entity.getComGest(), entity.getLastvisit(), entity.getIdMemberPres(), entity.getIdMemberVp(), entity.getIdMemberSec(), entity.getIdMemberTres(), entity.getIdMemberIt(), entity.getIdMemberLog(), entity.getIdMemberRh(),
-            entity.getIdMemberSh(), entity.getIdMemberPp(), entity.getIdMemberAsso(), entity.getIdMemberAppro(),
-            entity.getIdMemberPubrel(), entity.getIdMemberCeo(), entity.getIdMemberFead(),entity.getIdMemberQual() ,
-            entity.getAdresse(), entity.getCp(), entity.getLocalite(), entity.getBankTel(), entity.getBankGsm(), entity.getAdresseDepotPrinc(), entity.getCpDepotPrinc(), entity.getCityDepotPrinc(),
-            entity.getDepPrincTel(), entity.getSsAdresse(), entity.getSsCp(), entity.getSsCity(), entity.getSsTel(), entity.getRegio(), entity.getWebsite(), entity.getBank());
+        BanqueDto dto = new BanqueDto();
+        String dtoLastVisit = "";
+        if (entity.getLastvisit() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            dtoLastVisit = entity.getLastvisit().format(formatter);
+        }
+        dto.setBankId(entity.getBankId());
+        dto.setBankShortName(entity.getBankShortName());
+        dto.setBankName(entity.getBankName());
+        dto.setNrEntr(entity.getNrEntr());
+        dto.setBankMail(entity.getBankMail());
+        dto.setActif(entity.getActif());
+        dto.setComGest(entity.getComGest());
+        dto.setLastvisit(dtoLastVisit);
+        dto.setIdMemberPres(entity.getIdMemberPres());
+        dto.setIdMemberVp(entity.getIdMemberVp());
+        dto.setIdMemberSec(entity.getIdMemberSec());
+        dto.setIdMemberTres(entity.getIdMemberTres());
+        dto.setIdMemberIt(entity.getIdMemberIt());
+        dto.setIdMemberLog(entity.getIdMemberLog());
+        dto.setIdMemberRh(entity.getIdMemberRh());
+        dto.setIdMemberSh(entity.getIdMemberSh());
+        dto.setIdMemberPp(entity.getIdMemberPp());
+        dto.setIdMemberAsso(entity.getIdMemberAsso());
+        dto.setIdMemberAppro(entity.getIdMemberAppro());
+        dto.setIdMemberPubrel(entity.getIdMemberPubrel());
+        dto.setIdMemberCeo(entity.getIdMemberCeo());
+        dto.setIdMemberFead(entity.getIdMemberFead());
+        dto.setIdMemberQual(entity.getIdMemberQual() );
+        dto.setAdresse(entity.getAdresse());
+        dto.setCp(entity.getCp());
+        dto.setLocalite(entity.getLocalite());
+        dto.setBankTel(entity.getBankTel());
+        dto.setBankGsm(entity.getBankGsm());
+        dto.setAdresseDepotPrinc(entity.getAdresseDepotPrinc());
+        dto.setCpDepotPrinc(entity.getCpDepotPrinc());
+        dto.setCityDepotPrinc(entity.getCityDepotPrinc());
+        dto.setDepPrincTel(entity.getDepPrincTel());
+        dto.setSsAdresse(entity.getSsAdresse());
+        dto.setSsCp(entity.getSsCp());
+        dto.setSsCity(entity.getSsCity());
+        dto.setSsTel(entity.getSsTel());
+        dto.setRegio(entity.getRegio());
+        dto.setWebsite(entity.getWebsite());
+        dto.setBank(entity.getBank());
         return dto;
     }
 
     protected Banque convertToEntity(BanqueDto dto) {
-        Banque banque = new Banque( dto.getBankId(),dto.getBankShortName(), dto.getBankName(), dto.getNrEntr(), dto.getBankMail(), dto.getActif(), dto.getComGest(),  dto.getIdMemberPres(), dto.getIdMemberVp(), dto.getIdMemberSec(), dto.getIdMemberTres(), dto.getIdMemberIt(), dto.getIdMemberLog(), dto.getIdMemberRh(),
-            dto.getIdMemberSh(), dto.getIdMemberPp(), dto.getIdMemberAsso(), dto.getIdMemberAppro(),
-            dto.getIdMemberPubrel(), dto.getIdMemberCeo(), dto.getIdMemberFead(), dto.getIdMemberQual(),
-            dto.getAdresse(), dto.getCp(), dto.getLocalite(), dto.getBankTel(), dto.getBankGsm(), dto.getAdresseDepotPrinc(), dto.getCpDepotPrinc(), dto.getCityDepotPrinc(),
-            dto.getDepPrincTel(), dto.getSsAdresse(), dto.getSsCp(), dto.getSsCity(), dto.getSsTel(), dto.getRegio(), dto.getWebsite(), dto.getBank());
-        if (!StringUtils.isEmpty(dto.getBankId())) {
-            banque.setBankId(dto.getBankId());
-        }
+        Banque banque = new Banque();
+        banque.setBankId(dto.getBankId());
+        banque.setBankShortName(dto.getBankShortName());
+        banque.setBankName(dto.getBankName());
+        banque.setNrEntr(dto.getNrEntr());
+        banque.setBankMail(dto.getBankMail());
+        banque.setActif(dto.getActif());
+        banque.setComGest(dto.getComGest());
+        banque.setIdMemberPres(dto.getIdMemberPres());
+        banque.setIdMemberVp(dto.getIdMemberVp());
+        banque.setIdMemberSec(dto.getIdMemberSec());
+        banque.setIdMemberTres(dto.getIdMemberTres());
+        banque.setIdMemberIt(dto.getIdMemberIt());
+        banque.setIdMemberLog(dto.getIdMemberLog());
+        banque.setIdMemberRh(dto.getIdMemberRh());
+        banque.setIdMemberSh(dto.getIdMemberSh());
+        banque.setIdMemberPp(dto.getIdMemberPp());
+        banque.setIdMemberAsso(dto.getIdMemberAsso());
+        banque.setIdMemberAppro(dto.getIdMemberAppro());
+        banque.setIdMemberPubrel(dto.getIdMemberPubrel());
+        banque.setIdMemberCeo(dto.getIdMemberCeo());
+        banque.setIdMemberFead(dto.getIdMemberFead());
+        banque.setIdMemberQual(dto.getIdMemberQual());
+        banque.setAdresse(dto.getAdresse());
+        banque.setCp(dto.getCp());
+        banque.setLocalite(dto.getLocalite());
+        banque.setBankTel(dto.getBankTel());
+        banque.setBankGsm(dto.getBankGsm());
+        banque.setAdresseDepotPrinc(dto.getAdresseDepotPrinc());
+        banque.setCpDepotPrinc(dto.getCpDepotPrinc());
+        banque.setCityDepotPrinc(dto.getCityDepotPrinc());
+        banque.setDepPrincTel(dto.getDepPrincTel());
+        banque.setSsAdresse(dto.getSsAdresse());
+        banque.setSsCp(dto.getSsCp());
+        banque.setSsCity(dto.getSsCity());
+        banque.setSsTel(dto.getSsTel());
+        banque.setRegio(dto.getRegio());
+        banque.setWebsite(dto.getWebsite());
+        banque.setBank(dto.getBank());
+        banque.setLastvisit(LocalDateTime.now()); // ignore last visit from dto, we need to update with current time
+
         return banque;
     }
 

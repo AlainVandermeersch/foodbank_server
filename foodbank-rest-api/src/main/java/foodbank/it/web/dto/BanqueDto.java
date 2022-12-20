@@ -84,61 +84,6 @@ public class BanqueDto {
     
    
     
-    protected BanqueDto() {
-        
-    }
-
-    public BanqueDto(int bankId, String bankShortName, String bankName, String nrEntr, String bankMail, short actif, int comGest, LocalDateTime lastvisit, short idMemberPres, short idMemberVp, short idMemberSec, short idMemberTres, short idMemberIt, short idMemberLog, short idMemberRh,
-        short idMemberSh, short idMemberPp, short idMemberAsso, short idMemberAppro, short idMemberPubrel, int idMemberCeo, int idMemberFead, Short idMemberQual, String adresse, String cp, String localite, String bankTel, String bankGsm, String adresseDepotPrinc, String cpDepotPrinc, String cityDepotPrinc,
-        String depPrincTel, String ssAdresse, String ssCp, String ssCity, String ssTel, int regio, String website, String bank) {
-        super();
-        this.bankId = bankId;
-        this.bankShortName = bankShortName;
-        this.bankName = bankName;
-        this.nrEntr = nrEntr;
-        this.bankMail = bankMail;
-        this.actif = actif;
-        this.comGest = comGest;
-        if (lastvisit == null) {
-			this.lastvisit = "";
-		}
-		else {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-			this.lastvisit = lastvisit.format(formatter);
-		}
-        this.idMemberPres = idMemberPres;
-        this.idMemberVp = idMemberVp;
-        this.idMemberSec = idMemberSec;
-        this.idMemberTres = idMemberTres;
-        this.idMemberIt = idMemberIt;
-        this.idMemberLog = idMemberLog;
-        this.idMemberRh = idMemberRh;
-        this.idMemberSh = idMemberSh;
-        this.idMemberPp = idMemberPp;
-        this.idMemberAsso = idMemberAsso;
-        this.idMemberAppro = idMemberAppro;
-        this.idMemberPubrel = idMemberPubrel;
-        this.idMemberCeo = idMemberCeo;
-        this.idMemberFead = idMemberFead;
-        this.idMemberQual = idMemberQual;
-        this.adresse = adresse;
-        this.cp = cp;
-        this.localite = localite;
-        this.bankTel = bankTel;
-        this.bankGsm = bankGsm;
-        this.adresseDepotPrinc = adresseDepotPrinc;
-        this.cpDepotPrinc = cpDepotPrinc;
-        this.cityDepotPrinc = cityDepotPrinc;
-        this.depPrincTel = depPrincTel;
-        this.ssAdresse = ssAdresse;
-        this.ssCp = ssCp;
-        this.ssCity = ssCity;
-        this.ssTel = ssTel;
-        this.regio = regio;
-        this.website = website;
-        this.bank = bank;
-      
-    }
 
     public int getBankId() {
         return bankId;
