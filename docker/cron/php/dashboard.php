@@ -1,6 +1,7 @@
 <?php
 $errormsg = "";
-while ( $errormsg == "") {
+echo "Starting dashboard.php at " . date("Y-m-d H:i:s") . "\n";
+while ( true) {
     $host= getenv('MYSQL_HOST');
     $user =getenv('MYSQL_USER');
     $password =getenv('MYSQL_PASSWORD');
@@ -13,7 +14,7 @@ while ( $errormsg == "") {
         break;
     }
     $arrayMovements = array();
-    $lastMonth = 202002;
+    $lastMonth = 202001;
     $countDeleted = 0;
     $countInsertedFEADNONAGREED = 0;
     $countInsertedNOFEADNONAGREED = 0;
@@ -33,14 +34,8 @@ while ( $errormsg == "") {
         }
 
     }
-    $strLastMonth = (string)$lastMonth;
-    if(substr($strLastMonth,4) == "01") {
-       $lastMonth = ((int)(substr($strLastMonth,0,4))-1) * 100 + 12;
-    }
-    else {
-       $lastMonth--;
-    }
-    $sql_00 = "DELETE FROM `movements_monthly` where month >= '" . $lastMonth . "'";
+
+    $sql_00 = "DELETE FROM `movements_monthly` where month = '" . $lastMonth . "'";
     $res_sql_00 = mysqli_query($connection, $sql_00);
     if (!$res_sql_00)
     {
@@ -66,7 +61,7 @@ while ( $errormsg == "") {
         break;
     }
     while ($data_sql_01=mysqli_fetch_object($res_sql_01)) {
-        if ($data_sql_01->MONTHMVT <= $lastMonth) continue;
+        if ($data_sql_01->MONTHMVT < $lastMonth) continue;
         // détermination du volume FEAD livré aux CPAS ou autres organisations non affiliées
         // fead_n = 1 AND daten = 1 AND Birbcode <> 0
         $data_sql_01->Category = "FEADNONAGREED";
@@ -100,7 +95,7 @@ while ( $errormsg == "") {
         break;
     }
     while ($data_sql_02=mysqli_fetch_object($res_sql_02)) {
-        if ($data_sql_02->MONTHMVT <= $lastMonth) continue;
+        if ($data_sql_02->MONTHMVT < $lastMonth) continue;
             // détermination du volume de vivres livrés aux CPAS ou autres organisations non affiliées
             // fead_n = 0 AND daten = 1
 
@@ -135,7 +130,7 @@ while ( $errormsg == "") {
             break;
         }
         while ($data_sql_03=mysqli_fetch_object($res_sql_03)) {
-            if ($data_sql_03->MONTHMVT <= $lastMonth) continue;
+            if ($data_sql_03->MONTHMVT < $lastMonth) continue;
             // détermination des vivres livrés aux associations agréées y compris fead et ramasse
             $data_sql_03->Category = "AGREEDFEADCOLLECT";
             $data_sql_03->Volume = - $data_sql_03->QTE; // negative value
@@ -172,6 +167,7 @@ if ($errormsg == "")
 else {
     $message= substr($errormsg,0,50);
 }
+echo "Ending dashboard.php at " . date("Y-m-d H:i:s") . " with message:" . $message . "\n";
 
 $insertQuery = "INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) 
  VALUES ('avdmadmin',10,0,'movements_monthly','" . $message . "','Update')";
@@ -179,7 +175,8 @@ $sql = $connection->query($insertQuery);
 if (!$sql)
 {
     $errormsg=  "Failed to execute insert query: " . $connection->error;
-    echo $errormsg;
+    echo "dashboard.php failed to insert statistics in auditchanges table:" . $errormsg . "\n";
 }
 $connection->close();
+echo "dashboard.php ended at " . date("Y-m-d H:i:s") . "\n";
 
