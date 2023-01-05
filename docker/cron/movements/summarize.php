@@ -1,6 +1,6 @@
 <?php
 $errormsg = "";
-echo "Starting dashboard.php at " . date("Y-m-d H:i:s") . "\n";
+echo "Starting movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
 while ( true) {
     $host= getenv('MYSQL_HOST');
     $user =getenv('MYSQL_USER');
@@ -167,7 +167,7 @@ if ($errormsg == "")
 else {
     $message= substr($errormsg,0,50);
 }
-echo "Ending dashboard.php at " . date("Y-m-d H:i:s") . " with message:" . $message . "\n";
+echo "Ending movements summarize.php at " . date("Y-m-d H:i:s") . " with message:" . $message . "\n";
 
 $insertQuery = "INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) 
  VALUES ('avdmadmin',10,0,'movements_monthly','" . $message . "','Update')";
@@ -175,8 +175,8 @@ $sql = $connection->query($insertQuery);
 if (!$sql)
 {
     $errormsg=  "Failed to execute insert query: " . $connection->error;
-    echo "dashboard.php failed to insert statistics in auditchanges table:" . $errormsg . "\n";
+    echo "movements summarize.php failed to insert statistics in auditchanges table:" . $errormsg . "\n";
 }
 $connection->close();
-echo "dashboard.php ended at " . date("Y-m-d H:i:s") . "\n";
+echo "movements summarize.php ended at " . date("Y-m-d H:i:s") . "\n";
 

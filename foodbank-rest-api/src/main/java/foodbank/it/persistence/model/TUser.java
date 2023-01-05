@@ -502,15 +502,13 @@ public class TUser implements Serializable {
 		this.societe = societe;
 	}
 
-	public String getLienDepot() {
-		return lienDepot;
-	}
+    public String getLienDepot() {
+        return lienDepot;
+    }
 
-	public void setLienDepot(String lienDepot) {
-		this.lienDepot = lienDepot;
-	}
-	
-	
+    public void setLienDepot(String lienDepot) {
+        this.lienDepot = lienDepot;
+    }
 
 	public long getNbLogins() {
 		return nbLogins;

@@ -187,7 +187,7 @@ public class TUserController {
 				dto.setActif(booActif);
 				dto.setRights(caseCorrectedRights);
 				dto.setPassword(entity.getPassword());
-				dto.setLienDepot(entity.getLienDepot());
+				dto.setDepot(entity.getDepot());
 				dto.setDroit1(booDroit1);
 				dto.setEmail(entity.getEmail());
 				dto.setGestBen(booGestBen);
@@ -223,7 +223,7 @@ public class TUserController {
 		tUser.setActif((short) (dto.getActif() ? 1 : 0));
 		tUser.setRights(dto.getRights());
 		tUser.setPassword(dto.getPassword());
-		tUser.setDepot(dto.getLienDepot()); // feed erratic field depot from field liendepot derived from idDis
+		tUser.setDepot(dto.getDepot());
 		tUser.setDroit1((short) (dto.getDroit1() ? 1 : 0));
 		tUser.setEmail(dto.getEmail());
 		tUser.setGestBen((short) (dto.getGestBen() ? 1 : 0));

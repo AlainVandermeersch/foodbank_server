@@ -19,8 +19,9 @@ public class TUserDto {
     private String rights;
     
     private String password;
-     
-    private String lienDepot; // calculated field
+
+    private String depot;
+
      
     private boolean droit1;
      
@@ -130,12 +131,12 @@ public class TUserDto {
         this.password = password;
     }
 
-    public String getLienDepot() {
-        return lienDepot;
+    public String getDepot() {
+        return depot;
     }
 
-    public void setLienDepot(String lienDepot) {
-        this.lienDepot = lienDepot;
+    public void setDepot(String depot) {
+        this.depot = depot;
     }
 
     public boolean getDroit1() {
