@@ -6,13 +6,15 @@ $database =getenv('MYSQL_DATABASE');
 
 $countDonateurs = 0;
 $countDons = 0;
-
+$countDons2022 = 0;
 // Create connection
 
-
 $conn = new mysqli($host, $user, $password, $database);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-echo "Connected successfully";
+echo "Connected successfully\n";
 $don_colums=array();
 $columns = $conn->query("SHOW COLUMNS FROM donation_bat LIKE 'don_2%'");;
 while ($column = $columns->fetch_assoc()) {
@@ -27,6 +29,7 @@ if ($result->num_rows > 0) {
     $sqlInsertDonateur = $conn->prepare("INSERT INTO donateurs(lien_banque, nom, prenom, adresse, cp, city, pays, titre)  VALUES (?,?,?,?,?,?,?,?)");
 
     while ($row = $result->fetch_assoc()) {
+        $old_donateur_id = $row['don_id'];
         $sqlInsertDonateur->bind_param("ssssssss", $row['lien_banque'], $row['nom'], $row['prenom'], $row['adresse'], $row['cp'], $row['city'], $row['pays'], $row['titre']);
         if ($sqlInsertDonateur->execute()) {
             $countDonateurs++;
@@ -50,10 +53,25 @@ if ($result->num_rows > 0) {
                 }
             }
         }
+        $sql1 = "SELECT * FROM don_bat where donateur_id = $old_donateur_id";
+        $result1 = $conn->query($sql1);
+
+        if ($result1->num_rows > 0) {
+            while ($row1 = $result1->fetch_assoc()) {
+                $sqlInsertDon1 = "INSERT INTO dons(amount, lien_banque, donateur_id,  appended, checked, date) 
+                VALUES({$row1['amount']},{$row1['lien_banque']}, $donateur_id,false,true,'{$row1['date']}') ";
+                if ($conn->query($sqlInsertDon1)) {
+                    $countDons2022++;
+                } else {
+                    die("insert don 2022 failed: " . $conn->errno . ' ' . $conn->error . '\n' . $sqlInsertDonateur);
+                }
+            }
     }
+}
+
 }
 $conn->close();
 
-echo "$countDonateurs Donateurs added and $countDons Dons";
+echo "$countDonateurs Donateurs added. $countDons Dons converted from previous years. $countDons2022 Dons converted from 2022\n";
 
 
