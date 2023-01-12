@@ -435,6 +435,13 @@ public class OrganisationController {
 				dto.setTotalFamilies(entity.getTotalFamilies());
 				dto.setTotalPersons(entity.getTotalPersons());
     			dto.setTotalRecords(totalRecords);
+				dto.setTotalInfants(entity.getTotalInfants());
+				dto.setTotalBabies(entity.getTotalBabies());
+				dto.setTotalChildren(entity.getTotalChildren());
+				dto.setTotalTeens(entity.getTotalTeens());
+				dto.setTotalYoungAdults(entity.getTotalYoungAdults());
+				dto.setTotalSeniors(entity.getTotalSeniors());
+
         return dto;
     }
 

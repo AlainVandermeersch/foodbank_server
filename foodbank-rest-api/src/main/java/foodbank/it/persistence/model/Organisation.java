@@ -257,9 +257,21 @@ public class Organisation implements Serializable {
     @Formula("(select count(*) from audit a where a.id_dis = id_dis and year(a.date_in) > 2020)")
     long nbLogins;
     @Transient
-    long totalFamilies;
+    private long totalFamilies;
     @Transient
-    long totalPersons;
+    private long totalPersons;
+    @Transient
+    private long totalInfants;
+    @Transient
+    private long totalChildren;
+    @Transient
+    private long totalBabies;
+    @Transient
+    private long totalTeens;
+    @Transient
+    private long totalYoungAdults;
+    @Transient
+    private long totalSeniors;
 
 
     /**
@@ -2334,6 +2346,54 @@ public class Organisation implements Serializable {
 
     public void setTotalPersons(long totalPersons) {
         this.totalPersons = totalPersons;
+    }
+
+    public long getTotalInfants() {
+        return totalInfants;
+    }
+
+    public void setTotalInfants(long totalInfants) {
+        this.totalInfants = totalInfants;
+    }
+
+    public long getTotalChildren() {
+        return totalChildren;
+    }
+
+    public void setTotalChildren(long totalChildren) {
+        this.totalChildren = totalChildren;
+    }
+
+    public long getTotalBabies() {
+        return totalBabies;
+    }
+
+    public void setTotalBabies(long totalBabies) {
+        this.totalBabies = totalBabies;
+    }
+
+    public long getTotalTeens() {
+        return totalTeens;
+    }
+
+    public void setTotalTeens(long totalTeens) {
+        this.totalTeens = totalTeens;
+    }
+
+    public long getTotalYoungAdults() {
+        return totalYoungAdults;
+    }
+
+    public void setTotalYoungAdults(long totalYoungAdults) {
+        this.totalYoungAdults = totalYoungAdults;
+    }
+
+    public long getTotalSeniors() {
+        return totalSeniors;
+    }
+
+    public void setTotalSeniors(long totalSeniors) {
+        this.totalSeniors = totalSeniors;
     }
 
     @Override

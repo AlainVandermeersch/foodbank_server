@@ -1,23 +1,23 @@
 package foodbank.it.persistence.model;
 
 public class OrgClientsCount {
-    private Long nbClients;
-    private Long  nFam;
+    private long nbClients;
+    private long  nFam;
 
-    private Long  nPers;
+    private long  nPers;
 
-    private Long  nNour;
+    private long  nNour;
 
-    private Long  nBebe;
+    private long  nBebe;
 
-    private Long  nEnf;
+    private long  nEnf;
 
-    private Long  nAdo;
+    private long  nAdo;
 
-    private Long  n1824;
-    private Long  nSen;
+    private long  n1824;
+    private long  nSen;
 
-    public OrgClientsCount(Long nbClients, Long nFam, Long nPers, Long nNour, Long nBebe, Long nEnf, Long nAdo, Long n1824, Long nSen) {
+    public OrgClientsCount(long nbClients, long nFam, long nPers, long nNour, long nBebe, long nEnf, long nAdo, long n1824, long nSen) {
         this.nbClients = nbClients;
         this.nFam = nFam;
         this.nPers = nPers;
@@ -29,75 +29,75 @@ public class OrgClientsCount {
         this.nSen = nSen;
     }
 
-    public Long getNbClients() {
+    public long getNbClients() {
         return nbClients;
     }
 
-    public void setNbClients(Long nbClients) {
+    public void setNbClients(long nbClients) {
         this.nbClients = nbClients;
     }
 
-    public Long getnFam() {
+    public long getnFam() {
         return nFam;
     }
 
-    public void setnFam(Long nFam) {
+    public void setnFam(long nFam) {
         this.nFam = nFam;
     }
 
-    public Long getnPers() {
+    public long getnPers() {
         return nPers;
     }
 
-    public void setnPers(Long nPers) {
+    public void setnPers(long nPers) {
         this.nPers = nPers;
     }
 
-    public Long getnNour() {
+    public long getnNour() {
         return nNour;
     }
 
-    public void setnNour(Long nNour) {
+    public void setnNour(long nNour) {
         this.nNour = nNour;
     }
 
-    public Long getnBebe() {
+    public long getnBebe() {
         return nBebe;
     }
 
-    public void setnBebe(Long nBebe) {
+    public void setnBebe(long nBebe) {
         this.nBebe = nBebe;
     }
 
-    public Long getnEnf() {
+    public long getnEnf() {
         return nEnf;
     }
 
-    public void setnEnf(Long nEnf) {
+    public void setnEnf(long nEnf) {
         this.nEnf = nEnf;
     }
 
-    public Long getnAdo() {
+    public long getnAdo() {
         return nAdo;
     }
 
-    public void setnAdo(Long nAdo) {
+    public void setnAdo(long nAdo) {
         this.nAdo = nAdo;
     }
 
-    public Long getN1824() {
+    public long getN1824() {
         return n1824;
     }
 
-    public void setN1824(Long n1824) {
+    public void setN1824(long n1824) {
         this.n1824 = n1824;
     }
 
-    public Long getnSen() {
+    public long getnSen() {
         return nSen;
     }
 
-    public void setnSen(Long nSen) {
+    public void setnSen(long nSen) {
         this.nSen = nSen;
     }
 }

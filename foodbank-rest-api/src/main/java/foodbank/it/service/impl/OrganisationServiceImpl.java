@@ -306,7 +306,13 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Organisation org = iterator.next();
 			org.setTotalFamilies(clientsCount.getnFam());
 			org.setTotalPersons(clientsCount.getnPers());
-		}
+			org.setTotalInfants(clientsCount.getnNour());
+			org.setTotalBabies(clientsCount.getnBebe());
+			org.setTotalChildren(clientsCount.getnEnf());
+			org.setTotalTeens(clientsCount.getnAdo());
+			org.setTotalYoungAdults(clientsCount.getN1824());
+			org.setTotalSeniors(clientsCount.getnSen());
+	}
 		return new PageImpl<>(resultList, pageable, clientsCount.getNbClients());
 	}
 	@Override

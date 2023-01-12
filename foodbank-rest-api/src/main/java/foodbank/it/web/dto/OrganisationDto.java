@@ -241,8 +241,15 @@ public class OrganisationDto {
 		private String anomalies; // generated when creating dto in controller
 	    private Long  totalRecords;
 
-		private Long totalFamilies;
-		private Long totalPersons;
+		private long totalFamilies;
+		private long totalPersons;
+		private long totalInfants;
+
+		private long totalBabies;
+		private long totalChildren;
+		private long totalTeens;
+		private long totalYoungAdults;
+		private long totalSeniors;
 
 
 	    
@@ -1217,27 +1224,75 @@ public class OrganisationDto {
 		this.anomalies = anomalies;
 	}
 
-	public Long getTotalRecords() {
+	public long getTotalRecords() {
 			return totalRecords;
 		}
 
-	public void setTotalRecords(Long totalRecords) {
+	public void setTotalRecords(long totalRecords) {
 			this.totalRecords = totalRecords;
 		}
 
-	public Long getTotalFamilies() {
+	public long getTotalFamilies() {
 		return totalFamilies;
 	}
 
-	public void setTotalFamilies(Long totalFamilies) {
+	public void setTotalFamilies(long totalFamilies) {
 		this.totalFamilies = totalFamilies;
 	}
 
-	public Long getTotalPersons() {
+	public long getTotalPersons() {
 		return totalPersons;
 	}
 
-	public void setTotalPersons(Long totalPersons) {
+	public void setTotalPersons(long totalPersons) {
 		this.totalPersons = totalPersons;
+	}
+
+	public long getTotalInfants() {
+		return totalInfants;
+	}
+
+	public void setTotalInfants(long totalInfants) {
+		this.totalInfants = totalInfants;
+	}
+
+	public long getTotalChildren() {
+		return totalChildren;
+	}
+
+	public void setTotalChildren(long totalChildren) {
+		this.totalChildren = totalChildren;
+	}
+
+	public long getTotalBabies() {
+		return totalBabies;
+	}
+
+	public void setTotalBabies(long totalBabies) {
+		this.totalBabies = totalBabies;
+	}
+
+	public long getTotalTeens() {
+		return totalTeens;
+	}
+
+	public void setTotalTeens(long totalTeens) {
+		this.totalTeens = totalTeens;
+	}
+
+	public long getTotalSeniors() {
+		return totalSeniors;
+	}
+
+	public void setTotalSeniors(long totalSeniors) {
+		this.totalSeniors = totalSeniors;
+	}
+
+	public long getTotalYoungAdults() {
+		return totalYoungAdults;
+	}
+
+	public void setTotalYoungAdults(long totalYoungAdults) {
+		this.totalYoungAdults = totalYoungAdults;
 	}
 }
