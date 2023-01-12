@@ -256,6 +256,10 @@ public class Organisation implements Serializable {
     private String bankShortName;
     @Formula("(select count(*) from audit a where a.id_dis = id_dis and year(a.date_in) > 2020)")
     long nbLogins;
+    @Transient
+    long totalFamilies;
+    @Transient
+    long totalPersons;
 
 
     /**
@@ -2316,6 +2320,21 @@ public class Organisation implements Serializable {
         return nomDepotRamasse;
     }
 
+    public long getTotalFamilies() {
+        return totalFamilies;
+    }
+
+    public void setTotalFamilies(long totalFamilies) {
+        this.totalFamilies = totalFamilies;
+    }
+
+    public long getTotalPersons() {
+        return totalPersons;
+    }
+
+    public void setTotalPersons(long totalPersons) {
+        this.totalPersons = totalPersons;
+    }
 
     @Override
 	public int hashCode() {

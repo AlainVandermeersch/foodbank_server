@@ -1,6 +1,7 @@
 package foodbank.it.service.impl;
 
 import foodbank.it.persistence.model.Membre;
+import foodbank.it.persistence.model.OrgClientsCount;
 import foodbank.it.persistence.model.OrgProgram;
 import foodbank.it.persistence.model.Organisation;
 import foodbank.it.persistence.repository.IDepotRepository;
@@ -23,6 +24,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -280,14 +282,32 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
 
-		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
-		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Organisation.class)));
-		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-		long countResult = countQuery.getSingleResult();
+
+		CriteriaQuery<OrgClientsCount> orgClientsCountQuery = criteriaBuilder.createQuery(OrgClientsCount.class);
+		Root<Organisation> orgStats = orgClientsCountQuery.from(Organisation.class);
+
+		orgClientsCountQuery.where(predicates.stream().toArray(Predicate[]::new));
+		orgClientsCountQuery.multiselect( criteriaBuilder.count(orgStats),
+				criteriaBuilder.sum(orgStats.get("nFam")),
+				criteriaBuilder.sum(orgStats.get("nPers")),
+				criteriaBuilder.sum(orgStats.get("nNour")),
+				criteriaBuilder.sum(orgStats.get("nBebe")),
+				criteriaBuilder.sum(orgStats.get("nEnf")),
+				criteriaBuilder.sum(orgStats.get("nAdo")),
+				criteriaBuilder.sum(orgStats.get("n1824")),
+				criteriaBuilder.sum(orgStats.get("nSen"))
+		);
+		OrgClientsCount clientsCount = entityManager.createQuery(orgClientsCountQuery).getSingleResult();
 
 		List<Organisation> resultList = query.getResultList();
-		return new PageImpl<>(resultList, pageable, countResult);
+		Iterator<Organisation> iterator = resultList.iterator();
+
+		while (iterator.hasNext()) {
+			Organisation org = iterator.next();
+			org.setTotalFamilies(clientsCount.getnFam());
+			org.setTotalPersons(clientsCount.getnPers());
+		}
+		return new PageImpl<>(resultList, pageable, clientsCount.getNbClients());
 	}
 	@Override
 	public Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable) {
@@ -388,6 +408,8 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		long countResult = countQuery.getSingleResult();
 
 		List<Organisation> resultList = query.getResultList();
+
+
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
 

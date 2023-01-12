@@ -241,6 +241,9 @@ public class OrganisationDto {
 		private String anomalies; // generated when creating dto in controller
 	    private Long  totalRecords;
 
+		private Long totalFamilies;
+		private Long totalPersons;
+
 
 	    
 
@@ -1218,9 +1221,23 @@ public class OrganisationDto {
 			return totalRecords;
 		}
 
-		public void setTotalRecords(Long totalRecords) {
+	public void setTotalRecords(Long totalRecords) {
 			this.totalRecords = totalRecords;
 		}
 
+	public Long getTotalFamilies() {
+		return totalFamilies;
+	}
 
+	public void setTotalFamilies(Long totalFamilies) {
+		this.totalFamilies = totalFamilies;
+	}
+
+	public Long getTotalPersons() {
+		return totalPersons;
+	}
+
+	public void setTotalPersons(Long totalPersons) {
+		this.totalPersons = totalPersons;
+	}
 }

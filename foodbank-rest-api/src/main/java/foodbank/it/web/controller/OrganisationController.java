@@ -81,7 +81,7 @@ public class OrganisationController {
      		@RequestParam(required = false) String bankShortName,@RequestParam(required = false) Boolean hasLogins,
      		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
         Page<Organisation> selectedOrganisations = null;
-        List<OrganisationDto> OrganisationDtos = new ArrayList<>();
+        List<OrganisationDto> OrganisationDtos = new ArrayList<OrganisationDto>();
         int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -432,6 +432,8 @@ public class OrganisationController {
 				dto.setAntenneOrgName(antenneOrgName);
     			dto.setNbLogins(entity.getNbLogins());
 				dto.setAnomalies(anomalies);
+				dto.setTotalFamilies(entity.getTotalFamilies());
+				dto.setTotalPersons(entity.getTotalPersons());
     			dto.setTotalRecords(totalRecords);
         return dto;
     }
