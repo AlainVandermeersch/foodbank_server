@@ -1,32 +1,37 @@
 <?php
-$errormsg = "";
+$errormsgMonthly = "";
+$errormsgDaily = "";
 echo "Starting movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
 while ( true) {
     $host= getenv('MYSQL_HOST');
     $user =getenv('MYSQL_USER');
     $password =getenv('MYSQL_PASSWORD');
     $database =getenv('MYSQL_DATABASE');
+
     $connection= mysqli_connect($host,$user,"$password",$database);
     
     if (mysqli_connect_errno())
     {
-        $errormsg=  "Failed to connect to MySQL: " . mysqli_connect_error();
+        $errormsgMonthly=  "Failed to connect to MySQL: " . mysqli_connect_error();
         break;
     }
-    $arrayMovements = array();
+    $arrayMovements_monthly = array();
     $lastMonth = 202001;
-    $countDeleted = 0;
-    $countInsertedFEADNONAGREED = 0;
-    $countInsertedNOFEADNONAGREED = 0;
-    $countInsertedFEADAGREED = 0;
-    $sql_00 = "SELECT MAX(month) as lastMonth FROM `movements_monthly` ";
-    $res_sql_00 = mysqli_query($connection, $sql_00);
-    if (!$res_sql_00)
+    $countMonthlyDeleted = 0;
+    $countMonthlyInsertedFEADNONAGREED = 0;
+    $countMonthlyInsertedNOFEADNONAGREED = 0;
+    $countMonthlyInsertedFEADAGREED = 0;
+    $countDailyInsertedFEADNONAGREED = 0;
+    $countDailyInsertedNOFEADNONAGREED = 0;
+    $countDailyInsertedFEADAGREED = 0;
+    $sql_monthly_max = "SELECT MAX(month) as lastMonth FROM `movements_monthly` ";
+    $res_sql_monthly_max = mysqli_query($connection, $sql_monthly_max);
+    if (!$res_sql_monthly_max)
     {
-        $errormsg=  "Error: " . $sql_00 . "<br>" . mysqli_error($connection);
+        $errormsgMonthly=  "Error: " . $sql_monthly_max . "<br>" . mysqli_error($connection);
         break;
     }
-    if($row = mysqli_fetch_array($res_sql_00))
+    if($row = mysqli_fetch_array($res_sql_monthly_max))
     {
         if ($row['lastMonth'] != null)
         {
@@ -35,15 +40,15 @@ while ( true) {
 
     }
 
-    $sql_00 = "DELETE FROM `movements_monthly` where month = '" . $lastMonth . "'";
-    $res_sql_00 = mysqli_query($connection, $sql_00);
-    if (!$res_sql_00)
+    $sql_monthly_del = "DELETE FROM `movements_monthly` where month = '" . $lastMonth . "'";
+    $res_sql_monthly_del = mysqli_query($connection, $sql_monthly_del);
+    if (!$res_sql_monthly_del)
     {
-        $errormsg=  "Error: " . $sql_00 . "<br>" . mysqli_error($connection);
+        $errormsgMonthly=  "Error: " . $sql_monthly_del . "<br>" . mysqli_error($connection);
         break;
     }
-    $countDeleted = mysqli_affected_rows($connection);
-    $sql_01 = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
+    $countMonthlyDeleted = mysqli_affected_rows($connection);
+    $sql_extract_01_monthly = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
            m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         JOIN banques b ON (b.bank_id = o.lien_banque )
@@ -54,30 +59,31 @@ while ( true) {
         AND fead_n = 1 AND daten = 1 AND Birbcode <> 0
         group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
     
-    $res_sql_01 =mysqli_query($connection,$sql_01);
-    if (!$res_sql_01)
+    $res_sql_extract_01_monthly =mysqli_query($connection,$sql_extract_01_monthly);
+    if (!$res_sql_extract_01_monthly)
     {
-        $errormsg=  "Failed to execute FEADNONAGREED query: " . $sql_01 . " ". $connection->error;
+        $errormsgMonthly=  "Failed to execute FEADNONAGREED monthly  query: " . $sql_extract_01_monthly . " ". $connection->error;
         break;
     }
-    while ($data_sql_01=mysqli_fetch_object($res_sql_01)) {
-        if ($data_sql_01->MONTHMVT < $lastMonth) continue;
+    while ($data_sql_extract_01_monthly=mysqli_fetch_object($res_sql_extract_01_monthly)) {
+        if ($data_sql_extract_01_monthly->MONTHMVT < $lastMonth) continue;
         // détermination du volume FEAD livré aux CPAS ou autres organisations non affiliées
         // fead_n = 1 AND daten = 1 AND Birbcode <> 0
-        $data_sql_01->Category = "FEADNONAGREED";
-        $data_sql_01->Volume = - $data_sql_01->QTE; // negative value
+        $data_sql_extract_01_monthly->Category = "FEADNONAGREED";
+        $data_sql_extract_01_monthly->Volume = - $data_sql_extract_01_monthly->QTE; // negative value
 
         // remove fead_n, daten and Birbcode from the object
-        unset($data_sql_01->fead_n);
-        unset($data_sql_01->daten);
-        unset($data_sql_01->Birbcode);
-        unset($data_sql_01->QTE);
-        $countInsertedFEADNONAGREED++;
-        $arrayMovements[] = $data_sql_01;
+        unset($data_sql_extract_01_monthly->fead_n);
+        unset($data_sql_extract_01_monthly->daten);
+        unset($data_sql_extract_01_monthly->Birbcode);
+        unset($data_sql_extract_01_monthly->QTE);
+        $countMonthlyInsertedFEADNONAGREED++;
+        $arrayMovements_monthly[] = $data_sql_extract_01_monthly;
     }
+    echo "movements summarize.php ended extracting movements monthly FEADNONAGREED " . date("Y-m-d H:i:s") . "\n";
     // détermination des vivres aux associations non agréées SANS FEAD
     // fead_n = 0 AND daten = 1
-    $sql_02 = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
+    $sql_extract_02_monthly = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
            m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         JOIN banques b ON (b.bank_id = o.lien_banque )
@@ -88,31 +94,31 @@ while ( true) {
        AND fead_n = 0 AND daten = 1
         group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
-    $res_sql_02 =mysqli_query($connection,$sql_02);
-    if (!$res_sql_02)
+    $res_sql_extract_02_monthly =mysqli_query($connection,$sql_extract_02_monthly);
+    if (!$res_sql_extract_02_monthly)
     {
-        $errormsg=  "Failed to execute NOFEADNONAGREED query: " . $sql_02 . " " . $connection->error;
+        $errormsgMonthly=  "Failed to execute NOFEADNONAGREED monthly  query: " . $sql_extract_02_monthly . " " . $connection->error;
         break;
     }
-    while ($data_sql_02=mysqli_fetch_object($res_sql_02)) {
-        if ($data_sql_02->MONTHMVT < $lastMonth) continue;
+    while ($data_sql_extract_02_monthly=mysqli_fetch_object($res_sql_extract_02_monthly)) {
+        if ($data_sql_extract_02_monthly->MONTHMVT < $lastMonth) continue;
             // détermination du volume de vivres livrés aux CPAS ou autres organisations non affiliées
             // fead_n = 0 AND daten = 1
 
-        $data_sql_02->Category = "NOFEADNONAGREED";
-        $data_sql_02->Volume = - $data_sql_02->QTE; // negative value
+        $data_sql_extract_02_monthly->Category = "NOFEADNONAGREED";
+        $data_sql_extract_02_monthly->Volume = - $data_sql_extract_02_monthly->QTE; // negative value
 
         // remove fead_n, daten and Birbcode from the object
-        unset($data_sql_02->fead_n);
-        unset($data_sql_02->daten);
-        unset($data_sql_02->Birbcode);
-        unset($data_sql_02->QTE);
-        $countInsertedNOFEADNONAGREED++;
-        $arrayMovements[] = $data_sql_02;
+        unset($data_sql_extract_02_monthly->fead_n);
+        unset($data_sql_extract_02_monthly->daten);
+        unset($data_sql_extract_02_monthly->Birbcode);
+        unset($data_sql_extract_02_monthly->QTE);
+        $countMonthlyInsertedNOFEADNONAGREED++;
+        $arrayMovements_monthly[] = $data_sql_extract_02_monthly;
 }
-
+    echo "movements summarize.php ended extracting movements monthly NOFEADNONAGREED " . date("Y-m-d H:i:s") . "\n";
 // détermination des vivres livrés aux associations agréées y compris fead et ramasse
-        $sql_03 = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
+        $sql_extract_03_monthly = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
            m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         JOIN banques b ON (b.bank_id = o.lien_banque )
@@ -123,60 +129,212 @@ while ( true) {
 		AND daten = 0 
         group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
-        $res_sql_03 =mysqli_query($connection,$sql_03);
-        if (!$res_sql_03)
+        $res_sql_extract_03_monthly =mysqli_query($connection,$sql_extract_03_monthly);
+        if (!$res_sql_extract_03_monthly)
         {
-            $errormsg=  "Failed to execute neg fead query: " . $sql_03 . " ".  $connection->error;
+            $errormsgMonthly=  "Failed to execute neg fead monthly  query: " . $sql_extract_03_monthly . " ".  $connection->error;
             break;
         }
-        while ($data_sql_03=mysqli_fetch_object($res_sql_03)) {
-            if ($data_sql_03->MONTHMVT < $lastMonth) continue;
+        while ($data_sql_extract_03_monthly=mysqli_fetch_object($res_sql_extract_03_monthly)) {
+            if ($data_sql_extract_03_monthly->MONTHMVT < $lastMonth) continue;
             // détermination des vivres livrés aux associations agréées y compris fead et ramasse
-            $data_sql_03->Category = "AGREEDFEADCOLLECT";
-            $data_sql_03->Volume = - $data_sql_03->QTE; // negative value
+            $data_sql_extract_03_monthly->Category = "AGREEDFEADCOLLECT";
+            $data_sql_extract_03_monthly->Volume = - $data_sql_extract_03_monthly->QTE; // negative value
 
             // remove fead_n, daten and Birbcode from the object
-            unset($data_sql_03->fead_n);
-            unset($data_sql_03->daten);
-            unset($data_sql_03->Birbcode);
-            unset($data_sql_03->QTE);
-            $countInsertedFEADAGREED++;
-            $arrayMovements[] = $data_sql_03;
+            unset($data_sql_extract_03_monthly->fead_n);
+            unset($data_sql_extract_03_monthly->daten);
+            unset($data_sql_extract_03_monthly->Birbcode);
+            unset($data_sql_extract_03_monthly->QTE);
+            $countMonthlyInsertedFEADAGREED++;
+            $arrayMovements_monthly[] = $data_sql_extract_03_monthly;
         }
-        foreach ($arrayMovements as $key => $row) {
+    echo "movements summarize.php ended extracting movements monthly FEADAGREED " . date("Y-m-d H:i:s") . "\n";
+        foreach ($arrayMovements_monthly as $key => $row) {
             $societeEscaped= mysqli_real_escape_string($connection,$row->societe);
-            $insertQuery = "INSERT INTO `movements_monthly` (month,bank_short_name,id_org,orgname,category,quantity) 
+            $insertQuery_monthly = "INSERT INTO `movements_monthly` (month,bank_short_name,id_org,orgname,category,quantity) 
             VALUES ('".$row->MONTHMVT."', '".$row->bank_short_name."', '".$row->id_asso."', '".$societeEscaped."', '".$row->Category."', '".$row->Volume."')";
-            $sql = $connection->query($insertQuery);
+            $sql = $connection->query($insertQuery_monthly);
 
             if (!$sql)
             {
-                $errormsg=  "Failed to execute insert query: " . $connection->error;
+                $errormsgMonthly=  "Failed to execute insert monthly  query: " . $connection->error;
                 break;
             }
         }
 
+    if ($errormsgMonthly == "")
+    {
+    $countMonthlyInserted= $countMonthlyInsertedFEADAGREED + $countMonthlyInsertedFEADNONAGREED + $countMonthlyInsertedNOFEADNONAGREED;;
+    $messageMonthly = "From $lastMonth Deleted $countMonthlyDeleted & Inserted $countMonthlyInserted records";
+    }
+    else
+    {
+        $messageMonthly = "Error: $errormsgMonthly";
+    }
+    echo "Ending movements monthly summarize.php at " . date("Y-m-d H:i:s") . " with message:" . $messageMonthly . "\n";
+
+    $insertQuery_audit_monthly = "INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) 
+        VALUES ('avdmadmin',10,0,'movements_monthly','" . substr($messageMonthly,0,50) . "','Update')";
+    $sql = $connection->query($insertQuery_audit_monthly);
+    if (!$sql)
+    {
+        $errormsg=  "Failed to execute insert monthly audit  query: " . $connection->error;
+        echo "movements summarize.php failed to insert monthly statistics in auditchanges table:" . $errormsg . "\n";
+    }
+
+$arrayMovements_daily = array();
+
+
+$sql_daily_del = "DELETE FROM `movements_daily`";
+$res_sql_daily_del = mysqli_query($connection, $sql_daily_del);
+if (!$res_sql_daily_del)
+{
+    $errormsg=  "Error: " . $sql_daily_del . "<br>" . mysqli_error($connection);
     break;
 }
+$countDailyDeleted = mysqli_affected_rows($connection);
+$sql_extract_01_daily = "SELECT DATE(m.DATE) as DAYMVT, b.bank_short_name,
+           m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
+    FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
+        JOIN banques b ON (b.bank_id = o.lien_banque )
+       WHERE m.date < CURDATE() AND m.date >=  DATE_SUB(NOW(),INTERVAL 3 MONTH)
+        And   id_mouv IN('EXP','EXPCONG')  
+        AND ID_COMPANY = b.bank_short_name
+        and ID_FOURNISSEUR = 'FEAD' and depy_n = 0
+        AND fead_n = 1 AND daten = 1 AND Birbcode <> 0
+        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
-if ($errormsg == "")
+$res_sql_extract_01_daily =mysqli_query($connection,$sql_extract_01_daily);
+if (!$res_sql_extract_01_daily)
 {
-    $countInserted= $countInsertedFEADAGREED + $countInsertedFEADNONAGREED + $countInsertedNOFEADNONAGREED;;
-    $message = "From $lastMonth Deleted $countDeleted & Inserted $countInserted records";
+    $errormsgDaily=  "Failed to execute FEADNONAGREED daily  query: " . $sql_extract_01_daily . " ". $connection->error;
+    break;
+}
+while ($data_sql_extract_01_daily=mysqli_fetch_object($res_sql_extract_01_daily)) {
+   
+    // détermination du volume FEAD livré aux CPAS ou autres organisations non affiliées
+    // fead_n = 1 AND daten = 1 AND Birbcode <> 0
+    $data_sql_extract_01_daily->Category = "FEADNONAGREED";
+    $data_sql_extract_01_daily->Volume = - $data_sql_extract_01_daily->QTE; // negative value
+
+    // remove fead_n, daten and Birbcode from the object
+    unset($data_sql_extract_01_daily->fead_n);
+    unset($data_sql_extract_01_daily->daten);
+    unset($data_sql_extract_01_daily->Birbcode);
+    unset($data_sql_extract_01_daily->QTE);
+    $countDailyInsertedFEADNONAGREED++;
+    $arrayMovements_daily[] = $data_sql_extract_01_daily;
+}
+    echo "movements summarize.php ended extracting movements daily FEADNONAGREED " . date("Y-m-d H:i:s") . "\n";
+// détermination des vivres aux associations non agréées SANS FEAD
+// fead_n = 0 AND daten = 1
+$sql_extract_02_daily = "SELECT DATE(m.DATE) as DAYMVT, b.bank_short_name,
+           m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
+    FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
+        JOIN banques b ON (b.bank_id = o.lien_banque )
+      WHERE m.date < CURDATE() AND m.date >= DATE_SUB(NOW(),INTERVAL 3 MONTH)
+            And   id_mouv IN('EXP','EXPCONG')  
+        AND ID_COMPANY = b.bank_short_name
+        and ID_FOURNISSEUR <> 'FEAD' and depy_n = 0
+       AND fead_n = 0 AND daten = 1
+        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+
+$res_sql_extract_02_daily =mysqli_query($connection,$sql_extract_02_daily);
+if (!$res_sql_extract_02_daily)
+{
+    $errormsgDaily=  "Failed to execute NOFEADNONAGREED daily  query: " . $sql_extract_02_daily . " " . $connection->error;
+    break;
+}
+while ($data_sql_extract_02_daily=mysqli_fetch_object($res_sql_extract_02_daily)) {
+    // détermination du volume de vivres livrés aux CPAS ou autres organisations non affiliées
+    // fead_n = 0 AND daten = 1
+
+    $data_sql_extract_02_daily->Category = "NOFEADNONAGREED";
+    $data_sql_extract_02_daily->Volume = - $data_sql_extract_02_daily->QTE; // negative value
+
+    // remove fead_n, daten and Birbcode from the object
+    unset($data_sql_extract_02_daily->fead_n);
+    unset($data_sql_extract_02_daily->daten);
+    unset($data_sql_extract_02_daily->Birbcode);
+    unset($data_sql_extract_02_daily->QTE);
+    $countDailyInsertedNOFEADNONAGREED++;
+    $arrayMovements_daily[] = $data_sql_extract_02_daily;
+}
+    echo "movements summarize.php ended extracting movements daily NOFEADNONAGREED " . date("Y-m-d H:i:s") . "\n";
+// détermination des vivres livrés aux associations agréées y compris fead et ramasse
+$sql_extract_03_daily = "SELECT DATE(m.DATE) as DAYMVT, b.bank_short_name,
+           m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
+    FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
+        JOIN banques b ON (b.bank_id = o.lien_banque )
+       WHERE m.date < CURDATE() AND m.date >= DATE_SUB(NOW(),INTERVAL 3 MONTH)
+        And   id_mouv IN('EXP','EXPCONG')  
+        AND ID_COMPANY = b.bank_short_name
+        and depy_n = 0
+		AND daten = 0 
+        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+
+$res_sql_extract_03_daily =mysqli_query($connection,$sql_extract_03_daily);
+if (!$res_sql_extract_03_daily)
+{
+    $errormsgDaily=  "Failed to execute neg fead daily  query: " . $sql_extract_03_daily . " ".  $connection->error;
+    break;
+}
+while ($data_sql_extract_03_daily=mysqli_fetch_object($res_sql_extract_03_daily)) {
+
+    // détermination des vivres livrés aux associations agréées y compris fead et ramasse
+    $data_sql_extract_03_daily->Category = "AGREEDFEADCOLLECT";
+    $data_sql_extract_03_daily->Volume = - $data_sql_extract_03_daily->QTE; // negative value
+
+    // remove fead_n, daten and Birbcode from the object
+    unset($data_sql_extract_03_daily->fead_n);
+    unset($data_sql_extract_03_daily->daten);
+    unset($data_sql_extract_03_daily->Birbcode);
+    unset($data_sql_extract_03_daily->QTE);
+    $countDailyInsertedFEADAGREED++;
+    $arrayMovements_daily[] = $data_sql_extract_03_daily;
+}
+    echo "movements summarize.php ended extracting movements daily FEADAGREED " . date("Y-m-d H:i:s") . "\n";
+foreach ($arrayMovements_daily as $key => $row) {
+    $societeEscaped= mysqli_real_escape_string($connection,$row->societe);
+    $insertQuery_daily = "INSERT INTO `movements_daily` (day,bank_short_name,id_org,orgname,category,quantity) 
+            VALUES ('".$row->DAYMVT."', '".$row->bank_short_name."', '".$row->id_asso."', '".$societeEscaped."', '".$row->Category."', '".$row->Volume."')";
+    $sql = $connection->query($insertQuery_daily);
+
+    if (!$sql)
+    {
+        $errormsgDaily=  "Failed to execute insert daily  query: " . $connection->error;
+        break;
+    }
+}
+    echo "movements summarize.php ended loading daily movements " . date("Y-m-d H:i:s") . "\n";
+
+
+break;
+}
+
+
+if ($errormsgDaily == "")
+{
+    $countDailyInserted= $countDailyInsertedFEADAGREED + $countDailyInsertedFEADNONAGREED + $countDailyInsertedNOFEADNONAGREED;;
+    $messageDaily = "Deleted $countDailyDeleted & Inserted $countDailyInserted records";
 }
 else {
-    $message= substr($errormsg,0,50);
+    $messageDaily= "Error: $errormsgDaily";
 }
-echo "Ending movements summarize.php at " . date("Y-m-d H:i:s") . " with message:" . $message . "\n";
+echo "Ending movements daily summarize.php at " . date("Y-m-d H:i:s") . " with message:" . $messageDaily . "\n";
 
-$insertQuery = "INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) 
- VALUES ('avdmadmin',10,0,'movements_monthly','" . $message . "','Update')";
-$sql = $connection->query($insertQuery);
+$insertQuery_audit_daily = "INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) 
+ VALUES ('avdmadmin',10,0,'movements_daily','" . substr($messageDaily,0,50) . "','Update')";
+$sql = $connection->query($insertQuery_audit_daily);
 if (!$sql)
 {
-    $errormsg=  "Failed to execute insert query: " . $connection->error;
-    echo "movements summarize.php failed to insert statistics in auditchanges table:" . $errormsg . "\n";
+    $errormsg=  "Failed to execute insert daily audit  query: " . $connection->error;
+    echo "movements summarize.php failed to insert daily statistics in auditchanges table:" . $errormsg . "\n";
 }
+
+
 $connection->close();
 echo "movements summarize.php ended at " . date("Y-m-d H:i:s") . "\n";
+?>
 
