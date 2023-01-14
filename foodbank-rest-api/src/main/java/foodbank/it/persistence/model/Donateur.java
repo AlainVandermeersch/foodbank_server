@@ -2,6 +2,8 @@
 
 package foodbank.it.persistence.model;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -36,26 +38,10 @@ public class Donateur implements Serializable {
     private String pays;
     @Column(nullable=false, length=40)
     private String titre;
+    @Formula("(select sum(d.amount) from dons d where d.donateur_id = donateur_id)")
+    private Long totalDons;
    
-    /** Default constructor. */
-    public Donateur() {
-        super();
-    }
 
-   
-    public Donateur(int donateurId, short lienBanque, String nom, String prenom, String adresse, short cp, String city,
-			String pays, String titre) {
-		super();
-		this.donateurId = donateurId;
-		this.lienBanque = lienBanque;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
-		this.cp = cp;
-		this.city = city;
-		this.pays = pays;
-		this.titre = titre;
-	}
 
 
 	public int getDonateurId() {
@@ -212,7 +198,10 @@ public class Donateur implements Serializable {
         titre = aTitre;
     }
 
-   
+    public Long getTotalDons() {
+        return totalDons;
+    }
+
     /**
      * Compares the key for this instance with another DonationBat.
      *

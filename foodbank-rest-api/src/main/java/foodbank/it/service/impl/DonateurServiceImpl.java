@@ -84,7 +84,7 @@ public class DonateurServiceImpl implements IDonateurService{
 		String nom = searchCriteria.getNom();
 		String prenom = searchCriteria.getPrenom();
 		String adresse = searchCriteria.getAdresse();
-		String cp = searchCriteria.getCp();
+		Integer cp = searchCriteria.getCp();
 		String city = searchCriteria.getCity();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		
@@ -106,7 +106,7 @@ public class DonateurServiceImpl implements IDonateurService{
 		}
 		if (cp != null ) {			
 
-			Predicate cpPredicate = criteriaBuilder.like(donateur.get("cp"), "%" + cp.toLowerCase() + "%");
+			Predicate cpPredicate = criteriaBuilder.equal(donateur.get("cp"), cp);
 			predicates.add(cpPredicate);
 		}
 		if (city != null ) {			

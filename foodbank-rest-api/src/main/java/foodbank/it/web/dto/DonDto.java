@@ -14,29 +14,10 @@ public class DonDto {
 	 private String date;
 	 private String donateurNom;
 	 private String donateurPrenom;
+	 private long totalAmount;
 	 private Long  totalRecords;
 	 
-	public DonDto(int idDon, int amount, int lienBanque, int donateurId, LocalDateTime dateEntered, boolean appended,
-			boolean checked, String date,String donateurNom,String donateurPrenom,  Long  totalRecords) {
-		super();
-		this.idDon = idDon;
-		this.amount = amount;
-		this.lienBanque = lienBanque;
-		this.donateurId = donateurId;
-		if (dateEntered == null) {
-			this.dateEntered = "";
-		}
-		else {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			this.dateEntered = dateEntered.format(formatter);
-		}
-		this.appended = appended;
-		this.checked = checked;
-		this.date = date;
-		this.donateurNom = donateurNom;
-		this.donateurPrenom = donateurPrenom;
-		this.totalRecords = totalRecords;
-	}
+
 
 	public int getIdDon() {
 		return idDon;
@@ -111,11 +92,27 @@ public class DonDto {
 		return donateurNom;
 	}
 
+	public void setDonateurNom(String donateurNom) {
+		this.donateurNom = donateurNom;
+	}
+
+	public void setDonateurPrenom(String donateurPrenom) {
+		this.donateurPrenom = donateurPrenom;
+	}
+
+	public void setTotalAmount(long totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public void setTotalRecords(Long totalRecords) {
+		this.totalRecords = totalRecords;
+	}
+
 	public Long getTotalRecords() {
 		return totalRecords;
 	}
 
-		
-	 
-	 
+	public long getTotalAmount() {
+		return totalAmount;
+	}
 }

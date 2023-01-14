@@ -1,6 +1,7 @@
 package foodbank.it.service.impl;
 
 import foodbank.it.persistence.model.Don;
+import foodbank.it.persistence.model.DonsCount;
 import foodbank.it.persistence.repository.IDonRepository;
 import foodbank.it.service.IDonService;
 import foodbank.it.service.SearchDonCriteria;
@@ -18,6 +19,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,14 +90,22 @@ public class DonServiceImpl implements IDonService{
 		TypedQuery<Don> query = entityManager.createQuery(donQuery);
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
+		CriteriaQuery<DonsCount> donsCountQuery = criteriaBuilder.createQuery(DonsCount.class);
+		Root<Don> donTotal = donsCountQuery.from(Don.class);
 
-		CriteriaQuery<Long> totalCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
-		totalCriteriaQuery.select(criteriaBuilder.count(totalCriteriaQuery.from(Don.class)));
-        TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
-        long countResult = countQuery.getSingleResult();
+		donsCountQuery.where(predicates.stream().toArray(Predicate[]::new));
+		donsCountQuery.multiselect( criteriaBuilder.count(donTotal),
+				criteriaBuilder.sum(donTotal.get("amount"))
+				);
+		DonsCount donsCount = entityManager.createQuery(donsCountQuery).getSingleResult();
 		List<Don> resultList = query.getResultList();
-		return new PageImpl<>(resultList, pageable, countResult);
+		Iterator<Don> iterator = resultList.iterator();
+
+		while (iterator.hasNext()) {
+			Don donItem = iterator.next();
+			donItem.setTotalAmount(donsCount.getTotalAmount());
+		}
+		return new PageImpl<>(resultList, pageable, donsCount.getCount());
 	}
 	@Override
 	public Optional<Don> findByIdDon(int idDon) {

@@ -52,8 +52,16 @@ public class DonateurController {
         	pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        
-        SearchDonateurCriteria criteria = new SearchDonateurCriteria(nom, prenom, adresse,cp,city,lienBanqueInteger);
+        Integer cpInteger =null;
+        if (cp != null) {
+            try {
+                cpInteger = Integer.parseInt(cp);
+            } catch (NumberFormatException nfe) {
+            cpInteger = 0;
+            }
+        }
+
+        SearchDonateurCriteria criteria = new SearchDonateurCriteria(nom, prenom, adresse,cpInteger,city,lienBanqueInteger);
         Page<Donateur> selectedDonateurs = this.DonateurService.findAll(criteria, pageRequest);
 		long totalElements = selectedDonateurs.getTotalElements();
 
@@ -94,14 +102,37 @@ public class DonateurController {
         return this.convertToDto(createdDonateur,1);
     }
     private Donateur convertToEntity(DonateurDto dto) {
-    	Donateur myDonateur = new Donateur( dto.getDonateurId(), dto.getLienBanque(), dto.getNom(), dto.getPrenom(), dto.getAdresse(), dto.getCp(), dto.getCity(),
-    			dto.getPays(), dto.getTitre());
+    	Donateur myDonateur = new Donateur();
+        myDonateur.setDonateurId(dto.getDonateurId());
+        myDonateur.setLienBanque(dto.getLienBanque());
+        myDonateur.setNom(dto.getNom());
+        myDonateur.setPrenom(dto.getPrenom());
+        myDonateur.setAdresse(dto.getAdresse());
+        myDonateur.setCp(dto.getCp());
+        myDonateur.setCity(dto.getCity());
+        myDonateur.setPays(dto.getPays());
+        myDonateur.setTitre(dto.getTitre());
     	 return myDonateur;
     }
 
 	private DonateurDto convertToDto(Donateur entity,long totalRecords) {
-		DonateurDto dto = new DonateurDto(entity.getDonateurId(), entity.getLienBanque(), entity.getNom(), entity.getPrenom(), entity.getAdresse(), entity.getCp(), entity.getCity(),
-    			entity.getPays(), entity.getTitre(),totalRecords);
+		DonateurDto dto = new DonateurDto();
+        dto.setDonateurId(entity.getDonateurId());
+        dto.setLienBanque(entity.getLienBanque());
+        dto.setNom(entity.getNom());
+        dto.setPrenom(entity.getPrenom());
+        dto.setAdresse(entity.getAdresse());
+        dto.setCp(entity.getCp());
+        dto.setCity(entity.getCity());
+        dto.setPays(entity.getPays());
+        dto.setTitre(entity.getTitre());
+        if(entity.getTotalDons() != null) {
+        	dto.setTotalDons(entity.getTotalDons());
+        }
+        else {
+        	dto.setTotalDons(0);
+        }
+        dto.setTotalRecords(totalRecords);
 		return dto;
 	}
 

@@ -44,26 +44,9 @@ private static final long serialVersionUID = -893007371697272121L;
  private String donateurNom;
  @Formula("(select e.prenom from donateurs e where e.donateur_id = donateur_id)")
  private String donateurPrenom;
+ @Transient
+ private long totalAmount;
 
- /** Default constructor. */
- public Don() {
-     super();
- }
-
- public Don(int idDon, int amount, int lienBanque, int donateurId,  short appended,
-		short checked, LocalDate date,String donateurNom,String donateurPrenom) {
-	super();
-	this.idDon = idDon;
-	this.amount = amount;
-	this.lienBanque = lienBanque;
-	this.donateurId = donateurId;
-	this.dateEntered =  LocalDateTime.now(); // do not use dateEntered from DTO we need to update the time
-	this.appended = appended;
-	this.checked = checked;
-	this.date = date;
-	this.donateurNom = donateurNom;
-	this.donateurPrenom = donateurPrenom;
-}
 
 /**
   * Access method for idDon.
@@ -226,7 +209,15 @@ public void setDonateurPrenom(String donateurPrenom) {
 	this.donateurPrenom = donateurPrenom;
 }
 
-/**
+    public long getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    /**
   * Compares the key for this instance with another Don.
   *
   * @param other The object to compare to

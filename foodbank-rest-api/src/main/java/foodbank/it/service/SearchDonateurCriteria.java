@@ -4,10 +4,10 @@ public class SearchDonateurCriteria {
 	private String nom;
 	private String prenom;
 	private String adresse;
-	private String cp;
+	private Integer cp;
 	private String city;
 	private Integer lienBanque;
-	public SearchDonateurCriteria(String nom, String prenom, String adresse, String cp, String city,
+	public SearchDonateurCriteria(String nom, String prenom, String adresse, Integer cp, String city,
 			Integer lienBanque) {
 		super();
 		this.nom = nom;
@@ -35,10 +35,10 @@ public class SearchDonateurCriteria {
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
-	public String getCp() {
+	public Integer getCp() {
 		return cp;
 	}
-	public void setCp(String cp) {
+	public void setCp(Integer cp) {
 		this.cp = cp;
 	}
 	public String getCity() {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Optional;
@@ -89,9 +90,17 @@ public class DonController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate dateDon = LocalDate.parse(dto.getDate(), formatter);
     	
-    	Don myDon = new Don( dto.getIdDon(), dto.getAmount(), dto.getLienBanque(), dto.getDonateurId(),  (short) (dto.isAppended() ? 1 : 0),
-    			(short) (dto.isChecked() ? 1 : 0), dateDon,dto.getDonateurNom(),dto.getDonateurPrenom());
-    	 return myDon;
+    	Don myDon = new Don();
+            myDon.setIdDon(dto.getIdDon());
+            myDon.setAmount(dto.getAmount());
+            myDon.setLienBanque(dto.getLienBanque());
+            myDon.setDonateurId(dto.getDonateurId());
+            myDon.setAppended((short) (dto.isAppended() ? 1 : 0));
+    		myDon.setChecked((short) (dto.isChecked() ? 1 : 0));
+            myDon.setDate(dateDon);
+            myDon.setDateEntered(LocalDateTime.now());
+
+        return myDon;
     }
 
 	private DonDto convertToDto(Don entity,long totalRecords) {
@@ -99,9 +108,25 @@ public class DonController {
 		boolean booAppended= entity.getAppended() == 1;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");		
 		String donDate = entity.getDate().format(formatter);
-		DonDto dto = new DonDto(entity.getIdDon(), entity.getAmount(), entity.getLienBanque(), entity.getDonateurId(), entity.getDateEntered(), booAppended,
-				booChecked, donDate,entity.getDonateurNom(), entity.getDonateurPrenom(),totalRecords);
-		return dto;
+		DonDto dto = new DonDto();
+        dto.setIdDon(entity.getIdDon());
+        dto.setAmount(entity.getAmount());
+        dto.setLienBanque(entity.getLienBanque());
+        dto.setDonateurId(entity.getDonateurId());
+        if (entity.getDateEntered() == null) {
+            dto.setDateEntered("");
+        }
+        else {
+              dto.setDateEntered(entity.getDateEntered().format(formatter));
+        }
+        dto.setAppended(booAppended);
+        dto.setChecked(booChecked);
+        dto.setDate(donDate);
+        dto.setDonateurNom(entity.getDonateurNom());
+        dto.setDonateurPrenom(entity.getDonateurPrenom());
+        dto.setTotalAmount(entity.getTotalAmount());
+        dto.setTotalRecords(totalRecords);
+        return dto;
 	}
 
 }

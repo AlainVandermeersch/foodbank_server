@@ -20,22 +20,9 @@ public class DonateurDto {
     private int donateurId;
 	   
     private short lienBanque;
-    
+	private long totalDons;
     private Long  totalRecords;
-	public DonateurDto(int donateurId, short lienBanque, String nom, String prenom, String adresse, short cp, String city,
-			String pays, String titre, Long totalRecords) {
-		super();		
-		this.titre = titre;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
-		this.cp = cp;
-		this.city = city;
-		this.pays = pays;
-		this.donateurId = donateurId;
-		this.lienBanque = lienBanque;
-		this.totalRecords = totalRecords;
-	}
+
 	public int getDonateurId() {
 		return donateurId;
 	}
@@ -89,6 +76,12 @@ public class DonateurDto {
 	}
 	public void setTitre(String titre) {
 		this.titre = titre;
+	}
+	public long getTotalDons() {
+		return totalDons;
+	}
+	public void setTotalDons(long totalDons) {
+		this.totalDons = totalDons;
 	}
 	
 	public Long getTotalRecords() {
