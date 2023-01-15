@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@IdClass(MovementSummaryKey.class)
+@IdClass(MovementMonthlyKey.class)
 @Entity(name="movements_monthly")
 
-public class MovementSummary implements Serializable
+public class MovementMonthly implements Serializable
 {
     @Id
-    private MovementSummaryKey id;
+    private MovementMonthlyKey id;
     private static final long serialVersionUID = 1L;
     @Column(name="month")
     private String month;
@@ -30,7 +30,7 @@ public class MovementSummary implements Serializable
     private Float quantity;
     @Column(name="lastupdated")
     private LocalDateTime lastupdated;
-    public MovementSummaryKey getId() {
+    public MovementMonthlyKey getId() {
         return id;
     }
 
@@ -98,7 +98,7 @@ public class MovementSummary implements Serializable
 
     @Override
     public String toString() {
-        return "MovementSummary{" +
+        return "MovementMonthly{" +
                 "month='" + month + '\'' +
                 ", bankShortName='" + bankShortName + '\'' +
                 ", idOrg=" + idOrg +

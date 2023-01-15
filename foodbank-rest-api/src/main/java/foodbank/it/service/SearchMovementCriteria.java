@@ -1,8 +1,17 @@
 package foodbank.it.service;
 
 public class SearchMovementCriteria {
+    String scope;
     private String idCompany;
     private Integer lienDis;
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
 
     public String getIdCompany() {
         return idCompany;

@@ -1,9 +1,8 @@
 package foodbank.it.service.impl;
 
-import foodbank.it.persistence.model.MovementBankCount;
-import foodbank.it.persistence.model.MovementSummary;
+import foodbank.it.persistence.model.MovementSummaryCount;
+import foodbank.it.persistence.model.MovementMonthly;
 import foodbank.it.service.IMovementService;
-import foodbank.it.persistence.repository.IMovementSummaryRepository;
 
 import foodbank.it.service.SearchMovementCriteria;
 import org.springframework.stereotype.Service;
@@ -16,33 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 @Service
 public class MovementServiceImpl implements IMovementService {
-    private IMovementSummaryRepository movementSummaryRepository;
+
     private final EntityManager entityManager;
 
-    public MovementServiceImpl(IMovementSummaryRepository movementSummaryRepository, EntityManager entityManager) {
-        this.movementSummaryRepository = movementSummaryRepository;
-        this.entityManager = entityManager;
+    public MovementServiceImpl( EntityManager entityManager) {
+                this.entityManager = entityManager;
     }
     @Override
-    public List<MovementBankCount> findAll(SearchMovementCriteria searchCriteria) {
+    public List<MovementSummaryCount> findAll(SearchMovementCriteria searchCriteria) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<MovementBankCount> movementSummaryQuery = criteriaBuilder.createQuery(MovementBankCount.class);
-        Root<MovementSummary> movementSummary = movementSummaryQuery.from(MovementSummary.class);
+        CriteriaQuery<MovementSummaryCount> MovementMonthlyQuery = criteriaBuilder.createQuery(MovementSummaryCount.class);
+        Root<MovementMonthly> MovementMonthly = MovementMonthlyQuery.from(MovementMonthly.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        Predicate isValidBankPredicate = criteriaBuilder.isNotNull(movementSummary.get("bankShortName"));
+        Predicate isValidBankPredicate = criteriaBuilder.isNotNull(MovementMonthly.get("bankShortName"));
         predicates.add(isValidBankPredicate);
-
-
-        movementSummaryQuery.where(predicates.stream().toArray(Predicate[]::new));
-        movementSummaryQuery.groupBy(movementSummary.get("month"));
-        movementSummaryQuery.groupBy(movementSummary.get("bankShortName"));
-        movementSummaryQuery.groupBy(movementSummary.get("category"));
-        movementSummaryQuery.multiselect(movementSummary.get("month"), movementSummary.get("bankShortName"),
-                movementSummary.get("category"),criteriaBuilder.sum(movementSummary.get("quantity")));
-        movementSummaryQuery.groupBy(movementSummary.get("month"), movementSummary.get("bankShortName"), movementSummary.get("category"));
-        movementSummaryQuery.orderBy(criteriaBuilder.asc(movementSummary.get("month")), criteriaBuilder.asc(movementSummary.get("bankShortName")), criteriaBuilder.asc(movementSummary.get("category")));
-        List<MovementBankCount> results = entityManager.createQuery(movementSummaryQuery).getResultList();
+        MovementMonthlyQuery.where(predicates.stream().toArray(Predicate[]::new));
+      
+        MovementMonthlyQuery.multiselect(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"),
+                MovementMonthly.get("category"),criteriaBuilder.sum(MovementMonthly.get("quantity")));
+        MovementMonthlyQuery.groupBy(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("category"));
+        MovementMonthlyQuery.orderBy(criteriaBuilder.asc(MovementMonthly.get("month")), criteriaBuilder.asc(MovementMonthly.get("bankShortName")), criteriaBuilder.asc(MovementMonthly.get("category")));
+        List<MovementSummaryCount> results = entityManager.createQuery(MovementMonthlyQuery).getResultList();
         return results;
     }
 

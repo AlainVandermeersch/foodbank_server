@@ -1,7 +1,7 @@
 package foodbank.it.web.dto;
 
 public class MovementSummaryDto {
-    private String month;
+    private String key; // can be month or date
 
     private String bankShortName;
     private Integer idOrg;
@@ -14,12 +14,12 @@ public class MovementSummaryDto {
 
     private String lastupdated;
 
-    public String getMonth() {
-        return month;
+    public String getKey() {
+        return key;
     }
 
-    public void setMonth(String month) {
-        this.month = month;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getBankShortName() {
