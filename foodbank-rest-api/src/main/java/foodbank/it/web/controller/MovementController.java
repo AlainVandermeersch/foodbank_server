@@ -1,5 +1,6 @@
 package foodbank.it.web.controller;
-import foodbank.it.persistence.model.MovementSummaryCount;
+import foodbank.it.persistence.model.MovementDailyCount;
+import foodbank.it.persistence.model.MovementMonthlyCount;
 import foodbank.it.service.IMovementService;
 import foodbank.it.service.SearchMovementCriteria;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +14,26 @@ public class MovementController {
     public MovementController(IMovementService movementService) {
         this.movementService = movementService;
     }
-    @GetMapping("movements/")
-    public Iterable<MovementSummaryCount> findAll(@RequestParam String scope,
-                                                  @RequestParam(required = false) String idCompany,
-                                                  @RequestParam(required = false) String lienDis) {
+    @GetMapping("movementsmonthly/")
+    public Iterable<MovementMonthlyCount> findAllMonthly(
+            @RequestParam(required = false) String idCompany,
+            @RequestParam(required = false) String lienDis) {
         SearchMovementCriteria searchCriteria = new SearchMovementCriteria();
-        searchCriteria.setScope(scope);
+
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         searchCriteria.setIdCompany(idCompany);
         searchCriteria.setLienDis(lienDisInteger);
-        return movementService.findAll(searchCriteria);
+        return movementService.findAllMonthly(searchCriteria);
+    }
+    @GetMapping("movementsdaily/")
+    public Iterable<MovementDailyCount> findAllDaily(
+            @RequestParam(required = false) String idCompany,
+            @RequestParam(required = false) String lienDis) {
+        SearchMovementCriteria searchCriteria = new SearchMovementCriteria();
+
+        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        searchCriteria.setIdCompany(idCompany);
+        searchCriteria.setLienDis(lienDisInteger);
+        return movementService.findAllDaily(searchCriteria);
     }
 }
