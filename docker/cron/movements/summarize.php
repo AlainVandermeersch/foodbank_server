@@ -1,4 +1,5 @@
 <?php
+
 $errormsgMonthly = "";
 $errormsgDaily = "";
 echo "Starting movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
@@ -57,7 +58,8 @@ while ( true) {
         AND ID_COMPANY = b.bank_short_name
         and ID_FOURNISSEUR = 'FEAD' and depy_n = 0
         AND fead_n = 1 AND daten = 1 AND Birbcode <> 0
-        group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+        group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode 
+        order by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
     
     $res_sql_extract_01_monthly =mysqli_query($connection,$sql_extract_01_monthly);
     if (!$res_sql_extract_01_monthly)
@@ -92,7 +94,8 @@ while ( true) {
         AND ID_COMPANY = b.bank_short_name
         and ID_FOURNISSEUR <> 'FEAD' and depy_n = 0
        AND fead_n = 0 AND daten = 1
-        group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+        group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode 
+        order by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
     $res_sql_extract_02_monthly =mysqli_query($connection,$sql_extract_02_monthly);
     if (!$res_sql_extract_02_monthly)
@@ -127,7 +130,8 @@ while ( true) {
         AND ID_COMPANY = b.bank_short_name
         and depy_n = 0
 		AND daten = 0 
-        group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+        group by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode
+        order by MONTHMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
         $res_sql_extract_03_monthly =mysqli_query($connection,$sql_extract_03_monthly);
         if (!$res_sql_extract_03_monthly)
@@ -182,28 +186,68 @@ while ( true) {
         $errormsg=  "Failed to execute insert monthly audit  query: " . $connection->error;
         echo "movements summarize.php failed to insert monthly statistics in auditchanges table:" . $errormsg . "\n";
     }
+    // end of monthly movements
+
+    echo "Ending movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
 
 $arrayMovements_daily = array();
 
-
-$sql_daily_del = "DELETE FROM `movements_daily`";
+//------------------------------------------------------
+// daily movements
+// delete all records from movements_daily
+    $lastDayObj = new DateTime();
+    $lastDayObj->modify('-3 month');
+    $lastDay= $lastDayObj->format('Y-m-d');
+    echo "movements summarize.php last day 3 months ago is " . $lastDay . "\n";
+    $countDailyDeleted = 0;
+    $countDailyCleanedup = 0;
+    // delete all records from movements_daily older than 3 months
+$sql_daily_del = "DELETE FROM movements_daily where day < DATE_SUB(CURDATE(), INTERVAL 3 MONTH)";
 $res_sql_daily_del = mysqli_query($connection, $sql_daily_del);
 if (!$res_sql_daily_del)
 {
-    $errormsg=  "Error: " . $sql_daily_del . "<br>" . mysqli_error($connection);
+    $errormsgDaily=  "Error: " . $sql_daily_del . "<br>" . mysqli_error($connection);
     break;
 }
-$countDailyDeleted = mysqli_affected_rows($connection);
+$countDailyCleanedup = mysqli_affected_rows($connection);
+// find the last day in movements_daily
+    $sql_daily_max = "SELECT MAX(day) as lastDay FROM `movements_daily` ";
+    $res_sql_daily_max = mysqli_query($connection, $sql_daily_max);
+    if (!$res_sql_daily_max)
+    {
+        $errormsgDaily=  "Error: " . $sql_daily_max . "<br>" . mysqli_error($connection);
+        break;
+    }
+    if($row = mysqli_fetch_array($res_sql_daily_max))
+    {
+        if ($row['lastDay'] != null)
+        {
+            $lastDay = $row['lastDay'];
+            echo "movements summarize.php last day in movements_daily is " . $lastDay . "\n";
+        }
+
+    }
+    // delete all records from movements_daily equal or younger than the last day in movements_daily
+    $sql_daily_del = "DELETE FROM movements_daily where day >= '$lastDay'";
+    $res_sql_daily_del = mysqli_query($connection, $sql_daily_del);
+    if (!$res_sql_daily_del)
+    {
+        $errormsgDaily=  "Error: " . $sql_daily_del . "<br>" . mysqli_error($connection);
+        break;
+    }
+    $countDailyDeleted = mysqli_affected_rows($connection);
+    // extract all records from movements_daily equal or younger than the last day in movements_daily
 $sql_extract_01_daily = "SELECT DATE(m.DATE) as DAYMVT, b.bank_short_name,
            m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         JOIN banques b ON (b.bank_id = o.lien_banque )
-       WHERE m.date < CURDATE() AND m.date >=  DATE_SUB(NOW(),INTERVAL 3 MONTH)
+       WHERE m.date < CURDATE() AND m.date >=  '$lastDay'
         And   id_mouv IN('EXP','EXPCONG')  
         AND ID_COMPANY = b.bank_short_name
         and ID_FOURNISSEUR = 'FEAD' and depy_n = 0
         AND fead_n = 1 AND daten = 1 AND Birbcode <> 0
-        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode 
+        order by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
 $res_sql_extract_01_daily =mysqli_query($connection,$sql_extract_01_daily);
 if (!$res_sql_extract_01_daily)
@@ -233,12 +277,13 @@ $sql_extract_02_daily = "SELECT DATE(m.DATE) as DAYMVT, b.bank_short_name,
            m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         JOIN banques b ON (b.bank_id = o.lien_banque )
-      WHERE m.date < CURDATE() AND m.date >= DATE_SUB(NOW(),INTERVAL 3 MONTH)
+      WHERE m.date < CURDATE() AND m.date >= '$lastDay'
             And   id_mouv IN('EXP','EXPCONG')  
         AND ID_COMPANY = b.bank_short_name
         and ID_FOURNISSEUR <> 'FEAD' and depy_n = 0
        AND fead_n = 0 AND daten = 1
-        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode 
+        order by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
 $res_sql_extract_02_daily =mysqli_query($connection,$sql_extract_02_daily);
 if (!$res_sql_extract_02_daily)
@@ -267,12 +312,13 @@ $sql_extract_03_daily = "SELECT DATE(m.DATE) as DAYMVT, b.bank_short_name,
            m.id_asso, o.societe,o.fead_n,o.daten,o.Birbcode, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         JOIN banques b ON (b.bank_id = o.lien_banque )
-       WHERE m.date < CURDATE() AND m.date >= DATE_SUB(NOW(),INTERVAL 3 MONTH)
+       WHERE m.date < CURDATE() AND m.date >= '$lastDay'
         And   id_mouv IN('EXP','EXPCONG')  
         AND ID_COMPANY = b.bank_short_name
         and depy_n = 0
 		AND daten = 0 
-        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
+        group by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode 
+        order by DAYMVT,b.bank_id,m.id_asso,o.societe,o.fead_n,o.daten,o.Birbcode";
 
 $res_sql_extract_03_daily =mysqli_query($connection,$sql_extract_03_daily);
 if (!$res_sql_extract_03_daily)
@@ -317,7 +363,7 @@ break;
 if ($errormsgDaily == "")
 {
     $countDailyInserted= $countDailyInsertedFEADAGREED + $countDailyInsertedFEADNONAGREED + $countDailyInsertedNOFEADNONAGREED;;
-    $messageDaily = "Deleted $countDailyDeleted & Inserted $countDailyInserted records";
+    $messageDaily = "Cleaned up $countDailyCleanedup, Deleted $countDailyDeleted & Inserted $countDailyInserted records";
 }
 else {
     $messageDaily= "Error: $errormsgDaily";
