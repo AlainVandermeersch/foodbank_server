@@ -4,6 +4,8 @@ public class SearchMovementCriteria {
 
     private String idCompany;
     private Integer lienDis;
+    private String lowRange;
+    private String highRange;
     public String getIdCompany() {
         return idCompany;
     }
@@ -18,5 +20,21 @@ public class SearchMovementCriteria {
 
     public void setLienDis(Integer lienDis) {
         this.lienDis = lienDis;
+    }
+
+    public String getLowRange() {
+        return lowRange;
+    }
+
+    public void setLowRange(String lowRange) {
+        this.lowRange = lowRange;
+    }
+
+    public String getHighRange() {
+        return highRange;
+    }
+
+    public void setHighRange(String highRange) {
+        this.highRange = highRange;
     }
 }

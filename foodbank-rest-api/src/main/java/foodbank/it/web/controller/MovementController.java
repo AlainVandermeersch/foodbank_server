@@ -1,6 +1,6 @@
 package foodbank.it.web.controller;
-import foodbank.it.persistence.model.MovementDailyCount;
-import foodbank.it.persistence.model.MovementMonthlyCount;
+import foodbank.it.persistence.model.MovementDailyCountByBank;
+import foodbank.it.persistence.model.MovementMonthlyCountbyBank;
 import foodbank.it.service.IMovementService;
 import foodbank.it.service.SearchMovementCriteria;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,26 +14,26 @@ public class MovementController {
     public MovementController(IMovementService movementService) {
         this.movementService = movementService;
     }
-    @GetMapping("movementsmonthly/")
-    public Iterable<MovementMonthlyCount> findAllMonthly(
+    @GetMapping("movementsmonthlybank/")
+    public Iterable<MovementMonthlyCountbyBank> findAllMonthlyByBank(
             @RequestParam(required = false) String idCompany,
-            @RequestParam(required = false) String lienDis) {
+            @RequestParam(required = false) String lowRange,
+            @RequestParam(required = false) String highRange) {
         SearchMovementCriteria searchCriteria = new SearchMovementCriteria();
-
-        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         searchCriteria.setIdCompany(idCompany);
-        searchCriteria.setLienDis(lienDisInteger);
-        return movementService.findAllMonthly(searchCriteria);
+        searchCriteria.setLowRange(lowRange);
+        searchCriteria.setHighRange(highRange);
+        return movementService.findMonthlyByBank(searchCriteria);
     }
-    @GetMapping("movementsdaily/")
-    public Iterable<MovementDailyCount> findAllDaily(
+    @GetMapping("movementsdailybank/")
+    public Iterable<MovementDailyCountByBank> findAllDailyByBank(
             @RequestParam(required = false) String idCompany,
-            @RequestParam(required = false) String lienDis) {
+            @RequestParam(required = false) String lowRange,
+            @RequestParam(required = false) String highRange) {
         SearchMovementCriteria searchCriteria = new SearchMovementCriteria();
-
-        Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         searchCriteria.setIdCompany(idCompany);
-        searchCriteria.setLienDis(lienDisInteger);
-        return movementService.findAllDaily(searchCriteria);
+        searchCriteria.setLowRange(lowRange);
+        searchCriteria.setHighRange(highRange);
+        return movementService.findDailyByBank(searchCriteria);
     }
 }

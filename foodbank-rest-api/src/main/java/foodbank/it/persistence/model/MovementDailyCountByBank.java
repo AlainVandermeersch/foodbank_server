@@ -1,12 +1,14 @@
 package foodbank.it.persistence.model;
 
-public class MovementMonthlyCount {
-    private String key; // can be month or date
+import java.time.LocalDate;
+
+public class MovementDailyCountByBank {
+    private LocalDate key; // can be month or date
     private String bankShortName;
     private String category;
     private Double quantity;
 
-    public MovementMonthlyCount(String key, String bankShortName, String category, Double quantity) {
+    public MovementDailyCountByBank(LocalDate key, String bankShortName, String category, Double quantity) {
         this.key = key;
         this.bankShortName = bankShortName;
         this.category = category;
@@ -14,10 +16,10 @@ public class MovementMonthlyCount {
     }
 
     public String getKey() {
-        return key;
+        return key.toString();
     }
 
-    public void setKey(String key) {
+    public void setKey(LocalDate key) {
         this.key = key;
     }
 
@@ -45,3 +47,4 @@ public class MovementMonthlyCount {
         this.quantity = quantity;
     }
 }
+
