@@ -6,6 +6,7 @@ public class SearchMovementCriteria {
     private Integer lienDis;
     private String lowRange;
     private String highRange;
+    private Integer lastDays;
     public String getIdCompany() {
         return idCompany;
     }
@@ -36,5 +37,13 @@ public class SearchMovementCriteria {
 
     public void setHighRange(String highRange) {
         this.highRange = highRange;
+    }
+
+    public Integer getLastDays() {
+        return lastDays;
+    }
+
+    public void setLastDays(Integer lastDays) {
+        this.lastDays = lastDays;
     }
 }

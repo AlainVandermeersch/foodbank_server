@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 public class MovementDaily implements Serializable
 {
     @Id
-    private MovementDailyKey id;
-    private static final long serialVersionUID = 1L;
     @Column(name="day")
     private LocalDate day;
     @Column(name="bank_short_name")
@@ -32,9 +30,7 @@ public class MovementDaily implements Serializable
     private Float quantity;
     @Column(name="lastupdated")
     private LocalDateTime lastupdated;
-    public MovementDailyKey getId() {
-        return id;
-    }
+
 
     public String getDay() {
         return day.toString();

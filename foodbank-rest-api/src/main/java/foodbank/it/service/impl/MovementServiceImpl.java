@@ -9,10 +9,7 @@ import foodbank.it.service.IMovementService;
 import foodbank.it.service.SearchMovementCriteria;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +26,11 @@ public class MovementServiceImpl implements IMovementService {
         String idCompany = searchCriteria.getIdCompany();
         String lowRange = searchCriteria.getLowRange();
         String highRange = searchCriteria.getHighRange();
+
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<MovementMonthlyCountbyBank> MovementMonthlyQuery = criteriaBuilder.createQuery(MovementMonthlyCountbyBank.class);
         Root<MovementMonthly> MovementMonthly = MovementMonthlyQuery.from(MovementMonthly.class);
+
 
         List<Predicate> predicates = new ArrayList<>();
         Predicate isValidBankPredicate = criteriaBuilder.isNotNull(MovementMonthly.get("bankShortName"));
@@ -62,11 +61,58 @@ public class MovementServiceImpl implements IMovementService {
         String idCompany = searchCriteria.getIdCompany();
         String lowRange = searchCriteria.getLowRange();
         String highRange = searchCriteria.getHighRange();
+        Integer lastDays = searchCriteria.getLastDays();
+
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<MovementDailyCountByBank> MovementDailyQuery = criteriaBuilder.createQuery(MovementDailyCountByBank.class);
         Root<MovementDaily> MovementDaily = MovementDailyQuery.from(MovementDaily.class);
 
         List<Predicate> predicates = new ArrayList<>();
+        Predicate isValidBankPredicate = criteriaBuilder.isNotNull(MovementDaily.get("bankShortName"));
+        predicates.add(isValidBankPredicate);
+        if (idCompany != null) {
+            Predicate idCompanyPredicate = criteriaBuilder.equal(MovementDaily.get("bankShortName"), idCompany);
+            predicates.add(idCompanyPredicate);
+        }
+        if (lowRange != null) {
+            Predicate lowRangePredicate = criteriaBuilder.greaterThanOrEqualTo(MovementDaily.get("day"), lowRange);
+            predicates.add(lowRangePredicate);
+        }
+        if (highRange != null) {
+            Predicate highRangePredicate = criteriaBuilder.lessThanOrEqualTo(MovementDaily.get("day"), highRange);
+            predicates.add(highRangePredicate);
+        }
+        if (lastDays != null) {
+            LocalDate today = LocalDate.now();
+            LocalDate lastDaysDate = today.minusDays(lastDays);
+            Predicate lastDaysPredicate = criteriaBuilder.greaterThanOrEqualTo(MovementDaily.get("day"), lastDaysDate);
+            predicates.add(lastDaysPredicate);
+        }
+        MovementDailyQuery.where(predicates.stream().toArray(Predicate[]::new));
+        MovementDailyQuery.multiselect(MovementDaily.get("day"), MovementDaily.get("bankShortName"),
+                MovementDaily.get("category"),criteriaBuilder.sum(MovementDaily.get("quantity")));
+        MovementDailyQuery.groupBy(MovementDaily.get("day"), MovementDaily.get("bankShortName"), MovementDaily.get("category"));
+        MovementDailyQuery.orderBy(criteriaBuilder.asc(MovementDaily.get("day")), criteriaBuilder.asc(MovementDaily.get("bankShortName")), criteriaBuilder.asc(MovementDaily.get("category")));
+        List<MovementDailyCountByBank> results = entityManager.createQuery(MovementDailyQuery).getResultList();
+        return results;
+    }
+    @Override
+    public List<MovementDaily> findDailySummaries(SearchMovementCriteria searchCriteria) {
+        String idCompany = searchCriteria.getIdCompany();
+        String lowRange = searchCriteria.getLowRange();
+        String highRange = searchCriteria.getHighRange();
+        Integer lastDays = searchCriteria.getLastDays();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<MovementDaily> MovementDailyQuery = criteriaBuilder.createQuery(MovementDaily.class);
+        Root<MovementDaily> MovementDaily = MovementDailyQuery.from(MovementDaily.class);
+        List<Predicate> predicates = new ArrayList<>();
+        if (lastDays != null) {
+            LocalDate today = LocalDate.now();
+            LocalDate lastDaysDate = today.minusDays(lastDays);
+            Predicate lastDaysPredicate = criteriaBuilder.greaterThanOrEqualTo(MovementDaily.get("day"), lastDaysDate);
+            predicates.add(lastDaysPredicate);
+        }
+
         Predicate isValidBankPredicate = criteriaBuilder.isNotNull(MovementDaily.get("bankShortName"));
         predicates.add(isValidBankPredicate);
         if (idCompany != null) {
@@ -85,11 +131,8 @@ public class MovementServiceImpl implements IMovementService {
         }
         MovementDailyQuery.where(predicates.stream().toArray(Predicate[]::new));
 
-        MovementDailyQuery.multiselect(MovementDaily.get("day"), MovementDaily.get("bankShortName"),
-                MovementDaily.get("category"),criteriaBuilder.sum(MovementDaily.get("quantity")));
-        MovementDailyQuery.groupBy(MovementDaily.get("day"), MovementDaily.get("bankShortName"), MovementDaily.get("category"));
         MovementDailyQuery.orderBy(criteriaBuilder.asc(MovementDaily.get("day")), criteriaBuilder.asc(MovementDaily.get("bankShortName")), criteriaBuilder.asc(MovementDaily.get("category")));
-        List<MovementDailyCountByBank> results = entityManager.createQuery(MovementDailyQuery).getResultList();
+        List<MovementDaily> results = entityManager.createQuery(MovementDailyQuery).getResultList();
         return results;
     }
 
