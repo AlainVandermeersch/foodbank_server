@@ -37,7 +37,7 @@ public class MovementServiceImpl implements IMovementService {
         Predicate isValidBankPredicate = criteriaBuilder.isNotNull(MovementMonthly.get("bankShortName"));
         predicates.add(isValidBankPredicate);
         if (idCompany != null) {
-            Predicate idCompanyPredicate = criteriaBuilder.equal(MovementMonthly.get("idCompany"), idCompany);
+            Predicate idCompanyPredicate = criteriaBuilder.equal(MovementMonthly.get("bankShortName"), idCompany);
             predicates.add(idCompanyPredicate);
         }
         if (lowRange != null) {
