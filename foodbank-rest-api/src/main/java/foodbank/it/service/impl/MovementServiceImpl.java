@@ -131,7 +131,7 @@ public class MovementServiceImpl implements IMovementService {
         }
         MovementDailyQuery.where(predicates.stream().toArray(Predicate[]::new));
 
-        MovementDailyQuery.orderBy(criteriaBuilder.asc(MovementDaily.get("day")), criteriaBuilder.asc(MovementDaily.get("bankShortName")), criteriaBuilder.asc(MovementDaily.get("category")));
+        MovementDailyQuery.orderBy(criteriaBuilder.asc(MovementDaily.get("day")), criteriaBuilder.asc(MovementDaily.get("bankShortName")), criteriaBuilder.desc(MovementDaily.get("quantity")));
         List<MovementDaily> results = entityManager.createQuery(MovementDailyQuery).getResultList();
         return results;
     }
