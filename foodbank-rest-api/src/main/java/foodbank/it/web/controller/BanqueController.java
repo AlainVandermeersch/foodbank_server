@@ -119,9 +119,11 @@ public class BanqueController {
     	  
     }
     @GetMapping("banqueOrgClientReport/")
-    public List<BanqueClientReportDto> OrgClientReport() {
+    public List<BanqueClientReportDto> OrgClientReport(
+            @RequestParam( required = false) String bankShortName
+    ) {
     	
-    	List<BanqueClientReportDto> orgReports = this.BanqueService.reportOrgClients();
+    	List<BanqueClientReportDto> orgReports = this.BanqueService.reportOrgClients(bankShortName);
     	    	
 		return orgReports;       	
     	  

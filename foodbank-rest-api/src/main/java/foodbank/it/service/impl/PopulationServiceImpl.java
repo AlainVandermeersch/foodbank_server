@@ -19,13 +19,16 @@ public class PopulationServiceImpl implements IPopulationService {
 	}
 
 	@Override
-	public List<PopulationReportDto> report() {
+	public List<PopulationReportDto> report(Integer lienBanque) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<PopulationReportDto> populationQuery = criteriaBuilder.createQuery(PopulationReportDto.class);
 		Root<Population> population = populationQuery.from(Population.class);
 		List<Predicate> predicates = new ArrayList<>();
-		
+		if (lienBanque != null) {
+			Predicate lienBanquePredicate = criteriaBuilder.equal(population.get("lienBanque"), lienBanque);
+			predicates.add(lienBanquePredicate);
+		}
 		Expression<Integer> expressionDate = criteriaBuilder.function("DAYOFMONTH", Integer.class, population.get("dateStat"));
 		Predicate firstDayOfMonthPredicate = criteriaBuilder.equal(expressionDate, 1);
 		predicates.add(firstDayOfMonthPredicate);

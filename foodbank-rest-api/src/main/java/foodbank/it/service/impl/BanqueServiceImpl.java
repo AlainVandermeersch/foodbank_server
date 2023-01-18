@@ -282,7 +282,7 @@ public class BanqueServiceImpl implements IBanqueService {
 	}
 
 	@Override
-	public List<BanqueClientReportDto> reportOrgClients() {
+	public List<BanqueClientReportDto> reportOrgClients(String bankShortName) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<BanqueClientReportDto> organisationQuery = criteriaBuilder.createQuery(BanqueClientReportDto.class);
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
@@ -296,6 +296,10 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(lienBanqueClassicPredicate);
 		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(organisation.get("lienBanque"), 1);
 		predicates.add(lienBanqueNotNullPredicate);
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
+		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
 		organisationQuery.groupBy(organisation.get("lienBanque"));
 		organisationQuery.multiselect(organisation.get("bankShortName"), criteriaBuilder.count(organisation),
