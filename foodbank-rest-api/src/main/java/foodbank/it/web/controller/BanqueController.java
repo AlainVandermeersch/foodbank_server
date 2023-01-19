@@ -97,24 +97,28 @@ public class BanqueController {
     public List<BanqueCount> OrgReport(
     		@RequestParam(required = false) String filter) {
     	
-    	List<BanqueCount> listBanqueCount = this.BanqueService.reportOrgCount(filter);
+    	List<BanqueCount> listBanqueCount = this.BanqueService.reportOrgCount(filter, null);
     	    	
 		return listBanqueCount;       	
     	  
     }
     @GetMapping("banqueMembreCount/")
-    public List<BanqueOrgCountDto> MembreReport() {
+    public List<BanqueOrgCountDto> MembreReport(
+            @RequestParam( required = false) String bankShortName
+    ) {
     	
-    	List<BanqueOrgCountDto> listBanqueCount = this.BanqueService.reportMembreCount();
+    	List<BanqueOrgCountDto> listBanqueCount = this.BanqueService.reportMembreCount(bankShortName);
     	    	
 		return listBanqueCount;       	
     	  
     }
     @GetMapping("banqueUserCount/")
-    public List<BanqueOrgCountDto> UserReport() {
-    	
-    	List<BanqueOrgCountDto> listBanqueCount = this.BanqueService.reportTUserCount();
-    	    	
+    public List<BanqueOrgCountDto> UserReport(
+            @RequestParam( required = false) String bankShortName
+    ) {
+
+    	List<BanqueOrgCountDto> listBanqueCount = this.BanqueService.reportTUserCount(bankShortName);
+
 		return listBanqueCount;       	
     	  
     }
@@ -129,9 +133,11 @@ public class BanqueController {
     	  
     }
     @GetMapping("banqueOrgFeadReport/")
-    public List<BanqueFeadReportDto> OrgFeadeport() {
+    public List<BanqueFeadReportDto> OrgFeadeport(
+            @RequestParam( required = false) String bankShortName
+    ) {
 
-        List<BanqueFeadReportDto> orgReports = this.BanqueService.reportOrgFead();
+    	List<BanqueFeadReportDto> orgReports = this.BanqueService.reportOrgFead(bankShortName);
 
         return orgReports;
 

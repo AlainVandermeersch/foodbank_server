@@ -91,7 +91,7 @@ public class BanqueServiceImpl implements IBanqueService {
 	}
 	
 
-	private List<BanqueCount> countMembers(boolean bankCount) {
+	private List<BanqueCount> countMembers(boolean bankCount,	String filter, String bankShortName) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<BanqueCount> membreQuery = criteriaBuilder.createQuery(BanqueCount.class);
 		Root<Membre> membre = membreQuery.from(Membre.class);
@@ -105,6 +105,10 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(lienBanqueClassicPredicate);
 		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(membre.get("lienBanque"), 1);
 		predicates.add(lienBanqueNotNullPredicate);
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(membre.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
+		}
 		if (bankCount == true) {
 			// selecting bank members only
 			Predicate lienDisZero = criteriaBuilder.equal(membre.get("lienDis"), 0);
@@ -126,7 +130,7 @@ public class BanqueServiceImpl implements IBanqueService {
 
 		return results;
 	}
-	private List<UserCount> countUsers(boolean bankCount) {
+	private List<UserCount> countUsers(boolean bankCount,String bankShortName) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<UserCount> userQuery = criteriaBuilder.createQuery(UserCount.class);
 		Root<TUser> user = userQuery.from(TUser.class);
@@ -136,7 +140,10 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(isActifPredicate);
 		Predicate isValidBankPredicate = criteriaBuilder.isNotNull(user.get("idCompany"));
 		predicates.add(isValidBankPredicate);
-
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(user.get("idCompany"), bankShortName);
+			predicates.add(bankShortNamePredicate);
+		}
 		if (bankCount == true) {
 			// selecting bank members only
 			Predicate idOrgZero = criteriaBuilder.equal(user.get("idOrg"), 0);
@@ -159,9 +166,9 @@ public class BanqueServiceImpl implements IBanqueService {
 		return results;
 	}
 	@Override
-	public List<BanqueOrgCountDto> reportMembreCount() {
-	    List<BanqueCount> bankCounts = this.countMembers(true);
-		List<BanqueCount> orgCounts = this.countMembers(false);
+	public List<BanqueOrgCountDto> reportMembreCount(String bankShortName) {
+	    List<BanqueCount> bankCounts = this.countMembers(true,null, bankShortName);
+		List<BanqueCount> orgCounts = this.countMembers(false,null, bankShortName);
 		List<BanqueOrgCountDto> bankOrgcounts = new ArrayList<BanqueOrgCountDto>();
 		for (BanqueCount bankCount : bankCounts) {
 			boolean foundMatch = false;
@@ -181,9 +188,9 @@ public class BanqueServiceImpl implements IBanqueService {
 
 	}
 	@Override
-	public List<BanqueOrgCountDto> reportTUserCount() {
-		List<UserCount> bankCounts = this.countUsers(true);
-		List<UserCount> orgCounts = this.countUsers(false);
+	public List<BanqueOrgCountDto> reportTUserCount(String bankShortName) {
+		List<UserCount> bankCounts = this.countUsers(true,bankShortName);
+		List<UserCount> orgCounts = this.countUsers(false,bankShortName);
 		List<BanqueOrgCountDto> bankOrgcounts = new ArrayList<BanqueOrgCountDto>();
 		for (UserCount bankCount : bankCounts) {
 			boolean foundMatch = false;
@@ -204,11 +211,11 @@ public class BanqueServiceImpl implements IBanqueService {
 	}
 
 	@Override
-	public List<BanqueFeadReportDto> reportOrgFead() {
-		List<BanqueCount> bankOrgCounts = this.reportOrgCount(null);
-		List<BanqueCount> bankAgreedCounts = this.reportOrgCount("AGREED");
-		List<BanqueCount> bankFeadCounts = this.reportOrgCount("FEAD");
-		List<BanqueCount> bankFeadFromUsCounts = this.reportOrgCount("FEADFROMUS");
+	public List<BanqueFeadReportDto> reportOrgFead(String bankShortName) {
+		List<BanqueCount> bankOrgCounts = this.reportOrgCount(null, bankShortName);
+		List<BanqueCount> bankAgreedCounts = this.reportOrgCount("AGREED", bankShortName);
+		List<BanqueCount> bankFeadCounts = this.reportOrgCount("FEAD", bankShortName);
+		List<BanqueCount> bankFeadFromUsCounts = this.reportOrgCount("FEADFROMUS", bankShortName);
 		List<BanqueFeadReportDto> bankFeadReports = new ArrayList<BanqueFeadReportDto>();
 		for (BanqueCount bankOrgCount : bankOrgCounts) {
 			BanqueFeadReportDto bankFeadReport = new BanqueFeadReportDto(bankOrgCount.getBankShortName());
@@ -240,7 +247,7 @@ public class BanqueServiceImpl implements IBanqueService {
 
 
 	@Override
-	public List<BanqueCount> reportOrgCount(String filter) {
+	public List<BanqueCount> reportOrgCount(String filter, String bankShortName) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<BanqueCount> organisationQuery = criteriaBuilder.createQuery(BanqueCount.class);
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
@@ -257,6 +264,10 @@ public class BanqueServiceImpl implements IBanqueService {
 		// exclude depots
 		Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), 0);
 		predicates.add(isDepotPredicate);
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
+		}
 		if (filter != null) {
 			if (filter.equals("FEAD")) {
 				Predicate hasBirbCodePredicate = criteriaBuilder.greaterThan(organisation.get("birbCode"), 0);

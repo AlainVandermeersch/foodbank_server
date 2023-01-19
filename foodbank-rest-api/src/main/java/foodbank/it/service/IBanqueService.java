@@ -19,10 +19,10 @@ public interface IBanqueService {
     Iterable<Banque> findAll(Boolean classicBanks);
     Iterable<Banque> findByActif(short actif);
     void delete(int bankId) throws Exception;
-	List<BanqueCount> reportOrgCount(String filter);
+	List<BanqueCount> reportOrgCount(String filter, String bankShortName);
 	List<BanqueClientReportDto> reportOrgClients(String bankShortName);
-	List<BanqueOrgCountDto> reportMembreCount();
-	List<BanqueOrgCountDto> reportTUserCount();
+	List<BanqueOrgCountDto> reportMembreCount(String bankShortName);
+	List<BanqueOrgCountDto> reportTUserCount(String bankShortName);
 
-    List<BanqueFeadReportDto> reportOrgFead();
+    List<BanqueFeadReportDto> reportOrgFead(String bankShortName);
 }
