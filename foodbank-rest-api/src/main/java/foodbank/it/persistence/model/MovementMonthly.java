@@ -1,5 +1,7 @@
 package foodbank.it.persistence.model;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,6 +32,8 @@ public class MovementMonthly implements Serializable
     private Float quantity;
     @Column(name="lastupdated")
     private LocalDateTime lastupdated;
+    @Formula("(select d.lien_depot from organisations d where d.id_dis = id_org)")
+    private Integer lienDepot;
     public MovementMonthlyKey getId() {
         return id;
     }

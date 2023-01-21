@@ -15,6 +15,8 @@ public class SearchMovementCriteria {
         this.idCompany = idCompany;
     }
 
+
+
     public Integer getLienDis() {
         return lienDis;
     }
