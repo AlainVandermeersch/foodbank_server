@@ -88,6 +88,10 @@ public class MovementDaily implements Serializable
         this.lastupdated = lastupdated;
     }
 
+    public Integer getLienDepot() {
+        return lienDepot;
+    }
+
     @Override
     public String toString() {
         return "MovementDaily{" +

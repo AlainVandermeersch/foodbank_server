@@ -3,6 +3,7 @@ package foodbank.it.service;
 public class SearchMovementCriteria {
 
     private String idCompany;
+    private Integer idDepot;
     private Integer lienDis;
     private String lowRange;
     private String highRange;
@@ -14,7 +15,12 @@ public class SearchMovementCriteria {
     public void setIdCompany(String idCompany) {
         this.idCompany = idCompany;
     }
-
+    public Integer getIdDepot() {
+        return idDepot;
+    }
+    public void setIdDepot(Integer idDepot) {
+        this.idDepot = idDepot;
+    }
 
 
     public Integer getLienDis() {

@@ -94,6 +94,10 @@ public class MovementMonthly implements Serializable
         this.lastupdated = lastupdated;
     }
 
+    public Integer getLienDepot() {
+        return lienDepot;
+    }
+
 
     @Override
     public int hashCode() {

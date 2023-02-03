@@ -27,10 +27,13 @@ public class MovementController {
     @GetMapping("movementsmonthlybankdepot/")
     public Iterable<MovementMonthlyCountbyBankDepot> findAllMonthlyByBankDepot(
             @RequestParam(required = false) String idCompany,
+            @RequestParam(required = false) String idDepot,
             @RequestParam(required = false) String lowRange,
             @RequestParam(required = false) String highRange) {
         SearchMovementCriteria searchCriteria = new SearchMovementCriteria();
         searchCriteria.setIdCompany(idCompany);
+        Integer depotInteger = Optional.ofNullable(idDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        searchCriteria.setIdDepot(depotInteger);
         searchCriteria.setLowRange(lowRange);
         searchCriteria.setHighRange(highRange);
         return movementService.findMonthlyByBankDepot(searchCriteria);
@@ -52,11 +55,14 @@ public class MovementController {
     @GetMapping("movementsdailybankdepot/")
     public Iterable<MovementDailyCountByBankDepot> findAllDailyByBankDepot(
             @RequestParam(required = false) String idCompany,
+            @RequestParam(required = false) String idDepot,
             @RequestParam(required = false) String lowRange,
             @RequestParam(required = false) String highRange,
             @RequestParam(required = false) String lastDays) {
         SearchMovementCriteria searchCriteria = new SearchMovementCriteria();
         searchCriteria.setIdCompany(idCompany);
+        Integer depotInteger = Optional.ofNullable(idDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        searchCriteria.setIdDepot(depotInteger);
         searchCriteria.setLowRange(lowRange);
         searchCriteria.setHighRange(highRange);
         Integer lastDaysInteger = Optional.ofNullable(lastDays).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);

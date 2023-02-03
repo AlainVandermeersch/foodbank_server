@@ -10,8 +10,17 @@ public class MovementDailyCountByBankDepot {
     private String orgname; // orgName: name of the depot
     private String category;
     private Double quantity;
-
-    public MovementDailyCountByBankDepot(LocalDate key, String bankShortName, Integer lienDepot,String category, Double quantity) {
+    // special constructor for multiselect grouped by idOrg
+    public MovementDailyCountByBankDepot(LocalDate key, String bankShortName,String category, Integer idOrg,String orgname, Double quantity) {
+        this.key = key;
+        this.bankShortName = bankShortName;
+        this.idOrg = idOrg;
+        this.category = category;
+        this.quantity =quantity;
+        this.orgname = orgname;
+    }
+    // special constructor for multiselect grouped by depot
+    public MovementDailyCountByBankDepot(LocalDate key, String bankShortName,String category, Integer lienDepot, Double quantity) {
         this.key = key;
         this.bankShortName = bankShortName;
         this.idOrg = lienDepot;
@@ -19,7 +28,6 @@ public class MovementDailyCountByBankDepot {
         this.quantity =quantity;
         this.orgname = "Unknown";
     }
-
     public String getKey() {
         return key.toString();
     }
