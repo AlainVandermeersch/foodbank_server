@@ -42,24 +42,35 @@ public class MembreController {
     }
     @GetMapping("membresall/")
     public Collection<MembreDto> findAll(
-			@RequestParam(required = false) String lienBanque,
-			@RequestParam(required = false) String lienDepot,
-    		@RequestParam(required = false) String lienDis) {
+			@RequestParam(required = false) String nom, @RequestParam(required = false) String batmail,
+			@RequestParam(required = false) String address,@RequestParam(required = false) String zip,
+			@RequestParam(required = false) String city,@RequestParam(required = false) String lienDepot ,
+			@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String bankShortName,
+			@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
+			@RequestParam(required = false) String fonction ,@RequestParam(required = false) String telgsm ,
+			@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis){
     	List<Membre> selectedMembres;
-    	Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
-    	Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-    	if (lienDis != null) {
-    		selectedMembres = (List<Membre>) this.MembreService.findByLienDis(lienDisInteger);
-    	}
-		else if (lienDepot != null) {
-			selectedMembres = (List<Membre>) this.MembreService.findByLienDepot(lienDepot);
-		}
-    	else if (lienBanque != null) {
-    		selectedMembres = (List<Membre>) this.MembreService.findByLienBanque(lienBanqueShort);
-    	}
-    	else {
-    		selectedMembres = (List<Membre>) this.MembreService.findAll();
-    	}
+		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer fonctionInteger = Optional.ofNullable(fonction).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		SearchMembreCriteria  criteria= new SearchMembreCriteria();
+		criteria.setNom(nom);
+		criteria.setActif(actif);
+		criteria.setAddress(address);
+		criteria.setZip(zip);
+		criteria.setCity(city);
+		criteria.setBatmail(batmail);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setLienDis(lienDisInteger);
+		criteria.setLienDepot(lienDepotInteger);
+		criteria.setBankShortName(bankShortName);
+		criteria.setTelgsm(telgsm);
+		criteria.setFonction(fonctionInteger);
+		criteria.setHasAnomalies(hasAnomalies);
+		criteria.setClassicBanks(classicBanks);
+    	selectedMembres = (List<Membre>) this.MembreService.findAll(criteria);
+
 
     	return selectedMembres.stream()
 				.map(Membre -> convertToDto(Membre, selectedMembres.size()))
@@ -67,7 +78,7 @@ public class MembreController {
     }
 
     @GetMapping("membres/")
-    public Collection<MembreDto> find(@RequestParam String offset, @RequestParam String rows, 
+    public Collection<MembreDto> findPaged(@RequestParam String offset, @RequestParam String rows,
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String nom, @RequestParam(required = false) String batmail,
      		@RequestParam(required = false) String address,@RequestParam(required = false) String zip, 
@@ -92,16 +103,29 @@ public class MembreController {
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer fonctionInteger = Optional.ofNullable(fonction).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		SearchMembreCriteria criteria = new SearchMembreCriteria(nom, actif,address, zip,city, batmail,
-				lienBanqueInteger, lienDisInteger,lienDepotInteger,bankShortName,telgsm,fonctionInteger, hasAnomalies, classicBanks );
-		Page<Membre> selectedMembres = this.MembreService.findAll(criteria, pageRequest);
+		SearchMembreCriteria  criteria= new SearchMembreCriteria();
+		criteria.setNom(nom);
+		criteria.setActif(actif);
+		criteria.setAddress(address);
+		criteria.setZip(zip);
+		criteria.setCity(city);
+		criteria.setBatmail(batmail);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setLienDis(lienDisInteger);
+		criteria.setLienDepot(lienDepotInteger);
+		criteria.setBankShortName(bankShortName);
+		criteria.setTelgsm(telgsm);
+		criteria.setFonction(fonctionInteger);
+		criteria.setHasAnomalies(hasAnomalies);
+		criteria.setClassicBanks(classicBanks);
+		Page<Membre> selectedMembres = this.MembreService.findPaged(criteria, pageRequest);
 		long totalElements = selectedMembres.getTotalElements();
 
 		return selectedMembres.stream()
 				.map(Membre -> convertToDto(Membre, totalElements))
 				.collect(Collectors.toList());
     }
-   
+
     
 	@PutMapping("membre/{batId}")
     public MembreDto updateMembre(@PathVariable("batId") Integer batId, @RequestBody MembreDto updatedMembre) {

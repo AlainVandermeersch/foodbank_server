@@ -11,14 +11,11 @@ public interface IMembreService {
 	Optional<Membre> findByBatId(int batId);
 	
 	Membre save(Membre membre,boolean booCreateMode) throws Exception;
-	Iterable<Membre> findAll();
+	Iterable<Membre> findAll(SearchMembreCriteria searchCriteria);
 	
-    Page<Membre> findAll(SearchMembreCriteria searchCriteria, Pageable pageable);	
-    Iterable<Membre> findByLienBanque(Short lienBanque);
+    Page<Membre> findPaged(SearchMembreCriteria searchCriteria, Pageable pageable);
+
     
     void delete(int batId) throws Exception;
 
-	Iterable<Membre> findByLienDis(Integer lienDisInteger);
-
-    Iterable<Membre> findByLienDepot(String lienDepot);
 }

@@ -62,14 +62,14 @@ public class MembreServiceImpl implements IMembreService{
     		if (lienDis != null && lienDis != 0 ) {
     			Predicate lienDisPredicate = criteriaBuilder.equal(existingMembre.get("lienDis"), lienDis);
     			predicates.add(lienDisPredicate);    			
-    			log.debug("Checking If Member exists with nom: %s prenom %s in Organisation %d", membre.getNom(), membre.getPrenom(), lienDis);
+    			// Checking If Member exists with nom: %s prenom %s in Organisation %d", membre.getNom(), membre.getPrenom(), lienDis);
     		}
     		else {
     			Predicate lienBanquePredicate = criteriaBuilder.equal(existingMembre.get("lienBanque"), membre.getLienBanque());
     			predicates.add(lienBanquePredicate);
     			Predicate lienDisPredicate = criteriaBuilder.or((criteriaBuilder.equal(existingMembre.get("lienDis"),0 )),criteriaBuilder.isNull(existingMembre.get("lienDis")));
     			predicates.add(lienDisPredicate); 
-    			log.debug("Checking If Member exists with nom: %s prenom %s in Bank %d", membre.getNom(), membre.getPrenom(),membre.getLienBanque());
+    			// Checking If Member exists with nom: %s prenom %s in Bank %d", membre.getNom(), membre.getPrenom(),membre.getLienBanque());
     		}
     		
     		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
@@ -161,14 +161,9 @@ public class MembreServiceImpl implements IMembreService{
 		}
         
     }
-   
-    @Override 
-    public Page<Membre> findAll(SearchMembreCriteria searchCriteria, Pageable pageable) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
-		Root<Membre> membre = membreQuery.from(Membre.class);
-		List<Predicate> predicates = new ArrayList<>();
+	List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder,CriteriaQuery<Membre> membreQuery, Root<Membre> membre, SearchMembreCriteria searchCriteria) {
 
+		List<Predicate> predicates = new ArrayList<>();
 		String nom = searchCriteria.getNom();
 		Boolean actif = searchCriteria.getActif();
 		String address = searchCriteria.getAddress();
@@ -184,7 +179,7 @@ public class MembreServiceImpl implements IMembreService{
 		String hasAnomalies = searchCriteria.getHasAnomalies();
 		Boolean classicBanks = searchCriteria.getClassicBanks();
 
-		if (nom != null ) {			
+		if (nom != null ) {
 
 			Predicate nomPredicate = criteriaBuilder.like(membre.get("nom"), "%" + nom.toLowerCase() + "%");
 			Predicate prenomPredicate = criteriaBuilder.like(membre.get("prenom"), "%" + nom.toLowerCase() + "%");
@@ -199,26 +194,26 @@ public class MembreServiceImpl implements IMembreService{
 			Predicate gsmPredicate = criteriaBuilder.like(criteriaBuilder.function("REPLACE"
 					, String.class,membre.get("gsm"), criteriaBuilder.literal(" ")
 					, criteriaBuilder.literal("")),"%" + telgsm + "%");
-		    Predicate telgsmPredicate = criteriaBuilder.or(telPredicate,gsmPredicate);
+			Predicate telgsmPredicate = criteriaBuilder.or(telPredicate,gsmPredicate);
 			predicates.add(telgsmPredicate);
 		}
 
-		if (address != null ) {			
+		if (address != null ) {
 
 			Predicate addressPredicate = criteriaBuilder.like(membre.get("address"), "%" + address.toLowerCase() + "%");
 			predicates.add(addressPredicate);
 		}
-		if (zip != null ) {			
+		if (zip != null ) {
 
 			Predicate zipPredicate = criteriaBuilder.like(membre.get("zip"), "%" + zip.toLowerCase() + "%");
 			predicates.add(zipPredicate);
 		}
-		if (city != null ) {			
+		if (city != null ) {
 
 			Predicate cityPredicate = criteriaBuilder.like(membre.get("city"), "%" + city.toLowerCase() + "%");
 			predicates.add(cityPredicate);
 		}
-		if (batmail != null ) {			
+		if (batmail != null ) {
 
 			Predicate batmailPredicate = criteriaBuilder.like(membre.get("batmail"), "%" + batmail.toLowerCase() + "%");
 			predicates.add(batmailPredicate);
@@ -255,11 +250,11 @@ public class MembreServiceImpl implements IMembreService{
 			}
 			else {
 				if (lienDis == 999){
-				// exclude members of bank who have liendis 0 or null
-				Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
-				Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
-				predicates.add(lienDisNotZero);
-				predicates.add(lienDisNotNull);
+					// exclude members of bank who have liendis 0 or null
+					Predicate lienDisNotZero = criteriaBuilder.notEqual(membre.get("lienDis"), 0);
+					Predicate lienDisNotNull = criteriaBuilder.isNotNull(membre.get("lienDis"));
+					predicates.add(lienDisNotZero);
+					predicates.add(lienDisNotNull);
 				}
 				else {
 					Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), lienDis);
@@ -267,11 +262,11 @@ public class MembreServiceImpl implements IMembreService{
 				}
 			}
 		}
-		
+
 		if (lienDepot != null) {
-				Predicate lienDepotPredicate = criteriaBuilder.equal(membre.get("lienDepot"),lienDepot);
-				predicates.add(lienDepotPredicate);
-		
+			Predicate lienDepotPredicate = criteriaBuilder.equal(membre.get("lienDepot"),lienDepot);
+			predicates.add(lienDepotPredicate);
+
 		}
 		if (actif != null) {
 			Integer intActive = 0;
@@ -317,8 +312,16 @@ public class MembreServiceImpl implements IMembreService{
 				predicates.add(criteriaBuilder.greaterThan(subQuery, 1L));
 			}
 
-		
+
 		}
+		return predicates;
+	}
+	@Override
+    public Page<Membre> findPaged(SearchMembreCriteria searchCriteria, Pageable pageable) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
+		Root<Membre> membre = membreQuery.from(Membre.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,membreQuery,membre, searchCriteria);
 		membreQuery.where(predicates.toArray(new Predicate[0]));
 		membreQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), membre, criteriaBuilder));
 
@@ -336,22 +339,18 @@ public class MembreServiceImpl implements IMembreService{
 		return new PageImpl<>(resultList, pageable, countResult);
 	}
 	@Override
-	public Iterable<Membre> findAll() {
-		return MembreRepository.findAll();
-	}
-	@Override
-	public Iterable<Membre> findByLienBanque(Short lienBanque) {
-		return MembreRepository.findByLienBanque(lienBanque);
-	}
-	@Override
-	public Iterable<Membre> findByLienDis(Integer lienDisInteger) {
-		return MembreRepository.findByLienDis(lienDisInteger);
+	public Iterable<Membre> findAll(SearchMembreCriteria searchCriteria) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Membre> membreQuery = criteriaBuilder.createQuery(Membre.class);
+		Root<Membre> membre = membreQuery.from(Membre.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,membreQuery,membre, searchCriteria);
+		membreQuery.where(predicates.toArray(new Predicate[0]));
+		membreQuery.orderBy(criteriaBuilder.asc(membre.get("nom")),criteriaBuilder.asc(membre.get("prenom")));
+		TypedQuery<Membre> query = entityManager.createQuery(membreQuery);
+		List<Membre> resultList = query.getResultList();
+		return resultList;
 	}
 
-	@Override
-	public Iterable<Membre> findByLienDepot(String lienDepot) {
-		return MembreRepository.findByLienDepot(lienDepot);
-	}
 
 
 }

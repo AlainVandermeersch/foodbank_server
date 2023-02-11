@@ -17,26 +17,7 @@ public class SearchMembreCriteria {
 	private String hasAnomalies;
 	private Boolean classicBanks;
 	
-	public SearchMembreCriteria(String nom, Boolean actif, String address, String zip, String city, String batmail,
-			Integer lienBanque, Integer lienDis,Integer lienDepot,String bankShortName,String telgsm,Integer fonction,
-								String hasAnomalies, Boolean classicBanks) {
-		this.nom = nom;		
-		this.actif = actif;
-		this.address = address;
-		this.zip = zip;
-		this.city = city;
-		this.batmail = batmail;
-		this.lienBanque = lienBanque;
-		this.lienDis = lienDis;
-		this.lienDepot = lienDepot;
-		this.bankShortName = bankShortName;
-		this.telgsm = telgsm;
-		this.fonction = fonction;
-		this.hasAnomalies = hasAnomalies;
-		this.classicBanks = classicBanks;
-	}
 
-	
 
 	public String getNom() {
 		return nom;
