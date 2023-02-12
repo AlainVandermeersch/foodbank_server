@@ -307,13 +307,16 @@ public class BanqueServiceImpl implements IBanqueService {
 		predicates.add(lienBanqueClassicPredicate);
 		Predicate lienBanqueNotNullPredicate = criteriaBuilder.greaterThanOrEqualTo(organisation.get("lienBanque"), 1);
 		predicates.add(lienBanqueNotNullPredicate);
+		// Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), 0);
+		// predicates.add(isDepotPredicate);
 		if (bankShortName != null) {
 			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);
 			predicates.add(bankShortNamePredicate);
 		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
-		organisationQuery.groupBy(organisation.get("lienBanque"));
-		organisationQuery.multiselect(organisation.get("bankShortName"), criteriaBuilder.count(organisation),
+		organisationQuery.groupBy(organisation.get("lienBanque"), organisation.get("depyN"), organisation.get("daten"), organisation.get("gestBen"));
+		// Note daten field means is reverse of Agreed
+		organisationQuery.multiselect(organisation.get("bankShortName"), organisation.get("depyN"),organisation.get("daten"),organisation.get("gestBen"),criteriaBuilder.count(organisation),
 				criteriaBuilder.sum(organisation.get("nFam")),
 				criteriaBuilder.sum(organisation.get("nPers")),
 				criteriaBuilder.sum(organisation.get("nNour")),

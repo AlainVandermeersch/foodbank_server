@@ -2,6 +2,9 @@ package foodbank.it.web.dto;
 
 public class BanqueClientReportDto {
 	private String bankShortName;
+	private short isDepot;
+	private short nonAgreed;
+	private short gestBen;
 	private Long orgCount;
 
 	private Long nFam;
@@ -20,7 +23,7 @@ public class BanqueClientReportDto {
 	
 	private Long nSen;
 
-	public BanqueClientReportDto(String bankShortName, Long orgCount,
+	public BanqueClientReportDto(String bankShortName, short isDepot, short nonAgreed, short gestBen,Long orgCount,
 								 Long nFam,
 								 Long nPers,
 								 Long nNour,
@@ -31,6 +34,9 @@ public class BanqueClientReportDto {
 								 Long nSen) {
 		super();
 		this.bankShortName = bankShortName;
+		this.isDepot = isDepot;
+		this.nonAgreed = nonAgreed;
+		this.gestBen = gestBen;
 		this.orgCount = orgCount;
 		this.nFam = nFam;
 		this.nPers = nPers;
@@ -49,6 +55,30 @@ public class BanqueClientReportDto {
 
 	public void setBankShortName(String bankShortName) {
 		this.bankShortName = bankShortName;
+	}
+
+	public short getIsDepot() {
+		return isDepot;
+	}
+
+	public void setIsDepot(short isDepot) {
+		this.isDepot = isDepot;
+	}
+
+	public short getNonAgreed() {
+		return nonAgreed;
+	}
+
+	public void setNonAgreed(short nonAgreed) {
+		this.nonAgreed = nonAgreed;
+	}
+
+	public short getGestBen() {
+		return gestBen;
+	}
+
+	public void setGestBen(short gestBen) {
+		this.gestBen = gestBen;
 	}
 
 	public Long getOrgCount() {
