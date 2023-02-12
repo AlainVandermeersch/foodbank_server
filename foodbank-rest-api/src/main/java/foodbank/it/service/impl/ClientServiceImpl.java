@@ -11,11 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +39,7 @@ public class ClientServiceImpl implements IClientService{
     public Optional<Client> findByIdClient(int idClient) {
         return ClientRepository.findByIdClient(idClient);
     }
-
-	@Override public Page<Client> findAll(SearchClientCriteria searchCriteria, Pageable pageable) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Client> clientQuery = criteriaBuilder.createQuery(Client.class);
-		Root<Client> client = clientQuery.from(Client.class);
+	private List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder, Root<Client> client, SearchClientCriteria searchCriteria) {
 
 		List<Predicate> predicates = new ArrayList<>();
 		String nom = searchCriteria.getNom();
@@ -56,29 +52,29 @@ public class ClientServiceImpl implements IClientService{
 		Integer actif = searchCriteria.getActif();
 		Boolean isSuspect = searchCriteria.getSuspect();
 		String daten = searchCriteria.getDaten();
-		String duplicate = searchCriteria.getDuplicate();
 
-		if (nom != null ) {			
+
+		if (nom != null ) {
 
 			Predicate nomPredicate = criteriaBuilder.like(client.get("nom"), "%" + nom.toLowerCase() + "%");
 			predicates.add(nomPredicate);
 		}
-		if (prenom != null ) {			
+		if (prenom != null ) {
 
 			Predicate prenomPredicate = criteriaBuilder.like(client.get("prenom"), "%" + prenom.toLowerCase() + "%");
 			predicates.add(prenomPredicate);
 		}
-		if (adresse != null ) {			
+		if (adresse != null ) {
 
 			Predicate adressePredicate = criteriaBuilder.like(client.get("adresse"), "%" + adresse.toLowerCase() + "%");
 			predicates.add(adressePredicate);
 		}
-		if (cp != null ) {			
+		if (cp != null ) {
 
 			Predicate cpPredicate = criteriaBuilder.like(client.get("cp"), "%" + cp.toLowerCase() + "%");
 			predicates.add(cpPredicate);
 		}
-		if (localite != null ) {			
+		if (localite != null ) {
 
 			Predicate localitePredicate = criteriaBuilder.like(client.get("localite"), "%" + localite.toLowerCase() + "%");
 			predicates.add(localitePredicate);
@@ -88,30 +84,70 @@ public class ClientServiceImpl implements IClientService{
 			Predicate datenPredicate = criteriaBuilder.like(client.get("daten"), "%" + daten + "%");
 			predicates.add(datenPredicate);
 		}
-		// Alain in Client table field is lbanque		
+		// Alain in Client table field is lbanque
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(client.get("lbanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
 		}
-		
+
 		if (lienDis != null) {
 			Predicate lienDisPredicate = criteriaBuilder.equal(client.get("lienDis"), lienDis);
 			predicates.add(lienDisPredicate);
 		}
-				
+
 		Predicate lienActifPredicate = criteriaBuilder.equal(client.get("actif"),actif);
 		predicates.add(lienActifPredicate);
-		
+
 		if (isSuspect != null) {
-			Predicate isSuspectPredicate = criteriaBuilder.equal(client.get("coeff"), 1);	
+			Predicate isSuspectPredicate = criteriaBuilder.equal(client.get("coeff"), 1);
 			if (isSuspect) {
-				isSuspectPredicate = criteriaBuilder.notEqual(client.get("coeff"), 1);	
+				isSuspectPredicate = criteriaBuilder.notEqual(client.get("coeff"), 1);
 			}
 			predicates.add(isSuspectPredicate);
 		}
 
+		return predicates;
+	}
+	@Override public List<Client> findAll(SearchClientCriteria searchCriteria) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Client> clientQuery = criteriaBuilder.createQuery(Client.class);
+		Root<Client> client = clientQuery.from(Client.class);
+
+		List<Predicate> predicates = createPredicatesForQuery(criteriaBuilder, client, searchCriteria);
+		clientQuery.where(predicates.toArray(Predicate[]::new));
+		String duplicate = searchCriteria.getDuplicate();
+		if (duplicate == null ) {
+			clientQuery.orderBy(criteriaBuilder.asc(client.get("nom")),criteriaBuilder.asc(client.get("prenom")));
+			TypedQuery<Client> query = entityManager.createQuery(clientQuery);
+			List<Client> resultList = query.getResultList();
+
+			return resultList;
+		}
+		if (duplicate.equals("name") ) {
+
+			clientQuery.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(client.get("nom"))),
+					criteriaBuilder.asc(criteriaBuilder.upper(client.get("prenom"))));
+		}
+		else {
+			// must be search on duplicate birth dates
+			Expression<String> stringToDateConverter = criteriaBuilder.function("STR_TO_DATE", String.class, client.get("daten"), criteriaBuilder.literal("%d/%m/%Y"));
+			clientQuery.orderBy(criteriaBuilder.asc(stringToDateConverter));
+		}
+		TypedQuery<Client> query = entityManager.createQuery(clientQuery);
+		List<Client> clients = query.getResultList();
+		List<Client> duplicateClients = findDuplicateClients(clients, duplicate);
+		return duplicateClients;
+	}
+	@Override public Page<Client> findPaged(SearchClientCriteria searchCriteria, Pageable pageable) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Client> clientQuery = criteriaBuilder.createQuery(Client.class);
+		Root<Client> client = clientQuery.from(Client.class);
+
+		List<Predicate> predicates = createPredicatesForQuery( criteriaBuilder, client, searchCriteria);
+
 		clientQuery.where(predicates.toArray(Predicate[]::new));
 		Expression<String> stringToDateConverter = criteriaBuilder.function("STR_TO_DATE", String.class, client.get("daten"), criteriaBuilder.literal("%d/%m/%Y"));
+		String duplicate = searchCriteria.getDuplicate();
 		if (duplicate == null ) {
 			Sort sort = pageable.getSort();
 			boolean isSortOnDaten= false;
@@ -164,30 +200,7 @@ public class ClientServiceImpl implements IClientService{
 			}
 			TypedQuery<Client> query = entityManager.createQuery(clientQuery);
 			List<Client> clients = query.getResultList();
-			List<Client> duplicateClients = new ArrayList<>();
-			Client previousClient = null;
-
-			for (Client nextClient : clients) {
-				if (duplicate.equals("name") ) {
-					if (previousClient == null || !previousClient.getNom().equalsIgnoreCase(nextClient.getNom())) {
-						previousClient = nextClient;
-						continue;
-					}
-				}
-				else {
-					// must be search on duplicate birth dates
-					if (previousClient == null || !previousClient.getDaten().equalsIgnoreCase(nextClient.getDaten())) {
-						previousClient = nextClient;
-						continue;
-					}
-				}
-				if (!duplicateClients.contains(previousClient)) {
-					duplicateClients.add(previousClient);
-				}
-				duplicateClients.add(nextClient);
-				previousClient = nextClient;
-
-			}
+			List<Client> duplicateClients = findDuplicateClients(clients, duplicate);
 
 			int total = duplicateClients.size();
 			int start = (int) pageable.getOffset();
@@ -208,7 +221,33 @@ public class ClientServiceImpl implements IClientService{
 
 		}
 	}
+    private List<Client> findDuplicateClients(List<Client> clients, String duplicate) {
+		List<Client> duplicateClients = new ArrayList<>();
+		Client previousClient = null;
 
+		for (Client nextClient : clients) {
+			if (duplicate.equals("name") ) {
+				if (previousClient == null || !previousClient.getNom().equalsIgnoreCase(nextClient.getNom())) {
+					previousClient = nextClient;
+					continue;
+				}
+			}
+			else {
+				// must be search on duplicate birth dates
+				if (previousClient == null || !previousClient.getDaten().equalsIgnoreCase(nextClient.getDaten())) {
+					previousClient = nextClient;
+					continue;
+				}
+			}
+			if (!duplicateClients.contains(previousClient)) {
+				duplicateClients.add(previousClient);
+			}
+			duplicateClients.add(nextClient);
+			previousClient = nextClient;
+
+		}
+		return duplicateClients;
+	}
 	@Override
     public Client save(Client Client) {   
 		
@@ -227,13 +266,6 @@ public class ClientServiceImpl implements IClientService{
         
     }
 
-	@Override
-	public Iterable<Client> findByLienBanque(Short lienBanque) {
-		return ClientRepository.findByLbanque(lienBanque);
-	}
-	@Override
-	public Iterable<Client> findByLienDis(Integer lienDisInteger) {
-		return ClientRepository.findByLienDis(lienDisInteger);
-	}
+
 	
 }

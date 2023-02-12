@@ -46,7 +46,7 @@ public class ClientController {
 
 
 	@GetMapping("beneficiaires/")
-	public Collection<ClientDto> find(@RequestParam String offset, @RequestParam String rows,
+	public Collection<ClientDto> findPaged(@RequestParam String offset, @RequestParam String rows,
 			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String actif,
 			@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
      		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
@@ -73,7 +73,7 @@ public class ClientController {
 
 		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite,
 				lienBanqueInteger, lienDisInteger,actifInteger,suspect,daten,duplicate);
-		Page<Client> selectedClients = this.ClientService.findAll(criteria, pageRequest);
+		Page<Client> selectedClients = this.ClientService.findPaged(criteria, pageRequest);
 		long totalElements = selectedClients.getTotalElements();
 
 		return selectedClients.stream()
@@ -82,17 +82,23 @@ public class ClientController {
 	}
 
 	@GetMapping("beneficiairesall/")
-	public Collection<ClientDto> findAll(@RequestParam(required = false) String lienBanque,
-										 @RequestParam(required = false) 	String lienDis) {
-		List<Client> selectedClients;
-		Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort).orElse(null);
+	public Collection<ClientDto> findAll(@RequestParam String actif,
+										 @RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
+										 @RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
+										 @RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
+										 @RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
+										 @RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
+
+		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-		if (lienDis != null) {
-			selectedClients = (List<Client>) this.ClientService.findByLienDis(lienDisInteger);
+		Integer actifInteger = 1;
+		if (actif.equals("0")) {
+			actifInteger = 0;
 		}
-		else {
-			selectedClients = (List<Client>) this.ClientService.findByLienBanque(lienBanqueShort);
-		}
+
+		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite,
+				lienBanqueInteger, lienDisInteger,actifInteger,suspect,daten,duplicate);
+		List<Client> selectedClients = this.ClientService.findAll(criteria);
 		return selectedClients.stream()
 				.map(Client -> convertToDto(Client, selectedClients.size()))
 				.collect(Collectors.toList());
