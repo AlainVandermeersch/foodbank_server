@@ -16,8 +16,8 @@ public interface IOrganisationService {
 
     void delete(int idDis)  throws Exception;
 	
-	Page<Organisation> findAll(SearchOrganisationCriteria searchCriteria, Pageable pageable);
-    Iterable<Organisation> findAll();
+	Page<Organisation> findPaged(SearchOrganisationCriteria searchCriteria, Pageable pageable);
+    List<Organisation> findAll(SearchOrganisationCriteria searchCriteria);
     Iterable<Organisation> findByLienBanque(Short lienBanque);
 	Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable);
 	List<Organisation> OrgClientReport(Integer lienBanque);

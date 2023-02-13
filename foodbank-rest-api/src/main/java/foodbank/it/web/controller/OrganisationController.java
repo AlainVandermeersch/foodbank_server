@@ -15,10 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -64,10 +62,44 @@ public class OrganisationController {
          return convertToDto(o,1);
 
     }
-    
+	@GetMapping("organisationsall/")
+	public Collection<OrganisationDto> findAll(
+	  @RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
+	  @RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
+	  @RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
+	  @RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isFead,
+	  @RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
+	  @RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
+	  @RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
+	  @RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
+	  @RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
+	  @RequestParam(required = false) String bankShortName,@RequestParam(required = false) Boolean hasLogins,
+	  @RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
+		List<OrganisationDto> OrganisationDtos = new ArrayList<OrganisationDto>();
+		Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer classeFBBAInteger = Optional.ofNullable(classeFBBA).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer lienDepotInteger = null;
+		if (lienDepot != null && this.isNumeric(lienDepot)) {
+			lienDepotInteger = Integer.parseInt(lienDepot );
+		}
+		Integer idDisInteger = null;
+
+		if (idDis != null && this.isNumeric(idDis)) {
+			idDisInteger = Integer.parseInt(idDis );
+		}
+
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif,
+				nomDepot, nomDepotRamasse,lienBanqueInteger, lienDepotInteger,isDepot, isFead,birbCode,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
+		List<Organisation> selectedOrganisations  = this.OrganisationService.findAll(criteria);
+		for (Organisation o : selectedOrganisations) {
+			OrganisationDtos.add(convertToDto(o,selectedOrganisations.size()));
+		}
+		return OrganisationDtos;
+	}
 
     @GetMapping("organisations/")
-    public Collection<OrganisationDto> find( @RequestParam String offset, @RequestParam String rows, 
+    public Collection<OrganisationDto> findPaged( @RequestParam String offset, @RequestParam String rows,
     		@RequestParam String sortField, @RequestParam String sortOrder, 
     		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
      		@RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
@@ -109,7 +141,7 @@ public class OrganisationController {
 
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
 				nomDepot, nomDepotRamasse,lienBanqueInteger, lienDepotInteger,isDepot, isFead,birbCode,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
-		selectedOrganisations = this.OrganisationService.findAll(criteria,pageRequest);
+		selectedOrganisations = this.OrganisationService.findPaged(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
        
 		selectedOrganisations.forEach(o -> {			

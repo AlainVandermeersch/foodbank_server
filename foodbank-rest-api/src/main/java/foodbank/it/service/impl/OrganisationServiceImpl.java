@@ -35,8 +35,6 @@ public class OrganisationServiceImpl implements IOrganisationService{
 	private final IDepotRepository DepotRepository;
 	private final EntityManager entityManager;
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
 	public OrganisationServiceImpl(IOrganisationRepository OrganisationRepository,
 			IOrgProgramRepository OrgProgramRepository,
 			IDepotRepository DepotRepository,
@@ -66,9 +64,6 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		List<Predicate> predicates = new ArrayList<>();
 		Predicate lienDisPredicate = criteriaBuilder.equal(membre.get("lienDis"), idDis);
 		predicates.add(lienDisPredicate);
-	
-		log.debug("Checking Member References to Organisation with id: %d", idDis);
-		
 		totalCriteriaQuery.where(predicates.stream().toArray(Predicate[]::new));
 		totalCriteriaQuery.select(criteriaBuilder.count(membre));
 		TypedQuery<Long> countQuery = entityManager.createQuery(totalCriteriaQuery);
@@ -88,13 +83,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		}
         
     }
-	
-	@Override
-	public Page<Organisation> findAll(SearchOrganisationCriteria searchCriteria, Pageable pageable) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
-		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
-
+	private  List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder,Root<Organisation> organisation , SearchOrganisationCriteria searchCriteria) {
 		List<Predicate> predicates = new ArrayList<>();
 		Integer idDis = searchCriteria.getIdDis();
 		Integer regId = searchCriteria.getRegId();
@@ -118,13 +107,13 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Boolean feadN = searchCriteria.getFeadN();
 		String bankShortName = searchCriteria.getBankShortName();
 		Boolean hasLogins = searchCriteria.getHasLogins();
-		
-		if (societe != null ) {			
+
+		if (societe != null ) {
 
 			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
 			predicates.add(prenomPredicate);
 		}
-		if (adresse != null ) {			
+		if (adresse != null ) {
 
 			Predicate adressFieldPredicate = criteriaBuilder.like(organisation.get("adresse"), "%" + adresse.toLowerCase() + "%");
 			Predicate cityPredicate = criteriaBuilder.like(organisation.get("localite"), "%" + adresse.toLowerCase() + "%");
@@ -132,7 +121,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate adressePredicate = criteriaBuilder.or(adressFieldPredicate,cityPredicate,zipCodePredicate);
 			predicates.add(adressePredicate);
 		}
-		if (nomDepot != null ) {			
+		if (nomDepot != null ) {
 
 			Predicate nomDepotPredicate = criteriaBuilder.like(organisation.get("nomDepot"), "%" + nomDepot.toLowerCase() + "%");
 			predicates.add(nomDepotPredicate);
@@ -147,7 +136,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate birbCodePredicate = criteriaBuilder.like(organisation.get("birbCode"), "%" + birbCode.toLowerCase() + "%");
 			predicates.add(birbCodePredicate);
 		}
-			
+
 		if (isDepot != null) {
 			Integer intDepot = 0;
 			if (isDepot== true) {
@@ -156,7 +145,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), intDepot);
 			predicates.add(isDepotPredicate);
 		}
-		
+
 		if (isFead != null) {
 			Integer intBirb = 0;
 			if (isFead== true) {
@@ -178,9 +167,9 @@ public class OrganisationServiceImpl implements IOrganisationService{
 				predicates.add(birbCodeNotNull);
 
 			}
-		} 
-		
-	    if (isAgreed != null) {
+		}
+
+		if (isAgreed != null) {
 			// Note daten field means is reverse of Agreed
 			Integer intDaten= 1;
 			if (isAgreed == true) {
@@ -188,32 +177,32 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			}
 			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intDaten);
 			predicates.add(isAgreedPredicate);
-		} 
-	    if (isCotAnnuelle != null) {			
+		}
+		if (isCotAnnuelle != null) {
 			Integer intCotAnnuelle = 0;
 			if (isCotAnnuelle == true) {
 				intCotAnnuelle = 1;
 			}
 			Predicate isCotAnnuellePredicate = criteriaBuilder.equal(organisation.get("cotAnnuelle"), intCotAnnuelle);
 			predicates.add(isCotAnnuellePredicate);
-		} 
-	    if (isCotSup != null) {			
+		}
+		if (isCotSup != null) {
 			Integer intCotSup = 0;
 			if (isCotSup == true) {
 				intCotSup = 1;
 			}
 			Predicate isCotSupPredicate = criteriaBuilder.equal(organisation.get("cotSup"), intCotSup);
 			predicates.add(isCotSupPredicate);
-		} 
-	    if (gestBen != null) {			
+		}
+		if (gestBen != null) {
 			Integer intgestBen = 0;
 			if (gestBen == true) {
 				intgestBen = 1;
 			}
 			Predicate isgestBenPredicate = criteriaBuilder.equal(organisation.get("gestBen"), intgestBen);
 			predicates.add(isgestBenPredicate);
-		} 
-	    if (feadN != null) {			
+		}
+		if (feadN != null) {
 			Integer intfeadN = 0;
 			if (feadN == true) {
 				intfeadN = 1;
@@ -228,37 +217,37 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			}
 			Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), intActive);
 			predicates.add(isActifPredicate);
-		} 
-		
+		}
+
 		if (refint != null) {
 			Predicate refintPredicate = criteriaBuilder.like(organisation.get("refInt"), "%" + refint + "%");
 			predicates.add(refintPredicate);
 		}
 		if (lienBanque != null) {
-		Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
+			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
 		}
-		
+
 		if (lienDepot != null) {
 			Predicate lienlienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienDepot);
 			predicates.add(lienlienDepotPredicate);
 		}
 		if (idDis != null) {
 			Predicate idDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), idDis);
-				predicates.add(idDisPredicate);
-			}
+			predicates.add(idDisPredicate);
+		}
 		if (regId != null) {
 			Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId);
-				predicates.add(regIdPredicate);
-			}
+			predicates.add(regIdPredicate);
+		}
 		if (bankShortName != null) {
 			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);
-				predicates.add(bankShortNamePredicate);
-			}
+			predicates.add(bankShortNamePredicate);
+		}
 		if (statut != null) {
 			Predicate statutPredicate = criteriaBuilder.equal(organisation.get("statut"), statut);
-				predicates.add(statutPredicate);
-			}
+			predicates.add(statutPredicate);
+		}
 		if (classeFBBA != null) {
 			if ( classeFBBA > 0 ) {
 				Predicate classeFBBAPredicate = criteriaBuilder.or(criteriaBuilder.equal(organisation.get("classeFbba1"),classeFBBA ),criteriaBuilder.equal(organisation.get("classeFbba2"),classeFBBA ), criteriaBuilder.equal(organisation.get("classeFbba3"),classeFBBA ));
@@ -271,10 +260,20 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		if (hasLogins != null) {
 			Predicate hasLoginsPredicate = criteriaBuilder.equal(organisation.get("nbLogins"), 0);
 			if (hasLogins== true) {
-				hasLoginsPredicate = criteriaBuilder.gt(organisation.get("nbLogins"), 0);				
+				hasLoginsPredicate = criteriaBuilder.gt(organisation.get("nbLogins"), 0);
 			}
 			predicates.add(hasLoginsPredicate);
 		}
+		return predicates;
+	}
+	
+	@Override
+	public Page<Organisation> findPaged(SearchOrganisationCriteria searchCriteria, Pageable pageable) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
+		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,organisation, searchCriteria);
+
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));
 
@@ -508,8 +507,15 @@ public class OrganisationServiceImpl implements IOrganisationService{
 	}
 
 	@Override
-	public Iterable<Organisation> findAll() {
-		return OrganisationRepository.findAll();
+	public List<Organisation> findAll(SearchOrganisationCriteria searchCriteria) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
+		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,organisation, searchCriteria);
+		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
+		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("idDis")));
+		TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
+		return query.getResultList();
 	}
 	@Override
 	public Iterable<Organisation> findByLienBanque(Short lienBanque) {
