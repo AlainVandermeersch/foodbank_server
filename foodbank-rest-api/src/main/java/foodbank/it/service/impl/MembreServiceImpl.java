@@ -161,7 +161,7 @@ public class MembreServiceImpl implements IMembreService{
 		}
         
     }
-	List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder,CriteriaQuery<Membre> membreQuery, Root<Membre> membre, SearchMembreCriteria searchCriteria) {
+	private List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder,CriteriaQuery<Membre> membreQuery, Root<Membre> membre, SearchMembreCriteria searchCriteria) {
 
 		List<Predicate> predicates = new ArrayList<>();
 		String nom = searchCriteria.getNom();

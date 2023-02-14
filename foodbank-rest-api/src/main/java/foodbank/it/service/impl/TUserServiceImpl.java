@@ -74,13 +74,7 @@ public class TUserServiceImpl implements ITUserService {
 	public void delete(String idUser) {
 		TUserRepository.deleteByIdUser(idUser);
 	}
-
-	@Override
-	public Page<TUser> findAll(SearchTUserCriteria searchCriteria, Pageable pageable) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
-		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
-		Root<TUser> tuser = tuserQuery.from(TUser.class);
+	private List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder, CriteriaQuery<TUser> tuserQuery, Root<TUser> tuser, SearchTUserCriteria searchCriteria) {
 		List<Predicate> predicates = new ArrayList<>();
 
 		String idUser = searchCriteria.getIdUser();
@@ -101,7 +95,11 @@ public class TUserServiceImpl implements ITUserService {
 		Boolean hasLogins = searchCriteria.getHasLogins();
 		String hasAnomalies = searchCriteria.getHasAnomalies();
 		Boolean classicBanks = searchCriteria.getClassicBanks();
-
+		Integer lienBat = searchCriteria.getLienBat();
+    	if(lienBat != null) {
+	  		Predicate lienBatPredicate = criteriaBuilder.equal(tuser.get("lienBat"), lienBat);
+	  		predicates.add(lienBatPredicate);
+		}
 		if (idUser != null) {
 
 			Predicate idUserPredicate = criteriaBuilder.like(tuser.get("idUser"), "%" + idUser.toLowerCase() + "%");
@@ -252,12 +250,35 @@ public class TUserServiceImpl implements ITUserService {
 				Predicate notEqualCompanyPredicate = criteriaBuilder.notEqual(tuser.get("idCompany"), tuser.get("membreBankShortname"));
 				predicates.add(notEqualCompanyPredicate);
 			}
-			else { 
+			else {
 				Predicate memberNotFoundPredicate = criteriaBuilder.isNull(tuser.get("membreNom"));
 				predicates.add(memberNotFoundPredicate);
 			}
 
 		}
+		return predicates;
+	}
+	@Override
+	public List<TUser> findAll(SearchTUserCriteria searchCriteria) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
+		Root<TUser> tuser = tuserQuery.from(TUser.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder, tuserQuery, tuser, searchCriteria);
+
+		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
+		tuserQuery.orderBy(criteriaBuilder.asc(tuser.get("idUser")));
+		TypedQuery<TUser> query = entityManager.createQuery(tuserQuery);
+		List<TUser> resultList = query.getResultList();
+		return resultList;
+	}
+	@Override
+	public Page<TUser> findPaged(SearchTUserCriteria searchCriteria, Pageable pageable) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<TUser> tuserQuery = criteriaBuilder.createQuery(TUser.class);
+		Root<TUser> tuser = tuserQuery.from(TUser.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder, tuserQuery, tuser, searchCriteria);
+
 		tuserQuery.where(predicates.stream().toArray(Predicate[]::new));
 		tuserQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), tuser, criteriaBuilder));
 
@@ -284,10 +305,7 @@ public class TUserServiceImpl implements ITUserService {
 
 	}
 
-	@Override
-	public Iterable<TUser> findAll() {
-		return TUserRepository.findAll();
-	}
+
 
 	@Override
 	public Iterable<TUser> findByLienBanque(Short lienBanque) {

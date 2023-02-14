@@ -39,34 +39,32 @@ public class TUserController {
 	}
 
 	@GetMapping("usersall/")
-	public Collection<TUserDto> findAll(@RequestParam(required = false) String lienBanque,
-			@RequestParam(required = false) String idOrg,
-			@RequestParam(required = false) String lienDepot,
-			@RequestParam(required = false) String lienBat
+	public Collection<TUserDto> findAll(@RequestParam(required = false) String idUser, @RequestParam(required = false) String userName,
+										@RequestParam(required = false) String idLanguage, @RequestParam(required = false) String idCompany,
+										@RequestParam(required = false) String email, @RequestParam(required = false) String rights,
+										@RequestParam(required = false) String lienDepot, @RequestParam(required = false) Boolean actif,
+										@RequestParam(required = false) Boolean droit1, @RequestParam(required = false) Boolean gestMemb,
+										@RequestParam(required = false) Boolean gestBen, @RequestParam(required = false) Boolean gestFead,
+										@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
+										@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
+										@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg,
+										@RequestParam(required = false) String lienBat
 			) {
-		List<TUser> selectedTUsers;
-		Short lienBanqueShort = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Short::parseShort)
-				.orElse(null);
 
+		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt)
+				.orElse(null);
 		Integer idOrgInteger = Optional.ofNullable(idOrg).filter(str -> !str.isEmpty()).map(Integer::parseInt)
+				.orElse(null);
+		Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
 		Integer lienBatInteger = Optional.ofNullable(lienBat).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
-		if (lienBat != null) {
-			selectedTUsers = (List<TUser>) this.TUserService.findByLienBat(lienBatInteger);
-		} 
-		else if (idOrg != null) {
-			selectedTUsers = (List<TUser>) this.TUserService.findByIdOrg(idOrgInteger);
-		} 
-		else if (lienDepot != null) {
-				selectedTUsers = (List<TUser>) this.TUserService.findByLienDepot(lienDepot);
-			}
-		else if (lienBanque != null) {
-			selectedTUsers = (List<TUser>) this.TUserService.findByLienBanque(lienBanqueShort);
-		}
-		else {
-			selectedTUsers = (List<TUser>) this.TUserService.findAll();
-		}
+
+		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, userName, actif, idLanguage,
+				email, rights, droit1, gestMemb, gestBen, gestFead, gestDon, lienBanqueInteger, idOrgInteger,
+				lienDepotInteger, idCompany, hasLogins, hasAnomalies, classicBanks, lienBatInteger );
+		List<TUser> selectedTUsers = this.TUserService.findAll(criteria);
+
 		long nbOfSelectedTusers = selectedTUsers.size();
 
 		return selectedTUsers.stream().map(tuser -> convertToDto(tuser, nbOfSelectedTusers))
@@ -84,7 +82,8 @@ public class TUserController {
 			@RequestParam(required = false) Boolean gestBen, @RequestParam(required = false) Boolean gestFead,
 			@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
 			@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
-			@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg) {
+			@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg,
+			@RequestParam(required = false) String lienBat) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
 		int pageNumber = intOffset / intRows; // Java throws away remainder of division
@@ -103,11 +102,13 @@ public class TUserController {
 				.orElse(null);
 		Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
+		Integer lienBatInteger = Optional.ofNullable(lienBat).filter(str -> !str.isEmpty()).map(Integer::parseInt)
+				.orElse(null);
 	
 		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, userName, actif, idLanguage,
 				email, rights, droit1, gestMemb, gestBen, gestFead, gestDon, lienBanqueInteger, idOrgInteger,
-				lienDepotInteger, idCompany, hasLogins, hasAnomalies, classicBanks );
-		Page<TUser> selectedTUsers = this.TUserService.findAll(criteria, pageRequest);
+				lienDepotInteger, idCompany, hasLogins, hasAnomalies, classicBanks,lienBatInteger );
+		Page<TUser> selectedTUsers = this.TUserService.findPaged(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 
 		return selectedTUsers.stream().map(TUser -> convertToDto(TUser, totalElements)).collect(Collectors.toList());

@@ -4,12 +4,13 @@ import foodbank.it.persistence.model.TUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ITUserService {
 		Optional<TUser> findByIdUser(String idUser);	
-		Page<TUser> findAll(SearchTUserCriteria searchCriteria, Pageable pageable);	 
-		Iterable<TUser> findAll();
+		Page<TUser> findPaged(SearchTUserCriteria searchCriteria, Pageable pageable);
+		List<TUser> findAll(SearchTUserCriteria searchCriteria);
 		Iterable<TUser> findByLienBanque(Short lienBanque);
 		TUser save(TUser TUser,  boolean booCreateMode) throws Exception;
 	    void delete(String idUser);
