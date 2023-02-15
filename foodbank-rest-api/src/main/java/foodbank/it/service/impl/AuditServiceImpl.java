@@ -1,10 +1,13 @@
 package foodbank.it.service.impl;
 
 import foodbank.it.persistence.model.Audit;
+import foodbank.it.persistence.model.AuditUser;
 import foodbank.it.persistence.repository.IAuditRepository;
+import foodbank.it.persistence.repository.ITUserRepository;
 import foodbank.it.service.IAuditService;
 import foodbank.it.service.SearchAuditCriteria;
 import foodbank.it.web.dto.AuditReportDto;
+import foodbank.it.web.dto.AuditUserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -28,10 +31,14 @@ import java.util.Optional;
 public class AuditServiceImpl implements IAuditService {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private IAuditRepository AuditRepository;
+	private ITUserRepository TUserRepository;
 	private final EntityManager entityManager;
 
-	public AuditServiceImpl(IAuditRepository AuditRepository, EntityManager entityManager) {
+	public AuditServiceImpl(IAuditRepository AuditRepository,
+							ITUserRepository TUserRepository,
+							EntityManager entityManager) {
 		this.AuditRepository = AuditRepository;
+		this.TUserRepository = TUserRepository;
 		this.entityManager = entityManager;
 	}
 
@@ -66,14 +73,8 @@ public class AuditServiceImpl implements IAuditService {
 		log.debug("Recording  User %s logged on today %s\n",userId,today);
 		return AuditRepository.save(auditnew);
 	}
-
-	@Override
-	public Page<Audit> findAll(SearchAuditCriteria searchCriteria, Pageable pageable) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Audit> auditQuery = criteriaBuilder.createQuery(Audit.class);
-		Root<Audit> audit = auditQuery.from(Audit.class);
+	private List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder,  Root<Audit> audit, SearchAuditCriteria searchCriteria) {
 		List<Predicate> predicates = new ArrayList<>();
-
 		Integer idDis = searchCriteria.getIdDis();
 		String societe = searchCriteria.getSociete();
 		String user = searchCriteria.getUser();
@@ -135,6 +136,14 @@ public class AuditServiceImpl implements IAuditService {
 			}
 			predicates.add(applicationPredicate);
 		}
+		return predicates;
+	}
+	@Override
+	public Page<Audit> findAll(SearchAuditCriteria searchCriteria, Pageable pageable) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Audit> auditQuery = criteriaBuilder.createQuery(Audit.class);
+		Root<Audit> audit = auditQuery.from(Audit.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder, audit, searchCriteria);
 
 		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
 		auditQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), audit, criteriaBuilder));
@@ -161,6 +170,118 @@ public class AuditServiceImpl implements IAuditService {
 	@Transactional
 	public void delete(int auditId) throws Exception {
 		AuditRepository.deleteById(auditId);
+
+	}
+	@Override
+	public List<AuditUserDto> reportUsers(String bankShortName, String fromDateString, String toDateString) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<AuditUser> auditQuery = criteriaBuilder.createQuery(AuditUser.class);
+		Root<Audit> audit = auditQuery.from(Audit.class);
+		List<Predicate> predicates = new ArrayList<>();
+
+		if (bankShortName != null) {
+			Predicate bankShortNamePredicate = criteriaBuilder.equal(audit.get("bankShortName"), bankShortName);
+			predicates.add(bankShortNamePredicate);
+		}
+		if (fromDateString != null) {
+			LocalDateTime fromDate = LocalDate.parse(fromDateString, formatter).atStartOfDay();
+			Predicate fromDatePredicate = criteriaBuilder.greaterThanOrEqualTo(audit.get("dateIn"), fromDate);
+			predicates.add(fromDatePredicate);
+		}
+		if (toDateString != null) {
+			LocalDateTime toDate = LocalDate.parse(toDateString, formatter).atStartOfDay();
+			Predicate toDatePredicate = criteriaBuilder.lessThanOrEqualTo(audit.get("dateIn"), toDate);
+			predicates.add(toDatePredicate);
+		}
+
+		auditQuery.where(predicates.stream().toArray(Predicate[]::new));
+		auditQuery.multiselect(audit.get("user"),audit.get("application"),
+				criteriaBuilder.count(audit));
+		auditQuery.groupBy(audit.get("user"), audit.get("application"));
+		TypedQuery<AuditUser> query = entityManager.createQuery(auditQuery);
+		List<AuditUser> userReports = query.getResultList();
+		List<AuditUserDto> auditUserDtos = new ArrayList<AuditUserDto>();
+		for (AuditUser auditUser : userReports) {
+			AuditUserDto auditUserDto = auditUserDtos.stream()
+					.filter(a -> a.getIdUser().equals(auditUser.getIdUser())).findFirst().orElse(null);
+			if (auditUserDto == null) {
+				auditUserDto = new AuditUserDto();
+				auditUserDto.setLoginCountPHP(0L);
+				auditUserDto.setLoginCountFBIT(0L);
+
+			}
+			auditUserDto.setIdUser(auditUser.getIdUser());
+			if (auditUser.getApplication().equals("PHP")) {
+				auditUserDto.setLoginCountPHP(auditUser.getLoginCount());
+			}else {
+				auditUserDto.setLoginCountFBIT(auditUser.getLoginCount());
+			}
+			AuditUserDto finalAuditUserDto = auditUserDto;
+			TUserRepository.findByIdUser(auditUser.getIdUser()).ifPresent(tUser -> {
+				finalAuditUserDto.setUserName(tUser.getUserName());
+				finalAuditUserDto.setEmail(tUser.getEmail());
+				finalAuditUserDto.setIdCompany(tUser.getIdCompany());
+				finalAuditUserDto.setIdOrg(tUser.getIdOrg());
+				finalAuditUserDto.setSociete(tUser.getSociete());
+			});
+
+			auditUserDtos.add(finalAuditUserDto);
+		}
+		return auditUserDtos;
+	}
+
+	@Override
+	public List<AuditUserDto> findUsersPaged(SearchAuditCriteria criteria, Pageable pageRequest) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<AuditUser> auditUserQuery = criteriaBuilder.createQuery(AuditUser.class);
+		Root<Audit> audit = auditUserQuery.from(Audit.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,  audit, criteria);
+
+		auditUserQuery.where(predicates.stream().toArray(Predicate[]::new));
+		auditUserQuery.multiselect(audit.get("user"),audit.get("application"),
+				audit.get("userName"),audit.get("bankShortName"),audit.get("idDis"),
+				audit.get("societe"),audit.get("email"),audit.get("rights"),
+				criteriaBuilder.count(audit));
+		auditUserQuery.groupBy(audit.get("user"), audit.get("application"));
+		auditUserQuery.orderBy(QueryUtils.toOrders(pageRequest.getSort(), audit, criteriaBuilder));
+		TypedQuery<AuditUser> query = entityManager.createQuery(auditUserQuery);
+		List<AuditUser> userReports = query.getResultList();
+		List<AuditUserDto> auditUserDtos = new ArrayList<AuditUserDto>();
+		for (AuditUser auditUser : userReports) {
+			AuditUserDto auditUserDto = auditUserDtos.stream()
+					.filter(a -> a.getIdUser().equals(auditUser.getIdUser())).findFirst().orElse(null);
+			if (auditUserDto == null) {
+				auditUserDto = new AuditUserDto();
+				auditUserDto.setIdUser(auditUser.getIdUser());
+				auditUserDto.setUserName(auditUser.getUserName());
+				auditUserDto.setIdCompany(auditUser.getIdCompany());
+				auditUserDto.setIdOrg(auditUser.getIdOrg());
+				auditUserDto.setSociete(auditUser.getSociete());
+				auditUserDto.setEmail(auditUser.getEmail());
+				auditUserDto.setRights(auditUser.getRights());
+				auditUserDto.setLoginCountPHP(0L);
+				auditUserDto.setLoginCountFBIT(0L);
+				auditUserDto.setTotalRecords(0L);
+				auditUserDtos.add(auditUserDto);
+			}
+
+			if (auditUser.getApplication().equals("PHP")) {
+				auditUserDto.setLoginCountPHP(auditUser.getLoginCount());
+			} else {
+				auditUserDto.setLoginCountFBIT(auditUser.getLoginCount());
+			}
+		}
+		List<AuditUserDto> pagedAuditUserDtos = new ArrayList<AuditUserDto>();
+		int start = pageRequest.getPageNumber() * pageRequest.getPageSize();
+		int end = Math.min((start + pageRequest.getPageSize()), auditUserDtos.size());
+		for (int i = start; i < end; i++) {
+			AuditUserDto auditUserDto = auditUserDtos.get(i);
+			auditUserDto.setTotalRecords((long) auditUserDtos.size());
+			pagedAuditUserDtos.add(auditUserDto);
+		}
+
+		return pagedAuditUserDtos;
 
 	}
 

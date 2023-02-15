@@ -1,7 +1,9 @@
 package foodbank.it.service;
 
 import foodbank.it.persistence.model.Audit;
+import foodbank.it.persistence.model.AuditUser;
 import foodbank.it.web.dto.AuditReportDto;
+import foodbank.it.web.dto.AuditUserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,6 +22,8 @@ Optional<Audit> findByAuditId(int auditId);
     void delete(int auditId) throws Exception;
 
 	List<AuditReportDto> report( String bankShortName, String fromDateString, String toDateString, String reportType);
+    List<AuditUserDto> reportUsers(String bankShortName, String fromDateString, String toDateString);
 
 
+    List<AuditUserDto> findUsersPaged(SearchAuditCriteria criteria, Pageable pageRequest);
 }

@@ -37,7 +37,9 @@ public class Audit implements Serializable {
     @Formula("(select d.USER_NAME from t_user d where d.ID_USER = user)")
     private String userName;   
     @Formula("(select d.rights from t_user d where d.ID_USER = user)")
-    private String rights; 
+    private String rights;
+    @Formula("(select d.email from t_user d where d.ID_USER = user)")
+    private String email;
 
     /** Default constructor. */
     public Audit() {
@@ -159,8 +161,7 @@ public class Audit implements Serializable {
 		return rights;
 	}
 
-	
-
-	
-
+    public String getEmail() {
+        return email;
+    }
 }

@@ -15,4 +15,6 @@ public interface ITUserRepository extends PagingAndSortingRepository<TUser, Inte
 	Iterable<TUser> findByIdOrg(Integer idOrgInteger);
 	Iterable<TUser> findByLienBat(int lienBat);
 	Iterable<TUser> findByLienDepot(String lienDepot);
+
+
 }

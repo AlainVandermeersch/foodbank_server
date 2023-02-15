@@ -11,19 +11,7 @@ public class SearchAuditCriteria {
     private String fromDate;
     private String toDate;
     private Boolean isJavaApp;
-	public SearchAuditCriteria(String user, String bankShortName, Integer idDis, String societe, String userName, 
-			String rights, String fromDate, String toDate ,Boolean isJavaApp) {
-		super();
-		this.user = user;
-		this.bankShortName = bankShortName;
-		this.idDis = idDis;
-		this.societe = societe;
-		this.userName = userName;
-		this.rights = rights;
-		this.fromDate = fromDate;
-		this.toDate = toDate;
-		this.isJavaApp = isJavaApp;
-	}
+
 	public String getUser() {
 		return user;
 	}

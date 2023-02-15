@@ -5,6 +5,7 @@ import foodbank.it.service.IAuditService;
 import foodbank.it.service.SearchAuditCriteria;
 import foodbank.it.web.dto.AuditDto;
 import foodbank.it.web.dto.AuditReportDto;
+import foodbank.it.web.dto.AuditUserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,10 +61,16 @@ public class AuditController {
         if (this.isNumeric(idDis)) {
         	idDisInteger = Integer.parseInt(idDis);
         }
-        
-        
-        SearchAuditCriteria criteria = new SearchAuditCriteria( user,bankShortName,idDisInteger, societe, userName ,
-        		rights, fromDate, toDate, isJavaApp);
+
+
+		SearchAuditCriteria criteria = new SearchAuditCriteria();
+		criteria.setUser(user);
+		criteria.setBankShortName(bankShortName);
+		criteria.setIdDis(idDisInteger);
+		criteria.setSociete(societe);
+		criteria.setUserName(userName);
+		criteria.setFromDate(fromDate);
+		criteria.setToDate(toDate);
         Page<Audit> selectedAudits = this.AuditService.findAll(criteria, pageRequest);
 		long totalElements = selectedAudits.getTotalElements();
 
@@ -103,5 +110,55 @@ public class AuditController {
     	
     	  
     }
+	@GetMapping("audituserreport/")
+	public List<AuditUserDto> AuditUserReport(
+			@RequestParam(required = false) String bankShortName,
+			@RequestParam(required = false) String fromDate,
+			@RequestParam(required = false) String toDate
+	) {
+		List<AuditUserDto> listAudits = this.AuditService.reportUsers(bankShortName,fromDate,toDate);
+		return listAudits;
+	}
+	@GetMapping("auditusers/")
+	public Collection<AuditUserDto> find(@RequestParam String offset, @RequestParam String rows,
+										 @RequestParam String sortField, @RequestParam String sortOrder,
+										 @RequestParam(required = false) String societe,
+										 @RequestParam(required = false) String idUser,
+										 @RequestParam(required = false) String userName,
+										 @RequestParam(required = false) String fromDate,
+										 @RequestParam(required = false) String toDate,
+										 @RequestParam(required = false) String idDis,
+										 @RequestParam(required = false) String bankShortName) {
+		int intOffset = Integer.parseInt(offset);
+		int intRows = Integer.parseInt(rows);
+		int pageNumber=intOffset/intRows; // Java throws away remainder of division
+		int pageSize = intRows;
+		Pageable pageRequest = null;
+		if (sortOrder.equals("1")) {
+			pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).ascending());
+		}
+		else {
+			pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
+		}
+		Integer idDisInteger = null;
+
+		if (this.isNumeric(idDis)) {
+			idDisInteger = Integer.parseInt(idDis);
+		}
+
+
+		SearchAuditCriteria criteria = new SearchAuditCriteria();
+		criteria.setUser(idUser);
+		criteria.setBankShortName(bankShortName);
+		criteria.setIdDis(idDisInteger);
+		criteria.setSociete(societe);
+		criteria.setUserName(userName);
+		criteria.setFromDate(fromDate);
+		criteria.setToDate(toDate);
+
+		List<AuditUserDto> selectedAuditUserDtos = this.AuditService.findUsersPaged(criteria, pageRequest);
+		return selectedAuditUserDtos;
+
+	}
 
 }
