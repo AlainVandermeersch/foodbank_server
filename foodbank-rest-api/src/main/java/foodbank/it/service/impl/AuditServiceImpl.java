@@ -266,10 +266,10 @@ public class AuditServiceImpl implements IAuditService {
 				auditUserDtos.add(auditUserDto);
 			}
 
-			if (auditUser.getApplication().equals("PHP")) {
-				auditUserDto.setLoginCountPHP(auditUser.getLoginCount());
-			} else {
+			if ((auditUser.getApplication() != null) && auditUser.getApplication().equals("FBIT")) {
 				auditUserDto.setLoginCountFBIT(auditUser.getLoginCount());
+			} else {
+				auditUserDto.setLoginCountPHP(auditUser.getLoginCount());
 			}
 		}
 		List<AuditUserDto> pagedAuditUserDtos = new ArrayList<AuditUserDto>();
