@@ -24,55 +24,17 @@ public class SearchOrganisationCriteria {
 	private Boolean feadN;
 	private String bankShortName;
 	private Boolean hasLogins;
-	
-	
-	public SearchOrganisationCriteria(Integer idDis,Integer regId, Integer classeFBBA, String societe, String adresse, Boolean isAgreed, Boolean actif,
-									  String nomDepot, String nomDepotRamasse,
-			Integer lienBanque, Integer lienDepot, Boolean isDepot,Boolean isFead, String birbCode, String refInt,
-			Boolean cotAnnuelle,Boolean cotSup,String statut,Boolean gestBen,Boolean feadN,String bankShortName,Boolean hasLogins) {
-		this.idDis = idDis;
-		this.regId = regId;
-		this.classeFBBA = classeFBBA;
-		this.societe = societe;
-		this.adresse = adresse;
-		this.isAgreed = isAgreed;
-		this.nomDepot = nomDepot;
-		this.nomDepotRamasse = nomDepotRamasse;
-		this.lienBanque = lienBanque;
-		this.lienDepot = lienDepot;
-		this.isDepot = isDepot;
-		this.isFead = isFead;
-		this.birbCode = birbCode;
-		this.actif = actif;
-		this.refInt = refInt;
-		this.cotAnnuelle = cotAnnuelle;
-		this.cotSup = cotSup;
-		this.statut = statut;
-		this.gestBen = gestBen;
-		this.feadN = feadN;
-		this.bankShortName = bankShortName;
-		this.hasLogins = hasLogins;
-	}
-
-	
-
 	public Integer getIdDis() {
 		return idDis;
 	}
-
-
 
 	public void setIdDis(Integer idDis) {
 		this.idDis = idDis;
 	}
 
-
-
 	public Integer getRegId() {
 		return regId;
 	}
-
-
 
 	public void setRegId(Integer regId) {
 		this.regId = regId;

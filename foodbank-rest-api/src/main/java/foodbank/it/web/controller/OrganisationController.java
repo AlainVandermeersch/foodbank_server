@@ -89,8 +89,30 @@ public class OrganisationController {
 			idDisInteger = Integer.parseInt(idDis );
 		}
 
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif,
-				nomDepot, nomDepotRamasse,lienBanqueInteger, lienDepotInteger,isDepot, isFead,birbCode,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
+		criteria.setIdDis(idDisInteger);
+		criteria.setRegId(regIdInteger);
+		criteria.setClasseFBBA(classeFBBAInteger);
+		criteria.setSociete(societe);
+		criteria.setAdresse(adresse);
+		criteria.setIsAgreed(agreed);
+		criteria.setActif(actif);
+		criteria.setNomDepot(nomDepot);
+		criteria.setNomDepotRamasse(nomDepotRamasse);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setlienDepot(lienDepotInteger);
+		criteria.setIsDepot(isDepot);
+		criteria.setIsFead(isFead);
+		criteria.setBirbCode(birbCode);
+		criteria.setRefInt(refint);
+		criteria.setCotAnnuelle(cotAnnuelle);
+		criteria.setCotSup(cotSup);
+		criteria.setStatut(statut);
+		criteria.setGestBen(gestBen);
+		criteria.setFeadN(feadN);
+		criteria.setBankShortName(bankShortName);
+		criteria.setHasLogins(hasLogins);
+
 		List<Organisation> selectedOrganisations  = this.OrganisationService.findAll(criteria);
 		for (Organisation o : selectedOrganisations) {
 			OrganisationDtos.add(convertToDto(o,selectedOrganisations.size()));
@@ -139,11 +161,31 @@ public class OrganisationController {
         	idDisInteger = Integer.parseInt(idDis );
         }
 
-		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria(idDisInteger,regIdInteger, classeFBBAInteger,societe, adresse, agreed, actif, 
-				nomDepot, nomDepotRamasse,lienBanqueInteger, lienDepotInteger,isDepot, isFead,birbCode,refint,cotAnnuelle,cotSup,statut,gestBen,feadN,bankShortName,hasLogins);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
+		criteria.setIdDis(idDisInteger);
+		criteria.setRegId(regIdInteger);
+		criteria.setClasseFBBA(classeFBBAInteger);
+		criteria.setSociete(societe);
+		criteria.setAdresse(adresse);
+		criteria.setIsAgreed(agreed);
+		criteria.setActif(actif);
+		criteria.setNomDepot(nomDepot);
+		criteria.setNomDepotRamasse(nomDepotRamasse);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setlienDepot(lienDepotInteger);
+		criteria.setIsDepot(isDepot);
+		criteria.setIsFead(isFead);
+		criteria.setBirbCode(birbCode);
+		criteria.setRefInt(refint);
+		criteria.setCotAnnuelle(cotAnnuelle);
+		criteria.setCotSup(cotSup);
+		criteria.setStatut(statut);
+		criteria.setGestBen(gestBen);
+		criteria.setFeadN(feadN);
+		criteria.setBankShortName(bankShortName);
+		criteria.setHasLogins(hasLogins);
 		selectedOrganisations = this.OrganisationService.findPaged(criteria,pageRequest);
 		long totalElements = selectedOrganisations.getTotalElements();
-       
 		selectedOrganisations.forEach(o -> {			
 			OrganisationDtos.add(convertToDto(o,totalElements));
 		});

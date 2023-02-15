@@ -60,9 +60,26 @@ public class TUserController {
 		Integer lienBatInteger = Optional.ofNullable(lienBat).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
 
-		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, userName, actif, idLanguage,
-				email, rights, droit1, gestMemb, gestBen, gestFead, gestDon, lienBanqueInteger, idOrgInteger,
-				lienDepotInteger, idCompany, hasLogins, hasAnomalies, classicBanks, lienBatInteger );
+		SearchTUserCriteria criteria = new SearchTUserCriteria();
+		criteria.setIdUser(idUser) ;
+		criteria.setUserName(userName);
+		criteria.setActif(actif);
+		criteria.setIdLanguage(idLanguage);
+		criteria.setEmail(email);
+		criteria.setRights(rights);
+		criteria.setDroit1(droit1);
+		criteria.setGestMemb(gestMemb);
+		criteria.setGestBen(gestBen);
+		criteria.setGestFead(gestFead);
+		criteria.setGestDon(gestDon);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setIdOrg(idOrgInteger);
+		criteria.setLienDepot(lienDepotInteger);
+		criteria.setIdCompany(idCompany);
+		criteria.setHasLogins(hasLogins);
+		criteria.setHasAnomalies(hasAnomalies);
+		criteria.setClassicBanks(classicBanks);
+		criteria.setLienBat(lienBatInteger);
 		List<TUser> selectedTUsers = this.TUserService.findAll(criteria);
 
 		long nbOfSelectedTusers = selectedTUsers.size();
@@ -105,9 +122,27 @@ public class TUserController {
 		Integer lienBatInteger = Optional.ofNullable(lienBat).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
 	
-		SearchTUserCriteria criteria = new SearchTUserCriteria(idUser, userName, actif, idLanguage,
-				email, rights, droit1, gestMemb, gestBen, gestFead, gestDon, lienBanqueInteger, idOrgInteger,
-				lienDepotInteger, idCompany, hasLogins, hasAnomalies, classicBanks,lienBatInteger );
+		SearchTUserCriteria criteria = new SearchTUserCriteria();
+		criteria.setIdUser(idUser) ;
+		criteria.setUserName(userName);
+		criteria.setActif(actif);
+		criteria.setIdLanguage(idLanguage);
+		criteria.setEmail(email);
+		criteria.setRights(rights);
+		criteria.setDroit1(droit1);
+		criteria.setGestMemb(gestMemb);
+		criteria.setGestBen(gestBen);
+		criteria.setGestFead(gestFead);
+		criteria.setGestDon(gestDon);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setIdOrg(idOrgInteger);
+		criteria.setLienDepot(lienDepotInteger);
+		criteria.setIdCompany(idCompany);
+		criteria.setHasLogins(hasLogins);
+		criteria.setHasAnomalies(hasAnomalies);
+		criteria.setClassicBanks(classicBanks);
+		criteria.setLienBat(lienBatInteger);
+
 		Page<TUser> selectedTUsers = this.TUserService.findPaged(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();
 

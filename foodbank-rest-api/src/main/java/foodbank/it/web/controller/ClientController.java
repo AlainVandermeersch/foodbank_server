@@ -71,8 +71,18 @@ public class ClientController {
 			actifInteger = 0;
 		}
 
-		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite,
-				lienBanqueInteger, lienDisInteger,actifInteger,suspect,daten,duplicate);
+		SearchClientCriteria criteria = new SearchClientCriteria();
+		criteria.setNom(nom);
+		criteria.setPrenom(prenom);
+		criteria.setAdresse(adresse);
+		criteria.setCp(cp);
+		criteria.setLocalite(localite);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setLienDis(lienDisInteger);
+		criteria.setActif(actifInteger);
+		criteria.setSuspect(suspect);
+		criteria.setDaten(daten);
+		criteria.setDuplicate(duplicate);
 		Page<Client> selectedClients = this.ClientService.findPaged(criteria, pageRequest);
 		long totalElements = selectedClients.getTotalElements();
 
@@ -95,9 +105,18 @@ public class ClientController {
 		if (actif.equals("0")) {
 			actifInteger = 0;
 		}
-
-		SearchClientCriteria criteria = new SearchClientCriteria(nom, prenom, adresse, cp,localite,
-				lienBanqueInteger, lienDisInteger,actifInteger,suspect,daten,duplicate);
+		SearchClientCriteria criteria = new SearchClientCriteria();
+		criteria.setNom(nom);
+		criteria.setPrenom(prenom);
+		criteria.setAdresse(adresse);
+		criteria.setCp(cp);
+		criteria.setLocalite(localite);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setLienDis(lienDisInteger);
+		criteria.setActif(actifInteger);
+		criteria.setSuspect(suspect);
+		criteria.setDaten(daten);
+		criteria.setDuplicate(duplicate);
 		List<Client> selectedClients = this.ClientService.findAll(criteria);
 		return selectedClients.stream()
 				.map(Client -> convertToDto(Client, selectedClients.size()))

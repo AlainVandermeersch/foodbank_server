@@ -21,31 +21,6 @@ public class SearchTUserCriteria {
 	private String hasAnomalies;
 	private Boolean classicBanks;
 	private Integer lienBat;
-	public SearchTUserCriteria(String idUser, String userName,Boolean actif, String  idLanguage,String email,String rights, 
-			Boolean droit1, Boolean gestMemb, Boolean gestBen, Boolean gestFead, Boolean gestDon,
-			Integer lienBanque, Integer idOrg,Integer lienDepot, String idCompany,Boolean hasLogins,String hasAnomalies, Boolean classicBanks,Integer lienBat) {
-		this.idUser = idUser;
-		this.userName = userName;		
-		this.actif = actif;
-		this.idLanguage = idLanguage;
-		this.email = email;
-		this.rights = rights;
-		this.droit1 = droit1;
-		this.gestMemb = gestMemb;
-		this.gestBen = gestBen;
-		this.gestFead = gestFead;
-		this.gestDon = gestDon;
-		this.lienBanque = lienBanque;
-		this.idOrg = idOrg;
-		this.lienDepot = lienDepot;
-		this.idCompany = idCompany;
-		this.hasLogins = hasLogins;
-		this.hasAnomalies = hasAnomalies;
-		this.classicBanks = classicBanks;
-		this.lienBat = lienBat;
-	}
-
-	
 
 	public String getIdUser() {
 		return idUser;
