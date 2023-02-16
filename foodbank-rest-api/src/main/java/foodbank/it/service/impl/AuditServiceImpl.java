@@ -246,6 +246,7 @@ public class AuditServiceImpl implements IAuditService {
 				criteriaBuilder.count(audit));
 		auditUserQuery.groupBy(audit.get("user"), audit.get("application"));
 		String sortColumn = pageRequest.getSort().iterator().next().getProperty();
+		String sortDirection = pageRequest.getSort().iterator().next().getDirection().toString();
 		if (!sortColumn.startsWith("loginCount")) {
 			auditUserQuery.orderBy(QueryUtils.toOrders(pageRequest.getSort(), audit, criteriaBuilder));
 		}
@@ -277,9 +278,17 @@ public class AuditServiceImpl implements IAuditService {
 			}
 		}
 		if (sortColumn.equals("loginCountPHP")) {
-			auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountPHP).reversed());
+			if (sortDirection.equals("ASC")) {
+				auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountPHP));
+			} else {
+				auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountPHP).reversed());
+			}
 		} else if (sortColumn.equals("loginCountFBIT")) {
-			auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountFBIT).reversed());
+			if (sortDirection.equals("ASC")) {
+				auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountFBIT));
+			} else {
+				auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountFBIT).reversed());
+			}
 		}
 		List<AuditUserDto> pagedAuditUserDtos = new ArrayList<AuditUserDto>();
 		int start = pageRequest.getPageNumber() * pageRequest.getPageSize();

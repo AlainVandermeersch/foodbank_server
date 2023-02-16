@@ -91,21 +91,26 @@ public class DonServiceImpl implements IDonService{
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
 		CriteriaQuery<DonsCount> donsCountQuery = criteriaBuilder.createQuery(DonsCount.class);
-		Root<Don> donTotal = donsCountQuery.from(Don.class);
 
-		donsCountQuery.where(predicates.stream().toArray(Predicate[]::new));
-		donsCountQuery.multiselect( criteriaBuilder.count(donTotal),
-				criteriaBuilder.sum(donTotal.get("amount"))
-				);
-		DonsCount donsCount = entityManager.createQuery(donsCountQuery).getSingleResult();
 		List<Don> resultList = query.getResultList();
-		Iterator<Don> iterator = resultList.iterator();
+		if (resultList.size() > 0) {
+			Root<Don> donTotal = donsCountQuery.from(Don.class);
 
-		while (iterator.hasNext()) {
-			Don donItem = iterator.next();
-			donItem.setTotalAmount(donsCount.getTotalAmount());
+			donsCountQuery.where(predicates.stream().toArray(Predicate[]::new));
+			donsCountQuery.multiselect( criteriaBuilder.count(donTotal),
+					criteriaBuilder.sum(donTotal.get("amount"))
+			);
+			DonsCount donsCount = entityManager.createQuery(donsCountQuery).getSingleResult();
+			Iterator<Don> iterator = resultList.iterator();
+
+			while (iterator.hasNext()) {
+				Don donItem = iterator.next();
+				donItem.setTotalAmount(donsCount.getTotalAmount());
+			}
+			return new PageImpl<>(resultList, pageable, donsCount.getCount());
+		} else {
+			return new PageImpl<>(resultList, pageable, 0);
 		}
-		return new PageImpl<>(resultList, pageable, donsCount.getCount());
 	}
 	@Override
 	public Optional<Don> findByIdDon(int idDon) {

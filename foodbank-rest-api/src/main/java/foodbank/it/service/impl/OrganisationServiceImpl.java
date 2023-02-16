@@ -282,23 +282,27 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		query.setMaxResults(pageable.getPageSize());
 
 
-		CriteriaQuery<OrgClientsCount> orgClientsCountQuery = criteriaBuilder.createQuery(OrgClientsCount.class);
-		Root<Organisation> orgStats = orgClientsCountQuery.from(Organisation.class);
-
-		orgClientsCountQuery.where(predicates.stream().toArray(Predicate[]::new));
-		orgClientsCountQuery.multiselect( criteriaBuilder.count(orgStats),
-				criteriaBuilder.sum(orgStats.get("nFam")),
-				criteriaBuilder.sum(orgStats.get("nPers")),
-				criteriaBuilder.sum(orgStats.get("nNour")),
-				criteriaBuilder.sum(orgStats.get("nBebe")),
-				criteriaBuilder.sum(orgStats.get("nEnf")),
-				criteriaBuilder.sum(orgStats.get("nAdo")),
-				criteriaBuilder.sum(orgStats.get("n1824")),
-				criteriaBuilder.sum(orgStats.get("nSen"))
-		);
-		OrgClientsCount clientsCount = entityManager.createQuery(orgClientsCountQuery).getSingleResult();
 
 		List<Organisation> resultList = query.getResultList();
+		OrgClientsCount clientsCount = null;
+		if (resultList.size() > 0) {
+			CriteriaQuery<OrgClientsCount> orgClientsCountQuery = criteriaBuilder.createQuery(OrgClientsCount.class);
+			Root<Organisation> orgStats = orgClientsCountQuery.from(Organisation.class);
+
+			orgClientsCountQuery.where(predicates.stream().toArray(Predicate[]::new));
+			orgClientsCountQuery.multiselect( criteriaBuilder.count(orgStats),
+					criteriaBuilder.sum(orgStats.get("nFam")),
+					criteriaBuilder.sum(orgStats.get("nPers")),
+					criteriaBuilder.sum(orgStats.get("nNour")),
+					criteriaBuilder.sum(orgStats.get("nBebe")),
+					criteriaBuilder.sum(orgStats.get("nEnf")),
+					criteriaBuilder.sum(orgStats.get("nAdo")),
+					criteriaBuilder.sum(orgStats.get("n1824")),
+					criteriaBuilder.sum(orgStats.get("nSen"))
+			);
+			clientsCount = entityManager.createQuery(orgClientsCountQuery).getSingleResult();
+
+
 		Iterator<Organisation> iterator = resultList.iterator();
 
 		while (iterator.hasNext()) {
@@ -311,8 +315,10 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			org.setTotalTeens(clientsCount.getnAdo());
 			org.setTotalYoungAdults(clientsCount.getN1824());
 			org.setTotalSeniors(clientsCount.getnSen());
-	}
+		}
 		return new PageImpl<>(resultList, pageable, clientsCount.getNbClients());
+	}
+		return new PageImpl<>(resultList, pageable, 0);
 	}
 	@Override
 	public Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable) {
