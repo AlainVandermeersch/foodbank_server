@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -244,7 +245,10 @@ public class AuditServiceImpl implements IAuditService {
 				audit.get("societe"),audit.get("email"),audit.get("rights"),
 				criteriaBuilder.count(audit));
 		auditUserQuery.groupBy(audit.get("user"), audit.get("application"));
-		auditUserQuery.orderBy(QueryUtils.toOrders(pageRequest.getSort(), audit, criteriaBuilder));
+		String sortColumn = pageRequest.getSort().iterator().next().getProperty();
+		if (!sortColumn.startsWith("loginCount")) {
+			auditUserQuery.orderBy(QueryUtils.toOrders(pageRequest.getSort(), audit, criteriaBuilder));
+		}
 		TypedQuery<AuditUser> query = entityManager.createQuery(auditUserQuery);
 		List<AuditUser> userReports = query.getResultList();
 		List<AuditUserDto> auditUserDtos = new ArrayList<AuditUserDto>();
@@ -271,6 +275,11 @@ public class AuditServiceImpl implements IAuditService {
 			} else {
 				auditUserDto.setLoginCountPHP(auditUser.getLoginCount());
 			}
+		}
+		if (sortColumn.equals("loginCountPHP")) {
+			auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountPHP).reversed());
+		} else if (sortColumn.equals("loginCountFBIT")) {
+			auditUserDtos.sort(Comparator.comparing(AuditUserDto::getLoginCountFBIT).reversed());
 		}
 		List<AuditUserDto> pagedAuditUserDtos = new ArrayList<AuditUserDto>();
 		int start = pageRequest.getPageNumber() * pageRequest.getPageSize();
