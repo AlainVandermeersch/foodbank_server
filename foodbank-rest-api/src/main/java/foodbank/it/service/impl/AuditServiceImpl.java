@@ -222,7 +222,7 @@ public class AuditServiceImpl implements IAuditService {
 			TUserRepository.findByIdUser(auditUser.getIdUser()).ifPresent(tUser -> {
 				finalAuditUserDto.setUserName(tUser.getUserName());
 				finalAuditUserDto.setEmail(tUser.getEmail());
-				finalAuditUserDto.setIdCompany(tUser.getIdCompany());
+				finalAuditUserDto.setBankShortName(tUser.getIdCompany());
 				finalAuditUserDto.setIdOrg(tUser.getIdOrg());
 				finalAuditUserDto.setSociete(tUser.getSociete());
 			});
@@ -260,7 +260,7 @@ public class AuditServiceImpl implements IAuditService {
 				auditUserDto = new AuditUserDto();
 				auditUserDto.setIdUser(auditUser.getIdUser());
 				auditUserDto.setUserName(auditUser.getUserName());
-				auditUserDto.setIdCompany(auditUser.getIdCompany());
+				auditUserDto.setBankShortName(auditUser.getBankShortName());
 				auditUserDto.setIdOrg(auditUser.getIdOrg());
 				auditUserDto.setSociete(auditUser.getSociete());
 				auditUserDto.setEmail(auditUser.getEmail());

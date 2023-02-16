@@ -5,7 +5,7 @@ public class AuditUserDto {
 
     private String userName;
 
-    private String idCompany;
+    private String bankShortName;
     private Integer idOrg;
     private String societe;
     private String email;
@@ -30,12 +30,12 @@ public class AuditUserDto {
         this.userName = userName;
     }
 
-    public String getIdCompany() {
-        return idCompany;
+    public String getBankShortName() {
+        return bankShortName;
     }
 
-    public void setIdCompany(String idCompany) {
-        this.idCompany = idCompany;
+    public void setBankShortName(String bankShortName) {
+        this.bankShortName = bankShortName;
     }
 
     public Integer getIdOrg() {

@@ -3,7 +3,7 @@ package foodbank.it.persistence.model;
 public class AuditUser {
     private String idUser;
     private String userName;
-    private String idCompany;
+    private String bankShortName;
     private Integer idOrg;
     private String societe;
     private String email;
@@ -11,13 +11,13 @@ public class AuditUser {
     private String application;
     private Long loginCount;
 
-    public AuditUser(String idUser,String application, String userName,String idCompany,
+    public AuditUser(String idUser,String application, String userName,String bankShortName,
                      int idOrg,String societe, String email, String rights,
                      Long loginCount) {
         this.idUser = idUser;
         this.application = application;
         this.userName = userName;
-        this.idCompany = idCompany;
+        this.bankShortName = bankShortName;
         this.idOrg = idOrg;
         this.societe = societe;
         this.email = email;
@@ -41,12 +41,12 @@ public class AuditUser {
         this.userName = userName;
     }
 
-    public String getIdCompany() {
-        return idCompany;
+    public String getBankShortName() {
+        return bankShortName;
     }
 
-    public void setIdCompany(String idCompany) {
-        this.idCompany = idCompany;
+    public void setBankShortName(String bankShortName) {
+        this.bankShortName = bankShortName;
     }
 
     public Integer getIdOrg() {
