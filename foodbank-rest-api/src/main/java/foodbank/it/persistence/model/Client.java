@@ -92,7 +92,7 @@ private static final long serialVersionUID = -8518218294613491486L;
  @Column(precision=10)
  private Integer genreconj;
  private Short lbanque; 
- @Formula("(select count(*) from dep d where d.lien_mast = id_client)")
+ @Formula("(select count(*) from dep d where d.lien_mast = id_client and d.actif = 1)")
  private Long nbDep;
  @ManyToOne
  @JoinColumn(name="lien_dis")
