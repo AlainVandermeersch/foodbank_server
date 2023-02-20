@@ -314,9 +314,9 @@ public class BanqueServiceImpl implements IBanqueService {
 			predicates.add(bankShortNamePredicate);
 		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
-		organisationQuery.groupBy(organisation.get("lienBanque"), organisation.get("depyN"), organisation.get("daten"), organisation.get("gestBen"));
+		organisationQuery.groupBy(organisation.get("lienBanque"), organisation.get("lienDepot"), organisation.get("daten"), organisation.get("gestBen"));
 		// Note daten field means is reverse of Agreed
-		organisationQuery.multiselect(organisation.get("bankShortName"), organisation.get("depyN"),organisation.get("daten"),organisation.get("gestBen"),criteriaBuilder.count(organisation),
+		organisationQuery.multiselect(organisation.get("bankShortName"), organisation.get("lienDepot"),organisation.get("daten"),organisation.get("gestBen"),criteriaBuilder.count(organisation),
 				criteriaBuilder.sum(organisation.get("nFam")),
 				criteriaBuilder.sum(organisation.get("nPers")),
 				criteriaBuilder.sum(organisation.get("nNour")),
@@ -326,7 +326,7 @@ public class BanqueServiceImpl implements IBanqueService {
 				criteriaBuilder.sum(organisation.get("n1824")),
 				criteriaBuilder.sum(organisation.get("nSen"))
 				);
-		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("bankShortName")));
+		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("bankShortName")),criteriaBuilder.asc(organisation.get("lienDepot")));
 		List<BanqueClientReportDto> results = entityManager.createQuery(organisationQuery).getResultList();
 
 		return results;
