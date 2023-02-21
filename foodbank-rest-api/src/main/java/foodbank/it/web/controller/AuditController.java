@@ -71,6 +71,8 @@ public class AuditController {
 		criteria.setUserName(userName);
 		criteria.setFromDate(fromDate);
 		criteria.setToDate(toDate);
+		criteria.setRights(rights);
+		criteria.setIsJavaApp(isJavaApp);
         Page<Audit> selectedAudits = this.AuditService.findAll(criteria, pageRequest);
 		long totalElements = selectedAudits.getTotalElements();
 
