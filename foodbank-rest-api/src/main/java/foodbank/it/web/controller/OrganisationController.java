@@ -515,6 +515,7 @@ public class OrganisationController {
 				dto.setTotalTeens(entity.getTotalTeens());
 				dto.setTotalYoungAdults(entity.getTotalYoungAdults());
 				dto.setTotalSeniors(entity.getTotalSeniors());
+				dto.setTotalEq(entity.getTotalEq());
 
         return dto;
     }

@@ -1,5 +1,7 @@
 package foodbank.it.persistence.model;
 
+import java.math.BigDecimal;
+
 public class OrgClientsCount {
     private long nbClients;
     private long  nFam;
@@ -16,8 +18,9 @@ public class OrgClientsCount {
 
     private long  n1824;
     private long  nSen;
+    private BigDecimal nEq;
 
-    public OrgClientsCount(long nbClients, long nFam, long nPers, long nNour, long nBebe, long nEnf, long nAdo, long n1824, long nSen) {
+    public OrgClientsCount(long nbClients, long nFam, long nPers, long nNour, long nBebe, long nEnf, long nAdo, long n1824, long nSen, BigDecimal nEq) {
         this.nbClients = nbClients;
         this.nFam = nFam;
         this.nPers = nPers;
@@ -27,6 +30,7 @@ public class OrgClientsCount {
         this.nAdo = nAdo;
         this.n1824 = n1824;
         this.nSen = nSen;
+        this.nEq = nEq;
     }
 
     public long getNbClients() {
@@ -99,6 +103,14 @@ public class OrgClientsCount {
 
     public void setnSen(long nSen) {
         this.nSen = nSen;
+    }
+
+    public BigDecimal getnEq() {
+        return nEq;
+    }
+
+    public void setnEq(BigDecimal nEq) {
+        this.nEq = nEq;
     }
 }
 

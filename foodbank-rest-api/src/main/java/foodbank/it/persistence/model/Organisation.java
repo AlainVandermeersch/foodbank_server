@@ -272,6 +272,8 @@ public class Organisation implements Serializable {
     private long totalYoungAdults;
     @Transient
     private long totalSeniors;
+    @Transient
+    private BigDecimal totalEq;
 
 
     /**
@@ -2346,6 +2348,14 @@ public class Organisation implements Serializable {
 
     public void setTotalPersons(long totalPersons) {
         this.totalPersons = totalPersons;
+    }
+
+    public BigDecimal getTotalEq() {
+        return totalEq;
+    }
+
+    public void setTotalEq(BigDecimal totalEq) {
+        this.totalEq = totalEq;
     }
 
     public long getTotalInfants() {

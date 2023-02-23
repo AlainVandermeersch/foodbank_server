@@ -1,8 +1,6 @@
 package foodbank.it.web.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class OrganisationDto {
 	 
@@ -251,8 +249,7 @@ public class OrganisationDto {
 		private long totalYoungAdults;
 		private long totalSeniors;
 
-
-	    
+		private BigDecimal totalEq;
 
 
 		public int getIdDis() {
@@ -1248,6 +1245,14 @@ public class OrganisationDto {
 		this.totalPersons = totalPersons;
 	}
 
+	public BigDecimal getTotalEq() {
+		return totalEq;
+	}
+
+	public void setTotalEq(BigDecimal totalEq) {
+		this.totalEq = totalEq;
+	}
+
 	public long getTotalInfants() {
 		return totalInfants;
 	}
@@ -1295,4 +1300,5 @@ public class OrganisationDto {
 	public void setTotalYoungAdults(long totalYoungAdults) {
 		this.totalYoungAdults = totalYoungAdults;
 	}
+
 }

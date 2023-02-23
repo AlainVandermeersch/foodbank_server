@@ -298,7 +298,8 @@ public class OrganisationServiceImpl implements IOrganisationService{
 					criteriaBuilder.sum(orgStats.get("nEnf")),
 					criteriaBuilder.sum(orgStats.get("nAdo")),
 					criteriaBuilder.sum(orgStats.get("n1824")),
-					criteriaBuilder.sum(orgStats.get("nSen"))
+					criteriaBuilder.sum(orgStats.get("nSen")),
+					criteriaBuilder.sum(orgStats.get("nEq"))
 			);
 			clientsCount = entityManager.createQuery(orgClientsCountQuery).getSingleResult();
 
@@ -315,6 +316,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			org.setTotalTeens(clientsCount.getnAdo());
 			org.setTotalYoungAdults(clientsCount.getN1824());
 			org.setTotalSeniors(clientsCount.getnSen());
+			org.setTotalEq(clientsCount.getnEq());
 		}
 		return new PageImpl<>(resultList, pageable, clientsCount.getNbClients());
 	}
