@@ -38,7 +38,7 @@ public class CpasController {
 
     @GetMapping("cpases/")
     public Collection<CpasDto> find( @RequestParam String offset, @RequestParam String rows, 
-    		@RequestParam String sortField, @RequestParam String sortOrder, 
+    		@RequestParam String sortField, @RequestParam String sortOrder, @RequestParam(required = false) String lienBanque,
     		@RequestParam(required = false) String searchField,@RequestParam(required = false) String searchValue) {
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
@@ -58,17 +58,34 @@ public class CpasController {
         
         switch(searchField) {
         	case "cpasName":
-        		selectedCpass = this.CpasService.findByCpasNameContaining(searchValue,pageRequest);
-				long totalRecordsName = selectedCpass.getTotalElements();
+                if (!StringUtils.isEmpty(lienBanque)) {
+                    selectedCpass = this.CpasService.findBylBanqueAndCpasNameContaining(Short.parseShort(lienBanque),searchValue,pageRequest);
+                }
+                else {
+                    selectedCpass = this.CpasService.findByCpasNameContaining(searchValue,pageRequest);
+                }
+        		long totalRecordsName = selectedCpass.getTotalElements();
 				selectedCpass.forEach(p -> CpasDtos.add(convertToDto(p, totalRecordsName)));
         		break;
         	case "cpasZip":
-        		selectedCpass = this.CpasService.findByCpasZipStartsWith(searchValue,pageRequest);
+                if (!StringUtils.isEmpty(lienBanque)) {
+                    selectedCpass = this.CpasService.findBylBanqueAndCpasZipStartsWith(Short.parseShort(lienBanque),searchValue,pageRequest);
+                }
+                else {
+                    selectedCpass = this.CpasService.findByCpasZipStartsWith(searchValue,pageRequest);
+                }
+
 				long totalRecordsZip = selectedCpass.getTotalElements();
 				selectedCpass.forEach(p -> CpasDtos.add(convertToDto(p, totalRecordsZip)));
         		break;
         	default:
-        		selectedCpass = this.CpasService.findAll(pageRequest);
+                if (!StringUtils.isEmpty(lienBanque)) {
+                	selectedCpass = this.CpasService.findBylBanque(Short.parseShort(lienBanque),pageRequest);
+                }
+                else {
+                	selectedCpass = this.CpasService.findAll(pageRequest);
+                }
+
 				long totalRecords = selectedCpass.getTotalElements();
 				selectedCpass.forEach(p -> CpasDtos.add(convertToDto(p, totalRecords)));
         }

@@ -12,5 +12,10 @@ public interface ICpasService {
     Page<Cpas> findAll(Pageable pageable);
     Page<Cpas> findByCpasNameContaining(String search, Pageable pageRequest);
     Page<Cpas> findByCpasZipStartsWith(String search, Pageable pageRequest);
-    void delete(int cpasId);	
+    Page<Cpas> findBylBanque(short lBanque, Pageable pageRequest);
+    void delete(int cpasId);
+
+    Page<Cpas> findBylBanqueAndCpasNameContaining(short parseShort, String searchValue, Pageable pageRequest);
+
+    Page<Cpas> findBylBanqueAndCpasZipStartsWith(short parseShort, String searchValue, Pageable pageRequest);
 }
