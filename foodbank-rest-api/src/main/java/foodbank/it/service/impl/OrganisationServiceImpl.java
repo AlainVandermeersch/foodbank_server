@@ -521,7 +521,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
 		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,organisation, searchCriteria);
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));
-		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("idDis")));
+		organisationQuery.orderBy(criteriaBuilder.asc(organisation.get("societe")));
 		TypedQuery<Organisation> query = entityManager.createQuery(organisationQuery);
 		return query.getResultList();
 	}
