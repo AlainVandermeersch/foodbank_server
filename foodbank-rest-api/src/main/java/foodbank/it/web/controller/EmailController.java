@@ -2,6 +2,7 @@ package foodbank.it.web.controller;
 
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
+import com.sun.mail.smtp.SMTPMessage;
 import foodbank.it.service.IFilesStorageService;
 import foodbank.it.service.IMailService;
 import foodbank.it.service.SearchMailListCriteria;
@@ -140,7 +141,7 @@ private IMailService MailService;
 			}
 		});
 
-		MimeMessage email = new MimeMessage(session);
+		MimeMessage email = new SMTPMessage(session);
 // from becomes cc and from  becomes username
 		email.setFrom(new InternetAddress(username));
 		email.addRecipient(javax.mail.Message.RecipientType.CC, new InternetAddress(from));
