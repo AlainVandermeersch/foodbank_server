@@ -134,14 +134,14 @@ private IMailService MailService;
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
-		props.put("mail.smtp.from", fromAddress);
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
 			}
 		});
 
-		MimeMessage email = new SMTPMessage(session);
+		SMTPMessage email = new SMTPMessage(session);
+		email.setEnvelopeFrom(fromAddress);
 // from becomes cc and from  becomes username
 		email.setFrom(new InternetAddress(username));
 		email.addRecipient(javax.mail.Message.RecipientType.CC, new InternetAddress(from));
