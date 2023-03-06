@@ -125,13 +125,13 @@ private IMailService MailService;
 	public static MimeMessage createEmail(String username, String password, String to, String from, String subject, String language,String bodyText, String attachmentFileNames, boolean bccMode)
 			throws MessagingException {
 		Path root = Paths.get("uploads");
-		System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username, password);
+		// System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username, password);
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
-		props.put("mail.smtp.from", new InternetAddress(from));
+		props.put("mail.smtp.from", InternetAddress.parse(from));
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
@@ -174,13 +174,13 @@ private IMailService MailService;
 			 email.setContent(multipart);
 
 		}
-		String headerLine= String.format("----- Please Reply to: %s -----", from);
+		String headerLine= String.format("<p>----- Please Reply to: %s -----</p>", from);
 
 		if (language.equals("fr")) {
-			headerLine= String.format("----- Répondez svp à: %s -----", from);
+			headerLine= String.format("<p>----- Répondez svp à: %s -----</p>", from);
 		}
 		if (language.equals("nl")) {
-			headerLine= String.format("----- Antwoord aub aan: %s -----", from);
+			headerLine= String.format("<p>----- Antwoord aub aan: %s -----</p>", from);
 		}
 		email.addHeaderLine(headerLine);
 		return email;
