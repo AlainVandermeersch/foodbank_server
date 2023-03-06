@@ -174,13 +174,13 @@ private IMailService MailService;
 			 email.setContent(multipart);
 
 		}
-		String headerLine= String.format("<p>----- Please Reply to: %s -----</p>", from);
+		String headerLine= String.format("----- Please Reply to: %s -----", from);
 
 		if (language.equals("fr")) {
-			headerLine= String.format("<p>----- Répondez svp à: %s -----</p>", from);
+			headerLine= String.format("----- Répondez svp à: %s -----", from);
 		}
 		if (language.equals("nl")) {
-			headerLine= String.format("<p>----- Antwoord aub aan: %s -----</p>", from);
+			headerLine= String.format("----- Antwoord aub aan: %s -----", from);
 		}
 		email.addHeaderLine(headerLine);
 		return email;
