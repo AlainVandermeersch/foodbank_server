@@ -131,6 +131,7 @@ private IMailService MailService;
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.from", from);
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
@@ -173,13 +174,13 @@ private IMailService MailService;
 			 email.setContent(multipart);
 
 		}
-		String headerLine= String.format("----- Please Reply to: %s -----", from);
+		String headerLine= String.format("<p>----- Please Reply to: %s -----</p>", from);
 
 		if (language.equals("fr")) {
-			headerLine= String.format("----- Répondez svp à: %s -----", from);
+			headerLine= String.format("<p>----- Répondez svp à: %s -----</p>", from);
 		}
 		if (language.equals("nl")) {
-			headerLine= String.format("----- Antwoord aub aan: %s -----", from);
+			headerLine= String.format("<p>----- Antwoord aub aan: %s -----</p>", from);
 		}
 		email.addHeaderLine(headerLine);
 		return email;
