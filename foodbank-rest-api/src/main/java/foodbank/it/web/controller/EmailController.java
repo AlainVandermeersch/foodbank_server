@@ -108,9 +108,10 @@ private IMailService MailService;
 			String from = newEmail.getFrom();
 			String subject = newEmail.getSubject();
 			String bodyText = newEmail.getBodyText();
+			String language = newEmail.getLanguage();
 			boolean bccMode = newEmail.isBccMode();
 			String attachmentFileNames = newEmail.getAttachmentFileNames();
-			MimeMessage newMimeMessage = createEmail(smtpUser, smtpPassword, to, from, subject, bodyText,attachmentFileNames,bccMode);
+			MimeMessage newMimeMessage = createEmail(smtpUser, smtpPassword, to, from, subject,language, bodyText,attachmentFileNames,bccMode);
 			Transport.send(newMimeMessage);
 			newEmail.setBodyText(" ");
 			return newEmail;
@@ -121,7 +122,7 @@ private IMailService MailService;
 		}
 	}
 
-	public static MimeMessage createEmail(String username, String password, String to, String from, String subject, String bodyText, String attachmentFileNames, boolean bccMode)
+	public static MimeMessage createEmail(String username, String password, String to, String from, String subject, String language,String bodyText, String attachmentFileNames, boolean bccMode)
 			throws MessagingException {
 		Path root = Paths.get("uploads");
 		System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username, password);
@@ -150,7 +151,7 @@ private IMailService MailService;
 
 		email.setSubject(subject);
 		if (attachmentFileNames.length()==0) {
-		email.setContent(bodyText, "text/html; charset=utf-8");
+			email.setContent(bodyText, "text/html; charset=utf-8");
 		}
 		else {
 			Multipart multipart = new MimeMultipart();
@@ -172,6 +173,15 @@ private IMailService MailService;
 			 email.setContent(multipart);
 
 		}
+		String headerLine= String.format("----- Please Reply to: %s -----", from);
+
+		if (language.equals("fr")) {
+			headerLine= String.format("----- Répondez svp à: %s -----", from);
+		}
+		if (language.equals("nl")) {
+			headerLine= String.format("----- Antwoord aub aan: %s -----", from);
+		}
+		email.addHeaderLine(headerLine);
 		return email;
 	}
 	

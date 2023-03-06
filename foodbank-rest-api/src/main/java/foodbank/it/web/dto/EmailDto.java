@@ -4,6 +4,7 @@ public class EmailDto {
 	private String sentDate;
 	private String from;	
 	private String to;
+	private String language;
 	private String subject;
 	private String bodyText;
 	private String attachmentFileNames;
@@ -53,5 +54,13 @@ public class EmailDto {
 
 	public void setBccMode(boolean bccMode) {
 		this.bccMode = bccMode;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 }
