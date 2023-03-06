@@ -125,13 +125,15 @@ private IMailService MailService;
 	public static MimeMessage createEmail(String username, String password, String to, String from, String subject, String language,String bodyText, String attachmentFileNames, boolean bccMode)
 			throws MessagingException {
 		Path root = Paths.get("uploads");
-		// System.out.printf("\nEmailFrom: '%s'. Password: '%s'.\n", username, password);
+		InternetAddress adresses = new InternetAddress(from);
+		String fromAddress= adresses.getAddress();
+		System.out.printf("\nEmailFrom: '%s'.\n", fromAddress);
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
-		props.put("mail.smtp.from", InternetAddress.parse(from));
+		props.put("mail.smtp.from", fromAddress);
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
@@ -151,13 +153,22 @@ private IMailService MailService;
 		email.setReplyTo(InternetAddress.parse(from));
 
 		email.setSubject(subject);
+		String headerLine= String.format("<p>----- Please Reply to: %s -----</p>", fromAddress);
+
+		if (language.equals("fr")) {
+			headerLine= String.format("<p>----- Répondez svp à: %s -----</p>", fromAddress);
+		}
+		if (language.equals("nl")) {
+			headerLine= String.format("<p>----- Antwoord aub aan: %s -----</p>", fromAddress);
+		}
+		String modifiedBodyText = headerLine + bodyText;
 		if (attachmentFileNames.length()==0) {
-			email.setContent(bodyText, "text/html; charset=utf-8");
+			email.setContent(modifiedBodyText , "text/html; charset=utf-8");
 		}
 		else {
 			Multipart multipart = new MimeMultipart();
 			MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent(bodyText, "text/html; charset=utf-8");
+            mimeBodyPart.setContent(modifiedBodyText, "text/html; charset=utf-8");
             multipart.addBodyPart(mimeBodyPart);
 			String[] fileNameArray = attachmentFileNames.split(",");
 			 for (int i = 0; i <fileNameArray.length; i++) {
@@ -174,15 +185,7 @@ private IMailService MailService;
 			 email.setContent(multipart);
 
 		}
-		String headerLine= String.format("<p>----- Please Reply to: %s -----</p>", from);
 
-		if (language.equals("fr")) {
-			headerLine= String.format("<p>----- Répondez svp à: %s -----</p>", from);
-		}
-		if (language.equals("nl")) {
-			headerLine= String.format("<p>----- Antwoord aub aan: %s -----</p>", from);
-		}
-		email.addHeaderLine(headerLine);
 		return email;
 	}
 	
