@@ -134,6 +134,10 @@ private IMailService MailService;
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.from", fromAddress);
+		props.put("mail.smtp.user", username);
+		props.put("mail.smtp.password", password);
+		props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
