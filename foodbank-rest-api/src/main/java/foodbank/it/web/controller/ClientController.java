@@ -197,7 +197,11 @@ public class ClientController {
 		dto.setPrenomsav(entity.getPrenomsav());
 		dto.setGenreconj(entity.getGenreconj());
 		dto.setLbanque(entity.getLbanque());
-		dto.setNbDep(entity.getNbDep());
+		long nbDep = entity.getNbDep();
+		if(entity.getNomconj() != null && !entity.getNomconj().isEmpty()) {
+			nbDep = nbDep + 1;
+		}
+		dto.setNbDep(nbDep);
 		dto.setSociete(societe);
 		dto.setTotalRecords(totalRecords);
 		return dto;
