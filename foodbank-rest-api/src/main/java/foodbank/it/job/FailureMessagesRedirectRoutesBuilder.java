@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -28,18 +29,14 @@ import static javax.mail.Message.RecipientType.TO;
 @Component
 public class FailureMessagesRedirectRoutesBuilder extends RouteBuilder {
 
+    public static final String X_FOODBANKS_MAIL_ORIGINAL_MESSAGE = "X-Foodbanks-Mail-OriginalMessage";
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     @Value("${smtpuser}")
     private String smtpUser;
     @Value("${smtppassword}")
     private String smtpPassword;
 
-    private static final Set<String> FAILURE_FROM_ADDRESSES = Set.of(
-            "mailer-daemon@googlemail.com"
-//            ,
-//            "postmaster@kuurne.be",
-//            "facturatie@sasbrugge.be"
-    );
+    private static final Set<String> FAILURE_FROM_ADDRESSES = Set.of("mailer-daemon@googlemail.com");
 
     @Override
     public void configure() {
@@ -53,40 +50,88 @@ public class FailureMessagesRedirectRoutesBuilder extends RouteBuilder {
                 "username", smtpUser,
                 "password", smtpPassword));
 
-        FAILURE_FROM_ADDRESSES.forEach(fromAddress ->
-                from("imaps://imap.gmail.com:993?" + imapParams + "&searchTerm.from=" + fromAddress)
-                        .to("direct:processEmail")
-        );
+        createOneRouteForEachFailureEmailAddress(imapParams);
+        createRouteForMicrosoftFailureEmails(imapParams);
 
         from("direct:processEmail")
+                .routeId("failure-messages-redirect-processEmail")
                 .process(this::processFailureEmail)
                 .to("smtps://smtp.gmail.com:465?" + smtpParams);
     }
 
+    private void createOneRouteForEachFailureEmailAddress(String imapParams) {
+        FAILURE_FROM_ADDRESSES.forEach(fromAddress ->
+                from("imaps://imap.gmail.com:993?" + imapParams + "&searchTerm.from=" + fromAddress)
+                        .routeId("failure-messages-redirect-"+ fromAddress)
+                        .process(this::extractOriginalMessage)
+                        .filter(this::hasOriginalMessage)
+                        .to("direct:processEmail")
+        );
+    }
+
+    private void createRouteForMicrosoftFailureEmails(String imapParams) {
+        from("imaps://imap.gmail.com:993?" + imapParams + "&searchTerm.subject=Undeliverable:")
+                .routeId("failure-messages-redirect-microsoft-office365-undeliverable")
+                .process(this::extractOriginalMessage)
+                .filter(this::hasOriginalMessage)
+                .filter(this::looksLikeAnOffice365FailureMessage)
+                .to("direct:processEmail");
+    }
+
+    private void extractOriginalMessage(Exchange exchange) throws MessagingException, IOException {
+        MailMessage mailMessage = exchange.getIn(MailMessage.class);
+        Optional<IMAPNestedMessage> originalMessage = getOriginalMessage(mailMessage);
+
+        originalMessage.ifPresent(
+                message -> exchange.getIn().setHeader(X_FOODBANKS_MAIL_ORIGINAL_MESSAGE, message));
+    }
+
+    private boolean hasOriginalMessage(Exchange exchange) {
+        return exchange.getIn().getHeaders().containsKey(X_FOODBANKS_MAIL_ORIGINAL_MESSAGE);
+    }
+
+    private boolean looksLikeAnOffice365FailureMessage(Exchange exchange) {
+        MailMessage mailMessage = exchange.getIn(MailMessage.class);
+        IMAPNestedMessage originalMessage = exchange.getIn().getHeader(X_FOODBANKS_MAIL_ORIGINAL_MESSAGE, IMAPNestedMessage.class);
+
+        try {
+            String failureMessageSubject = mailMessage.getMessage().getSubject();
+            String originalMessageSubject = originalMessage.getSubject();
+            return failureMessageSubject.equals("Undeliverable: " + originalMessageSubject);
+        } catch (MessagingException e) {
+            log.error("Error while processing failure message", e);
+        }
+
+        return false;
+    }
+
     private void processFailureEmail(Exchange exchange) throws MessagingException, IOException {
         MailMessage mailMessage = exchange.getIn(MailMessage.class);
-
+        IMAPNestedMessage originalMessage = exchange.getIn().getHeader(X_FOODBANKS_MAIL_ORIGINAL_MESSAGE, IMAPNestedMessage.class);
 
         Message message = mailMessage.getMessage();
         MimeMessage newMessage = (MimeMessage) message.reply(false);
         log.info("Processing failure email: {} ({})", mailMessage.getMessageId(), message.getSubject());
 
-        Optional<Address[]> originalMessageFrom = getFromAddressOfOriginalMessage(mailMessage);
+        Address[] originalMessageFrom = Arrays.stream(originalMessage.getFrom())
+                .filter(address -> !address.toString().equalsIgnoreCase(smtpUser))
+                .toArray(Address[]::new);
 
-        if (originalMessageFrom.isEmpty()) {
+        if (originalMessageFrom.length == 0) {
+            log.debug("Orignal message from value is {}. No need to redirect", smtpUser);
             return;
         }
 
-        newMessage.setRecipients(TO, originalMessageFrom.orElseThrow(IllegalStateException::new));
+        newMessage.setRecipients(TO, originalMessageFrom);
         newMessage.setSubject("[Foodbanks] " + message.getSubject());
         newMessage.setFrom(new InternetAddress(smtpUser, "Foodbanks Mail Delivery Subsystem"));
         newMessage.setContent((Multipart) message.getContent());
 
         // send the message to the SMTP endpoint
-        exchange.getOut().setBody(newMessage);
+        exchange.getMessage().setBody(newMessage);
     }
 
-    private Optional<Address[]> getFromAddressOfOriginalMessage(MailMessage mailMessage) throws MessagingException, IOException {
+    private Optional<IMAPNestedMessage> getOriginalMessage(MailMessage mailMessage) throws MessagingException, IOException {
         MimeMultipart body = mailMessage.getBody(MimeMultipart.class);
         int count = body.getCount();
 
@@ -95,7 +140,7 @@ public class FailureMessagesRedirectRoutesBuilder extends RouteBuilder {
 
             if (bodyPart.getContentType().equalsIgnoreCase("MESSAGE/RFC822")) {
                 IMAPNestedMessage content = (IMAPNestedMessage) bodyPart.getDataHandler().getContent();
-                return Optional.of(content.getFrom());
+                return Optional.of(content);
             }
         }
 
@@ -115,8 +160,8 @@ public class FailureMessagesRedirectRoutesBuilder extends RouteBuilder {
         CamelContext context = new DefaultCamelContext();
 
         FailureMessagesRedirectRoutesBuilder builder = new FailureMessagesRedirectRoutesBuilder();
-        builder.smtpUser = "XXXX";
-        builder.smtpPassword = "XXXXXXXXXXXXX";
+        builder.smtpUser = "emanuel.ciuca@gmail.com";
+        builder.smtpPassword = "tmbvzixmbygkmsjg";
         context.addRoutes(builder);
         context.start();
         while (true) {
