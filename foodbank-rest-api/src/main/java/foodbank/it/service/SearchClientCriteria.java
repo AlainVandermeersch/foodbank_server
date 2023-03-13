@@ -9,6 +9,7 @@ public class SearchClientCriteria {
 	private String localite;
 	private Integer lienBanque;
 	private Integer lienDis;
+	private Integer lienCpas;
 	private Integer actif;
 	private Boolean suspect;
     private String daten;
@@ -68,6 +69,14 @@ public class SearchClientCriteria {
 
 	public void setLienDis(Integer lienDis) {
 		this.lienDis = lienDis;
+	}
+
+	public Integer getLienCpas() {
+		return lienCpas;
+	}
+
+	public void setLienCpas(Integer lienCpas) {
+		this.lienCpas = lienCpas;
 	}
 
 	public Integer getActif() {

@@ -3,6 +3,7 @@ package foodbank.it.service.impl;
 import foodbank.it.persistence.model.Client;
 import foodbank.it.persistence.repository.IClientDependentRepository;
 import foodbank.it.persistence.repository.IClientRepository;
+import foodbank.it.persistence.repository.ICodePostalRepository;
 import foodbank.it.service.IClientService;
 import foodbank.it.service.SearchClientCriteria;
 import org.springframework.data.domain.Page;
@@ -26,13 +27,16 @@ public class ClientServiceImpl implements IClientService{
 
 	private final IClientRepository ClientRepository;
 	private final IClientDependentRepository ClientDependentRepository;
+	private final ICodePostalRepository CodePostalRepository;
 	private final EntityManager entityManager;
 	
 	public ClientServiceImpl(IClientRepository ClientRepository,
 			IClientDependentRepository ClientDependentRepository,
+			ICodePostalRepository CodePostalRepository,
 			EntityManager entityManager) {
         this.ClientRepository = ClientRepository;
         this.ClientDependentRepository = ClientDependentRepository;
+		this.CodePostalRepository = CodePostalRepository;
 		this.entityManager = entityManager;
 	}
 	@Override
@@ -49,9 +53,18 @@ public class ClientServiceImpl implements IClientService{
 		String localite = searchCriteria.getLocalite();
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
+		Integer lienCpas = searchCriteria.getLienCpas();
 		Integer actif = searchCriteria.getActif();
 		Boolean isSuspect = searchCriteria.getSuspect();
 		String daten = searchCriteria.getDaten();
+		if (lienCpas != null) {
+			CriteriaBuilder.In<String> inClause = criteriaBuilder.in(client.get("cp"));
+			this.CodePostalRepository.findBylCpas(lienCpas).forEach(codePostal -> {
+				inClause.value(String.valueOf(codePostal.getZipCode()));
+			});
+			Predicate lienCpasPredicate = criteriaBuilder.in(client.get("cp")).value(inClause);
+			predicates.add(lienCpasPredicate);
+		}
 
 
 		if (nom != null ) {

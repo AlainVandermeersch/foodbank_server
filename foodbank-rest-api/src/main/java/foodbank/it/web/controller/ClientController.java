@@ -49,7 +49,7 @@ public class ClientController {
 	public Collection<ClientDto> findPaged(@RequestParam String offset, @RequestParam String rows,
 			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String actif,
 			@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
-     		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
+     		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp, @RequestParam(required = false) String lienCpas,
      		@RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
 			@RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
      		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
@@ -70,7 +70,7 @@ public class ClientController {
 		if (actif.equals("0")) {
 			actifInteger = 0;
 		}
-
+		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchClientCriteria criteria = new SearchClientCriteria();
 		criteria.setNom(nom);
 		criteria.setPrenom(prenom);
@@ -79,6 +79,7 @@ public class ClientController {
 		criteria.setLocalite(localite);
 		criteria.setLienBanque(lienBanqueInteger);
 		criteria.setLienDis(lienDisInteger);
+		criteria.setLienCpas(lienCpasInteger);
 		criteria.setActif(actifInteger);
 		criteria.setSuspect(suspect);
 		criteria.setDaten(daten);
@@ -97,10 +98,12 @@ public class ClientController {
 										 @RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
 										 @RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
 										 @RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
-										 @RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
+										 @RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis,
+										 @RequestParam(required = false) String lienCpas) {
 
 		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer actifInteger = 1;
 		if (actif.equals("0")) {
 			actifInteger = 0;
@@ -113,6 +116,7 @@ public class ClientController {
 		criteria.setLocalite(localite);
 		criteria.setLienBanque(lienBanqueInteger);
 		criteria.setLienDis(lienDisInteger);
+		criteria.setLienCpas(lienCpasInteger);
 		criteria.setActif(actifInteger);
 		criteria.setSuspect(suspect);
 		criteria.setDaten(daten);

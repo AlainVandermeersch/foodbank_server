@@ -4,6 +4,7 @@ import foodbank.it.persistence.model.Membre;
 import foodbank.it.persistence.model.OrgClientsCount;
 import foodbank.it.persistence.model.OrgProgram;
 import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.repository.ICodePostalRepository;
 import foodbank.it.persistence.repository.IDepotRepository;
 import foodbank.it.persistence.repository.IOrgProgramRepository;
 import foodbank.it.persistence.repository.IOrganisationRepository;
@@ -31,6 +32,7 @@ import java.util.Optional;
 public class OrganisationServiceImpl implements IOrganisationService{
 
 	private final IOrganisationRepository OrganisationRepository;
+	private final ICodePostalRepository CodePostalRepository;
 	private final IOrgProgramRepository OrgProgramRepository;
 	private final IDepotRepository DepotRepository;
 	private final EntityManager entityManager;
@@ -38,9 +40,11 @@ public class OrganisationServiceImpl implements IOrganisationService{
 	public OrganisationServiceImpl(IOrganisationRepository OrganisationRepository,
 			IOrgProgramRepository OrgProgramRepository,
 			IDepotRepository DepotRepository,
+		    ICodePostalRepository CodePostalRepository,
 			EntityManager entityManager) {
         this.OrganisationRepository = OrganisationRepository;
 		this.DepotRepository = DepotRepository;
+		this.CodePostalRepository = CodePostalRepository;
         this.OrgProgramRepository = OrgProgramRepository;
         this.entityManager = entityManager;
     }
@@ -95,6 +99,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDepot = searchCriteria.getlienDepot();
 		Boolean isDepot = searchCriteria.getIsDepot();
+		Integer lienCpas = searchCriteria.getLienCpas();
 		Boolean isFead = searchCriteria.getIsFead();
 		String birbCode = searchCriteria.getBirbCode();
 		Boolean isAgreed = searchCriteria.getIsAgreed();
@@ -108,6 +113,14 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		String bankShortName = searchCriteria.getBankShortName();
 		Boolean hasLogins = searchCriteria.getHasLogins();
 
+		if (lienCpas != null) {
+			CriteriaBuilder.In<String> inClause = criteriaBuilder.in(organisation.get("cp"));
+			this.CodePostalRepository.findBylCpas(lienCpas).forEach(codePostal -> {
+				inClause.value(String.valueOf(codePostal.getZipCode()));
+			});
+			Predicate lienCpasPredicate = criteriaBuilder.in(organisation.get("cp")).value(inClause);
+			predicates.add(lienCpasPredicate);
+		}
 		if (societe != null ) {
 
 			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");

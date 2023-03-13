@@ -10,6 +10,7 @@ public class SearchOrganisationCriteria {
 	private String nomDepotRamasse;
 	private Integer lienBanque;
 	private Integer lienDepot;
+	private Integer lienCpas;
 	private Boolean isDepot;
 	private Boolean isFead;
 
@@ -213,7 +214,13 @@ public class SearchOrganisationCriteria {
 		this.lienDepot = lienDepot;
 	}
 
+	public Integer getLienCpas() {
+		return lienCpas;
+	}
 
+	public void setLienCpas(Integer lienCpas) {
+		this.lienCpas = lienCpas;
+	}
 
 	public Boolean getGestBen() {
 		return gestBen;

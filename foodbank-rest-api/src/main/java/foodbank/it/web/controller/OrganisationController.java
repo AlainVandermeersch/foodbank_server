@@ -66,6 +66,7 @@ public class OrganisationController {
 	public Collection<OrganisationDto> findAll(
 	  @RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
 	  @RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
+	  @RequestParam(required = false) String lienCpas,
 	  @RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
 	  @RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isFead,
 	  @RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
@@ -88,9 +89,10 @@ public class OrganisationController {
 		if (idDis != null && this.isNumeric(idDis)) {
 			idDisInteger = Integer.parseInt(idDis );
 		}
-
+		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
 		criteria.setIdDis(idDisInteger);
+		criteria.setLienCpas(lienCpasInteger);
 		criteria.setRegId(regIdInteger);
 		criteria.setClasseFBBA(classeFBBAInteger);
 		criteria.setSociete(societe);
@@ -133,7 +135,8 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
      		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
      		@RequestParam(required = false) String bankShortName,@RequestParam(required = false) Boolean hasLogins,
-     		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
+     		@RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis,
+		    @RequestParam(required = false) String lienCpas 	) {
         Page<Organisation> selectedOrganisations = null;
         List<OrganisationDto> OrganisationDtos = new ArrayList<OrganisationDto>();
         int intOffset = Integer.parseInt(offset);
@@ -160,7 +163,7 @@ public class OrganisationController {
         if (idDis != null && this.isNumeric(idDis)) {
         	idDisInteger = Integer.parseInt(idDis );
         }
-
+        Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
 		criteria.setIdDis(idDisInteger);
 		criteria.setRegId(regIdInteger);
@@ -174,6 +177,7 @@ public class OrganisationController {
 		criteria.setLienBanque(lienBanqueInteger);
 		criteria.setlienDepot(lienDepotInteger);
 		criteria.setIsDepot(isDepot);
+		criteria.setLienCpas(lienCpasInteger);
 		criteria.setIsFead(isFead);
 		criteria.setBirbCode(birbCode);
 		criteria.setRefInt(refint);
