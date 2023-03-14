@@ -5,7 +5,6 @@ import foodbank.it.persistence.repository.IDepotRepository;
 import foodbank.it.service.IOrgProgramService;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
-import foodbank.it.service.SearchOrganisationSummariesCriteria;
 import foodbank.it.web.dto.OrgClientReportDto;
 import foodbank.it.web.dto.OrgMemberReportDto;
 import foodbank.it.web.dto.OrganisationDto;
@@ -219,8 +218,10 @@ public class OrganisationController {
 			@RequestParam(required = false)  Boolean depotMissing,
     		@RequestParam(required = false) Boolean cotType,
     		@RequestParam(required = false) String regId,
-    		@RequestParam(required = false) Boolean feadN
-    		) {
+    		@RequestParam(required = false) Boolean feadN,
+			@RequestParam(required = false) String lienCpas,
+			@RequestParam(required = false) Boolean gestBen
+	) {
         Page<Organisation> selectedOrganisations = null;
 
         Pageable pageRequest = PageRequest.of(0, 300, Sort.by("societe").ascending());
@@ -233,8 +234,20 @@ public class OrganisationController {
 		{
 			isDepotGlobal = true;
 		}
-		SearchOrganisationSummariesCriteria criteria = new SearchOrganisationSummariesCriteria(societe, lienBanqueInteger,lienDepotInteger,
-				isDepotGlobal,agreed,actif,cotType,regIdInteger,feadN,bankShortName);
+		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
+	    criteria.setRegId(regIdInteger);
+		criteria.setSociete(societe);
+		criteria.setIsAgreed(agreed);
+		criteria.setActif(actif);
+		criteria.setLienBanque(lienBanqueInteger);
+		criteria.setlienDepot(lienDepotInteger);
+		criteria.setIsDepot(isDepot);
+		criteria.setLienCpas(lienCpasInteger);
+		criteria.setFeadN(feadN);
+		criteria.setCotType(cotType);
+		criteria.setGestBen(gestBen);
+		criteria.setBankShortName(bankShortName);
 		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);
 		
 		List<OrganisationSummaryDto> organisationSummaryDtos = new ArrayList<>();

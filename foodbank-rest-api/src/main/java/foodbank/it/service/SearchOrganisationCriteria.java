@@ -25,6 +25,8 @@ public class SearchOrganisationCriteria {
 	private Boolean feadN;
 	private String bankShortName;
 	private Boolean hasLogins;
+
+	private Boolean cotType;
 	public Integer getIdDis() {
 		return idDis;
 	}
@@ -259,6 +261,13 @@ public class SearchOrganisationCriteria {
 
 	public void setHasLogins(Boolean hasLogins) {
 		this.hasLogins = hasLogins;
+	}
+
+	public Boolean getCotType() {
+		return cotType;
+	}
+	public void setCotType(Boolean cotType) {
+		this.cotType = cotType;
 	}
 	
 }

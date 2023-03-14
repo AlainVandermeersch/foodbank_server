@@ -10,7 +10,6 @@ import foodbank.it.persistence.repository.IOrgProgramRepository;
 import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
-import foodbank.it.service.SearchOrganisationSummariesCriteria;
 import foodbank.it.web.dto.OrgMemberReportDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +23,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class OrganisationServiceImpl implements IOrganisationService{
 
@@ -112,13 +109,20 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Boolean feadN = searchCriteria.getFeadN();
 		String bankShortName = searchCriteria.getBankShortName();
 		Boolean hasLogins = searchCriteria.getHasLogins();
+		Boolean isCotType = searchCriteria.getCotType();
 
 		if (lienCpas != null) {
-			CriteriaBuilder.In<String> inClause = criteriaBuilder.in(organisation.get("cp"));
+			Collection<String> zipCodes = new ArrayList<>();
 			this.CodePostalRepository.findBylCpas(lienCpas).forEach(codePostal -> {
-				inClause.value(String.valueOf(codePostal.getZipCode()));
+				String zipCode = String.valueOf(codePostal.getZipCode());
+				zipCodes.add(zipCode);
 			});
-			Predicate lienCpasPredicate = criteriaBuilder.in(organisation.get("cp")).value(inClause);
+			System.out.println("zipCodes = " + zipCodes);
+			if (zipCodes.size() == 0) {
+				zipCodes.add("0");
+			}
+			Expression<String> userExpression = organisation.get("cp");
+			Predicate lienCpasPredicate = userExpression.in(zipCodes);
 			predicates.add(lienCpasPredicate);
 		}
 		if (societe != null ) {
@@ -277,6 +281,19 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			}
 			predicates.add(hasLoginsPredicate);
 		}
+		if (isCotType != null) {
+
+
+			if (isCotType == true) {
+				Predicate isCotAnnuellePredicate = criteriaBuilder.equal(organisation.get("cotAnnuelle"), 1);
+				predicates.add(isCotAnnuellePredicate);
+			}
+			else {
+				Predicate isCotSupPredicate = criteriaBuilder.equal(organisation.get("cotSup"), 1);
+				predicates.add(isCotSupPredicate);
+			}
+
+		}
 		return predicates;
 	}
 	
@@ -336,90 +353,12 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		return new PageImpl<>(resultList, pageable, 0);
 	}
 	@Override
-	public Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable) {
+	public Page<Organisation> findSummaries(SearchOrganisationCriteria searchCriteria, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Organisation> organisationQuery = criteriaBuilder.createQuery(Organisation.class);
 		Root<Organisation> organisation = organisationQuery.from(Organisation.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,organisation, searchCriteria);
 
-		List<Predicate> predicates = new ArrayList<>();
-		String societe = searchCriteria.getSociete();
-		Integer lienBanque = searchCriteria.getLienBanque();
-		Integer lienDepot = searchCriteria.getLienDepot();
-		Boolean isDepot = searchCriteria.getIsDepot();
-		Boolean actif = searchCriteria.getActif();
-		Boolean isAgreed = searchCriteria.getAgreed();
-		Boolean isCotType = searchCriteria.getCotType();
-		Integer regId = searchCriteria.getRegId();
-		Boolean feadN = searchCriteria.getFeadN();
-		String bankShortName = searchCriteria.getBankShortName();
-		
-		if (societe != null ) {	
-			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
-			predicates.add(prenomPredicate);
-		}
-		if (lienBanque != null) {
-			Predicate lienBanquePredicate = criteriaBuilder.equal(organisation.get("lienBanque"), lienBanque);
-			predicates.add(lienBanquePredicate);
-		}
-		if (bankShortName != null) {
-			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);
-				predicates.add(bankShortNamePredicate);
-			}
-		if (lienDepot != null) {
-			Predicate lienDepotPredicate = criteriaBuilder.equal(organisation.get("lienDepot"), lienDepot);
-			predicates.add(lienDepotPredicate);
-		}
-		if (isDepot != null) {
-			Integer intDepot = 0;
-			if (isDepot== true) {
-				intDepot = 1;
-			}
-			Predicate isDepotPredicate = criteriaBuilder.equal(organisation.get("depyN"), intDepot);
-			predicates.add(isDepotPredicate);
-		}
-		if (isAgreed != null) {
-			// Note daten field means is reverse of Agreed
-			Integer intDaten= 1;
-			if (isAgreed == true) {
-				intDaten = 0;
-			}
-			Predicate isAgreedPredicate = criteriaBuilder.equal(organisation.get("daten"), intDaten);
-			predicates.add(isAgreedPredicate);
-		} 
-		if (actif != null) {
-			Integer intActive = 0;
-			if (actif == true) {
-				intActive = 1;
-			}
-			Predicate isActifPredicate = criteriaBuilder.equal(organisation.get("actif"), intActive);
-			predicates.add(isActifPredicate);
-		} 
-		if (isCotType != null) {
-			
-			
-			if (isCotType == true) {
-				Predicate isCotAnnuellePredicate = criteriaBuilder.equal(organisation.get("cotAnnuelle"), 1);
-				predicates.add(isCotAnnuellePredicate);					
-			} 
-			else {
-			Predicate isCotSupPredicate = criteriaBuilder.equal(organisation.get("cotSup"), 1);
-				predicates.add(isCotSupPredicate);	
-			}
-		
-		} 
-		
-		if (regId != null) {
-			Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId);
-				predicates.add(regIdPredicate);
-		}
-		if (feadN != null) {			
-			Integer intfeadN = 0;
-			if (feadN == true) {
-				intfeadN = 1;
-			}
-			Predicate isfeadNPredicate = criteriaBuilder.equal(organisation.get("feadN"), intfeadN);
-			predicates.add(isfeadNPredicate);
-		}
 		organisationQuery.where(predicates.stream().toArray(Predicate[]::new));	
 		organisationQuery.orderBy(QueryUtils.toOrders(pageable.getSort(), organisation, criteriaBuilder));
 

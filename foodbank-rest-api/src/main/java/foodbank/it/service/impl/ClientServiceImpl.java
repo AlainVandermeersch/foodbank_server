@@ -18,9 +18,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class ClientServiceImpl implements IClientService{
@@ -58,12 +60,20 @@ public class ClientServiceImpl implements IClientService{
 		Boolean isSuspect = searchCriteria.getSuspect();
 		String daten = searchCriteria.getDaten();
 		if (lienCpas != null) {
-			CriteriaBuilder.In<String> inClause = criteriaBuilder.in(client.get("cp"));
+
+			Collection<String> zipCodes = new ArrayList<>();
 			this.CodePostalRepository.findBylCpas(lienCpas).forEach(codePostal -> {
-				inClause.value(String.valueOf(codePostal.getZipCode()));
+				String zipCode = String.valueOf(codePostal.getZipCode());
+				zipCodes.add(zipCode);
 			});
-			Predicate lienCpasPredicate = criteriaBuilder.in(client.get("cp")).value(inClause);
+			System.out.println("zipCodes = " + zipCodes);
+			if (zipCodes.size() == 0) {
+				zipCodes.add("0");
+			}
+			Expression<String> userExpression = client.get("cp");
+			Predicate lienCpasPredicate = userExpression.in(zipCodes);
 			predicates.add(lienCpasPredicate);
+
 		}
 
 

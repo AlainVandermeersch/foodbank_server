@@ -19,7 +19,7 @@ public interface IOrganisationService {
 	Page<Organisation> findPaged(SearchOrganisationCriteria searchCriteria, Pageable pageable);
     List<Organisation> findAll(SearchOrganisationCriteria searchCriteria);
     Iterable<Organisation> findByLienBanque(Short lienBanque);
-	Page<Organisation> findSummaries(SearchOrganisationSummariesCriteria searchCriteria, Pageable pageable);
+	Page<Organisation> findSummaries(SearchOrganisationCriteria searchCriteria, Pageable pageable);
 	List<Organisation> OrgClientReport(Integer lienBanque);
 	List<OrgMemberReportDto> OrgMemberReport(Integer lienBanque);
 	String getAnomalies(Organisation organisation);
