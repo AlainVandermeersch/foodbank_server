@@ -52,6 +52,7 @@ public class ClientController {
      		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp, @RequestParam(required = false) String lienCpas,
      		@RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
 			@RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
+			@RequestParam(required = false) String birb,
      		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
@@ -66,6 +67,7 @@ public class ClientController {
 		}
 		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer birbInteger = Optional.ofNullable(birb).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer actifInteger = 1;
 		if (actif.equals("0")) {
 			actifInteger = 0;
@@ -80,6 +82,7 @@ public class ClientController {
 		criteria.setLienBanque(lienBanqueInteger);
 		criteria.setLienDis(lienDisInteger);
 		criteria.setLienCpas(lienCpasInteger);
+		criteria.setBirb(birbInteger);
 		criteria.setActif(actifInteger);
 		criteria.setSuspect(suspect);
 		criteria.setDaten(daten);
@@ -99,11 +102,12 @@ public class ClientController {
 										 @RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
 										 @RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
 										 @RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis,
-										 @RequestParam(required = false) String lienCpas) {
+										 @RequestParam(required = false) String birb,@RequestParam(required = false) String lienCpas) {
 
 		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer birbInteger = Optional.ofNullable(birb).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer actifInteger = 1;
 		if (actif.equals("0")) {
 			actifInteger = 0;
@@ -118,6 +122,7 @@ public class ClientController {
 		criteria.setLienDis(lienDisInteger);
 		criteria.setLienCpas(lienCpasInteger);
 		criteria.setActif(actifInteger);
+		criteria.setBirb(birbInteger);
 		criteria.setSuspect(suspect);
 		criteria.setDaten(daten);
 		criteria.setDuplicate(duplicate);

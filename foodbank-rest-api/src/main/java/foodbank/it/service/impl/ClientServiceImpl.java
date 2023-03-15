@@ -56,6 +56,7 @@ public class ClientServiceImpl implements IClientService{
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienCpas = searchCriteria.getLienCpas();
+		Integer birb = searchCriteria.getBirb();
 		Integer actif = searchCriteria.getActif();
 		Boolean isSuspect = searchCriteria.getSuspect();
 		String daten = searchCriteria.getDaten();
@@ -111,6 +112,10 @@ public class ClientServiceImpl implements IClientService{
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(client.get("lbanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
+		}
+		if (birb != null) {
+			Predicate birbPredicate = criteriaBuilder.equal(client.get("birb"), birb);
+			predicates.add(birbPredicate);
 		}
 
 		if (lienDis != null) {

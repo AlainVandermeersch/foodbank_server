@@ -10,6 +10,7 @@ public class SearchClientCriteria {
 	private Integer lienBanque;
 	private Integer lienDis;
 	private Integer lienCpas;
+	private Integer birb;
 	private Integer actif;
 	private Boolean suspect;
     private String daten;
@@ -93,6 +94,14 @@ public class SearchClientCriteria {
 
 	public void setDaten(String daten) {
 		this.daten = daten;
+	}
+
+	public Integer getBirb() {
+		return birb;
+	}
+
+	public void setBirb(Integer birb) {
+		this.birb = birb;
 	}
 
 	public Boolean getSuspect() {
