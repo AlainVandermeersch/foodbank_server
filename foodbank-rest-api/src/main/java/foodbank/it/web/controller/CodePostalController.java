@@ -2,6 +2,7 @@ package foodbank.it.web.controller;
 
 import foodbank.it.persistence.model.CodePostal;
 import foodbank.it.service.ICodePostalService;
+import foodbank.it.service.SearchCodePostalCriteria;
 import foodbank.it.web.dto.CodePostalDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CodePostalController {
@@ -29,7 +31,12 @@ public class CodePostalController {
     @GetMapping("zipcodes/")
     public Collection<CodePostalDto> find(@RequestParam String offset, @RequestParam String rows,
                                     @RequestParam String sortField, @RequestParam String sortOrder,
-                                    @RequestParam(required = false) String searchField, @RequestParam(required = false) String searchValue) {
+                                    @RequestParam(required = false) String zipCode,
+                                    @RequestParam(required = false) String city,
+                                    @RequestParam(required = false) String zipCodeCpas,
+                                    @RequestParam(required = false) String cityCpas
+
+    ) {
         int intOffset = Integer.parseInt(offset);
         int intRows = Integer.parseInt(rows);
         int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -41,9 +48,16 @@ public class CodePostalController {
         else {
             pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
+        Integer zipCodeInteger = Optional.ofNullable(zipCode).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        Integer zipCodeCpasInteger = Optional.ofNullable(zipCodeCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+        SearchCodePostalCriteria searchCodePostalCriteria = new SearchCodePostalCriteria();
+        searchCodePostalCriteria.setZipCode(zipCodeInteger);
+        searchCodePostalCriteria.setCity(city);
+        searchCodePostalCriteria.setZipCodeCpas(zipCodeCpasInteger);
+        searchCodePostalCriteria.setCityCpas(cityCpas);
         Page<CodePostal> selectedCps = null;
         List<CodePostalDto> codePostalDtos = new ArrayList<>();
-        selectedCps = CodePostalService.findAll(pageRequest);
+        selectedCps = CodePostalService.findAll(searchCodePostalCriteria,pageRequest);
         long totalRecords = selectedCps.getTotalElements();
         selectedCps.forEach(p -> codePostalDtos.add(convertToDto(p, totalRecords)));
         return codePostalDtos;

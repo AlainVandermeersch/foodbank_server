@@ -1,7 +1,6 @@
 package foodbank.it.service;
 
 import foodbank.it.persistence.model.CodePostal;
-import foodbank.it.persistence.model.Cpas;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,5 +15,5 @@ public interface ICodePostalService {
 
     void delete(Integer zipcode);
 
-    Page<CodePostal> findAll(Pageable pageRequest);
+    Page<CodePostal> findAll(SearchCodePostalCriteria searchCodePostalCriteria, Pageable pageRequest);
 }
