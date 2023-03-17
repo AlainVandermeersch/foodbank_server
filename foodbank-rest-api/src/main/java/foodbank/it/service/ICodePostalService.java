@@ -1,6 +1,9 @@
 package foodbank.it.service;
 
 import foodbank.it.persistence.model.CodePostal;
+import foodbank.it.persistence.model.Cpas;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -12,4 +15,6 @@ public interface ICodePostalService {
     CodePostal save(CodePostal newCodePostal);
 
     void delete(Integer zipcode);
+
+    Page<CodePostal> findAll(Pageable pageRequest);
 }

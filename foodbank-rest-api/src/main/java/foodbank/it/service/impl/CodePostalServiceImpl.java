@@ -1,8 +1,11 @@
 package foodbank.it.service.impl;
 
 import foodbank.it.persistence.model.CodePostal;
+import foodbank.it.persistence.model.Cpas;
 import foodbank.it.persistence.repository.ICodePostalRepository;
 import foodbank.it.service.ICodePostalService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -36,5 +39,10 @@ public class CodePostalServiceImpl implements ICodePostalService {
     @Override
     public void delete(Integer zipcode) {
         this.CodePostalRepository.deleteByZipCode(zipcode);
+    }
+
+    @Override
+    public Page<CodePostal> findAll(Pageable pageRequest) {
+        return this.CodePostalRepository.findAll(pageRequest);
     }
 }
