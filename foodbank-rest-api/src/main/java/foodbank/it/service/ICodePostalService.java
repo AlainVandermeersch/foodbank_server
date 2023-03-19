@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ICodePostalService {
     Optional<CodePostal> findByZipCode(int zipCode);
-    Iterable<CodePostal> findByLCpas(int lCpas);
+    Iterable<CodePostal> findByLcpas(int lcpas);
     void deleteByZipCode(int zipCode);
 
     CodePostal save(CodePostal newCodePostal);

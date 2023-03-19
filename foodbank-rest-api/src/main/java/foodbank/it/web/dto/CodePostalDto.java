@@ -5,7 +5,7 @@ public class CodePostalDto {
 
     private String city;
 
-    private int lCpas;
+    private int lcpas;
 
     private Short zipCodeCpas;
 
@@ -32,12 +32,12 @@ public class CodePostalDto {
         this.city = city;
     }
 
-    public int getlCpas() {
-        return lCpas;
+    public int getLcpas() {
+        return lcpas;
     }
 
-    public void setlCpas(int lCpas) {
-        this.lCpas = lCpas;
+    public void setLcpas(int lcpas) {
+        this.lcpas = lcpas;
     }
 
     public Short getZipCodeCpas() {

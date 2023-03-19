@@ -113,13 +113,13 @@ public class OrganisationServiceImpl implements IOrganisationService{
 
 		if (lienCpas != null) {
 			Collection<String> zipCodes = new ArrayList<>();
-			this.CodePostalRepository.findBylCpas(lienCpas).forEach(codePostal -> {
+			this.CodePostalRepository.findByLcpas(lienCpas).forEach(codePostal -> {
 				String zipCode = String.valueOf(codePostal.getZipCode());
 				zipCodes.add(zipCode);
 			});
 			System.out.println("zipCodes = " + zipCodes);
 			if (zipCodes.size() == 0) {
-				zipCodes.add("0");
+				zipCodes.add("0"); // to force empty list
 			}
 			Expression<String> userExpression = organisation.get("cp");
 			Predicate lienCpasPredicate = userExpression.in(zipCodes);

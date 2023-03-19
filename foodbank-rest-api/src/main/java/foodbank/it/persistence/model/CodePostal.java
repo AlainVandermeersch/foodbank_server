@@ -15,7 +15,7 @@ public class CodePostal implements Serializable {
     @Column(name="com_name", nullable=false, length=30)
     private String city;
     @Column(name="l_cpas", nullable=false)
-    private int lCpas;
+    private int lcpas;
     @Formula("(select b.cpas_zip from cpas b where b.cpas_ID = l_cpas)")
     private Short zipCodeCpas;
     @Formula("(select b.cpas_name from cpas b where b.cpas_ID = l_cpas)")
@@ -41,12 +41,12 @@ public class CodePostal implements Serializable {
         this.city = city;
     }
 
-    public int getLCpas() {
-        return lCpas;
+    public int getLcpas() {
+        return lcpas;
     }
 
-    public void setLCpas(int l_Cpas) {
-        this.lCpas = l_Cpas;
+    public void setLcpas(int lcpas) {
+        this.lcpas = lcpas;
     }
 
     public Short getZipCodeCpas() {
@@ -70,7 +70,7 @@ public class CodePostal implements Serializable {
         return "CodePostal{" +
                 "zipCode=" + zipCode +
                 ", city='" + city + '\'' +
-                ", l_Cpas=" + lCpas +
+                ", l_Cpas=" + lcpas +
                 ", zipCodeCpas=" + zipCodeCpas +
                 ", cityCpas='" + cityCpas + '\'' +
                 ", mailCpas='" + mailCpas + '\'' +
@@ -83,11 +83,11 @@ public class CodePostal implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CodePostal that = (CodePostal) o;
-        return zipCode == that.zipCode && lCpas == that.lCpas && city.equals(that.city);
+        return zipCode == that.zipCode && lcpas == that.lcpas && city.equals(that.city);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(zipCode, city, lCpas);
+        return Objects.hash(zipCode, city, lcpas);
     }
 }

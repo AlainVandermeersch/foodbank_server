@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ICodePostalRepository extends PagingAndSortingRepository<CodePostal, Integer> {
     Optional<CodePostal> findByZipCode(int zipCode);
-    Iterable<CodePostal> findBylCpas(int lCpas);
+    Iterable<CodePostal> findByLcpas(int lcpas);
     void deleteByZipCode(int zipCode);
     Page<CodePostal> findAll( Pageable pageRequest);
 }

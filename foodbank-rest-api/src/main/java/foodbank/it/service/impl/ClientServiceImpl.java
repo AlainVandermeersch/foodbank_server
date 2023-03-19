@@ -63,7 +63,7 @@ public class ClientServiceImpl implements IClientService{
 		if (lienCpas != null) {
 
 			Collection<String> zipCodes = new ArrayList<>();
-			this.CodePostalRepository.findBylCpas(lienCpas).forEach(codePostal -> {
+			this.CodePostalRepository.findByLcpas(lienCpas).forEach(codePostal -> {
 				String zipCode = String.valueOf(codePostal.getZipCode());
 				zipCodes.add(zipCode);
 			});

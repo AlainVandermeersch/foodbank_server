@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -34,11 +35,12 @@ public class CodePostalServiceImpl implements ICodePostalService {
     }
 
     @Override
-    public Iterable<CodePostal> findByLCpas(int lcpas) {
-        return this.CodePostalRepository.findBylCpas(lcpas);
+    public Iterable<CodePostal> findByLcpas(int lcpas) {
+        return this.CodePostalRepository.findByLcpas(lcpas);
     }
 
     @Override
+    @Transactional
     public void deleteByZipCode(int zipCode) {
         this.CodePostalRepository.deleteByZipCode(zipCode);
     }
@@ -49,6 +51,7 @@ public class CodePostalServiceImpl implements ICodePostalService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer zipcode) {
         this.CodePostalRepository.deleteByZipCode(zipcode);
     }
@@ -71,12 +74,12 @@ public class CodePostalServiceImpl implements ICodePostalService {
         }
         String city = searchCodePostalCriteria.getCity();
         if (city != null) {
-            Predicate cityPredicate = criteriaBuilder.equal(codePostal.get("city"), city);
+            Predicate cityPredicate = criteriaBuilder.like(codePostal.get("city"), "%" + city + "%");
             predicates.add(cityPredicate);
         }
         String cityCpas = searchCodePostalCriteria.getCityCpas();
         if (cityCpas != null) {
-            Predicate cityCpasPredicate = criteriaBuilder.equal(codePostal.get("cityCpas"), cityCpas);
+            Predicate cityCpasPredicate = criteriaBuilder.like(codePostal.get("cityCpas"), "%" +cityCpas + "%");
             predicates.add(cityCpasPredicate);
         }
         codePostalQuery.where(predicates.stream().toArray(Predicate[]::new));

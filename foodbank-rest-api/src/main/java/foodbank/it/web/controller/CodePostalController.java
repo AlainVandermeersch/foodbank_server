@@ -66,7 +66,7 @@ public class CodePostalController {
         CodePostalDto dto = new CodePostalDto();
         dto.setZipCode(entity.getZipCode());
         dto.setCity(entity.getCity());
-        dto.setlCpas(entity.getLCpas());
+        dto.setLcpas(entity.getLcpas());
         dto.setCityCpas(entity.getCityCpas());
         dto.setZipCodeCpas(entity.getZipCodeCpas());
         dto.setMailCpas(entity.getMailCpas());
@@ -78,7 +78,7 @@ public class CodePostalController {
         CodePostal entity = new CodePostal();
         entity.setZipCode(dto.getZipCode());
         entity.setCity(dto.getCity());
-        entity.setLCpas(dto.getlCpas());
+        entity.setLcpas(dto.getLcpas());
         return entity;
     }
 
