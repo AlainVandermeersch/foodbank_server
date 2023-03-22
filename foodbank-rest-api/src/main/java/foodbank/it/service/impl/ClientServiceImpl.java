@@ -58,7 +58,7 @@ public class ClientServiceImpl implements IClientService{
 		Integer lienCpas = searchCriteria.getLienCpas();
 		Integer birb = searchCriteria.getBirb();
 		Integer actif = searchCriteria.getActif();
-		Boolean isSuspect = searchCriteria.getSuspect();
+		Boolean coeff = searchCriteria.getCoeff();
 		String daten = searchCriteria.getDaten();
 		if (lienCpas != null) {
 
@@ -126,12 +126,12 @@ public class ClientServiceImpl implements IClientService{
 		Predicate lienActifPredicate = criteriaBuilder.equal(client.get("actif"),actif);
 		predicates.add(lienActifPredicate);
 
-		if (isSuspect != null) {
-			Predicate isSuspectPredicate = criteriaBuilder.equal(client.get("coeff"), 1);
-			if (isSuspect) {
-				isSuspectPredicate = criteriaBuilder.notEqual(client.get("coeff"), 1);
+		if (coeff != null) {
+			Predicate coeffPredicate = criteriaBuilder.equal(client.get("coeff"), 1);
+			if (coeff) {
+				coeffPredicate = criteriaBuilder.notEqual(client.get("coeff"), 1);
 			}
-			predicates.add(isSuspectPredicate);
+			predicates.add(coeffPredicate);
 		}
 
 		return predicates;

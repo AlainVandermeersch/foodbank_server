@@ -50,7 +50,7 @@ public class ClientController {
 			@RequestParam String sortField, @RequestParam String sortOrder,@RequestParam String actif,
 			@RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
      		@RequestParam(required = false) String adresse,@RequestParam(required = false) String cp, @RequestParam(required = false) String lienCpas,
-     		@RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
+     		@RequestParam(required = false) String localite,@RequestParam(required = false) Boolean coeff,
 			@RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
 			@RequestParam(required = false) String birb,
      		@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis) {
@@ -84,7 +84,7 @@ public class ClientController {
 		criteria.setLienCpas(lienCpasInteger);
 		criteria.setBirb(birbInteger);
 		criteria.setActif(actifInteger);
-		criteria.setSuspect(suspect);
+		criteria.setCoeff(coeff);
 		criteria.setDaten(daten);
 		criteria.setDuplicate(duplicate);
 		Page<Client> selectedClients = this.ClientService.findPaged(criteria, pageRequest);
@@ -99,7 +99,7 @@ public class ClientController {
 	public Collection<ClientDto> findAll(@RequestParam String actif,
 										 @RequestParam(required = false) String nom,@RequestParam(required = false) String prenom,
 										 @RequestParam(required = false) String adresse,@RequestParam(required = false) String cp,
-										 @RequestParam(required = false) String localite,@RequestParam(required = false) Boolean suspect,
+										 @RequestParam(required = false) String localite,@RequestParam(required = false) Boolean coeff,
 										 @RequestParam(required = false) String daten,@RequestParam(required = false) String duplicate,
 										 @RequestParam(required = false) String lienBanque, @RequestParam(required = false) String lienDis,
 										 @RequestParam(required = false) String birb,@RequestParam(required = false) String lienCpas) {
@@ -123,7 +123,7 @@ public class ClientController {
 		criteria.setLienCpas(lienCpasInteger);
 		criteria.setActif(actifInteger);
 		criteria.setBirb(birbInteger);
-		criteria.setSuspect(suspect);
+		criteria.setCoeff(coeff);
 		criteria.setDaten(daten);
 		criteria.setDuplicate(duplicate);
 		List<Client> selectedClients = this.ClientService.findAll(criteria);

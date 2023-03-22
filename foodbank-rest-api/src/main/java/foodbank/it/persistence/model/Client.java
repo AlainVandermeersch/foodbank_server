@@ -101,7 +101,10 @@ private static final long serialVersionUID = -8518218294613491486L;
 
 
 public Long getNbDep() {
-	return nbDep;
+	if (nbDep == null) {
+        return 0L;
+    }
+ return nbDep;
 }
 
 

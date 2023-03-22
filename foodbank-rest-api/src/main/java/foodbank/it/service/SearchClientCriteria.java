@@ -12,7 +12,7 @@ public class SearchClientCriteria {
 	private Integer lienCpas;
 	private Integer birb;
 	private Integer actif;
-	private Boolean suspect;
+	private Boolean coeff;
     private String daten;
 	private String duplicate;
 
@@ -104,12 +104,12 @@ public class SearchClientCriteria {
 		this.birb = birb;
 	}
 
-	public Boolean getSuspect() {
-		return suspect;
+	public Boolean getCoeff() {
+		return coeff;
 	}
 
-	public void setSuspect(Boolean suspect) {
-		this.suspect = suspect;
+	public void setCoeff(Boolean coeff) {
+		this.coeff = coeff;
 	}
 
 	public String getDuplicate() {
