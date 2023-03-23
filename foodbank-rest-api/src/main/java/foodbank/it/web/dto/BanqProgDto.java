@@ -36,52 +36,13 @@ public class BanqProgDto {
 	 private String cotAmount; 
 	 private boolean cotSup;
 	 private String cotAmountSup;
+	private String cotTextFr;
+	private String cotTextNl;
 	 private String bankShortName;
 	 
 	
 	 
-	public BanqProgDto(int lienBanque, boolean luam, boolean lupm, boolean tuam, boolean tupm, boolean weam,
-			boolean wepm, boolean tham, boolean thpm, boolean fram, boolean frpm, boolean saam, boolean sapm,
-			boolean sunam, boolean sunpm, String reluam, String relupm, String retuam, String retupm, String reweam,
-			String rewepm, String retham, String rethpm, String refram, String refrpm, String resaam, String resapm,
-			String resunam, String resunpm, boolean cotAnnuelle, String cotAmount, boolean cotSup, String cotAmountSup,
-			String bankShortName) {
-		super();
-		this.lienBanque = lienBanque;
-		this.luam = luam;
-		this.lupm = lupm;
-		this.tuam = tuam;
-		this.tupm = tupm;
-		this.weam = weam;
-		this.wepm = wepm;
-		this.tham = tham;
-		this.thpm = thpm;
-		this.fram = fram;
-		this.frpm = frpm;
-		this.saam = saam;
-		this.sapm = sapm;
-		this.sunam = sunam;
-		this.sunpm = sunpm;
-		this.reluam = reluam;
-		this.relupm = relupm;
-		this.retuam = retuam;
-		this.retupm = retupm;
-		this.reweam = reweam;
-		this.rewepm = rewepm;
-		this.retham = retham;
-		this.rethpm = rethpm;
-		this.refram = refram;
-		this.refrpm = refrpm;
-		this.resaam = resaam;
-		this.resapm = resapm;
-		this.resunam = resunam;
-		this.resunpm = resunpm;
-		this.cotAnnuelle = cotAnnuelle;
-		this.cotAmount = cotAmount;
-		this.cotSup = cotSup;
-		this.cotAmountSup = cotAmountSup;
-		this.bankShortName = bankShortName;
-	}
+
 	public int getLienBanque() {
 		return lienBanque;
 	}
@@ -280,6 +241,23 @@ public class BanqProgDto {
 	public void setCotAmountSup(String cotAmountSup) {
 		this.cotAmountSup = cotAmountSup;
 	}
+
+	public String getCotTextFr() {
+		return cotTextFr;
+	}
+
+	public void setCotTextFr(String cotTextFr) {
+		this.cotTextFr = cotTextFr;
+	}
+
+	public String getCotTextNl() {
+		return cotTextNl;
+	}
+
+	public void setCotTextNl(String cotTextNl) {
+		this.cotTextNl = cotTextNl;
+	}
+
 	public String getBankShortName() {
 		return bankShortName;
 	}

@@ -77,54 +77,14 @@ public class BanqProg implements Serializable {
  private Short cotSup;
  @Column(name="cot_amount_sup", length=6)
  private String cotAmountSup;
+ @Column(name="cot_text_fr")
+ private String cotTextFr;
+ @Column(name="cot_text_nl")
+ private String cotTextNl;
  @Formula("(select d.bank_short_name from banques d where d.bank_id = lien_banque)")
  private String bankShortName;
 
- /** Default constructor. */
- public BanqProg() {
-     super();
- }
 
- public BanqProg(int lienBanque, int luam, int lupm, int tuam, int tupm, int weam, int wepm, int tham, int thpm,
-		int fram, int frpm, int saam, int sapm, int sunam, int sunpm, String reluam, String relupm, String retuam,
-		String retupm, String reweam, String rewepm, String retham, String rethpm, String refram, String refrpm,
-		String resaam, String resapm, String resunam, String resunpm, Short cotAnnuelle, String cotAmount, Short cotSup,
-		String cotAmountSup) {
-	super();
-	this.lienBanque = lienBanque;
-	this.luam = luam;
-	this.lupm = lupm;
-	this.tuam = tuam;
-	this.tupm = tupm;
-	this.weam = weam;
-	this.wepm = wepm;
-	this.tham = tham;
-	this.thpm = thpm;
-	this.fram = fram;
-	this.frpm = frpm;
-	this.saam = saam;
-	this.sapm = sapm;
-	this.sunam = sunam;
-	this.sunpm = sunpm;
-	this.reluam = reluam;
-	this.relupm = relupm;
-	this.retuam = retuam;
-	this.retupm = retupm;
-	this.reweam = reweam;
-	this.rewepm = rewepm;
-	this.retham = retham;
-	this.rethpm = rethpm;
-	this.refram = refram;
-	this.refrpm = refrpm;
-	this.resaam = resaam;
-	this.resapm = resapm;
-	this.resunam = resunam;
-	this.resunpm = resunpm;
-	this.cotAnnuelle = cotAnnuelle;
-	this.cotAmount = cotAmount;
-	this.cotSup = cotSup;
-	this.cotAmountSup = cotAmountSup;	
-}
 
 /**
   * Access method for lienBanque.
@@ -709,6 +669,22 @@ public class BanqProg implements Serializable {
   */
  public String getCotAmountSup() {
      return cotAmountSup;
+ }
+
+ public String getCotTextFr() {
+  return cotTextFr;
+ }
+
+ public void setCotTextFr(String cotTextFr) {
+  this.cotTextFr = cotTextFr;
+ }
+
+ public String getCotTextNl() {
+  return cotTextNl;
+ }
+
+ public void setCotTextNl(String cotTextNl) {
+  this.cotTextNl = cotTextNl;
  }
 
  /**
