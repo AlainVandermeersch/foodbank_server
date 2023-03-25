@@ -78,6 +78,7 @@ public class BanqProgController {
     	boolean boosunpm = entity.getSunpm() == 1;
     	boolean booCotAnnuelle = entity.getCotAnnuelle() == 1;
     	boolean booCotSup = entity.getCotSup() == 1;
+        boolean booCotCustom = entity.getCotTextCustom() == 1;
     	
         BanqProgDto dto = new BanqProgDto();
         dto.setLienBanque(entity.getLienBanque());
@@ -116,6 +117,7 @@ public class BanqProgController {
         dto.setBankShortName(entity.getBankShortName() );
         dto.setCotTextFr(entity.getCotTextFr());
         dto.setCotTextNl(entity.getCotTextNl());
+        dto.setCotTextCustom(booCotCustom);
         return dto;
     }
 
@@ -155,6 +157,7 @@ public class BanqProgController {
         entity.setCotAmount(dto.getCotAmount());
         entity.setCotSup((short) (dto.getCotSup()  ? 1 : 0));
         entity.setCotAmountSup(dto.getCotAmountSup() );
+        entity.setCotTextCustom((short) (dto.isCotTextCustom()  ? 1 : 0));
         entity.setCotTextFr(dto.getCotTextFr());
         entity.setCotTextNl(dto.getCotTextNl());
         return entity;

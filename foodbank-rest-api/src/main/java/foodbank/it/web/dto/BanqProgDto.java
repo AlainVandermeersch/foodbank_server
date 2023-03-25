@@ -36,6 +36,8 @@ public class BanqProgDto {
 	 private String cotAmount; 
 	 private boolean cotSup;
 	 private String cotAmountSup;
+
+	private boolean cotTextCustom;
 	private String cotTextFr;
 	private String cotTextNl;
 	 private String bankShortName;
@@ -240,6 +242,14 @@ public class BanqProgDto {
 	}
 	public void setCotAmountSup(String cotAmountSup) {
 		this.cotAmountSup = cotAmountSup;
+	}
+
+	public boolean isCotTextCustom() {
+		return cotTextCustom;
+	}
+
+	public void setCotTextCustom(boolean cotTextCustom) {
+		this.cotTextCustom = cotTextCustom;
 	}
 
 	public String getCotTextFr() {

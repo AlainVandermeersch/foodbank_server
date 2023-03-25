@@ -77,6 +77,8 @@ public class BanqProg implements Serializable {
  private Short cotSup;
  @Column(name="cot_amount_sup", length=6)
  private String cotAmountSup;
+ @Column(name="cot_text_custom", precision=3)
+ private Short cotTextCustom;
  @Column(name="cot_text_fr")
  private String cotTextFr;
  @Column(name="cot_text_nl")
@@ -669,6 +671,14 @@ public class BanqProg implements Serializable {
   */
  public String getCotAmountSup() {
      return cotAmountSup;
+ }
+
+ public Short getCotTextCustom() {
+  return cotTextCustom;
+ }
+
+ public void setCotTextCustom(Short cotTextCustom) {
+  this.cotTextCustom = cotTextCustom;
  }
 
  public String getCotTextFr() {
