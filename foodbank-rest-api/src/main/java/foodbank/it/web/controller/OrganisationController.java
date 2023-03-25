@@ -63,7 +63,8 @@ public class OrganisationController {
     }
 	@GetMapping("organisationsall/")
 	public Collection<OrganisationDto> findAll(
-	  @RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
+	  @RequestParam(required = false) String societe, @RequestParam(required = false) String societeOrIdDis,
+	  @RequestParam(required = false) String adresse,
 	  @RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
 	  @RequestParam(required = false) String lienCpas,
 	  @RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
@@ -95,6 +96,7 @@ public class OrganisationController {
 		criteria.setRegId(regIdInteger);
 		criteria.setClasseFBBA(classeFBBAInteger);
 		criteria.setSociete(societe);
+		criteria.setSocieteOrIdDis(societeOrIdDis);
 		criteria.setAdresse(adresse);
 		criteria.setIsAgreed(agreed);
 		criteria.setActif(actif);
@@ -124,9 +126,10 @@ public class OrganisationController {
     @GetMapping("organisations/")
     public Collection<OrganisationDto> findPaged( @RequestParam String offset, @RequestParam String rows,
     		@RequestParam String sortField, @RequestParam String sortOrder, 
-    		@RequestParam(required = false) String societe, @RequestParam(required = false) String adresse,
+    		@RequestParam(required = false) String societe,	@RequestParam(required = false) String societeOrIdDis,
+		    @RequestParam(required = false) String adresse,
      		@RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
-			 @RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
+			@RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isFead,
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
@@ -168,6 +171,7 @@ public class OrganisationController {
 		criteria.setRegId(regIdInteger);
 		criteria.setClasseFBBA(classeFBBAInteger);
 		criteria.setSociete(societe);
+		criteria.setSocieteOrIdDis(societeOrIdDis);
 		criteria.setAdresse(adresse);
 		criteria.setIsAgreed(agreed);
 		criteria.setActif(actif);
@@ -208,8 +212,9 @@ public class OrganisationController {
   
     @GetMapping("orgsummaries/")
     public Collection<OrganisationSummaryDto> findSummaries( 
-    		@RequestParam(required = false) String societe, 
-    		@RequestParam(required = false) String lienBanque ,
+    		@RequestParam(required = false) String societe,
+			@RequestParam(required = false) String societeOrIdDis,
+			@RequestParam(required = false) String lienBanque ,
     		@RequestParam(required = false) String bankShortName,
     		@RequestParam(required = false) String lienDepot,
     		@RequestParam(required = false) Boolean agreed,
@@ -238,6 +243,7 @@ public class OrganisationController {
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
 	    criteria.setRegId(regIdInteger);
 		criteria.setSociete(societe);
+		criteria.setSocieteOrIdDis(societeOrIdDis);
 		criteria.setIsAgreed(agreed);
 		criteria.setActif(actif);
 		criteria.setLienBanque(lienBanqueInteger);

@@ -11,8 +11,6 @@ import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IOrganisationService;
 import foodbank.it.service.SearchOrganisationCriteria;
 import foodbank.it.web.dto.OrgMemberReportDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -90,6 +88,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		Integer regId = searchCriteria.getRegId();
 		Integer classeFBBA = searchCriteria.getClasseFBBA();
 		String societe = searchCriteria.getSociete();
+		String societeOrIdDis = searchCriteria.getSocieteOrIdDis();
 		String adresse = searchCriteria.getAdresse();
 		String nomDepot = searchCriteria.getNomDepot();
 		String nomDepotRamasse = searchCriteria.getNomDepotRamasse();
@@ -125,10 +124,23 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			Predicate lienCpasPredicate = userExpression.in(zipCodes);
 			predicates.add(lienCpasPredicate);
 		}
-		if (societe != null ) {
+		if (societeOrIdDis != null ) {
 
-			Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
-			predicates.add(prenomPredicate);
+			try {
+				Predicate idDisPredicate = criteriaBuilder.equal(organisation.get("idDis"), Integer.parseInt(societeOrIdDis));
+				predicates.add(idDisPredicate);
+			} catch (NumberFormatException e) {
+				Predicate societePredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societeOrIdDis.toLowerCase() + "%");
+				predicates.add(societePredicate);
+			}
+
+		}
+		else {
+			if (societe != null) {
+
+				Predicate prenomPredicate = criteriaBuilder.like(organisation.get("societe"), "%" + societe.toLowerCase() + "%");
+				predicates.add(prenomPredicate);
+			}
 		}
 		if (adresse != null ) {
 

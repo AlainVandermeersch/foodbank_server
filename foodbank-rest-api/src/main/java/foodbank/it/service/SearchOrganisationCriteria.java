@@ -5,6 +5,7 @@ public class SearchOrganisationCriteria {
 	private Integer regId;
 	private Integer classeFBBA;
 	private String societe;
+	private String societeOrIdDis;
 	private String adresse;
 	private String nomDepot;
 	private String nomDepotRamasse;
@@ -67,7 +68,13 @@ public class SearchOrganisationCriteria {
 		this.societe = societe;
 	}
 
+	public String getSocieteOrIdDis() {
+		return societeOrIdDis;
+	}
 
+	public void setSocieteOrIdDis(String societeOrIdDis) {
+		this.societeOrIdDis = societeOrIdDis;
+	}
 
 	public String getAdresse() {
 		return adresse;
