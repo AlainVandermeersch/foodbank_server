@@ -256,6 +256,10 @@ public class Organisation implements Serializable {
     private String bankShortName;
     @Formula("(select count(*) from audit a where a.id_dis = id_dis and year(a.date_in) > 2020)")
     long nbLogins;
+    @Formula("(select count(*) from clients a where a.lien_dis = id_dis and a.actif = 1)")
+    long nbRegisteredClients;
+    @Formula("(select max(a.date_upd) from clients a where a.lien_dis = id_dis and a.actif = 1)")
+    LocalDateTime latestClientUpdate;
     @Transient
     private long totalFamilies;
     @Transient
@@ -2356,6 +2360,14 @@ public class Organisation implements Serializable {
 
     public void setTotalEq(BigDecimal totalEq) {
         this.totalEq = totalEq;
+    }
+
+    public long getNbRegisteredClients() {
+        return nbRegisteredClients;
+    }
+
+    public LocalDateTime getLatestClientUpdate() {
+        return latestClientUpdate;
     }
 
     public long getTotalInfants() {

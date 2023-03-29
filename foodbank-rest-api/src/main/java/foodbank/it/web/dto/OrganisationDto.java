@@ -235,6 +235,9 @@ public class OrganisationDto {
 		private String antenneOrgName; // generated when creating dto in controller
 
 		private long nbLogins;
+		long nbRegisteredClients;
+
+		String latestClientUpdate;
 
 		private String anomalies; // generated when creating dto in controller
 	    private Long  totalRecords;
@@ -1165,7 +1168,23 @@ public class OrganisationDto {
 			this.lupdTs = lupdTs;
 		}
 
-		public Short getLienBanque() {
+		public long getNbRegisteredClients() {
+			return nbRegisteredClients;
+		}
+
+		public void setNbRegisteredClients(long nbClients) {
+			this.nbRegisteredClients = nbClients;
+		}
+
+	public String getLatestClientUpdate() {
+		return latestClientUpdate;
+	}
+
+	public void setLatestClientUpdate(String latestClientUpdate) {
+		this.latestClientUpdate = latestClientUpdate;
+	}
+
+	public Short getLienBanque() {
 			return lienBanque;
 		}
 

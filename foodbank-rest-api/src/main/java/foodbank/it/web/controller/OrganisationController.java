@@ -381,7 +381,7 @@ public class OrganisationController {
 		if ( entity.getStatut() != null) {
 			strStatut = entity.getStatut().trim();
 		}
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String lastVisit = "";
 		if (entity.getLastvisit() != null) {
 			lastVisit = entity.getLastvisit().format(formatter);
@@ -389,6 +389,10 @@ public class OrganisationController {
 		String lupTs = "";
 		if (entity.getLupdTs() != null) {
 			lupTs = entity.getLupdTs().format(formatter);
+		}
+		String latestClientUpdate = "";
+		if (entity.getLatestClientUpdate() != null) {
+			latestClientUpdate = entity.getLatestClientUpdate().format(formatter);
 		}
 	 // antenneOrgName is the name of the parent organisation
 	  String antenneOrgName ="";
@@ -528,6 +532,8 @@ public class OrganisationController {
     			dto.setBankShortName(entity.getBankShortName());
 				dto.setAntenneOrgName(antenneOrgName);
     			dto.setNbLogins(entity.getNbLogins());
+				dto.setLatestClientUpdate(latestClientUpdate);
+				dto.setNbRegisteredClients(entity.getNbRegisteredClients());
 				dto.setAnomalies(anomalies);
 				dto.setTotalFamilies(entity.getTotalFamilies());
 				dto.setTotalPersons(entity.getTotalPersons());
