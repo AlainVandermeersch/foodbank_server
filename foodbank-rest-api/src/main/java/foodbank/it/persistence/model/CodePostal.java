@@ -16,8 +16,11 @@ public class CodePostal implements Serializable {
     private String city;
     @Column(name="l_cpas", nullable=false)
     private int lcpas;
+
     @Formula("(select b.cpas_zip from cpas b where b.cpas_ID = l_cpas)")
     private Short zipCodeCpas;
+    @Formula("(select b.l_banque from cpas b where b.cpas_ID = l_cpas)")
+    private Integer lienBanque;
     @Formula("(select b.cpas_name from cpas b where b.cpas_ID = l_cpas)")
     private String cityCpas;
     @Formula("(select b.cpas_mail from cpas b where b.cpas_ID = l_cpas)")
@@ -47,6 +50,10 @@ public class CodePostal implements Serializable {
 
     public void setLcpas(int lcpas) {
         this.lcpas = lcpas;
+    }
+
+    public Integer getLienBanque() {
+        return lienBanque;
     }
 
     public Short getZipCodeCpas() {

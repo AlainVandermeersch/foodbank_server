@@ -62,10 +62,16 @@ public class CodePostalServiceImpl implements ICodePostalService {
         CriteriaQuery<CodePostal> codePostalQuery = criteriaBuilder.createQuery(CodePostal.class);
         Root<CodePostal> codePostal = codePostalQuery.from(CodePostal.class);
         List<Predicate> predicates = new ArrayList<>();
+
         Integer zipCode = searchCodePostalCriteria.getZipCode();
         if (zipCode != null) {
             Predicate zipCodePredicate = criteriaBuilder.equal(codePostal.get("zipCode"), zipCode);
             predicates.add(zipCodePredicate);
+        }
+        Integer lienBanque = searchCodePostalCriteria.getLienBanque();
+        if (lienBanque != null) {
+            Predicate lienBanquePredicate = criteriaBuilder.equal(codePostal.get("lienBanque"), lienBanque);
+            predicates.add(lienBanquePredicate);
         }
         Integer zipCodecPAS = searchCodePostalCriteria.getZipCodeCpas();
         if (zipCodecPAS != null) {

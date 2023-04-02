@@ -6,6 +6,7 @@ public class CodePostalDto {
     private String city;
 
     private int lcpas;
+    private Integer lienBanque;
 
     private Short zipCodeCpas;
 
@@ -22,6 +23,13 @@ public class CodePostalDto {
 
     public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public Integer getLienBanque() {
+        return lienBanque;
+    }
+    public void setLienBanque(Integer lienBanque) {
+        this.lienBanque = lienBanque;
     }
 
     public String getCity() {

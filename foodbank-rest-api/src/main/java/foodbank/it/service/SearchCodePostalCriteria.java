@@ -2,6 +2,7 @@ package foodbank.it.service;
 
 public class SearchCodePostalCriteria {
     private Integer zipCode;
+    private Integer lienBanque;
     private String city;
     private Integer zipCodeCpas;
     private String cityCpas;
@@ -12,6 +13,14 @@ public class SearchCodePostalCriteria {
 
     public void setZipCode(Integer zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public Integer getLienBanque() {
+        return lienBanque;
+    }
+
+    public void setLienBanque(Integer lienBanque) {
+        this.lienBanque = lienBanque;
     }
 
     public String getCity() {

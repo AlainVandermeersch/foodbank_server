@@ -31,6 +31,7 @@ public class CodePostalController {
     @GetMapping("zipcodes/")
     public Collection<CodePostalDto> find(@RequestParam String offset, @RequestParam String rows,
                                     @RequestParam String sortField, @RequestParam String sortOrder,
+                                    @RequestParam(required = false) String lienBanque,
                                     @RequestParam(required = false) String zipCode,
                                     @RequestParam(required = false) String city,
                                     @RequestParam(required = false) String zipCodeCpas,
@@ -48,10 +49,12 @@ public class CodePostalController {
         else {
             pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
+        Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer zipCodeInteger = Optional.ofNullable(zipCode).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer zipCodeCpasInteger = Optional.ofNullable(zipCodeCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         SearchCodePostalCriteria searchCodePostalCriteria = new SearchCodePostalCriteria();
         searchCodePostalCriteria.setZipCode(zipCodeInteger);
+        searchCodePostalCriteria.setLienBanque(lienBanqueInteger);
         searchCodePostalCriteria.setCity(city);
         searchCodePostalCriteria.setZipCodeCpas(zipCodeCpasInteger);
         searchCodePostalCriteria.setCityCpas(cityCpas);
@@ -65,6 +68,7 @@ public class CodePostalController {
     protected CodePostalDto convertToDto(CodePostal entity,long totalRecords) {
         CodePostalDto dto = new CodePostalDto();
         dto.setZipCode(entity.getZipCode());
+        dto.setLienBanque(entity.getLienBanque());
         dto.setCity(entity.getCity());
         dto.setLcpas(entity.getLcpas());
         dto.setCityCpas(entity.getCityCpas());
