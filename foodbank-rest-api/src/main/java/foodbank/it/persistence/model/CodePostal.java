@@ -18,7 +18,7 @@ public class CodePostal implements Serializable {
     private int lcpas;
 
     @Formula("(select b.cpas_zip from cpas b where b.cpas_ID = l_cpas)")
-    private Short zipCodeCpas;
+    private String zipCodeCpas;
     @Formula("(select b.l_banque from cpas b where b.cpas_ID = l_cpas)")
     private Integer lienBanque;
     @Formula("(select b.cpas_name from cpas b where b.cpas_ID = l_cpas)")
@@ -56,7 +56,7 @@ public class CodePostal implements Serializable {
         return lienBanque;
     }
 
-    public Short getZipCodeCpas() {
+    public String getZipCodeCpas() {
         return zipCodeCpas;
     }
 

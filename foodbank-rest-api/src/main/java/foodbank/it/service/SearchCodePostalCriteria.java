@@ -4,7 +4,7 @@ public class SearchCodePostalCriteria {
     private Integer zipCode;
     private Integer lienBanque;
     private String city;
-    private Integer zipCodeCpas;
+    private String zipCodeCpas;
     private String cityCpas;
 
     public Integer getZipCode() {
@@ -31,11 +31,11 @@ public class SearchCodePostalCriteria {
         this.city = city;
     }
 
-    public Integer getZipCodeCpas() {
+    public String getZipCodeCpas() {
         return zipCodeCpas;
     }
 
-    public void setZipCodeCpas(Integer zipCodeCpas) {
+    public void setZipCodeCpas(String zipCodeCpas) {
         this.zipCodeCpas = zipCodeCpas;
     }
 

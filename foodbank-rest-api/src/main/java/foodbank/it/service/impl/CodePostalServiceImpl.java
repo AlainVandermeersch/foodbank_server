@@ -73,7 +73,7 @@ public class CodePostalServiceImpl implements ICodePostalService {
             Predicate lienBanquePredicate = criteriaBuilder.equal(codePostal.get("lienBanque"), lienBanque);
             predicates.add(lienBanquePredicate);
         }
-        Integer zipCodecPAS = searchCodePostalCriteria.getZipCodeCpas();
+        String zipCodecPAS = searchCodePostalCriteria.getZipCodeCpas();
         if (zipCodecPAS != null) {
             Predicate zipCodecPASPredicate = criteriaBuilder.equal(codePostal.get("zipCodeCpas"), zipCodecPAS);
             predicates.add(zipCodecPASPredicate);

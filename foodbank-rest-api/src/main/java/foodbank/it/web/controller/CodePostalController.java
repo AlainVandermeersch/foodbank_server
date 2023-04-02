@@ -20,6 +20,17 @@ import java.util.Optional;
 @RestController
 public class CodePostalController {
     private ICodePostalService CodePostalService;
+    private  boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 
     public CodePostalController(ICodePostalService CodePostalService) {
         this.CodePostalService = CodePostalService;
@@ -50,13 +61,17 @@ public class CodePostalController {
             pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortField).descending());
         }
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        Integer zipCodeInteger = Optional.ofNullable(zipCode).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        Integer zipCodeCpasInteger = Optional.ofNullable(zipCodeCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+
+        Integer zipCodeInteger = null;
+
+        if (this.isNumeric(zipCode)) {
+            zipCodeInteger = Integer.parseInt(zipCode);
+        }
         SearchCodePostalCriteria searchCodePostalCriteria = new SearchCodePostalCriteria();
         searchCodePostalCriteria.setZipCode(zipCodeInteger);
         searchCodePostalCriteria.setLienBanque(lienBanqueInteger);
         searchCodePostalCriteria.setCity(city);
-        searchCodePostalCriteria.setZipCodeCpas(zipCodeCpasInteger);
+        searchCodePostalCriteria.setZipCodeCpas(zipCodeCpas );
         searchCodePostalCriteria.setCityCpas(cityCpas);
         Page<CodePostal> selectedCps = null;
         List<CodePostalDto> codePostalDtos = new ArrayList<>();
@@ -72,7 +87,7 @@ public class CodePostalController {
         dto.setCity(entity.getCity());
         dto.setLcpas(entity.getLcpas());
         dto.setCityCpas(entity.getCityCpas());
-        dto.setZipCodeCpas(entity.getZipCodeCpas());
+        dto.setZipCodeCpas(Short.valueOf(entity.getZipCodeCpas()));
         dto.setMailCpas(entity.getMailCpas());
         dto.setRemCpas(entity.getRemCpas());
         dto.setTotalRecords(totalRecords);
