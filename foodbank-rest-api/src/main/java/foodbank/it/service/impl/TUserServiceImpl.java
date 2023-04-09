@@ -74,6 +74,7 @@ public class TUserServiceImpl implements ITUserService {
 	public void delete(String idUser) {
 		TUserRepository.deleteByIdUser(idUser);
 	}
+
 	private List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder, CriteriaQuery<TUser> tuserQuery, Root<TUser> tuser, SearchTUserCriteria searchCriteria) {
 		List<Predicate> predicates = new ArrayList<>();
 
@@ -96,9 +97,10 @@ public class TUserServiceImpl implements ITUserService {
 		String hasAnomalies = searchCriteria.getHasAnomalies();
 		Boolean classicBanks = searchCriteria.getClassicBanks();
 		Integer lienBat = searchCriteria.getLienBat();
-    	if(lienBat != null) {
-	  		Predicate lienBatPredicate = criteriaBuilder.equal(tuser.get("lienBat"), lienBat);
-	  		predicates.add(lienBatPredicate);
+		Integer lienCpas = searchCriteria.getLienCpas();
+		if(lienBat != null) {
+			Predicate lienBatPredicate = criteriaBuilder.equal(tuser.get("lienBat"), lienBat);
+			predicates.add(lienBatPredicate);
 		}
 		if (idUser != null) {
 
@@ -128,14 +130,12 @@ public class TUserServiceImpl implements ITUserService {
 			predicates.add(rightsPredicate);
 		}
 		if (idCompany != null) {
-			if (idCompany.equals("???"))
-			{
+			if (idCompany.equals("???")) {
 				Predicate idCompanyNullPredicate = criteriaBuilder.isNull(tuser.get("idCompany"));
 				Predicate idCompanyEmptyPredicate = criteriaBuilder.equal(tuser.get("idCompany"),"");
 				Predicate idCompanyNullOrEmptyPredicate = criteriaBuilder.or(idCompanyNullPredicate,idCompanyEmptyPredicate);
 				predicates.add(idCompanyNullOrEmptyPredicate);
-			}
-			else {
+			} else {
 				Predicate idCompanyPredicate = criteriaBuilder.equal(tuser.get("idCompany"), idCompany);
 				predicates.add(idCompanyPredicate);
 			}
@@ -143,6 +143,10 @@ public class TUserServiceImpl implements ITUserService {
 		if (lienBanque != null) {
 			Predicate lienBanquePredicate = criteriaBuilder.equal(tuser.get("lienBanque"), lienBanque);
 			predicates.add(lienBanquePredicate);
+		}
+		if (lienCpas != null) {
+			Predicate lienCpasPredicate = criteriaBuilder.equal(tuser.get("lienCpas"), lienCpas);
+			predicates.add(lienCpasPredicate);
 		}
 		if (idOrg != null) {
 			log.debug("Checking Users with idOrg: %d", idOrg);
@@ -243,14 +247,12 @@ public class TUserServiceImpl implements ITUserService {
 				predicates.add(memberFoundPredicate);
 				Predicate notEqualEmailPredicate = criteriaBuilder.notEqual(tuser.get("email"), tuser.get("membreEmail"));
 				predicates.add(notEqualEmailPredicate);
-			}
-			else if (hasAnomalies.equals("4")) {
+			} else if (hasAnomalies.equals("4")) {
 				Predicate memberFoundPredicate = criteriaBuilder.isNotNull(tuser.get("membreNom"));
 				predicates.add(memberFoundPredicate);
 				Predicate notEqualCompanyPredicate = criteriaBuilder.notEqual(tuser.get("idCompany"), tuser.get("membreBankShortname"));
 				predicates.add(notEqualCompanyPredicate);
-			}
-			else {
+			} else {
 				Predicate memberNotFoundPredicate = criteriaBuilder.isNull(tuser.get("membreNom"));
 				predicates.add(memberNotFoundPredicate);
 			}
@@ -258,6 +260,7 @@ public class TUserServiceImpl implements ITUserService {
 		}
 		return predicates;
 	}
+
 	@Override
 	public List<TUser> findAll(SearchTUserCriteria searchCriteria) {
 
@@ -272,6 +275,7 @@ public class TUserServiceImpl implements ITUserService {
 		List<TUser> resultList = query.getResultList();
 		return resultList;
 	}
+
 	@Override
 	public Page<TUser> findPaged(SearchTUserCriteria searchCriteria, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -284,7 +288,7 @@ public class TUserServiceImpl implements ITUserService {
 
 		TypedQuery<TUser> query = entityManager.createQuery(tuserQuery);
 		long countResult = query.getResultList().size(); // todo: delete this expensive statement and replace it by a
-															// count query
+		// count query
 		// as commented out below if I can make it work with a join
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
@@ -306,11 +310,11 @@ public class TUserServiceImpl implements ITUserService {
 	}
 
 
-
 	@Override
 	public Iterable<TUser> findByLienBanque(Short lienBanque) {
 		return TUserRepository.findByLienBanque(lienBanque);
 	}
+
 	@Override
 	public Iterable<TUser> findByLienBat(int lienBat) {
 		return TUserRepository.findByLienBat(lienBat);

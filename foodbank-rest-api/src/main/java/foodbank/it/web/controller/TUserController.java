@@ -48,7 +48,7 @@ public class TUserController {
 										@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
 										@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
 										@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg,
-										@RequestParam(required = false) String lienBat
+										@RequestParam(required = false) String lienBat,@RequestParam(required = false) String lienCpas
 			) {
 
 		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt)
@@ -59,7 +59,8 @@ public class TUserController {
 				.orElse(null);
 		Integer lienBatInteger = Optional.ofNullable(lienBat).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
-
+		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt)
+				.orElse(null);
 		SearchTUserCriteria criteria = new SearchTUserCriteria();
 		criteria.setIdUser(idUser) ;
 		criteria.setUserName(userName);
@@ -80,6 +81,7 @@ public class TUserController {
 		criteria.setHasAnomalies(hasAnomalies);
 		criteria.setClassicBanks(classicBanks);
 		criteria.setLienBat(lienBatInteger);
+		criteria.setLienCpas(lienCpasInteger);
 		List<TUser> selectedTUsers = this.TUserService.findAll(criteria);
 
 		long nbOfSelectedTusers = selectedTUsers.size();
@@ -100,7 +102,7 @@ public class TUserController {
 			@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
 			@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
 			@RequestParam(required = false) String lienBanque, @RequestParam(required = false) String idOrg,
-			@RequestParam(required = false) String lienBat) {
+			@RequestParam(required = false) String lienBat,@RequestParam(required = false) String lienCpas) {
 		int intOffset = Integer.parseInt(offset);
 		int intRows = Integer.parseInt(rows);
 		int pageNumber = intOffset / intRows; // Java throws away remainder of division
@@ -120,6 +122,8 @@ public class TUserController {
 		Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
 		Integer lienBatInteger = Optional.ofNullable(lienBat).filter(str -> !str.isEmpty()).map(Integer::parseInt)
+				.orElse(null);
+		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt)
 				.orElse(null);
 	
 		SearchTUserCriteria criteria = new SearchTUserCriteria();
@@ -142,6 +146,7 @@ public class TUserController {
 		criteria.setHasAnomalies(hasAnomalies);
 		criteria.setClassicBanks(classicBanks);
 		criteria.setLienBat(lienBatInteger);
+		criteria.setLienCpas(lienCpasInteger);
 
 		Page<TUser> selectedTUsers = this.TUserService.findPaged(criteria, pageRequest);
 		long totalElements = selectedTUsers.getTotalElements();

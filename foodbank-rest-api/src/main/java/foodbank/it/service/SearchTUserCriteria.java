@@ -21,6 +21,7 @@ public class SearchTUserCriteria {
 	private String hasAnomalies;
 	private Boolean classicBanks;
 	private Integer lienBat;
+	private Integer lienCpas;
 
 	public String getIdUser() {
 		return idUser;
@@ -170,6 +171,14 @@ public class SearchTUserCriteria {
 
 	public void setLienDepot(Integer lienDepot) {
 		this.lienDepot = lienDepot;
+	}
+
+	public Integer getLienCpas() {
+		return lienCpas;
+	}
+
+	public void setLienCpas(Integer lienCpas) {
+		this.lienCpas = lienCpas;
 	}
 
 	public String getIdCompany() {
