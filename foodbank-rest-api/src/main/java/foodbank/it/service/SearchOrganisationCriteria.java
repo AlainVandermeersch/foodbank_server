@@ -23,6 +23,8 @@ public class SearchOrganisationCriteria {
 	private Boolean cotSup;
 	private String statut;
 	private Boolean gestBen;
+
+	private Boolean birbyN;
 	private Boolean feadN;
 	private String bankShortName;
 	private Boolean hasLogins;
@@ -236,12 +238,17 @@ public class SearchOrganisationCriteria {
 	}
 
 
-
 	public void setGestBen(Boolean gestBen) {
 		this.gestBen = gestBen;
 	}
 
+	public Boolean getBirbyN() {
+		return birbyN;
+	}
 
+	public void setBirbyN(Boolean birbyN) {
+		this.birbyN = birbyN;
+	}
 
 	public Boolean getFeadN() {
 		return feadN;
