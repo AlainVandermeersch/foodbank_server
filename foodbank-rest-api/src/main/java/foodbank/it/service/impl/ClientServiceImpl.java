@@ -4,6 +4,7 @@ import foodbank.it.persistence.model.Client;
 import foodbank.it.persistence.repository.IClientDependentRepository;
 import foodbank.it.persistence.repository.IClientRepository;
 import foodbank.it.persistence.repository.ICodePostalRepository;
+import foodbank.it.persistence.repository.IOrganisationRepository;
 import foodbank.it.service.IClientService;
 import foodbank.it.service.SearchClientCriteria;
 import org.springframework.data.domain.Page;
@@ -20,25 +21,25 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class ClientServiceImpl implements IClientService{
-
 	private final IClientRepository ClientRepository;
 	private final IClientDependentRepository ClientDependentRepository;
 	private final ICodePostalRepository CodePostalRepository;
+	private final IOrganisationRepository OrganisationRepository;
 	private final EntityManager entityManager;
 	
 	public ClientServiceImpl(IClientRepository ClientRepository,
 			IClientDependentRepository ClientDependentRepository,
 			ICodePostalRepository CodePostalRepository,
+			IOrganisationRepository OrganisationRepository,
 			EntityManager entityManager) {
         this.ClientRepository = ClientRepository;
         this.ClientDependentRepository = ClientDependentRepository;
 		this.CodePostalRepository = CodePostalRepository;
+		this.OrganisationRepository = OrganisationRepository;
 		this.entityManager = entityManager;
 	}
 	@Override
@@ -67,14 +68,19 @@ public class ClientServiceImpl implements IClientService{
 				String zipCode = String.valueOf(codePostal.getZipCode());
 				zipCodes.add(zipCode);
 			});
-			System.out.println("zipCodes = " + zipCodes);
 			if (zipCodes.size() == 0) {
 				zipCodes.add("0");
 			}
-			Expression<String> userExpression = client.get("cp");
-			Predicate lienCpasPredicate = userExpression.in(zipCodes);
+			Expression<String> cpExpression = client.get("cp");
+			Predicate lienCpasPredicate = cpExpression.in(zipCodes);
 			predicates.add(lienCpasPredicate);
-
+			Collection<Integer> ids = new ArrayList<>();
+			this.OrganisationRepository.findByBirbyN((short) 1).forEach(organisation -> {
+				ids.add(organisation.getIdDis());
+			});
+			Expression<Integer> lienDisExpression = client.get("lienDis");
+			Predicate lienDisPredicate = lienDisExpression.in(ids);
+			predicates.add(lienDisPredicate);
 		}
 
 

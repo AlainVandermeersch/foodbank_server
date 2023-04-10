@@ -10,4 +10,6 @@ public interface IOrganisationRepository extends PagingAndSortingRepository<Orga
     Optional<Organisation> findByIdDis(int idDis);
     void deleteByIdDis(int idDis);
     Iterable<Organisation> findByLienBanque(Short lienBanque);
+    Iterable<Organisation> findByBirbyN(Short birbyN);
 }
+
