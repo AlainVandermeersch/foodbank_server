@@ -11,7 +11,7 @@ public class DonateurDto {
    
     private String adresse;
     
-    private short cp;
+    private int cp;
    
     private String city;
    
@@ -53,10 +53,10 @@ public class DonateurDto {
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
-	public short getCp() {
+	public int getCp() {
 		return cp;
 	}
-	public void setCp(short cp) {
+	public void setCp(int cp) {
 		this.cp = cp;
 	}
 	public String getCity() {

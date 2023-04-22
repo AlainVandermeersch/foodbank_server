@@ -31,7 +31,7 @@ public class Donateur implements Serializable {
     @Column(nullable=false, length=100)
     private String adresse;
     @Column(nullable=false, precision=5)
-    private short cp;
+    private int cp;
     @Column(nullable=false, length=50)
     private String city;
     @Column(nullable=false, length=50)
@@ -131,7 +131,7 @@ public class Donateur implements Serializable {
      *
      * @return the current value of cp
      */
-    public short getCp() {
+    public int getCp() {
         return cp;
     }
 
@@ -140,7 +140,7 @@ public class Donateur implements Serializable {
      *
      * @param aCp the new value for cp
      */
-    public void setCp(short aCp) {
+    public void setCp(int aCp) {
         cp = aCp;
     }
 
