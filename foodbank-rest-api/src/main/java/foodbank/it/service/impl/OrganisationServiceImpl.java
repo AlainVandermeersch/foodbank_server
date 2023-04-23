@@ -105,6 +105,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		String refint = searchCriteria.getRefInt();
 		String statut = searchCriteria.getStatut();
 		Boolean gestBen = searchCriteria.getGestBen();
+		Boolean guestHouse = searchCriteria.getGuestHouse();
 		Boolean birbyN = searchCriteria.getBirbyN();
 		Boolean feadN = searchCriteria.getFeadN();
 		String bankShortName = searchCriteria.getBankShortName();
@@ -231,6 +232,14 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			}
 			Predicate isgestBenPredicate = criteriaBuilder.equal(organisation.get("gestBen"), intgestBen);
 			predicates.add(isgestBenPredicate);
+		}
+		if (guestHouse != null) {
+			Integer intGuestHouse = 0;
+			if (guestHouse == true) {
+				intGuestHouse = 1;
+			}
+			Predicate isGuestHousePredicate = criteriaBuilder.equal(organisation.get("msonac"), intGuestHouse);
+			predicates.add(isGuestHousePredicate);
 		}
 		if (birbyN != null) {
 			Integer intbirbyN = 0;

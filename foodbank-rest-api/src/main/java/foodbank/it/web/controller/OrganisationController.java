@@ -72,7 +72,7 @@ public class OrganisationController {
 	  @RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
 	  @RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
 	  @RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
-	  @RequestParam(required = false) Boolean birbyN,
+	  @RequestParam(required = false) Boolean birbyN,@RequestParam(required = false) Boolean guestHouse,
 	  @RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
 	  @RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
 	  @RequestParam(required = false) String bankShortName,@RequestParam(required = false) Boolean hasLogins,
@@ -113,6 +113,7 @@ public class OrganisationController {
 		criteria.setCotSup(cotSup);
 		criteria.setStatut(statut);
 		criteria.setGestBen(gestBen);
+		criteria.setGuestHouse(guestHouse);
 		criteria.setBirbyN(birbyN);
 		criteria.setFeadN(feadN);
 		criteria.setBankShortName(bankShortName);
@@ -136,7 +137,7 @@ public class OrganisationController {
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
      		@RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
-			@RequestParam(required = false) Boolean birbyN,
+			@RequestParam(required = false) Boolean birbyN,@RequestParam(required = false) Boolean guestHouse,
      		@RequestParam(required = false) Boolean cotAnnuelle,@RequestParam(required = false) Boolean cotSup,
      		@RequestParam(required = false) String classeFBBA,@RequestParam(required = false) String statut,
      		@RequestParam(required = false) String bankShortName,@RequestParam(required = false) Boolean hasLogins,
@@ -191,6 +192,7 @@ public class OrganisationController {
 		criteria.setCotSup(cotSup);
 		criteria.setStatut(statut);
 		criteria.setGestBen(gestBen);
+		criteria.setGuestHouse(guestHouse);
 		criteria.setBirbyN(birbyN);
 		criteria.setFeadN(feadN);
 		criteria.setBankShortName(bankShortName);
@@ -230,6 +232,7 @@ public class OrganisationController {
     		@RequestParam(required = false) Boolean feadN,
 			@RequestParam(required = false) String lienCpas,
 			@RequestParam(required = false) Boolean gestBen,
+			@RequestParam(required = false) Boolean guestHouse,
 			@RequestParam(required = false) Boolean birbyN
 	) {
         Page<Organisation> selectedOrganisations = null;
@@ -258,6 +261,7 @@ public class OrganisationController {
 		criteria.setFeadN(feadN);
 		criteria.setCotType(cotType);
 		criteria.setGestBen(gestBen);
+		criteria.setGuestHouse(guestHouse);
 		criteria.setBirbyN(birbyN);
 		criteria.setBankShortName(bankShortName);
 		selectedOrganisations = this.OrganisationService.findSummaries(criteria,pageRequest);

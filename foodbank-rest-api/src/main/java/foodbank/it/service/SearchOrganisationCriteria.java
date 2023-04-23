@@ -23,6 +23,7 @@ public class SearchOrganisationCriteria {
 	private Boolean cotSup;
 	private String statut;
 	private Boolean gestBen;
+	private Boolean guestHouse;
 
 	private Boolean birbyN;
 	private Boolean feadN;
@@ -240,6 +241,14 @@ public class SearchOrganisationCriteria {
 
 	public void setGestBen(Boolean gestBen) {
 		this.gestBen = gestBen;
+	}
+
+	public Boolean getGuestHouse() {
+		return guestHouse;
+	}
+
+	public void setGuestHouse(Boolean guestHouse) {
+		this.guestHouse = guestHouse;
 	}
 
 	public Boolean getBirbyN() {
