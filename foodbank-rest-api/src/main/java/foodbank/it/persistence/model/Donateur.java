@@ -35,7 +35,7 @@ public class Donateur implements Serializable {
     @Column(nullable=false, length=50)
     private String city;
     @Column(nullable=false, length=50)
-    private String pays;
+    private int pays;
     @Column(nullable=false, length=40)
     private String titre;
     @Formula("(select sum(d.amount) from dons d where d.donateur_id = donateur_id)")
@@ -167,7 +167,7 @@ public class Donateur implements Serializable {
      *
      * @return the current value of pays
      */
-    public String getPays() {
+    public int getPays() {
         return pays;
     }
 
@@ -176,7 +176,7 @@ public class Donateur implements Serializable {
      *
      * @param aPays the new value for pays
      */
-    public void setPays(String aPays) {
+    public void setPays(int aPays) {
         pays = aPays;
     }
 

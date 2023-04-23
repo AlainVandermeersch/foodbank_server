@@ -15,7 +15,7 @@ public class DonateurDto {
    
     private String city;
    
-    private String pays;
+    private int pays;
     
     private int donateurId;
 	   
@@ -65,10 +65,10 @@ public class DonateurDto {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getPays() {
+	public int getPays() {
 		return pays;
 	}
-	public void setPays(String pays) {
+	public void setPays(int pays) {
 		this.pays = pays;
 	}
 	public String getTitre() {
