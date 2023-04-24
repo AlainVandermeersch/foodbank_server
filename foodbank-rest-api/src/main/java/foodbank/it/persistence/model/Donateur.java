@@ -36,6 +36,8 @@ public class Donateur implements Serializable {
     private String city;
     @Column(nullable=false, length=50)
     private int pays;
+
+    private String email;
     @Column(nullable=false, length=40)
     private String titre;
     @Formula("(select sum(d.amount) from dons d where d.donateur_id = donateur_id)")
@@ -196,6 +198,14 @@ public class Donateur implements Serializable {
      */
     public void setTitre(String aTitre) {
         titre = aTitre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getTotalDons() {

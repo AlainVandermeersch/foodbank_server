@@ -16,6 +16,8 @@ public class DonateurDto {
     private String city;
    
     private int pays;
+
+	private String email;
     
     private int donateurId;
 	   
@@ -77,6 +79,15 @@ public class DonateurDto {
 	public void setTitre(String titre) {
 		this.titre = titre;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public long getTotalDons() {
 		return totalDons;
 	}

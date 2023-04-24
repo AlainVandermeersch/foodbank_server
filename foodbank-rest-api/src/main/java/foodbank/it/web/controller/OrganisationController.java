@@ -256,7 +256,7 @@ public class OrganisationController {
 		criteria.setActif(actif);
 		criteria.setLienBanque(lienBanqueInteger);
 		criteria.setlienDepot(lienDepotInteger);
-		criteria.setIsDepot(isDepot);
+		criteria.setIsDepot(isDepotGlobal);
 		criteria.setLienCpas(lienCpasInteger);
 		criteria.setFeadN(feadN);
 		criteria.setCotType(cotType);

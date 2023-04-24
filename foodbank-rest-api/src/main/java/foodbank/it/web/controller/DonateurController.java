@@ -112,6 +112,7 @@ public class DonateurController {
         myDonateur.setCity(dto.getCity());
         myDonateur.setPays(dto.getPays());
         myDonateur.setTitre(dto.getTitre());
+        myDonateur.setEmail(dto.getEmail());
     	 return myDonateur;
     }
 
@@ -126,6 +127,7 @@ public class DonateurController {
         dto.setCity(entity.getCity());
         dto.setPays(entity.getPays());
         dto.setTitre(entity.getTitre());
+        dto.setEmail(entity.getEmail());
         if(entity.getTotalDons() != null) {
         	dto.setTotalDons(entity.getTotalDons());
         }
