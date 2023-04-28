@@ -140,7 +140,7 @@ public class AuditServiceImpl implements IAuditService {
 		return predicates;
 	}
 	@Override
-	public Page<Audit> findAll(SearchAuditCriteria searchCriteria, Pageable pageable) {
+	public Page<Audit> findPaged(SearchAuditCriteria searchCriteria, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Audit> auditQuery = criteriaBuilder.createQuery(Audit.class);
 		Root<Audit> audit = auditQuery.from(Audit.class);
@@ -231,7 +231,49 @@ public class AuditServiceImpl implements IAuditService {
 		}
 		return auditUserDtos;
 	}
+	@Override
+	public List<AuditUserDto> findUsers(SearchAuditCriteria criteria) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<AuditUser> auditUserQuery = criteriaBuilder.createQuery(AuditUser.class);
+		Root<Audit> audit = auditUserQuery.from(Audit.class);
+		List<Predicate> predicates = this.createPredicatesForQuery(criteriaBuilder,  audit, criteria);
 
+		auditUserQuery.where(predicates.stream().toArray(Predicate[]::new));
+		auditUserQuery.multiselect(audit.get("user"),audit.get("application"),
+				audit.get("userName"),audit.get("bankShortName"),audit.get("idDis"),
+				audit.get("societe"),audit.get("email"),audit.get("rights"),
+				criteriaBuilder.count(audit));
+		auditUserQuery.groupBy(audit.get("user"), audit.get("application"));
+		auditUserQuery.orderBy(criteriaBuilder.asc(audit.get("user")),criteriaBuilder.asc(audit.get("application")));
+		TypedQuery<AuditUser> query = entityManager.createQuery(auditUserQuery);
+		List<AuditUser> userReports = query.getResultList();
+		List<AuditUserDto> auditUserDtos = new ArrayList<AuditUserDto>();
+		for (AuditUser auditUser : userReports) {
+			AuditUserDto auditUserDto = auditUserDtos.stream()
+					.filter(a -> a.getIdUser().equals(auditUser.getIdUser())).findFirst().orElse(null);
+			if (auditUserDto == null) {
+				auditUserDto = new AuditUserDto();
+				auditUserDto.setIdUser(auditUser.getIdUser());
+				auditUserDto.setUserName(auditUser.getUserName());
+				auditUserDto.setBankShortName(auditUser.getBankShortName());
+				auditUserDto.setIdOrg(auditUser.getIdOrg());
+				auditUserDto.setSociete(auditUser.getSociete());
+				auditUserDto.setEmail(auditUser.getEmail());
+				auditUserDto.setRights(auditUser.getRights());
+				auditUserDto.setLoginCountPHP(0L);
+				auditUserDto.setLoginCountFBIT(0L);
+				auditUserDto.setTotalRecords(0L);
+				auditUserDtos.add(auditUserDto);
+			}
+
+			if ((auditUser.getApplication() != null) && auditUser.getApplication().equals("FBIT")) {
+				auditUserDto.setLoginCountFBIT(auditUser.getLoginCount());
+			} else {
+				auditUserDto.setLoginCountPHP(auditUser.getLoginCount());
+			}
+		}
+		return auditUserDtos;
+	}
 	@Override
 	public List<AuditUserDto> findUsersPaged(SearchAuditCriteria criteria, Pageable pageRequest) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -302,6 +344,8 @@ public class AuditServiceImpl implements IAuditService {
 		return pagedAuditUserDtos;
 
 	}
+
+
 
 	@Override
 	public List<AuditReportDto> report(String bankShortName, String fromDateString, String toDateString, String reportType) {

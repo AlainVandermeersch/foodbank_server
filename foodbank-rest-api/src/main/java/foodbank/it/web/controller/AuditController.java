@@ -37,6 +37,7 @@ public class AuditController {
         this.AuditService = AuditService;
        
     }
+
     @GetMapping("audits/")
     public Collection<AuditDto> find(@RequestParam String offset, @RequestParam String rows, 
     		@RequestParam String sortField, @RequestParam String sortOrder, 
@@ -73,7 +74,7 @@ public class AuditController {
 		criteria.setToDate(toDate);
 		criteria.setRights(rights);
 		criteria.setIsJavaApp(isJavaApp);
-        Page<Audit> selectedAudits = this.AuditService.findAll(criteria, pageRequest);
+        Page<Audit> selectedAudits = this.AuditService.findPaged(criteria, pageRequest);
 		long totalElements = selectedAudits.getTotalElements();
 
 		return selectedAudits.stream()
@@ -121,8 +122,32 @@ public class AuditController {
 		List<AuditUserDto> listAudits = this.AuditService.reportUsers(bankShortName,fromDate,toDate);
 		return listAudits;
 	}
+	@GetMapping("auditusersall/")
+	public List<AuditUserDto> findUsersAll(  @RequestParam(required = false) String societe,
+									   @RequestParam(required = false) String idUser,
+									   @RequestParam(required = false) String userName,
+									   @RequestParam(required = false) String fromDate,
+									   @RequestParam(required = false) String toDate,
+									   @RequestParam(required = false) String idDis,
+									   @RequestParam(required = false) String bankShortName) {
+		Integer idDisInteger = null;
+		if (this.isNumeric(idDis)) {
+			idDisInteger = Integer.parseInt(idDis);
+		}
+		SearchAuditCriteria criteria = new SearchAuditCriteria();
+		criteria.setUser(idUser);
+		criteria.setBankShortName(bankShortName);
+		criteria.setIdDis(idDisInteger);
+		criteria.setSociete(societe);
+		criteria.setUserName(userName);
+		criteria.setFromDate(fromDate);
+		criteria.setToDate(toDate);
+
+		List<AuditUserDto> selectedAuditUserDtos = this.AuditService.findUsers(criteria);
+		return selectedAuditUserDtos;
+	}
 	@GetMapping("auditusers/")
-	public Collection<AuditUserDto> find(@RequestParam String offset, @RequestParam String rows,
+	public Collection<AuditUserDto> findUsersPaged(@RequestParam String offset, @RequestParam String rows,
 										 @RequestParam String sortField, @RequestParam String sortOrder,
 										 @RequestParam(required = false) String societe,
 										 @RequestParam(required = false) String idUser,

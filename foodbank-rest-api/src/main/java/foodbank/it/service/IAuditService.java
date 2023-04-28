@@ -16,7 +16,7 @@ Optional<Audit> findByAuditId(int auditId);
 	
 	Audit save(Audit audit) ;
 
-    Page<Audit> findAll(SearchAuditCriteria searchCriteria, Pageable pageable);	
+    Page<Audit> findPaged(SearchAuditCriteria searchCriteria, Pageable pageable);
    
 
     void delete(int auditId) throws Exception;
@@ -26,4 +26,5 @@ Optional<Audit> findByAuditId(int auditId);
 
 
     List<AuditUserDto> findUsersPaged(SearchAuditCriteria criteria, Pageable pageRequest);
+    List<AuditUserDto> findUsers(SearchAuditCriteria criteria);
 }
