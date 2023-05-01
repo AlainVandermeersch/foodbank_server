@@ -1,4 +1,5 @@
 <?php
+// ceci est un script qui est lancé par cron toutes les nuits et reprend la logique de l'ancien script php compte.php
 // cette fonction calcule l'age en jours et tient compte des années bisextiles.
 function AgeJours($jour, $mois, $annee) {
     $now = time();
@@ -8,36 +9,42 @@ function AgeJours($jour, $mois, $annee) {
     return floor($datediff / (60 * 60 * 24));
 }
 
-// Ce code ventile chaque jour les bénéficiaires /organisation / tranche d'âge et met à jour les populations des organisations;// La seconde partie du code évalue et met à jour les suspensions d'organisation.
+// Ce code ventile chaque jour les bénéficiaires /organisation / tranche d'âge et met à jour les populations des organisations;
+// La seconde partie du code évalue et met à jour les suspensions d'organisation.
 
 echo "Starting population.php at " . date("Y-m-d H:i:s") . "\n";
 $errormsg = "";
+$nbUpdatesCat1 = 0;
+$nbUpdatesCat2 = 0;
+$nbUpdatesCat3 = 0;
+$nbUpdatesCat4 = 0;
+$nbUpdatesSusp = 0;
 while ( true) {
-$host= getenv('MYSQL_HOST');
-$user =getenv('MYSQL_USER');
-$password =getenv('MYSQL_PASSWORD');
-$database =getenv('MYSQL_DATABASE');
+    $host= getenv('MYSQL_HOST');
+    $user =getenv('MYSQL_USER');
+    $password =getenv('MYSQL_PASSWORD');
+    $database =getenv('MYSQL_DATABASE');
 
-$connection= mysqli_connect($host,$user,"$password",$database);
+    $connection= mysqli_connect($host,$user,"$password",$database);
 
-if (mysqli_connect_errno())
-{
+    if (mysqli_connect_errno())
+    {
     $errormsg=  "Failed to connect to MySQL: " . mysqli_connect_error();
     break;
-}
+    }
 
 
 
-$now = time();
-$mydate=date("Y-m-d",$now);
+    $now = time();
+    $mydate=date("Y-m-d",$now);
 
-$prog='';
-$fixinf="update dep set eq = 1 where eq = 0";
-$resfixinf = mysqli_query($connection,$fixinf);
-$reqdis ="SELECT id_dis, nbrefix,lien_depot,lien_banque,msonac,gest_ben,n_pers,n_eq,n_fam,n_nour,n_bebe,n_enf,n_ado,n_18_24,n_sen FROM organisations WHERE 0=0  and actif = 1 and depy_n = 0  ORDER BY societe";
-$resdis= mysqli_query($connection,$reqdis);
-while ($datadis= mysqli_fetch_object($resdis)) // while 1
-{
+    $prog='';
+    $fixinf="update dep set eq = 1 where eq = 0";
+    $resfixinf = mysqli_query($connection,$fixinf);
+    $reqdis ="SELECT id_dis, nbrefix,lien_depot,lien_banque,msonac,gest_ben,n_pers,n_eq,n_fam,n_nour,n_bebe,n_enf,n_ado,n_18_24,n_sen FROM organisations WHERE actif = 1 and depy_n = 0  ORDER BY societe";
+    $resdis= mysqli_query($connection,$reqdis);
+    while ($datadis= mysqli_fetch_object($resdis)) // while 1
+    {
     set_time_limit(120);
 
     $m_ac=$datadis->msonac;
@@ -100,21 +107,21 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
             }
 
             $requete ="UPDATE organisations SET 
-			n_fam='".$countactif."',
-			n_pers='".$countmember."',
-			n_nour='".$countnourisson."',
-			n_bebe='".$countbebe."',
-			n_enf='".$countenf."',
-			n_ado='".$countad."',
-			n_18_24='".$count18_24."',
-			n_sen='".$countsenior."',
-			n_eq='".number_format($pers, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
+            n_fam='".$countactif."',
+            n_pers='".$countmember."',
+            n_nour='".$countnourisson."',
+            n_bebe='".$countbebe."',
+            n_enf='".$countenf."',
+            n_ado='".$countad."',
+            n_18_24='".$count18_24."',
+            n_sen='".$countsenior."',
+            n_eq='".number_format($pers, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
 
             $resultat=mysqli_query($connection,$requete);
             if (!$resultat)
             {
-                echo $requete ;
-                //echo '<br>Il y a une erreur dans le programme 1 de compte.php. Veuillez essayer plus tard'. mysqli_error($connection);
+               $errormsg = "error updating organisation(case 1 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+               break;
             }
             else
             {
@@ -123,19 +130,18 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
                 $resultat=mysqli_query($connection,$requete);
                 if (!$resultat)
                 {
-                    echo $requete;
-                    echo '<br>Il y a une erreur dans l\'insert 1 en population. Veuillez essayer plus tard'. mysqli_error($connection);
+                    $errormsg = "error inserting population record for organisation(case 1 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+                    break;
                 }
                 else
                 {
-                    //echo "Statistiques mises &agrave; jour pour insert 1.";
+                    $nbUpdatesCat1++;
                 }
             }
 
             break;
 
         case 2: //pas maison d'accueil et gestion des bénéficiaires sur le site
-            $drapeau=0; // change lorsque id_dis change
             $countactif=0; // familles/assoc
             $countnourisson=0; // nour/assoc
             $countbebe=0; // bebe/assoc
@@ -150,7 +156,6 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
 
             while ($data= mysqli_fetch_object($resultat)) // while 2
             {
-                $drapeau=1;
                 $lm = $data->id_client;
                 $coef = $data->coeff;
                 $countactif = $countactif +1;
@@ -260,23 +265,23 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
             }
 
             $requete ="UPDATE organisations SET 
-			n_fam='".$countactif."',
-			n_pers='".$countmember."',
-			n_nour='".$countnourisson."',
-			n_bebe='".$countbebe."',
-			n_enf='".$countenf."',
-			n_ado='".$countad."',
-			n_18_24='".$count18_24."',
-			n_sen='".$countsenior."',
-			n_eq='".number_format($counteq, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
+            n_fam='".$countactif."',
+            n_pers='".$countmember."',
+            n_nour='".$countnourisson."',
+            n_bebe='".$countbebe."',
+            n_enf='".$countenf."',
+            n_ado='".$countad."',
+            n_18_24='".$count18_24."',
+            n_sen='".$countsenior."',
+            n_eq='".number_format($counteq, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
 
-            //echo $requete;	
+            //echo $requete;
 
             $resultat=mysqli_query($connection,$requete);
             if (!$resultat)
             {
-                echo $requete ;
-                echo '<br>Il y a une erreur dans le programme  2 compte.php. Veuillez essayer plus tard'. mysqli_error($connection);
+                $errormsg = "error updating organisation(case 2 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+                break;
             }
             else
             {
@@ -285,12 +290,12 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
                 $resultat=mysqli_query($connection,$requete);
                 if (!$resultat)
                 {
-                    echo $requete;
-                    echo '<br>Il y a une erreur dans l\'insert 2 en population. Veuillez essayer plus tard'. mysqli_error($connection);
+                    $errormsg = "error inserting population record for organisation(case 2 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+                    break;
                 }
                 else
                 {
-                    echo "Statistiques mises &agrave; jour pour l'insert 2.";
+                  $nbUpdatesCat2++;
                 }
             }
 
@@ -303,14 +308,13 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
             $countad=0;//ados / association
             $count18_24=0;//jeunes adulres 18-24
             $countsenior=0; //+ 65 ans
-            $countmember=$nfix; // ajout du nombre fixe 
-            $counteq=$nfix; // ajout du nombre fixe 
+            $countmember=$nfix; // ajout du nombre fixe
+            $counteq=$nfix; // ajout du nombre fixe
             $requete ="SELECT * FROM clients WHERE lien_dis=".$datadis->id_dis." and actif=1";
             $resultat= mysqli_query($connection,$requete);
 
             while ($data= mysqli_fetch_object($resultat)) // while 4
             {
-                $drapeau=1;
                 $lm = $data->id_client;
                 $coef = $data->coeff;
                 $countactif = $countactif +1;
@@ -420,21 +424,21 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
             }
 
             $requete ="UPDATE organisations SET 
-			n_fam='".$countactif."',
-			n_pers='".$countmember."',
-			n_nour='".$countnourisson."',
-			n_bebe='".$countbebe."',
-			n_enf='".$countenf."',
-			n_ado='".$countad."',
-			n_18_24='".$count18_24."',
-			n_sen='".$countsenior."',
-			n_eq='".number_format($counteq, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
+            n_fam='".$countactif."',
+            n_pers='".$countmember."',
+            n_nour='".$countnourisson."',
+            n_bebe='".$countbebe."',
+            n_enf='".$countenf."',
+            n_ado='".$countad."',
+            n_18_24='".$count18_24."',
+            n_sen='".$countsenior."',
+            n_eq='".number_format($counteq, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
 
             $resultat=mysqli_query($connection,$requete);
             if (!$resultat)
             {
-                echo $requete ;
-                echo '<br>Il y a une erreur dans le programme 3 compte.php. Veuillez essayer plus tard'. mysqli_error($connection);
+                $errormsg = "error updating organisation(case 3 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+                break;
             }
             else
             {
@@ -443,12 +447,12 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
                 $resultat=mysqli_query($connection,$requete);
                 if (!$resultat)
                 {
-                    echo $requete;
-                    echo '<br>Il y a une erreur dans l\'insert  3 en population. Veuillez essayer plus tard'. mysqli_error($connection);
+                    $errormsg = "error inserting population record for organisation(case 3 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+                    break;
                 }
                 else
                 {
-                    echo "Statistiques mises &agrave; jour pour l'insert 3.";
+                    $nbUpdatesCat3++;
                 }
             }
 
@@ -490,20 +494,20 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
             }
 
             $requete ="UPDATE organisations SET 
-			n_fam='".$countactif."',
-			n_pers='".$countmember."',
-			n_nour='".$countnourisson."',
-			n_bebe='".$countbebe."',
-			n_enf='".$countenf."',
-			n_ado='".$countad."',
-			n_18_24='".$count18_24."',
-			n_sen='".$countsenior."',
-			n_eq='".number_format($counteq, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
+            n_fam='".$countactif."',
+            n_pers='".$countmember."',
+            n_nour='".$countnourisson."',
+            n_bebe='".$countbebe."',
+            n_enf='".$countenf."',
+            n_ado='".$countad."',
+            n_18_24='".$count18_24."',
+            n_sen='".$countsenior."',
+            n_eq='".number_format($counteq, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
             $resultat=mysqli_query($connection,$requete);
             if (!$resultat)
             {
-                echo $requete ;
-                echo '<br>Il y a une erreur dans le programme 4 compte.php. Veuillez esasayer plus tard'. mysqli_error($connection);
+                $errormsg = "error updating organisation(case 4 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+                break;
             }
             else
             {
@@ -512,51 +516,69 @@ while ($datadis= mysqli_fetch_object($resdis)) // while 1
                 $resultat=mysqli_query($connection,$requete);
                 if (!$resultat)
                 {
-                    echo $requete;
-                    echo '<br>Il y a une erreur dans l\'insert 4 en population. Veuillez essayer plus tard'. mysqli_error($connection);
+                    $errormsg = "error inserting population record for organisation(case 4 - see population.php) $datadis->id_dis with $requete . mysqli_error($connection)";
+                    break;
                 }
                 else
                 {
-                    echo "Statistiques mises &agrave; jour pour insert 4.";
+                   $nbUpdatesCat4++;
                 }
             }
 
             break;
-    } // end switch
-} //end while 1
+        } // end switch
+    } //end while 1
 
-////////////////////////////////////////////////////////////////////
-// - le code suivant évalue la date de fin de suspension d'une organisation et annule la suspension 1 jour avant la date de fin.
-$req="select stop_susp,id_dis from organisations where stop_susp <>' '";
-$res=mysqli_query($connection,$req);
-while ($data=mysqli_fetch_object($res))
-{
-    $today=0;
-    $dn=0;
-    $days_susp=0;
-    $id=$data->id_dis;
-    $today = mktime(0,0,0,date("m" ),date("d" ),date("Y" ));
-    $stopsusp = explode("/",$data->stop_susp);
-    $dn=mktime(0,0,0,$stopsusp[1].("m"),$stopsusp[0].("d") ,$stopsusp[2].("Y" ));
-    //echo '$dn='.$dn;'<br>';
-    //echo '$today ='.$today.'&nbsp;&nbsp;<br>';
-    $days_susp=($dn-$today)/100000;
-    //echo '$days_susp='.$days_susp;
-    $daysus=round($days_susp);
-    //echo '$daysus ='.$daysus;
-    if ($daysus < 2) {
-        $req2=mysqli_query($connection,"UPDATE organisations SET stop_susp = ' ', susp = 0 WHERE id_dis =".$id);
-    }
-}
+    ////////////////////////////////////////////////////////////////////
+    // - le code suivant évalue la date de fin de suspension d'une organisation et annule la suspension 1 jour avant la date de fin.
+    $req="select stop_susp,id_dis from organisations where stop_susp <>' '";
+    $res=mysqli_query($connection,$req);
+    while ($data=mysqli_fetch_object($res))
+    {
+        $today=0;
+        $dn=0;
+        $days_susp=0;
+        $id=$data->id_dis;
+        $today = mktime(0,0,0,date("m" ),date("d" ),date("Y" ));
+        $stopsusp = explode("/",$data->stop_susp);
+        $dn=mktime(0,0,0,$stopsusp[1].("m"),$stopsusp[0].("d") ,$stopsusp[2].("Y" ));
+        //echo '$dn='.$dn;'<br>';
+        //echo '$today ='.$today.'&nbsp;&nbsp;<br>';
+        $days_susp=($dn-$today)/100000;
+        //echo '$days_susp='.$days_susp;
+        $daysus=round($days_susp);
+        //echo '$daysus ='.$daysus;
+        if ($daysus < 2) {
+            $req2=mysqli_query($connection,"UPDATE organisations SET stop_susp = ' ', susp = 0 WHERE id_dis =".$id);
+            if (!$req2)
+            {
+                $errormsg = "error stopping suspension(see population.php) for organisation $id with $req2 . mysqli_error($connection)";
+                break;
+            }
+            else
+            {
+                $nbUpdatesSusp++;
+                echo 'population.php: suspension stopped for organisation '.$id.'<br>';
+            }
 
-///// le code suivant enlève les espaces blancs dans le champ n_eq
-$result = mysqli_query($connection,"UPDATE `population` SET `n_eq` = REPLACE(`n_eq`, ' ', '')");
+        }
+    } // end while
+
+    ///// le code suivant enlève les espaces blancs dans le champ n_eq
+    $result = mysqli_query($connection,"UPDATE `population` SET `n_eq` = REPLACE(`n_eq`, ' ', '')");
     break;
-}
-$message = "Update was successful";
+} //end while true
+$nbUpdates= $nbUpdatesCat1 + $nbUpdatesCat2 + $nbUpdatesCat3 + $nbUpdatesCat4 + $nbUpdatesSusp;
+echo 'population.php: '.$nbUpdatesCat1.' organisations updated for case 1<br>';
+echo 'population.php: '.$nbUpdatesCat2.' organisations updated for case 2<br>';
+echo 'population.php: '.$nbUpdatesCat3.' organisations updated for case 3<br>';
+echo 'population.php: '.$nbUpdatesCat4.' organisations updated for case 4<br>';
+echo 'population.php: '.$nbUpdatesSusp.' organisations updated for suspension<br>';
+$message = "Updated $nbUpdates orgs and stopped $nbUpdatesSusp suspensions";
 if ($errormsg != "")
 {
     $message = "Error: " . $errormsg;
+    echo $message;
 }
 $insertQuery_audit_daily = "INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) 
  VALUES ('avdmadmin',10,0,'population','" . substr($message,0,50) . "','Update')";
