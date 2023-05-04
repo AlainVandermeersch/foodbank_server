@@ -8,7 +8,6 @@ while ( true) {
     $user =getenv('MYSQL_USER');
     $password =getenv('MYSQL_PASSWORD');
     $database =getenv('MYSQL_DATABASE');
-
     $connection= mysqli_connect($host,$user,"$password",$database);
 
     if (mysqli_connect_errno())

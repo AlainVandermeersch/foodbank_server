@@ -25,7 +25,8 @@ while ( true) {
     $password =getenv('MYSQL_PASSWORD');
     $database =getenv('MYSQL_DATABASE');
 
-    $connection= mysqli_connect($host,$user,"$password",$database);
+
+    $connection= mysqli_connect($host,$user,$password,$database);
 
     if (mysqli_connect_errno())
     {
@@ -37,6 +38,27 @@ while ( true) {
 
     $now = time();
     $mydate=date("Y-m-d",$now);
+
+    $sql_date_last_run =  "SELECT MAX(date_stat) as lastDate FROM `population` ";
+    $res_sql_date_last_run = mysqli_query($connection, $sql_date_last_run);
+    if (!$res_sql_date_last_run)
+    {
+        $errormsg=  "Error: " . $sql_date_last_run . "<br>" . mysqli_error($connection);
+        break;
+    }
+    if($row = mysqli_fetch_array($res_sql_date_last_run))
+    {
+        if ($row['lastDate'] != null)
+        {
+            $lastDate = $row['lastDate'];
+            if ($lastDate == $mydate)
+            {
+                $errormsg=  "Error: Already run today\n";
+                break;
+            }
+        }
+
+    }
 
     $prog='';
     $fixinf="update dep set eq = 1 where eq = 0";
@@ -158,27 +180,38 @@ while ( true) {
             {
                 $lm = $data->id_client;
                 $coef = $data->coeff;
+                if($coef < 1) {
+                    $coef = 1;
+                }
                 $countactif = $countactif +1;
                 $countmember = $countmember +1;
                 $counteq = $counteq +(1/$coef);
 
-                if (!empty($data->nomconj)) // calcul de l'âge du conjoint
+                if (!empty($data->nomconj) && !empty($data->daten_conj)) // calcul de l'âge du conjoint
                 {
                     $countmember = $countmember +1;
                     $counteq = $counteq +(1/$coef);
                     $datnaissance = explode("/",$data->daten_conj);
-                    $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                    $age = 9000; // default adult age
+                    if (count($datnaissance) == 3) {
+                        $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                    }
+                    if ($age>23741) {
+                        $countsenior=$countsenior+1;
+                    }
+                    if ($age>6570 and $age<8760) {
+                        $count18_24=$count18_24+1;
+                    }
+
                 }
 
-                if ($age>23741) {
-                    $countsenior=$countsenior+1;
-                }
-                if ($age>6570 and $age<8760) {
-                    $count18_24=$count18_24+1;
-                }
+
                 // calcul de l'âge du chef de famille
                 $datnaissance = explode("/",$data->daten);
-                $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                $age = 9000; // default adult age
+                if (count($datnaissance) == 3) {
+                    $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                }
                 if ($age>23741) {
                     $countsenior=$countsenior+1;
                 }
@@ -190,8 +223,14 @@ while ( true) {
                 while ($data2= mysqli_fetch_object($result)) // while 3
                 {
                     $coef=$data2->eq;
+                    if($coef < 1) {
+                        $coef = 1;
+                    }
                     $datnaissance = explode("/",$data2->datenais);
-                    $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);// jour/mois/année = paramètres passés à la fonction Agejours dans fonction_age.php
+                    $age = 9000; // default adult age
+                    if (count($datnaissance) == 3) {
+                        $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                    }
                     if ($age <=182)
                     {
                         $countnourisson = $countnourisson + 1;
@@ -239,30 +278,6 @@ while ( true) {
                 }//end while 3
             }// end while 2
 
-            if($countnourisson == '') {
-                $countnourisson = 0;
-            }
-            if($countmember == '') {
-                $countmember = 0;
-            }
-            if($countactif == '') {
-                $countactif = 0;
-            }
-            if($countbebe == '') {
-                $countbebe = 0;
-            }
-            if($countsenior == '') {
-                $countsenior = 0;
-            }
-            if($countad == '') {
-                $countad = 0;
-            }
-            if($count18_24 == '') {
-                $count18_24 = 0;
-            }
-            if($countenf == '') {
-                $countenf = 0;
-            }
 
             $requete ="UPDATE organisations SET 
             n_fam='".$countactif."',
@@ -275,7 +290,7 @@ while ( true) {
             n_sen='".$countsenior."',
             n_eq='".number_format($counteq, 2, '.', '')."' WHERE id_dis=".$datadis->id_dis."";
 
-            //echo $requete;
+          
 
             $resultat=mysqli_query($connection,$requete);
             if (!$resultat)
@@ -317,6 +332,9 @@ while ( true) {
             {
                 $lm = $data->id_client;
                 $coef = $data->coeff;
+                if($coef < 1) {
+                    $coef = 1;
+                }
                 $countactif = $countactif +1;
                 $countmember = $countmember +1;
                 $counteq = $counteq +(1/$coef);
@@ -326,7 +344,10 @@ while ( true) {
                     $countmember = $countmember +1;
                     $counteq = $counteq +(1/$coef);
                     $datnaissance = explode("/",$data->daten_conj);
-                    $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                    $age = 9000; // default adult age
+                    if (count($datnaissance) == 3) {
+                        $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                    }
                 }
                 if ($age>6570 and $age<8760) {
                     $count18_24=$count18_24+1;
@@ -348,8 +369,14 @@ while ( true) {
                 while ($data2= mysqli_fetch_object($result)) // while 5
                 {
                     $coef=$data2->eq;
+                    if($coef < 1) {
+                        $coef = 1;
+                    }
                     $datnaissance = explode("/",$data2->datenais);
-                    $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                    $age = 9000; // default adult age
+                    if (count($datnaissance) == 3) {
+                        $age = AgeJours($datnaissance[0],$datnaissance[1],$datnaissance[2]);
+                    }
 
                     if ($age <=182)
                     {
@@ -398,30 +425,7 @@ while ( true) {
                 }// end while 5
             }// end while 4
 
-            if($countnourisson == '') {
-                $countnourisson = 0;
-            }
-            if($countmember == '') {
-                $countmember = 0;
-            }
-            if($countactif == '') {
-                $countactif = 0;
-            }
-            if($countbebe == '') {
-                $countbebe = 0;
-            }
-            if($countsenior == '') {
-                $countsenior = 0;
-            }
-            if($countad == '') {
-                $countad = 0;
-            }
-            if($count18_24 == '') {
-                $count18_24 = 0;
-            }
-            if($countenf == '') {
-                $countenf = 0;
-            }
+
 
             $requete ="UPDATE organisations SET 
             n_fam='".$countactif."',
@@ -458,7 +462,6 @@ while ( true) {
 
             break;
         case 4://maison d'accueil et pas de gestion des bénéficiaires sur le site
-            //	echo 'enfants ='.$enf;
             $countactif=$nfix;
             $countmember=$nfix; // nbrefix = nombre de personnes agréées pour maison d'accueil (pas d'enregistrement individuel)
             $counteq=$nfix;
@@ -542,12 +545,11 @@ while ( true) {
         $today = mktime(0,0,0,date("m" ),date("d" ),date("Y" ));
         $stopsusp = explode("/",$data->stop_susp);
         $dn=mktime(0,0,0,$stopsusp[1].("m"),$stopsusp[0].("d") ,$stopsusp[2].("Y" ));
-        //echo '$dn='.$dn;'<br>';
-        //echo '$today ='.$today.'&nbsp;&nbsp;<br>';
+     
         $days_susp=($dn-$today)/100000;
-        //echo '$days_susp='.$days_susp;
+     
         $daysus=round($days_susp);
-        //echo '$daysus ='.$daysus;
+        
         if ($daysus < 2) {
             $req2=mysqli_query($connection,"UPDATE organisations SET stop_susp = ' ', susp = 0 WHERE id_dis =".$id);
             if (!$req2)
@@ -558,7 +560,7 @@ while ( true) {
             else
             {
                 $nbUpdatesSusp++;
-                echo 'population.php: suspension stopped for organisation '.$id.'<br>';
+                echo 'population.php: suspension stopped for organisation '.$id. "\n";;
             }
 
         }
@@ -569,11 +571,16 @@ while ( true) {
     break;
 } //end while true
 $nbUpdates= $nbUpdatesCat1 + $nbUpdatesCat2 + $nbUpdatesCat3 + $nbUpdatesCat4 + $nbUpdatesSusp;
-echo 'population.php: '.$nbUpdatesCat1.' organisations updated for case 1<br>';
-echo 'population.php: '.$nbUpdatesCat2.' organisations updated for case 2<br>';
-echo 'population.php: '.$nbUpdatesCat3.' organisations updated for case 3<br>';
-echo 'population.php: '.$nbUpdatesCat4.' organisations updated for case 4<br>';
-echo 'population.php: '.$nbUpdatesSusp.' organisations updated for suspension<br>';
+echo 'population.php: '.$nbUpdatesCat1.' organisations updated for case 1' . "\n";
+
+echo 'population.php: '.$nbUpdatesCat2.' organisations updated for case 2' . "\n";
+
+echo 'population.php: '.$nbUpdatesCat3.' organisations updated for case 3' . "\n";
+
+echo 'population.php: '.$nbUpdatesCat4.' organisations updated for case 4' . "\n";
+
+echo 'population.php: '.$nbUpdatesSusp.' organisations updated for suspension' . "\n";
+
 $message = "Updated $nbUpdates orgs and stopped $nbUpdatesSusp suspensions";
 if ($errormsg != "")
 {
@@ -586,10 +593,10 @@ $sql = $connection->query($insertQuery_audit_daily);
 if (!$sql)
 {
     $errormsg=  "Failed to execute insert daily audit  query: " . $connection->error;
-    echo "movements summarize.php failed to insert daily statistics in auditchanges table:" . $errormsg . "\n";
+    echo "population.php failed to insert daily statistics in auditchanges table:" . $errormsg . "\n";
 }
 
 
 $connection->close();
-echo "movements summarize.php ended at " . date("Y-m-d H:i:s") . "\n";
+echo "population.php ended at " . date("Y-m-d H:i:s") . "\n";
 ?>
