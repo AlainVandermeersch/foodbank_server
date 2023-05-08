@@ -34,6 +34,11 @@ public class MovementDaily implements Serializable
     private LocalDateTime lastupdated;
     @Formula("(select d.lien_depot from organisations d where d.id_dis = id_org)")
     private Integer lienDepot;
+    @Formula("(select d.n_fam from organisations d where d.id_dis = id_org)")
+    private Long nfamilies;
+    @Formula("(select d.n_pers from organisations d where d.id_dis = id_org)")
+    private Long npersons;
+
 
     public String getDay() {
         return day.toString();
@@ -90,6 +95,13 @@ public class MovementDaily implements Serializable
 
     public Integer getLienDepot() {
         return lienDepot;
+    }
+
+    public Long getnfamilies() {
+        return nfamilies;
+    }
+    public Long getnpersons() {
+        return npersons;
     }
 
     @Override

@@ -50,7 +50,7 @@ public class MovementServiceImpl implements IMovementService {
         MovementMonthlyQuery.where(predicates.stream().toArray(Predicate[]::new));
       
         MovementMonthlyQuery.multiselect(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"),
-                MovementMonthly.get("category"),criteriaBuilder.sum(MovementMonthly.get("quantity")));
+                MovementMonthly.get("category"),criteriaBuilder.sum(MovementMonthly.get("quantity")),criteriaBuilder.sum(MovementMonthly.get("nfamilies")),criteriaBuilder.sum(MovementMonthly.get("npersons")));
         MovementMonthlyQuery.groupBy(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("category"));
         MovementMonthlyQuery.orderBy(criteriaBuilder.asc(MovementMonthly.get("month")), criteriaBuilder.asc(MovementMonthly.get("bankShortName")), criteriaBuilder.asc(MovementMonthly.get("category")));
         List<MovementMonthlyCountbyBank> results = entityManager.createQuery(MovementMonthlyQuery).getResultList();
@@ -89,7 +89,8 @@ public class MovementServiceImpl implements IMovementService {
         MovementMonthlyQuery.where(predicates.stream().toArray(Predicate[]::new));
         if (idDepot != null) {
             MovementMonthlyQuery.multiselect(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"),
-                    MovementMonthly.get("category"), MovementMonthly.get("idOrg"), MovementMonthly.get("orgname"),criteriaBuilder.sum(MovementMonthly.get("quantity")));
+                    MovementMonthly.get("category"), MovementMonthly.get("idOrg"), MovementMonthly.get("orgname"),
+                    criteriaBuilder.sum(MovementMonthly.get("quantity")),criteriaBuilder.sum(MovementMonthly.get("nfamilies")),criteriaBuilder.sum(MovementMonthly.get("npersons")));
             MovementMonthlyQuery.groupBy(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("idOrg"), MovementMonthly.get("category"));
             MovementMonthlyQuery.orderBy(criteriaBuilder.asc(MovementMonthly.get("month")), criteriaBuilder.asc(MovementMonthly.get("bankShortName")), criteriaBuilder.asc(MovementMonthly.get("category")), criteriaBuilder.desc(MovementMonthly.get("quantity")));
             List<MovementMonthlyCountbyBankDepot> results = entityManager.createQuery(MovementMonthlyQuery).getResultList();
@@ -97,7 +98,7 @@ public class MovementServiceImpl implements IMovementService {
 
         } else {
             MovementMonthlyQuery.multiselect(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("category"),  MovementMonthly.get("lienDepot"),
-                   criteriaBuilder.sum(MovementMonthly.get("quantity")));
+                   criteriaBuilder.sum(MovementMonthly.get("quantity")),criteriaBuilder.sum(MovementMonthly.get("nfamilies")),criteriaBuilder.sum(MovementMonthly.get("npersons")));
             MovementMonthlyQuery.groupBy(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("lienDepot"), MovementMonthly.get("category"));
             MovementMonthlyQuery.orderBy(criteriaBuilder.asc(MovementMonthly.get("month")), criteriaBuilder.asc(MovementMonthly.get("bankShortName")),
                     criteriaBuilder.asc(MovementMonthly.get("lienDepot")), criteriaBuilder.asc(MovementMonthly.get("category")));
@@ -150,7 +151,7 @@ public class MovementServiceImpl implements IMovementService {
         }
         MovementDailyQuery.where(predicates.stream().toArray(Predicate[]::new));
         MovementDailyQuery.multiselect(MovementDaily.get("day"), MovementDaily.get("bankShortName"),
-                MovementDaily.get("category"),criteriaBuilder.sum(MovementDaily.get("quantity")));
+                MovementDaily.get("category"),criteriaBuilder.sum(MovementDaily.get("quantity")),criteriaBuilder.sum(MovementDaily.get("nfamilies")),criteriaBuilder.sum(MovementDaily.get("npersons")));
         MovementDailyQuery.groupBy(MovementDaily.get("day"), MovementDaily.get("bankShortName"), MovementDaily.get("category"));
         MovementDailyQuery.orderBy(criteriaBuilder.asc(MovementDaily.get("day")), criteriaBuilder.asc(MovementDaily.get("bankShortName")), criteriaBuilder.asc(MovementDaily.get("category")));
 
@@ -199,7 +200,8 @@ public class MovementServiceImpl implements IMovementService {
         MovementDailyQuery.where(predicates.stream().toArray(Predicate[]::new));
         if (idDepot != null) {
             MovementDailyQuery.multiselect(MovementDaily.get("day"), MovementDaily.get("bankShortName"),MovementDaily.get("category"),
-                    MovementDaily.get("idOrg"), MovementDaily.get("orgname"),criteriaBuilder.sum(MovementDaily.get("quantity")));
+                    MovementDaily.get("idOrg"), MovementDaily.get("orgname"),criteriaBuilder.sum(MovementDaily.get("quantity")),
+                    criteriaBuilder.sum(MovementDaily.get("nfamilies")),criteriaBuilder.sum(MovementDaily.get("npersons")));
             MovementDailyQuery.groupBy(MovementDaily.get("day"), MovementDaily.get("bankShortName"), MovementDaily.get("lienDepot"), MovementDaily.get("category"));
             MovementDailyQuery.orderBy(criteriaBuilder.asc(MovementDaily.get("day")), criteriaBuilder.asc(MovementDaily.get("bankShortName")),
                     criteriaBuilder.asc(MovementDaily.get("category")),criteriaBuilder.desc(MovementDaily.get("quantity")));
@@ -208,7 +210,8 @@ public class MovementServiceImpl implements IMovementService {
         } else {
 
             MovementDailyQuery.multiselect(MovementDaily.get("day"), MovementDaily.get("bankShortName"), MovementDaily.get("category"),MovementDaily.get("lienDepot"),
-                     criteriaBuilder.sum(MovementDaily.get("quantity")));
+                     criteriaBuilder.sum(MovementDaily.get("quantity")),
+                    criteriaBuilder.sum(MovementDaily.get("nfamilies")),criteriaBuilder.sum(MovementDaily.get("npersons")));
             MovementDailyQuery.groupBy(MovementDaily.get("day"), MovementDaily.get("bankShortName"), MovementDaily.get("lienDepot"), MovementDaily.get("category"));
             MovementDailyQuery.orderBy(criteriaBuilder.asc(MovementDaily.get("day")), criteriaBuilder.asc(MovementDaily.get("bankShortName")), criteriaBuilder.asc(MovementDaily.get("lienDepot")), criteriaBuilder.asc(MovementDaily.get("category")));
 

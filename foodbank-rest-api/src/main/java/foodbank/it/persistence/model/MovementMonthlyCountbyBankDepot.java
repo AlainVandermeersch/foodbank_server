@@ -8,23 +8,30 @@ public class MovementMonthlyCountbyBankDepot {
     private String orgname; // orgName: name of the depot
     private String category;
     private Double quantity;
+    private Long nfamilies;
+    private Long npersons;
+
     // special constructor for multiselect grouped by idOrg
-    public MovementMonthlyCountbyBankDepot(String key, String bankShortName,String category, Integer idOrg,String orgname, Double quantity) {
+    public MovementMonthlyCountbyBankDepot(String key, String bankShortName,String category, Integer idOrg,String orgname, Double quantity,Long nfamilies, Long npersons) {
         this.key = key;
         this.bankShortName = bankShortName;
         this.idOrg = idOrg;
         this.category = category;
         this.quantity =quantity;
         this.orgname = orgname;
+        this.nfamilies = nfamilies;
+        this.npersons = npersons;
     }
     // special constructor for multiselect grouped by depot
-    public MovementMonthlyCountbyBankDepot(String key, String bankShortName, String category,Integer lienDepot, Double quantity) {
+    public MovementMonthlyCountbyBankDepot(String key, String bankShortName, String category,Integer lienDepot, Double quantity,Long nfamilies, Long npersons) {
         this.key = key;
         this.bankShortName = bankShortName;
         this.idOrg = lienDepot;
         this.category = category;
         this.quantity =quantity;
         this.orgname = "Unknown";
+        this.nfamilies = nfamilies;
+        this.npersons = npersons;
     }
 
     public String getKey() {
@@ -73,5 +80,18 @@ public class MovementMonthlyCountbyBankDepot {
 
     public void setQuantity(Double quantity) {
         this.quantity = quantity;
+    }
+
+    public Long getnfamilies() {
+        return nfamilies;
+    }
+    public void setnfamilies(Long nfamilies) {
+        this.nfamilies = nfamilies;
+    }
+    public Long getnpersons() {
+        return npersons;
+    }
+    public void setnpersons(Long npersons) {
+        this.npersons = npersons;
     }
 }

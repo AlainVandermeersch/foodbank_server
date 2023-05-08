@@ -7,12 +7,16 @@ public class MovementDailyCountByBank {
     private String bankShortName;
     private String category;
     private Double quantity;
+    private Long nfamilies;
+    private Long npersons;
 
-    public MovementDailyCountByBank(LocalDate key, String bankShortName, String category, Double quantity) {
+    public MovementDailyCountByBank(LocalDate key, String bankShortName, String category, Double quantity,Long nfamilies, Long npersons) {
         this.key = key;
         this.bankShortName = bankShortName;
         this.category = category;
         this.quantity =quantity;
+        this.nfamilies = nfamilies;
+        this.npersons = npersons;
     }
 
     public String getKey() {
@@ -45,6 +49,19 @@ public class MovementDailyCountByBank {
 
     public void setQuantity(Double quantity) {
         this.quantity = quantity;
+    }
+
+    public Long getnfamilies() {
+        return nfamilies;
+    }
+    public void setnfamilies(Long nfamilies) {
+        this.nfamilies = nfamilies;
+    }
+    public Long getnpersons() {
+        return npersons;
+    }
+    public void setnpersons(Long npersons) {
+        this.npersons = npersons;
     }
 }
 
