@@ -8,6 +8,8 @@ public class MovementMonthlyCountbyBankDepot {
     private String orgname; // orgName: name of the depot
     private String category;
     private Double quantity;
+
+    private Long norgs;
     private Long nfamilies;
     private Long npersons;
 
@@ -18,18 +20,20 @@ public class MovementMonthlyCountbyBankDepot {
         this.idOrg = idOrg;
         this.category = category;
         this.quantity =quantity;
-        this.orgname = orgname;
+        this.orgname = orgname; // orgname is organisation name
+        this.norgs = 1L; // case group by orgs
         this.nfamilies = nfamilies;
         this.npersons = npersons;
     }
     // special constructor for multiselect grouped by depot
-    public MovementMonthlyCountbyBankDepot(String key, String bankShortName, String category,Integer lienDepot, Double quantity,Long nfamilies, Long npersons) {
+    public MovementMonthlyCountbyBankDepot(String key, String bankShortName, String category, Integer lienDepot, Double quantity, Long norgs, Long nfamilies, Long npersons) {
         this.key = key;
         this.bankShortName = bankShortName;
         this.idOrg = lienDepot;
         this.category = category;
         this.quantity =quantity;
         this.orgname = "Unknown";
+        this.norgs = norgs;
         this.nfamilies = nfamilies;
         this.npersons = npersons;
     }
@@ -80,6 +84,14 @@ public class MovementMonthlyCountbyBankDepot {
 
     public void setQuantity(Double quantity) {
         this.quantity = quantity;
+    }
+
+    public Long getNorgs() {
+        return norgs;
+    }
+
+    public void setNorgs(Long norgs) {
+        this.norgs = norgs;
     }
 
     public Long getnfamilies() {

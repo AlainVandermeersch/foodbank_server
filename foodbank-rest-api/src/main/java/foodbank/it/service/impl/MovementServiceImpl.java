@@ -90,7 +90,8 @@ public class MovementServiceImpl implements IMovementService {
         if (idDepot != null) {
             MovementMonthlyQuery.multiselect(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"),
                     MovementMonthly.get("category"), MovementMonthly.get("idOrg"), MovementMonthly.get("orgname"),
-                    criteriaBuilder.sum(MovementMonthly.get("quantity")),criteriaBuilder.sum(MovementMonthly.get("nfamilies")),criteriaBuilder.sum(MovementMonthly.get("npersons")));
+                    criteriaBuilder.sum(MovementMonthly.get("quantity")),
+                    criteriaBuilder.sum(MovementMonthly.get("nfamilies")),criteriaBuilder.sum(MovementMonthly.get("npersons")));
             MovementMonthlyQuery.groupBy(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("idOrg"), MovementMonthly.get("category"));
             MovementMonthlyQuery.orderBy(criteriaBuilder.asc(MovementMonthly.get("month")), criteriaBuilder.asc(MovementMonthly.get("bankShortName")), criteriaBuilder.asc(MovementMonthly.get("category")), criteriaBuilder.desc(MovementMonthly.get("quantity")));
             List<MovementMonthlyCountbyBankDepot> results = entityManager.createQuery(MovementMonthlyQuery).getResultList();
@@ -98,7 +99,8 @@ public class MovementServiceImpl implements IMovementService {
 
         } else {
             MovementMonthlyQuery.multiselect(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("category"),  MovementMonthly.get("lienDepot"),
-                   criteriaBuilder.sum(MovementMonthly.get("quantity")),criteriaBuilder.sum(MovementMonthly.get("nfamilies")),criteriaBuilder.sum(MovementMonthly.get("npersons")));
+                   criteriaBuilder.sum(MovementMonthly.get("quantity")),criteriaBuilder.countDistinct(MovementMonthly.get("idOrg")),
+                   criteriaBuilder.sum(MovementMonthly.get("nfamilies")),criteriaBuilder.sum(MovementMonthly.get("npersons")));
             MovementMonthlyQuery.groupBy(MovementMonthly.get("month"), MovementMonthly.get("bankShortName"), MovementMonthly.get("lienDepot"), MovementMonthly.get("category"));
             MovementMonthlyQuery.orderBy(criteriaBuilder.asc(MovementMonthly.get("month")), criteriaBuilder.asc(MovementMonthly.get("bankShortName")),
                     criteriaBuilder.asc(MovementMonthly.get("lienDepot")), criteriaBuilder.asc(MovementMonthly.get("category")));
