@@ -5,7 +5,6 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -19,11 +18,13 @@ public class MovementMonthly implements Serializable
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name="month")
-    private String month;
+    private int month;
+    @Id
     @Column(name="bank_short_name")
     private String bankShortName;
+    @Id
     @Column(name="id_org")
-    private Integer idOrg;
+    private int idOrg;
     @Column(name="orgname")
     private String orgname;
     @Column(name="category")
@@ -40,11 +41,11 @@ public class MovementMonthly implements Serializable
     private Long npersons;
 
 
-    public String getMonth() {
+    public int getMonth() {
         return month;
     }
 
-    public void setMonth(String month) {
+    public void setMonth(int month) {
         this.month = month;
     }
 
@@ -56,11 +57,11 @@ public class MovementMonthly implements Serializable
         this.bankShortName = bankShortName;
     }
 
-    public Integer getIdOrg() {
+    public int getIdOrg() {
         return idOrg;
     }
 
-    public void setIdOrg(Integer idOrg) {
+    public void setIdOrg(int idOrg) {
         this.idOrg = idOrg;
     }
 
@@ -99,30 +100,37 @@ public class MovementMonthly implements Serializable
     public Integer getLienDepot() {
         return lienDepot;
     }
-    public Long getnfamilies() {
+
+    public void setLienDepot(Integer lienDepot) {
+        this.lienDepot = lienDepot;
+    }
+
+    public Long getNfamilies() {
         return nfamilies;
     }
-    public Long getnpersons() {
+
+    public void setNfamilies(Long nfamilies) {
+        this.nfamilies = nfamilies;
+    }
+
+    public Long getNpersons() {
         return npersons;
+    }
+
+    public void setNpersons(Long npersons) {
+        this.npersons = npersons;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovementMonthly that = (MovementMonthly) o;
+        return month == that.month && idOrg == that.idOrg &&  Objects.equals(bankShortName, that.bankShortName) && Objects.equals(orgname, that.orgname) && Objects.equals(category, that.category) && Objects.equals(quantity, that.quantity) && Objects.equals(lastupdated, that.lastupdated) && Objects.equals(lienDepot, that.lienDepot) && Objects.equals(nfamilies, that.nfamilies) && Objects.equals(npersons, that.npersons);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(month, bankShortName, idOrg, orgname, category, quantity);
+        return Objects.hash( month, bankShortName, idOrg, orgname, category, quantity, lastupdated, lienDepot, nfamilies, npersons);
     }
-
-    @Override
-    public String toString() {
-        return "MovementMonthly{" +
-                "month='" + month + '\'' +
-                ", bankShortName='" + bankShortName + '\'' +
-                ", idOrg=" + idOrg +
-                ", orgname='" + orgname + '\'' +
-                ", category='" + category + '\'' +
-                ", quantity=" + quantity +
-                ", lastupdated=" + lastupdated +
-                '}';
-    }
-
-
 }

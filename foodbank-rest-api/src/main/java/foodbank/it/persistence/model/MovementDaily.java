@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Entity(name="movements_daily")
@@ -19,8 +20,10 @@ public class MovementDaily implements Serializable
     @Id
     @Column(name="day")
     private LocalDate day;
+    @Id
     @Column(name="bank_short_name")
     private String bankShortName;
+    @Id
     @Column(name="id_org")
     private Integer idOrg;
     @Column(name="orgname")
@@ -42,6 +45,10 @@ public class MovementDaily implements Serializable
     public String getDay() {
         return day.toString();
     }
+    public void setDay(LocalDate day) {
+        this.day = day;
+    }
+
 
 
     public String getBankShortName() {
@@ -75,6 +82,13 @@ public class MovementDaily implements Serializable
     public void setCategory(String category) {
         this.category = category;
     }
+    public Integer getLienDepot() {
+        return lienDepot;
+    }
+
+    public void setLienDepot(Integer lienDepot) {
+        this.lienDepot = lienDepot;
+    }
 
     public Float getQuantity() {
         return quantity;
@@ -92,15 +106,35 @@ public class MovementDaily implements Serializable
         this.lastupdated = lastupdated;
     }
 
-    public Integer getLienDepot() {
-        return lienDepot;
-    }
 
-    public Long getnfamilies() {
+
+    public Long getNfamilies() {
         return nfamilies;
     }
-    public Long getnpersons() {
+
+    public void setNfamilies(Long nfamilies) {
+        this.nfamilies = nfamilies;
+    }
+
+    public Long getNpersons() {
         return npersons;
+    }
+
+    public void setNpersons(Long npersons) {
+        this.npersons = npersons;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovementDaily that = (MovementDaily) o;
+        return Objects.equals(day, that.day) && Objects.equals(bankShortName, that.bankShortName) && Objects.equals(idOrg, that.idOrg) && Objects.equals(orgname, that.orgname) && Objects.equals(category, that.category) && Objects.equals(quantity, that.quantity) && Objects.equals(lastupdated, that.lastupdated) && Objects.equals(lienDepot, that.lienDepot) && Objects.equals(nfamilies, that.nfamilies) && Objects.equals(npersons, that.npersons);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(day, bankShortName, idOrg, orgname, category, quantity, lastupdated, lienDepot, nfamilies, npersons);
     }
 
     @Override
@@ -113,6 +147,9 @@ public class MovementDaily implements Serializable
                 ", category='" + category + '\'' +
                 ", quantity=" + quantity +
                 ", lastupdated=" + lastupdated +
+                ", lienDepot=" + lienDepot +
+                ", nfamilies=" + nfamilies +
+                ", npersons=" + npersons +
                 '}';
     }
 }
