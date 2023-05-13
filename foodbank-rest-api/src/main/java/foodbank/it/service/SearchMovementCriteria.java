@@ -22,7 +22,6 @@ public class SearchMovementCriteria {
         this.idDepot = idDepot;
     }
 
-
     public Integer getLienDis() {
         return lienDis;
     }

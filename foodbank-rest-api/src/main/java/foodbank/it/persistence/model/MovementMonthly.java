@@ -10,14 +10,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@IdClass(MovementMonthlyKey.class)
+
 @Entity(name="movements_monthly")
 
 public class MovementMonthly implements Serializable
 {
-    @Id
-    private MovementMonthlyKey id;
+
     private static final long serialVersionUID = 1L;
+    @Id
     @Column(name="month")
     private String month;
     @Column(name="bank_short_name")
@@ -38,9 +38,7 @@ public class MovementMonthly implements Serializable
     private Long nfamilies;
     @Formula("(select d.n_pers from organisations d where d.id_dis = id_org)")
     private Long npersons;
-    public MovementMonthlyKey getId() {
-        return id;
-    }
+
 
     public String getMonth() {
         return month;

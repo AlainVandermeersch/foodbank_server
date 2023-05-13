@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
-@IdClass(MovementDailyKey.class)
 @Entity(name="movements_daily")
 
 public class MovementDaily implements Serializable
