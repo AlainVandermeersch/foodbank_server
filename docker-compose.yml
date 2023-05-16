@@ -15,6 +15,16 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
+    command: --sql_mode=""
+    networks:
+      foodbank:
+        aliases:
+          - db
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - "8068:80"
     networks:
       - foodbank
 
