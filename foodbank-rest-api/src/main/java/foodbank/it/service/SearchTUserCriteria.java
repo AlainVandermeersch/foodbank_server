@@ -9,6 +9,7 @@ public class SearchTUserCriteria {
 	private String email;
 	private String rights;
 	private Boolean droit1;
+	private Boolean gestAsso;
 	private Boolean gestMemb;
 	private Boolean gestBen;
 	private Boolean gestFead;
@@ -100,7 +101,13 @@ public class SearchTUserCriteria {
 		this.droit1 = droit1;
 	}
 
+	public Boolean getGestAsso() {
+		return gestAsso;
+	}
 
+	public void setGestAsso(Boolean gestAsso) {
+		this.gestAsso = gestAsso;
+	}
 
 	public Boolean getGestMemb() {
 		return gestMemb;

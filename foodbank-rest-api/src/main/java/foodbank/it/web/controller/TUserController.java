@@ -43,7 +43,8 @@ public class TUserController {
 										@RequestParam(required = false) String idLanguage, @RequestParam(required = false) String idCompany,
 										@RequestParam(required = false) String email, @RequestParam(required = false) String rights,
 										@RequestParam(required = false) String lienDepot, @RequestParam(required = false) Boolean actif,
-										@RequestParam(required = false) Boolean droit1, @RequestParam(required = false) Boolean gestMemb,
+										@RequestParam(required = false) Boolean droit1, @RequestParam(required = false) Boolean gestAsso,
+										@RequestParam(required = false) Boolean gestMemb,
 										@RequestParam(required = false) Boolean gestBen, @RequestParam(required = false) Boolean gestFead,
 										@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
 										@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
@@ -69,6 +70,7 @@ public class TUserController {
 		criteria.setEmail(email);
 		criteria.setRights(rights);
 		criteria.setDroit1(droit1);
+		criteria.setGestAsso(gestAsso);
 		criteria.setGestMemb(gestMemb);
 		criteria.setGestBen(gestBen);
 		criteria.setGestFead(gestFead);
@@ -97,7 +99,8 @@ public class TUserController {
 			@RequestParam(required = false) String idLanguage, @RequestParam(required = false) String idCompany,
 			@RequestParam(required = false) String email, @RequestParam(required = false) String rights,
 			@RequestParam(required = false) String lienDepot, @RequestParam(required = false) Boolean actif,
-			@RequestParam(required = false) Boolean droit1, @RequestParam(required = false) Boolean gestMemb,
+			@RequestParam(required = false) Boolean droit1, @RequestParam(required = false) Boolean gestAsso,
+			@RequestParam(required = false) Boolean gestMemb,
 			@RequestParam(required = false) Boolean gestBen, @RequestParam(required = false) Boolean gestFead,
 			@RequestParam(required = false) Boolean gestDon, @RequestParam(required = false) Boolean hasLogins,
 			@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
@@ -134,6 +137,7 @@ public class TUserController {
 		criteria.setEmail(email);
 		criteria.setRights(rights);
 		criteria.setDroit1(droit1);
+		criteria.setGestAsso(gestAsso);
 		criteria.setGestMemb(gestMemb);
 		criteria.setGestBen(gestBen);
 		criteria.setGestFead(gestFead);

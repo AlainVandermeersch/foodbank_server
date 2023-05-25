@@ -82,6 +82,7 @@ public class TUserServiceImpl implements ITUserService {
 		String userName = searchCriteria.getUserName();
 		Boolean actif = searchCriteria.getActif();
 		Boolean droit1 = searchCriteria.getDroit1();
+		Boolean gestAsso = searchCriteria.getGestAsso();
 		Boolean gestMemb = searchCriteria.getGestMemb();
 		Boolean gestBen = searchCriteria.getGestBen();
 		Boolean gestFead = searchCriteria.getGestFead();
@@ -190,6 +191,14 @@ public class TUserServiceImpl implements ITUserService {
 			}
 			Predicate isDroit1Predicate = criteriaBuilder.equal(tuser.get("droit1"), intDroit1);
 			predicates.add(isDroit1Predicate);
+		}
+		if (gestAsso != null) {
+			Integer intGestAsso = 0;
+			if (gestAsso == true) {
+				intGestAsso = 1;
+			}
+			Predicate isGestAssoPredicate = criteriaBuilder.equal(tuser.get("gestAsso"), intGestAsso);
+			predicates.add(isGestAssoPredicate);
 		}
 		if (gestMemb != null) {
 			Integer intGestMemb = 0;
