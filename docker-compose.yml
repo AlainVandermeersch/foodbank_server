@@ -15,7 +15,7 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
-    command: --sql_mode=""
+    command: --sql_mode="" --lower-case-table-names=1 --log_bin_trust_function_creators=1
     networks:
       foodbank:
         aliases:
