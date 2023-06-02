@@ -44,6 +44,8 @@ services:
       - AUTH_PORT=${AUTH_PROXY_PORT}
       - WILDFLY_HOST=${WILDFLY_PROXY_HOST}
       - WILDFLY_PORT=${WILDFLY_PROXY_PORT}
+      - ADMIN_HOST=${ADMIN_PROXY_HOST}
+      - ADMIN_PORT=${ADMIN_PROXY_PORT}
     volumes:
       - letsencrypt-data:/home/letsencrypt/data
       - letsencrypt-certs:/home/letsencrypt/certs
