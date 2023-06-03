@@ -1,7 +1,7 @@
 {
   "id": "FoodBank",
   "realm": "FoodBank",
-  "displayName": "FoodBanks",
+  "displayName": "Belgian FoodBanks",
   "notBefore": 0,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
