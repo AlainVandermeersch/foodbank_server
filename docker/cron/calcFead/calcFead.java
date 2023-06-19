@@ -243,7 +243,6 @@ public class calcFead {
                         " join articles a on (a.id_article=c.id_article) "+
                         " left join campagne_fead f on ( f.id_asso=o.birbcode and f.id_article=c.id_article and f.campagne<>'cumul') ";
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
-                System.out.println(query);
                 ResultSet rs=stmt.executeQuery(query);
                 if(getRowCount(rs)>0) {
                     while(rs.next()) {
@@ -272,7 +271,7 @@ public class calcFead {
             String query = "select asso_origin,o1.birbcode as asso1,asso_destination,o2.birbcode as asso2,a.id_article,  coalesce(quantite,0) as qte "+
                     " from cession_fead f  join organisations o1 on (o1.id_dis=f.asso_origin)  join organisations o2 on (o2.id_dis=f.asso_destination) "+
                     " join articles a on (a.id_article=f.id_article) ";
-            query+= String.format(" where annee=? order by id_cession ",annee);
+            query+= String.format(" where annee=%s order by id_cession ",annee);
             ResultSet rs=stmt.executeQuery(query);
             int qte=0;
             String article="";
