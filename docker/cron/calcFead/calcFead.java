@@ -48,14 +48,21 @@ public class calcFead {
             numrows = stmt.executeUpdate(query);
             System.out.printf("Updated %d rows with qte = qte=init+cession for year and cumul from  campagne_fead table for year %s .",numrows, annee );
 
-            //Maj réceptions par les assos
-            query= String.format("select annee,id_article,id_asso,sum(coalesce(init,0)) as init,sum(coalesce(qte,0)) as qte,sum(coalesce(expedie,0)) as expedie,sum(coalesce(envoye,0)) as envoye,sum(coalesce(cession,0)) as cession from campagne_fead where campagne<>'cumul' and annee='%s' group by annee,id_article,id_asso" , annee);
+            query= String.format("select annee,'CUMUL' as campagne,id_article,id_asso,sum(coalesce(init,0)) as init,sum(coalesce(qte,0)) as qte,sum(coalesce(expedie,0)) as expedie,sum(coalesce(envoye,0)) as envoye,sum(coalesce(cession,0)) as cession from campagne_fead where campagne<>'cumul' and annee='%s' group by annee,id_article,id_asso" , annee);
             ResultSet rs=stmt.executeQuery(query);
+            numrows = updateCampagneFeadWithResultSet(stmt,rs,"INIT",annee);
+            System.out.printf("Reloaded %d CUMUL rows from  campagne_fead table for year %s .",numrows, annee );
+            //Maj réceptions par les assos
+            query = "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as expedie from mvtasso m join organisations o on (o.id_dis=m.id_asso) " +
+             " join articles a on (a.id_article=m.id_article) ";
+            query +=  String.format(" where a.annee_fead= '%s'  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
+                      rs=stmt.executeQuery(query);
             numrows = updateCampagneFeadWithResultSet(stmt,rs,"EXPEDIE",annee);
             System.out.printf("Updated %d EXPEDIE rows from  stoasso table for year %s .",numrows, annee );
 
-            System.out.printf("Reloaded %d CUMUL rows from  campagne_fead table for year %s .",numrows, annee );
+
             //Maj stock assos
+
             query= "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as STOCK " +
                     " from stoasso m join organisations o on (o.id_dis=m.id_asso) " +
                     " join articles a on (a.id_article=m.id_article) " ;
@@ -69,7 +76,7 @@ public class calcFead {
                     ",round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as ATTENTE " +
                     " from stoasso_prev m join organisations o on (o.id_dis=m.id_asso) " +
                     " join articles a on (a.id_article=m.id_article) " ;
-            query +=  String.format(" where a.annee_fead= '%s'  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
+            query +=  String.format(" where a.annee_fead= '%s' and status= 0 and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
             rs=stmt.executeQuery(query);
             numrows = updateCampagneFeadWithResultSet(stmt,rs,"ATTENTE",annee);
             System.out.printf("Retrieved %d attente rows from  stoasso_prev table for year %s .",numrows, annee );
@@ -94,8 +101,8 @@ public class calcFead {
             while (rs.next()) {
                 switch (item) {
                     case "INIT":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,init,qte,expedie,envoye,cession) values(annee,%s,'%s','%s','%s','%s',%d,%d,%d,%d)",
-                                rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,init,qte,expedie,envoye,cession) values(annee,'CUMUL',%s,'%s','%s','%s','%s',%d,%d,%d,%d)",
+                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                                 rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
                         query += String.format(" on duplicate key update init = %d, qte = %d, expedie= %d, envoye = %d, cession = %d",
                                 rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
@@ -130,7 +137,7 @@ public class calcFead {
                                 rs.getInt("refus"));
                         break;
                     case "ENVOYE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,envoye) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
+                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,envoye) values(annee,annee,'%s','%s','%s','%s',%d)",
                                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                                 rs.getInt("envoye"));
                         query += String.format(" on duplicate key update envoye = %d",
@@ -168,36 +175,36 @@ public class calcFead {
             query+= String.format(" where a.annee_fead=%s and d.id_depot is null  group by o.birbcode,a.id_article order by o.birbcode,a.id_article ",annee);
             System.out.println(query);
             ResultSet rs=stmt.executeQuery(query);
-            String qte="0";
+           int qte = 0;
             String article="";
             String asso="";
             ResultSet rs1;
-            Float dispo;
+            int dispo =0;
             Float fqte;
 
             while (rs.next()) {
-                qte=rs.getString("nbunit");
-                article=rs.getString("id_article");
-                asso=rs.getString("birbcode");
-                fqte=Float.parseFloat(qte);
+               qte=rs.getInt("nbunit");
+               article=rs.getString("id_article");
+               asso=rs.getString("birbcode");
+
                 query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
                 rs1=stmt.executeQuery(query);
-                while(rs1.next() && fqte>0) {
-                    dispo=Float.parseFloat(rs1.getString("qte"));
+                while(rs1.next() && qte>0) {
+                    dispo=rs1.getInt("qte");
                     // Alain getRow() returns row number of current row
-                    if(dispo>=fqte || getRowCount(rs1)==rs1.getRow()) {
-                        rs1.updateString("envoye", String.valueOf(fqte));
+                    if(dispo>=qte || getRowCount(rs1)==rs1.getRow()) {
+                        rs1.updateInt("envoye", qte);
                         rs1.updateRow();
-                        fqte=0f;
+                        qte=0;
                     }
                     else {
-                        rs1.updateString("envoye", rs1.getString("qte"));
+                        rs1.updateInt("envoye", dispo);
                         rs1.updateRow();
-                        fqte-=dispo;
+                        qte-=dispo;
                     }
                 }
                 rs1.beforeFirst();
-                int numrows = updateCampagneFeadWithResultSet(stmt,rs,"ENVOYE",annee);
+                int numrows = updateCampagneFeadWithResultSet(stmt,rs1,"ENVOYE",annee);
             }
         }
 
