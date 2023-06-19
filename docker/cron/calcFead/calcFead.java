@@ -19,7 +19,7 @@ public class calcFead {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con=DriverManager.getConnection(connectionString,user,password);
-            Statement stmt=con.createStatement();
+            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             CalcFeadOneYear(stmt,"2022");
             con.close();
         }catch(Exception e){
@@ -259,7 +259,6 @@ public class calcFead {
                         " join articles a on (a.id_article=c.id_article) "+
                         " left join campagne_fead f on ( f.id_asso=o.birbcode and f.id_article=c.id_article and f.campagne<>'CUMUL') ";
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
-                System.out.println(query);
                 rs=stmt.executeQuery(query);
                 if(getRowCount(rs)>0) {
                     while(rs.next()) {
@@ -274,7 +273,6 @@ public class calcFead {
                     " from cession_fead f  join organisations o1 on (o1.id_dis=f.asso_origin)  join organisations o2 on (o2.id_dis=f.asso_destination) "+
                     " join articles a on (a.id_article=f.id_article) ";
             query+= String.format(" where annee=? order by id_cession ",annee);
-            System.out.println(query);
             ResultSet rs=stmt.executeQuery(query);
             int qte=0;
             String article="";
@@ -286,10 +284,10 @@ public class calcFead {
                 qte=rs.getInt("qte");
                 origin=rs.getString("asso1");
                 destination=rs.getString("asso2");
-                System.out.println("cession origin="+ origin+" destination="+destination+" article="+article+" qte= "+qte);
+
                 majUneCessionOrigin(stmt, annee, origin, destination, article, qte);
             }
-            System.out.println("fin maj cessions");
+
         }
         private static void majUneCessionOrigin(Statement stmt, String annee,String origin,String destination,String article,int qte) throws Exception {
             int ucart= 0;
