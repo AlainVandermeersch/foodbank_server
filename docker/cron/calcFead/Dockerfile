@@ -9,5 +9,5 @@ COPY mysql-connector-j-8.0.33.jar ./
 
 RUN javac CalcFead.java
 
-CMD ["java", "-classpath", "mysql-connector-j-8.0.33.jar:.","calcFead"]
+CMD ["java", "-classpath", "mysql-connector-j-8.0.33.jar:.","CalcFead"]
 
