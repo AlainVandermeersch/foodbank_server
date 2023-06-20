@@ -325,11 +325,11 @@ public class CalcFead {
                             intCession += intQte;
                             rs1.updateInt("cession", intCession);
                             rs1.updateRow();
-                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),String.valueOf(intQte));
+                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),intQte);
                             intQte=0;
                         }
                         else {
-                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),String.valueOf(intDispo));
+                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),intDispo);
                             // intQte -= intDispo; not needed cfr original source
                             intCession -=intDispo;
                             rs1.updateInt("cession",intCession);
@@ -345,7 +345,7 @@ public class CalcFead {
 
         }
 
-        private  void majUneCessionsDestination(Connection con,String annee, String campagne ,String article,String asso, String debut,String fin, String qte) throws Exception {
+        private  void majUneCessionsDestination(Connection con,String annee, String campagne ,String article,String asso, String debut,String fin, int intQte) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne ,article,asso, debut,fin);
             ResultSet rs=stmt.executeQuery(query);
@@ -354,12 +354,12 @@ public class CalcFead {
                 addResultSetRow(rs,annee,campagne,article,asso,debut,fin,tournee);
             }
             int intCession= rs.getInt("cession");
-            int intQte= Integer.parseInt(qte);
-            rs.updateInt("cession", intCession + intQte);
-            rs.updateInt("qte", rs.getInt("init") + intCession);
-            rs.updateRow();
-            rs.beforeFirst();
-            int numrows = updateCampagneFeadWithResultSet(stmt,rs,"CESSIONQTE",annee);
+            query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession,qte) values(annee,'CUMUL','%s','%s','%s','%s',%d,%d)",
+                    rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                    intCession,intQte);
+            query += String.format(" on duplicate key update cession = %d, qte = %d",
+                    intCession,intQte);
+            int numrows = stmt.executeUpdate(query);
             System.out.printf("%n%s CalcFead Updated %d cessionqte values in rows for article %s for year %s .",
                     LocalDateTime.now().format(formatter),numrows, article,annee );
         }
