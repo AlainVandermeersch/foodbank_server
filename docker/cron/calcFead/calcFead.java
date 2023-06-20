@@ -9,23 +9,28 @@ import java.time.format.DateTimeFormatter;
 public class calcFead {
      private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     public static void main(String[] args) {
-        System.out.println("CalcFead Starting!");
+        System.out.printf("%n%s CalcFead Started", LocalDateTime.now().format(formatter));
         String host = System.getenv("MYSQL_HOST");
         String user = System.getenv("MYSQL_USER");
         String password = System.getenv("MYSQL_PASSWORD");
         String database = System.getenv("MYSQL_DATABASE");
         String connectionString =  String.format("jdbc:mysql://%s:3306/%s", host, database);
-        System.out.println("connection String: " + connectionString + " " + "user: " + user + "password: " + password );
+        // System.out.println("connection String: " + connectionString + " " + "user: " + user + "password: " + password );
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con=DriverManager.getConnection(connectionString,user,password);
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             CalcFeadOneYear(stmt,"2022");
             con.close();
-        }catch(Exception e){
+        }catch(SQLException e){
+            System.out.printf("%n%s CalcFead a SQL Error Occurred", LocalDateTime.now().format(formatter));
+                    e.printStackTrace();
+        }
+        catch(Exception e){
+            System.out.printf("%n%s CalcFead a System Error Occurred", LocalDateTime.now().format(formatter));
             System.out.println(e);
         }finally {
-            System.out.println("CalcFead ended!");
+            System.out.printf("%n%s CalcFead Ended", LocalDateTime.now().format(formatter));
         }
     }
 
@@ -159,14 +164,14 @@ public class calcFead {
                         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%s)",
                                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                                 rs.getInt("cession"));
-                        query += String.format(" on duplicate key update cession = %s",
+                        query += String.format(" on duplicate key update cession = %d",
                                 rs.getInt("cession"));
                         break;
                     case "CESSIONQTE":
                         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%s,%s)",
                                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                                 rs.getInt("cession"),rs.getInt("qte"));
-                        query += String.format(" on duplicate key update cession = %s qte = %s",
+                        query += String.format(" on duplicate key update cession = %d qte = %d",
                                 rs.getInt("cession"), rs.getInt("qte"));
                         break;
                     case "TOURNEE":
@@ -175,6 +180,8 @@ public class calcFead {
                                 rs.getInt("tournee"));
                         query += String.format(" on duplicate key update tournee = %d",
                                 rs.getInt("tournee"));
+                        System.out.printf("%n%s CalcFead  tournee query '%s'",
+                                LocalDateTime.now().format(formatter),query);
                         break;
                     default:
                         System.out.printf("%n%s CalcFead  unknown update option '%s'",
