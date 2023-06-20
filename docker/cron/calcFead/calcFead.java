@@ -19,8 +19,7 @@ public class calcFead {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con=DriverManager.getConnection(connectionString,user,password);
-            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
-            CalcFeadOneYear(stmt,"2022");
+            CalcFeadOneYear(con,"2022");
             con.close();
         }catch(SQLException e){
             System.out.printf("%n%s CalcFead a SQL Error Occurred", LocalDateTime.now().format(formatter));
@@ -35,7 +34,8 @@ public class calcFead {
     }
 
 
- private static void CalcFeadOneYear(Statement stmt, String annee) throws Exception {
+ private static void CalcFeadOneYear(Connection con, String annee) throws Exception {
+            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query= String.format("delete from campagne_fead where campagne='CUMUL' and annee = '%s'", annee );
             int numrows = stmt.executeUpdate(query);
             System.out.printf("%n%s CalcFead Deleted %d CUMUL rows from  campagne_fead table for year %s .",
@@ -46,14 +46,14 @@ public class calcFead {
             System.out.printf("%n%s CalcFead Reinitialized %d rows from  campagne_fead table for year %s .",
                     LocalDateTime.now().format(formatter),numrows, annee );
 
-            majCessions(stmt,annee);
+            majCessions(con,annee);
 
             query= String.format("update campagne_fead set qte=init+cession where annee= '%s' and campagne<>'cumul'" ,annee);
             numrows = stmt.executeUpdate(query);
             System.out.printf("%n%s CalcFead Updated %d rows with qte = qte=init+cession for non-cumul from  campagne_fead table for year %s .",
                     LocalDateTime.now().format(formatter),numrows, annee );
 
-            majEnvoye(stmt,annee);
+            majEnvoye(con,annee);
 
             query= String.format("update campagne_fead set qte=init+cession  where annee= '%s'",annee);
             numrows = stmt.executeUpdate(query);
@@ -192,7 +192,8 @@ public class calcFead {
             return numrows;
    }
         //Mise à jour des envoyés par les banques
-        private static void majEnvoye(Statement stmt,String annee) throws Exception {
+        private static void majEnvoye(Connection con,String annee) throws Exception {
+            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query ="select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot "+
                     " from mouvements m "+
                     " join articles a on (a.id_article=m.id_article) "+
@@ -239,9 +240,9 @@ public class calcFead {
 
 
 
-       private static void majCessions(Statement stmt,String annee) throws Exception {
+       private static void majCessions(Connection con,String annee) throws Exception {
             //réinitialisation qte=init
-
+           Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             if(annee.startsWith("20")) {
                 //creation des assos manquantes (destination)
                 String query ="select a.annee_fead as annee,a.annee_fead as campagne,c.id_article,o.birbcode as id_asso,'' as debut ,'' as fin "+
@@ -253,7 +254,7 @@ public class calcFead {
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
                 ResultSet rs=stmt.executeQuery(query);
                 while(rs.next()) {
-                    addCampagneRow(stmt,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
+                    addCampagneRow(con,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
                 }
 
                 //creation des assos manquantes (origine)
@@ -266,7 +267,7 @@ public class calcFead {
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
                 rs=stmt.executeQuery(query);
                 while(rs.next()) {
-                   addCampagneRow(stmt,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
+                   addCampagneRow(con,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
                 }
 
             }
@@ -289,11 +290,12 @@ public class calcFead {
                 origin=rs.getString("asso1");
                 destination=rs.getString("asso2");
 
-                majUneCessionOrigin(stmt, annee, origin, destination, article, qte);
+                majUneCessionOrigin(con, annee, origin, destination, article, qte);
             }
 
         }
-        private static void majUneCessionOrigin(Statement stmt, String annee,String origin,String destination,String article,int qte) throws Exception {
+        private static void majUneCessionOrigin(Connection con, String annee,String origin,String destination,String article,int qte) throws Exception {
+            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             int ucart= 0;
             String query=String.format("select fead_ucart from articles where id_article=%s", article).trim();
             ResultSet rs=stmt.executeQuery(query);
@@ -320,11 +322,11 @@ public class calcFead {
                             intCession += intQte;
                             rs1.updateInt("cession", intCession);
                             rs1.updateRow();
-                            majUneCessionsDestination(stmt,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),String.valueOf(intQte));
+                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),String.valueOf(intQte));
                             intQte=0;
                         }
                         else {
-                            majUneCessionsDestination(stmt,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),String.valueOf(intDispo));
+                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),String.valueOf(intDispo));
                             // intQte -= intDispo; not needed cfr original source
                             intCession -=intDispo;
                             rs1.updateInt("cession",intCession);
@@ -340,7 +342,8 @@ public class calcFead {
 
         }
 
-        private static void majUneCessionsDestination(Statement stmt,String annee, String campagne ,String article,String asso, String debut,String fin, String qte) throws Exception {
+        private static void majUneCessionsDestination(Connection con,String annee, String campagne ,String article,String asso, String debut,String fin, String qte) throws Exception {
+            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne ,article,asso, debut,fin);
             ResultSet rs=stmt.executeQuery(query);
             if(!rs.next()) {
@@ -361,7 +364,8 @@ public class calcFead {
         /**
          * Ajout d'une ligne dans campagne_fead si la ligne de cumul est inconnue
          */
-        private static void addCampagneRow(Statement stmt,String annee, String article,String asso,boolean genCumulRow) throws Exception {
+        private static void addCampagneRow(Connection con,String annee, String article,String asso,boolean genCumulRow) throws Exception {
+            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             //génération des lignes
 
             ResultSet rs=stmt.executeQuery("select * from campagne_fead where false");
