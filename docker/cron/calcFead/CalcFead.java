@@ -369,11 +369,12 @@ public class CalcFead {
          */
         private  void addCampagneRow(Connection con,String annee, String article,String asso,boolean genCumulRow) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+            Statement stmt2=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             //génération des lignes
 
             ResultSet rs=stmt.executeQuery("select * from campagne_fead where false");
             String query = String.format("select distinct debut,fin,tournee from campagne_fead where id_article=%s and campagne<>'cumul' and tournee<>0",article);
-            ResultSet rs2=stmt.executeQuery(query);
+            ResultSet rs2=stmt2.executeQuery(query);
             while(rs2.next()) {
                addResultSetRow(rs,annee,annee,article,asso,rs2.getString("debut"),rs2.getString("fin"),rs2.getInt("tournee"));               
             }
