@@ -345,6 +345,9 @@ public class calcFead {
         private static void majUneCessionsDestination(Statement stmt,String annee, String campagne ,String article,String asso, String debut,String fin, String qte) throws Exception {
             String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut=%s and fin=%s", annee, campagne ,article,asso, debut,fin);
             ResultSet rs=stmt.executeQuery(query);
+            int rowCount = getRowCount(rs);
+            System.out.printf("%n%s CalcFead majUneCessionsDestination %d rows returned for query %s",
+                    LocalDateTime.now().format(formatter),rowCount, query );
             if(getRowCount(rs)==0) {
                 int tournee = 1;
                 addResultSetRow(rs,annee,campagne,article,asso,debut,fin,tournee);
