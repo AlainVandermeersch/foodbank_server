@@ -161,20 +161,7 @@ public class CalcFead {
                         query += String.format(" on duplicate key update envoye = %d",
                                 rs.getInt("envoye"));
                         break;
-                    case "CESSION":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("cession"));
-                        query += String.format(" on duplicate key update cession = %d",
-                                rs.getInt("cession"));
-                        break;
-                    case "CESSIONQTE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession,qte) values(annee,'CUMUL','%s','%s','%s','%s',%d,%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("cession"),rs.getInt("qte"));
-                        query += String.format(" on duplicate key update cession = %d, qte = %d",
-                                rs.getInt("cession"), rs.getInt("qte"));
-                        break;
+                   
                     case "TOURNEE":
                         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
                                 rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"),  rs.getString("debut"),  rs.getString("fin"),
@@ -313,34 +300,42 @@ public class CalcFead {
                 String exped="0";
                 query=String.format("select * from campagne_fead where annee=%s and id_article=%s and id_asso=%s and campagne<>'CUMUL' and coalesce(init,0)-coalesce(envoye,0)+coalesce(cession,0)>0 ",annee , article,origin);
                 ResultSet rs1=stmt1.executeQuery(query);
-                while(rs1.next() && intQte>0) {
-                  int  intInit = rs1.getInt("init");
-                  int  intCession = rs1.getInt("cession");
-                  int  intEnvoye = rs1.getInt("envoye");
-                  int  intDispo = intInit + intCession - intEnvoye;
+                int numrowsCumul =0;
+                while(rs1.next()) {
+                    if (intQte > 0) {
+                        int intInit = rs1.getInt("init");
+                        int intCession = rs1.getInt("cession");
+                        int intEnvoye = rs1.getInt("envoye");
+                        int intDispo = intInit + intCession - intEnvoye;
 
-                  if(intDispo > 0) {
-                        if(intDispo-intQte>=0f) {
-                            intDispo -= intQte;
-                            intCession += intQte;
-                            rs1.updateInt("cession", intCession);
-                            rs1.updateRow();
-                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),intQte);
-                            intQte=0;
-                        }
-                        else {
-                            majUneCessionsDestination(con,annee, rs1.getString("campagne"),article,destination, rs1.getString("debut"),rs1.getString("fin"),intDispo);
-                            // intQte -= intDispo; not needed cfr original source
-                            intCession -=intDispo;
-                            rs1.updateInt("cession",intCession);
-                            rs1.updateRow();
+                        if (intDispo > 0) {
+                            if (intDispo - intQte >= 0f) {
+                                intDispo -= intQte;
+                                intCession += intQte;
+                                rs1.updateInt("cession", intCession);
+                                rs1.updateRow();
+                                majUneCessionsDestination(con, annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intQte);
+                                intQte = 0;
+                            } else {
+                                majUneCessionsDestination(con, annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intDispo);
+                                // intQte -= intDispo; not needed cfr original source
+                                intCession -= intDispo;
+                                rs1.updateInt("cession", intCession);
+                                rs1.updateRow();
+                            }
                         }
                     }
+
+                    query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
+                            rs1.getString("id_article"), rs1.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                            rs1.getInt("cession"));
+                    query += String.format(" on duplicate key update cession = %d",
+                            rs1.getInt("cession"));
+                    numrowsCumul += stmt.executeUpdate(query);
                 }
-                rs1.beforeFirst();
-                int numrows = updateCampagneFeadWithResultSet(stmt1,rs1,"CESSION",annee);
+
                 System.out.printf("%n%s CalcFead Updated %d cession values in rows for article %s for year %s .",
-                        LocalDateTime.now().format(formatter),numrows, article,annee );
+                        LocalDateTime.now().format(formatter),numrowsCumul, article,annee );
             }
 
         }
