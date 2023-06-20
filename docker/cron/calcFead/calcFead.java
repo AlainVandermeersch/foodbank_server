@@ -126,11 +126,11 @@ public class calcFead {
                         break;
 
                     case "EXPEDIE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,init,qte,expedie,envoye,cession) values(annee,'CUMUL','%s','%s','%s','%s',%d,%d,%d,%d)",
+                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,expedie) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
                                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
-                        query += String.format(" on duplicate key update init = %d, qte = %d, expedie= %d, envoye = %d, cession = %d",
-                                rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
+                               rs.getInt("expedie"), rs.getInt("cession"));
+                        query += String.format(" on duplicate key update expedie= %d",
+                               rs.getInt("expedie"));
                         break;
                     case "STOCK":
                         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,stock) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
@@ -161,21 +161,21 @@ public class calcFead {
                                 rs.getInt("envoye"));
                         break;
                     case "CESSION":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%s)",
+                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
                                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                                 rs.getInt("cession"));
                         query += String.format(" on duplicate key update cession = %d",
                                 rs.getInt("cession"));
                         break;
                     case "CESSIONQTE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%s,%s)",
+                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession,qte) values(annee,'CUMUL','%s','%s','%s','%s',%d,%d)",
                                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                                 rs.getInt("cession"),rs.getInt("qte"));
                         query += String.format(" on duplicate key update cession = %d, qte = %d",
                                 rs.getInt("cession"), rs.getInt("qte"));
                         break;
                     case "TOURNEE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%s,%s)",
+                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
                                 rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"),  rs.getString("debut"),  rs.getString("fin"),
                                 rs.getInt("tournee"));
                         query += String.format(" on duplicate key update tournee = %d",
@@ -397,6 +397,7 @@ public class calcFead {
             rs.updateString("DEBUT", debut);
             rs.updateString("FIN", fin);
             rs.updateInt("TOURNEE", tournee);
+            rs.updateInt("QTE", 0);
             rs.insertRow();
             // rs.moveToCurrentRow(); Alain todo - check if logic requires this
         }
