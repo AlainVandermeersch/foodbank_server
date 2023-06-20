@@ -171,7 +171,7 @@ public class calcFead {
                         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%s,%s)",
                                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                                 rs.getInt("cession"),rs.getInt("qte"));
-                        query += String.format(" on duplicate key update cession = %d qte = %d",
+                        query += String.format(" on duplicate key update cession = %d, qte = %d",
                                 rs.getInt("cession"), rs.getInt("qte"));
                         break;
                     case "TOURNEE":
