@@ -184,6 +184,7 @@ public class CalcFead {
             query+= String.format(" where a.annee_fead=%s and d.id_depot is null  group by o.birbcode,a.id_article order by o.birbcode,a.id_article ",annee);
             System.out.println(query);
             ResultSet rs=stmt.executeQuery(query);
+            ResultSet rs1;
            int qte = 0;
             String article="";
             String asso="";
@@ -195,7 +196,8 @@ public class CalcFead {
                article=rs.getString("id_article");
                asso=rs.getString("birbcode");
                 query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
-                ResultSet rs1=stmt1.executeQuery(query);
+                stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+                rs1=stmt1.executeQuery(query);
                 int numrowsEnvoye = 0;
                 while(rs1.next() && qte>0) {
                     dispo=rs1.getInt("qte");
