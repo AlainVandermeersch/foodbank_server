@@ -194,6 +194,7 @@ public class calcFead {
         //Mise à jour des envoyés par les banques
         private static void majEnvoye(Connection con,String annee) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+            Statement stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query ="select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot "+
                     " from mouvements m "+
                     " join articles a on (a.id_article=m.id_article) "+
@@ -215,7 +216,7 @@ public class calcFead {
                asso=rs.getString("birbcode");
 
                 query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
-                rs1=stmt.executeQuery(query);
+                rs1=stmt1.executeQuery(query);
                 while(rs1.next() && qte>0) {
                     dispo=rs1.getInt("qte");
                     // Alain getRow() returns row number of current row
@@ -296,6 +297,7 @@ public class calcFead {
         }
         private static void majUneCessionOrigin(Connection con, String annee,String origin,String destination,String article,int qte) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+            Statement stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             int ucart= 0;
             String query=String.format("select fead_ucart from articles where id_article=%s", article).trim();
             ResultSet rs=stmt.executeQuery(query);
@@ -309,7 +311,7 @@ public class calcFead {
 
                 String exped="0";
                 query=String.format("select * from campagne_fead where annee=%s and id_article=%s and id_asso=%s and campagne<>'CUMUL' and coalesce(init,0)-coalesce(envoye,0)+coalesce(cession,0)>0 ",annee , article,origin);
-                ResultSet rs1=stmt.executeQuery(query);
+                ResultSet rs1=stmt1.executeQuery(query);
                 while(rs1.next() && intQte>0) {
                   int  intInit = rs1.getInt("init");
                   int  intCession = rs1.getInt("cession");
@@ -335,7 +337,7 @@ public class calcFead {
                     }
                 }
                 rs1.beforeFirst();
-                int numrows = updateCampagneFeadWithResultSet(stmt,rs1,"CESSION",annee);
+                int numrows = updateCampagneFeadWithResultSet(stmt1,rs1,"CESSION",annee);
                 System.out.printf("%n%s CalcFead Updated %d cession values in rows for article %s for year %s .",
                         LocalDateTime.now().format(formatter),numrows, article,annee );
             }
