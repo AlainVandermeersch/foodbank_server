@@ -154,13 +154,6 @@ public class CalcFead {
                         query += String.format(" on duplicate key update refus = %d",
                                 rs.getInt("refus"));
                         break;
-                    case "ENVOYE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,envoye) values(annee,annee,'%s','%s','%s','%s',%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("envoye"));
-                        query += String.format(" on duplicate key update envoye = %d",
-                                rs.getInt("envoye"));
-                        break;
                    
                     case "TOURNEE":
                         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
@@ -205,6 +198,7 @@ public class CalcFead {
 
                 query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
                 rs1=stmt1.executeQuery(query);
+                int numrowsEnvoye = 0;
                 while(rs1.next() && qte>0) {
                     dispo=rs1.getInt("qte");
                     // Alain getRow() returns row number of current row
@@ -219,11 +213,15 @@ public class CalcFead {
                         rs1.updateRow();
                         qte-=dispo;
                     }
+                    query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,envoye) values(annee,annee,'%s','%s','%s','%s',%d)",
+                            rs1.getString("id_article"), rs1.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                            rs1.getInt("envoye"));
+                    query += String.format(" on duplicate key update envoye = %d",
+                            rs1.getInt("envoye"));
+                    numrowsEnvoye += stmt.executeUpdate(query);
                 }
-                rs1.beforeFirst();
-                int numrows = updateCampagneFeadWithResultSet(stmt,rs1,"ENVOYE",annee);
                 System.out.printf("%n%s CalcFead Updated %d envoye rows from  mouvements table for year %s .",
-                        LocalDateTime.now().format(formatter),numrows, annee );
+                        LocalDateTime.now().format(formatter),numrowsEnvoye, annee );
             }
         }
 
