@@ -154,7 +154,7 @@ public class CalcFead {
                         query += String.format(" on duplicate key update refus = %d",
                                 rs.getInt("refus"));
                         break;
-                   
+
                     case "TOURNEE":
                         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
                                 rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"),  rs.getString("debut"),  rs.getString("fin"),
@@ -187,7 +187,6 @@ public class CalcFead {
            int qte = 0;
             String article="";
             String asso="";
-            ResultSet rs1;
             int dispo =0;
             Float fqte;
 
@@ -195,9 +194,8 @@ public class CalcFead {
                qte=rs.getInt("nbunit");
                article=rs.getString("id_article");
                asso=rs.getString("birbcode");
-
                 query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
-                rs1=stmt1.executeQuery(query);
+                ResultSet rs1=stmt1.executeQuery(query);
                 int numrowsEnvoye = 0;
                 while(rs1.next() && qte>0) {
                     dispo=rs1.getInt("qte");
@@ -218,7 +216,7 @@ public class CalcFead {
                             rs1.getInt("envoye"));
                     query += String.format(" on duplicate key update envoye = %d",
                             rs1.getInt("envoye"));
-                    numrowsEnvoye += stmt.executeUpdate(query);
+                    numrowsEnvoye += stmt1.executeUpdate(query);
                 }
                 System.out.printf("%n%s CalcFead Updated %d envoye rows from  mouvements table for year %s .",
                         LocalDateTime.now().format(formatter),numrowsEnvoye, annee );
