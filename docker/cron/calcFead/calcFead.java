@@ -405,7 +405,7 @@ public class calcFead {
             rs.updateInt("TOURNEE", tournee);
             rs.updateInt("QTE", 0);
             rs.insertRow();
-            // rs.moveToCurrentRow(); Alain todo - check if logic requires this
+            rs.moveToCurrentRow(); 
         }
 
 }
