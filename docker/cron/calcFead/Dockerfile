@@ -4,10 +4,10 @@ RUN mkdir -p /usr/src/workdir
 
 WORKDIR /usr/src/workdir
 
-COPY calcFead.java ./
+COPY CalcFead.java ./
 COPY mysql-connector-j-8.0.33.jar ./
 
-RUN javac calcFead.java
+RUN javac CalcFead.java
 
 CMD ["java", "-classpath", "mysql-connector-j-8.0.33.jar:.","calcFead"]
 

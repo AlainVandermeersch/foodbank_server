@@ -6,9 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-public class calcFead {
+public class CalcFead {
      private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     public static void main(String[] args) {
+        CalcFead myCalcFeadObj = new CalcFead();
         System.out.printf("%n%s CalcFead Started", LocalDateTime.now().format(formatter));
         String host = System.getenv("MYSQL_HOST");
         String user = System.getenv("MYSQL_USER");
@@ -19,7 +20,7 @@ public class calcFead {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con=DriverManager.getConnection(connectionString,user,password);
-            CalcFeadOneYear(con,"2022");
+            myCalcFeadObj.CalcFeadOneYear(con,"2022");
             con.close();
         }catch(SQLException e){
             System.out.printf("%n%s CalcFead a SQL Error Occurred", LocalDateTime.now().format(formatter));
@@ -34,7 +35,7 @@ public class calcFead {
     }
 
 
- private static void CalcFeadOneYear(Connection con, String annee) throws Exception {
+ private  void CalcFeadOneYear(Connection con, String annee) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query= String.format("delete from campagne_fead where campagne='CUMUL' and annee = '%s'", annee );
             int numrows = stmt.executeUpdate(query);
@@ -112,7 +113,7 @@ public class calcFead {
 
     }
 
-    private static int updateCampagneFeadWithResultSet(Statement stmt,ResultSet rs,String item,String annee) throws Exception {
+    private  int updateCampagneFeadWithResultSet(Statement stmt,ResultSet rs,String item,String annee) throws Exception {
             int numrows = 0;
             String query = null;
             while (rs.next()) {
@@ -192,7 +193,7 @@ public class calcFead {
             return numrows;
    }
         //Mise à jour des envoyés par les banques
-        private static void majEnvoye(Connection con,String annee) throws Exception {
+        private  void majEnvoye(Connection con,String annee) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             Statement stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query ="select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot "+
@@ -241,7 +242,7 @@ public class calcFead {
 
 
 
-       private static void majCessions(Connection con,String annee) throws Exception {
+       private  void majCessions(Connection con,String annee) throws Exception {
             //réinitialisation qte=init
            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             if(annee.startsWith("20")) {
@@ -295,7 +296,7 @@ public class calcFead {
             }
 
         }
-        private static void majUneCessionOrigin(Connection con, String annee,String origin,String destination,String article,int qte) throws Exception {
+        private  void majUneCessionOrigin(Connection con, String annee,String origin,String destination,String article,int qte) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             Statement stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             int ucart= 0;
@@ -344,7 +345,7 @@ public class calcFead {
 
         }
 
-        private static void majUneCessionsDestination(Connection con,String annee, String campagne ,String article,String asso, String debut,String fin, String qte) throws Exception {
+        private  void majUneCessionsDestination(Connection con,String annee, String campagne ,String article,String asso, String debut,String fin, String qte) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne ,article,asso, debut,fin);
             ResultSet rs=stmt.executeQuery(query);
@@ -366,7 +367,7 @@ public class calcFead {
         /**
          * Ajout d'une ligne dans campagne_fead si la ligne de cumul est inconnue
          */
-        private static void addCampagneRow(Connection con,String annee, String article,String asso,boolean genCumulRow) throws Exception {
+        private  void addCampagneRow(Connection con,String annee, String article,String asso,boolean genCumulRow) throws Exception {
             Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
             //génération des lignes
 
@@ -394,7 +395,7 @@ public class calcFead {
                 }
             }
         }
-        private static void addResultSetRow(ResultSet rs,String annee, String campagne,String article,String asso,String debut, String fin, int tournee) throws Exception {
+        private void addResultSetRow(ResultSet rs,String annee, String campagne,String article,String asso,String debut, String fin, int tournee) throws Exception {
             rs.moveToInsertRow();
             rs.updateString("ANNEE", annee);
             rs.updateString("CAMPAGNE", campagne);
@@ -405,7 +406,7 @@ public class calcFead {
             rs.updateInt("TOURNEE", tournee);
             rs.updateInt("QTE", 0);
             rs.insertRow();
-            rs.moveToCurrentRow(); 
+            rs.moveToCurrentRow();
         }
 
 }
