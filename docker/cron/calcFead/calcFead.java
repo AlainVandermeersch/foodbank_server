@@ -218,7 +218,8 @@ public class calcFead {
                 while(rs1.next() && qte>0) {
                     dispo=rs1.getInt("qte");
                     // Alain getRow() returns row number of current row
-                    if(dispo>=qte || getRowCount(rs1)==rs1.getRow()) {
+                   // Alain old statement if(dispo>=qte || getRowCount(rs1)==rs1.getRow()) {
+                    if(dispo>=qte) {
                         rs1.updateInt("envoye", qte);
                         rs1.updateRow();
                         qte=0;
@@ -251,10 +252,8 @@ public class calcFead {
                         " left join campagne_fead f on ( f.id_asso=o.birbcode and f.id_article=c.id_article and f.campagne<>'cumul') ";
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
                 ResultSet rs=stmt.executeQuery(query);
-                if(getRowCount(rs)>0) {
-                    while(rs.next()) {
-                        addCampagneRow(stmt,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
-                    }
+                while(rs.next()) {
+                    addCampagneRow(stmt,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
                 }
 
                 //creation des assos manquantes (origine)
@@ -266,11 +265,10 @@ public class calcFead {
                         " left join campagne_fead f on ( f.id_asso=o.birbcode and f.id_article=c.id_article and f.campagne<>'CUMUL') ";
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
                 rs=stmt.executeQuery(query);
-                if(getRowCount(rs)>0) {
-                    while(rs.next()) {
-                        addCampagneRow(stmt,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
-                    }
+                while(rs.next()) {
+                   addCampagneRow(stmt,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
                 }
+
             }
 
 
@@ -345,10 +343,7 @@ public class calcFead {
         private static void majUneCessionsDestination(Statement stmt,String annee, String campagne ,String article,String asso, String debut,String fin, String qte) throws Exception {
             String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne ,article,asso, debut,fin);
             ResultSet rs=stmt.executeQuery(query);
-            int rowCount = getRowCount(rs);
-            System.out.printf("%n%s CalcFead majUneCessionsDestination %d rows returned for query %s",
-                    LocalDateTime.now().format(formatter),rowCount, query );
-            if(getRowCount(rs)==0) {
+            if(!rs.next()) {
                 int tournee = 1;
                 addResultSetRow(rs,annee,campagne,article,asso,debut,fin,tournee);
             }
@@ -405,12 +400,5 @@ public class calcFead {
             rs.insertRow();
             // rs.moveToCurrentRow(); Alain todo - check if logic requires this
         }
-    private static int getRowCount(ResultSet rs) throws Exception {
-        int size = 0;
-        while (rs.next()) {
-            size++;
-        }
-        rs.beforeFirst();
-        return size;
-    }
+
 }
