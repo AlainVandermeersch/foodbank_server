@@ -37,172 +37,128 @@ public class CalcFead {
 
 
  private  void CalcFeadOneYear(Connection con, String annee) throws Exception {
-            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
-            String query= String.format("delete from campagne_fead where campagne='CUMUL' and annee = '%s'", annee );
-            int numrows = stmt.executeUpdate(query);
-            System.out.printf("%n%s CalcFead Deleted %d CUMUL rows from  campagne_fead table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
+    Statement stmt=con.createStatement();
+    String query= String.format("delete from campagne_fead where campagne='CUMUL' and annee = '%s'", annee );
+    int numrows = stmt.executeUpdate(query);
+    System.out.printf("%n%s CalcFead Deleted %d CUMUL rows from  campagne_fead table for year %s .",
+            LocalDateTime.now().format(formatter),numrows, annee );
 
-            query= String.format("update campagne_fead set envoye=0,cession=0,qte=init where annee = '%s'", annee );
-            numrows = stmt.executeUpdate(query);
-            System.out.printf("%n%s CalcFead Reinitialized %d rows from  campagne_fead table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
+    query= String.format("update campagne_fead set envoye=0,cession=0,qte=init where annee = '%s'", annee );
+    numrows = stmt.executeUpdate(query);
+    System.out.printf("%n%s CalcFead Reinitialized %d rows from  campagne_fead table for year %s .",
+            LocalDateTime.now().format(formatter),numrows, annee );
 
-            majCessions(con,annee);
+    majCessions(con,annee);
 
-            query= String.format("update campagne_fead set qte=init+cession where annee= '%s' and campagne<>'cumul'" ,annee);
-            numrows = stmt.executeUpdate(query);
-            System.out.printf("%n%s CalcFead Updated %d rows with qte = qte=init+cession for non-cumul from  campagne_fead table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
+    query= String.format("update campagne_fead set qte=init+cession where annee= '%s' and campagne<>'cumul'" ,annee);
+    numrows = stmt.executeUpdate(query);
+    System.out.printf("%n%s CalcFead Updated %d rows with qte = qte=init+cession for non-cumul from  campagne_fead table for year %s .",
+            LocalDateTime.now().format(formatter),numrows, annee );
 
-            majEnvoye(con,annee);
+    majEnvoye(con,annee);
 
-            query= String.format("update campagne_fead set qte=init+cession  where annee= '%s'",annee);
-            numrows = stmt.executeUpdate(query);
-            System.out.printf("%n%s CalcFead Updated %d rows with qte = qte=init+cession for year and cumul from  campagne_fead table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
+    query= String.format("update campagne_fead set qte=init+cession  where annee= '%s'",annee);
+    numrows = stmt.executeUpdate(query);
+    System.out.printf("%n%s CalcFead Updated %d rows with qte = qte=init+cession for year and cumul from  campagne_fead table for year %s .",
+            LocalDateTime.now().format(formatter),numrows, annee );
 
-            query= String.format("select annee,'CUMUL' as campagne,id_article,id_asso,sum(coalesce(init,0)) as init,sum(coalesce(qte,0)) as qte,sum(coalesce(expedie,0)) as expedie,sum(coalesce(envoye,0)) as envoye,sum(coalesce(cession,0)) as cession from campagne_fead where campagne<>'cumul' and annee='%s' group by annee,id_article,id_asso" , annee);
-            ResultSet rs=stmt.executeQuery(query);
-            numrows = updateCampagneFeadWithResultSet(stmt,rs,"INITCUMUL",annee);
-            System.out.printf("%n%s CalcFead Reloaded %d CUMUL rows from  campagne_fead table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
-            //Maj réceptions par les assos
-            query = "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as expedie from mvtasso m join organisations o on (o.id_dis=m.id_asso) " +
-             " join articles a on (a.id_article=m.id_article) ";
-            query +=  String.format(" where a.annee_fead= '%s'  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
-                      rs=stmt.executeQuery(query);
-            numrows = updateCampagneFeadWithResultSet(stmt,rs,"EXPEDIE",annee);
-            System.out.printf("%n%s CalcFead Updated %d EXPEDIE rows from  mvtasso table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
+    query= String.format("select annee,'CUMUL' as campagne,id_article,id_asso,sum(coalesce(init,0)) as init,sum(coalesce(qte,0)) as qte,sum(coalesce(expedie,0)) as expedie,sum(coalesce(envoye,0)) as envoye,sum(coalesce(cession,0)) as cession from campagne_fead where campagne<>'cumul' and annee='%s' group by annee,id_article,id_asso" , annee);
+    ResultSet rs=stmt.executeQuery(query);
+     numrows =0;
+     while(rs.next()) {
+         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,init,qte,expedie,envoye,cession) values(annee,'CUMUL',%s,'%s','%s','%s','%s',%d,%d,%d,%d)",
+                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                 rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
+         query += String.format(" on duplicate key update init = %d, qte = %d, expedie= %d, envoye = %d, cession = %d",
+                 rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
 
-
-            //Maj stock assos
-
-            query= "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as STOCK " +
-                    " from stoasso m join organisations o on (o.id_dis=m.id_asso) " +
-                    " join articles a on (a.id_article=m.id_article) " ;
-            query +=  String.format(" where a.annee_fead= '%s'  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
-            rs=stmt.executeQuery(query);
-            numrows = updateCampagneFeadWithResultSet(stmt,rs,"STOCK",annee);
-            System.out.printf("%n%s CalcFead Updated %d STOCK rows from  stoasso table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
-
-            //Maj en attente par les assos
-            query= "select m.id_article,o.birbcode as id_asso" +
-                    ",round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as ATTENTE " +
-                    " from stoasso_prev m join organisations o on (o.id_dis=m.id_asso) " +
-                    " join articles a on (a.id_article=m.id_article) " ;
-            query +=  String.format(" where a.annee_fead= '%s' and status= 0 and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
-            rs=stmt.executeQuery(query);
-            numrows = updateCampagneFeadWithResultSet(stmt,rs,"ATTENTE",annee);
-            System.out.printf("%n%s CalcFead Updated %d attente rows from  stoasso_prev table for year %s .",
-                    LocalDateTime.now().format(formatter),numrows, annee );
-
-            //Maj refus par les assos
-            query= "select m.id_article,o.birbcode as id_asso" +
-                    ",round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as refus " +
-                    " from stoasso_prev m join organisations o on (o.id_dis=m.id_asso) " +
-                    " join articles a on (a.id_article=m.id_article) ";
-            query +=  String.format(" where a.annee_fead= '%s' and status=2  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",  annee );
-            rs=stmt.executeQuery(query);
-            numrows = updateCampagneFeadWithResultSet(stmt,rs,"REFUS",annee);
-            System.out.printf("%n%s CalcFead Updated %d refus rows from  stoasso_prev table for year %s .",
+         numrows += stmt.executeUpdate(query);
+     }
+    System.out.printf("%n%s CalcFead Reloaded %d CUMUL rows from  campagne_fead table for year %s .",
+            LocalDateTime.now().format(formatter),numrows, annee );
+    //Maj réceptions par les assos
+    query = "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as expedie from mvtasso m join organisations o on (o.id_dis=m.id_asso) " +
+     " join articles a on (a.id_article=m.id_article) ";
+    query +=  String.format(" where a.annee_fead= '%s'  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
+    rs=stmt.executeQuery(query);
+     numrows =0;
+     while(rs.next()) {
+         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,expedie) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
+                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                 rs.getInt("expedie"), rs.getInt("cession"));
+         query += String.format(" on duplicate key update expedie= %d",
+                 rs.getInt("expedie"));
+         numrows += stmt.executeUpdate(query);
+     }
+     System.out.printf("%n%s CalcFead Updated %d EXPEDIE rows from  mvtasso table for year %s .",
                     LocalDateTime.now().format(formatter),numrows, annee );
 
 
+    //Maj stock assos
 
-    }
+    query= "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as STOCK " +
+            " from stoasso m join organisations o on (o.id_dis=m.id_asso) " +
+            " join articles a on (a.id_article=m.id_article) " ;
+    query +=  String.format(" where a.annee_fead= '%s'  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
+    rs=stmt.executeQuery(query);
+     numrows =0;
+     while(rs.next()) {
+         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,stock) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
+                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                 rs.getInt("stock"));
+         query += String.format(" on duplicate key update stock = %d",
+                 rs.getInt("Stock"));
+         numrows += stmt.executeUpdate(query);
+     }
 
-    private  int updateCampagneFeadWithResultSet(Statement stmt,ResultSet rs,String item,String annee) throws Exception {
-            int numrows = 0;
-            String query = null;
-            while (rs.next()) {
-                switch (item) {
-                    case "INITCUMUL":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,init,qte,expedie,envoye,cession) values(annee,'CUMUL',%s,'%s','%s','%s','%s',%d,%d,%d,%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
-                        query += String.format(" on duplicate key update init = %d, qte = %d, expedie= %d, envoye = %d, cession = %d",
-                                rs.getInt("init"), rs.getInt("qte"), rs.getInt("expedie"), rs.getInt("cession"));
-                        break;
+    System.out.printf("%n%s CalcFead Updated %d STOCK rows from  stoasso table for year %s .",
+            LocalDateTime.now().format(formatter),numrows, annee );
 
-                    case "EXPEDIE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,expedie) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                               rs.getInt("expedie"), rs.getInt("cession"));
-                        query += String.format(" on duplicate key update expedie= %d",
-                               rs.getInt("expedie"));
-                        break;
-                    case "STOCK":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,stock) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("stock"));
-                        query += String.format(" on duplicate key update stock = %d",
-                                rs.getInt("Stock"));
-                        break;
-                    case "ATTENTE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,attente) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("attente"));
-                        query += String.format(" on duplicate key update attente = %d",
-                                rs.getInt("attente"));
-                        break;
-                    case "REFUS":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,refus) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
-                                rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                                rs.getInt("refus"));
-                        query += String.format(" on duplicate key update refus = %d",
-                                rs.getInt("refus"));
-                        break;
+    //Maj en attente par les assos
+    query= "select m.id_article,o.birbcode as id_asso" +
+            ",round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as ATTENTE " +
+            " from stoasso_prev m join organisations o on (o.id_dis=m.id_asso) " +
+            " join articles a on (a.id_article=m.id_article) " ;
+    query +=  String.format(" where a.annee_fead= '%s' and status= 0 and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",annee);
+    rs=stmt.executeQuery(query);
+     numrows =0;
+     while(rs.next()) {
+         query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,attente) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
+                 rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                 rs.getInt("attente"));
+         query += String.format(" on duplicate key update attente = %d",
+                 rs.getInt("attente"));
+         numrows += stmt.executeUpdate(query);
+     }
+     System.out.printf("%n%s CalcFead Updated %d attente rows from  stoasso_prev table for year %s .",
+                    LocalDateTime.now().format(formatter),numrows, annee );
 
-                    case "TOURNEE":
-                        query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
-                                rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"),  rs.getString("debut"),  rs.getString("fin"),
-                                rs.getInt("tournee"));
-                        query += String.format(" on duplicate key update tournee = %d",
-                                rs.getInt("tournee"));
-                        System.out.printf("%n%s CalcFead  tournee query '%s'",
-                                LocalDateTime.now().format(formatter),query);
-                        break;
-                    default:
-                        System.out.printf("%n%s CalcFead  unknown update option '%s'",
-                                LocalDateTime.now().format(formatter), item);
-                }               
-                numrows += stmt.executeUpdate(query);
-            }
-            return numrows;
+    //Maj refus par les assos
+    query= "select m.id_article,o.birbcode as id_asso" +
+            ",round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as refus " +
+            " from stoasso_prev m join organisations o on (o.id_dis=m.id_asso) " +
+            " join articles a on (a.id_article=m.id_article) ";
+    query +=  String.format(" where a.annee_fead= '%s' and status=2  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ",  annee );
+    rs=stmt.executeQuery(query);
+   numrows =0;
+   while(rs.next()) {
+       query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,refus) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
+               rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+               rs.getInt("refus"));
+       query += String.format(" on duplicate key update refus = %d",
+               rs.getInt("refus"));
+       numrows += stmt.executeUpdate(query);
    }
-    private  void majEnvoyeArticle(Connection con,String annee, String article,String asso,int qte) throws Exception {
-        Statement stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
-        String  query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
-        stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
-        ResultSet rs1=stmt1.executeQuery(query);
-        int numrowsEnvoye = 0;
-        while(rs1.next() && qte>0) {
-            int dispo=rs1.getInt("qte");
-            // Alain getRow() returns row number of current row
-            // Alain old statement if(dispo>=qte || getRowCount(rs1)==rs1.getRow()) {
-            if(dispo>=qte) {
-                rs1.updateInt("envoye", qte);
-                rs1.updateRow();
-                qte=0;
-            }
-            else {
-                rs1.updateInt("envoye", dispo);
-                rs1.updateRow();
-                qte-=dispo;
-            }
-            query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,envoye) values(annee,annee,'%s','%s','%s','%s',%d)",
-                    rs1.getString("id_article"), rs1.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                    rs1.getInt("envoye"));
-            query += String.format(" on duplicate key update envoye = %d",
-                    rs1.getInt("envoye"));
-            numrowsEnvoye += stmt1.executeUpdate(query);
-        }
-        System.out.printf("%n%s CalcFead Updated %d envoye rows from  mouvements table for year %s .",
-                LocalDateTime.now().format(formatter),numrowsEnvoye, annee );
+
+   System.out.printf("%n%s CalcFead Updated %d refus rows from  stoasso_prev table for year %s .",
+                LocalDateTime.now().format(formatter),numrows, annee );
+
+
+
     }
+
+
+
         //Mise à jour des envoyés par les banques
         private  void majEnvoye(Connection con,String annee) throws Exception {
             Statement stmt=con.createStatement();
@@ -231,12 +187,39 @@ public class CalcFead {
             System.out.printf("%n%s CalcFead Processed %d articles from  mouvements table for year %s .",
                     LocalDateTime.now().format(formatter),count, annee );
         }
-
+    private  void majEnvoyeArticle(Connection con,String annee, String article,String asso,int qte) throws Exception {
+        Statement stmt1=con.createStatement();
+        String  query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
+        ResultSet rs1=stmt1.executeQuery(query);
+        int numrowsEnvoye = 0;
+        while(rs1.next() && qte>0) {
+            int dispo=rs1.getInt("qte");
+            int envoye= rs1.getInt("envoye");
+            // Alain getRow() returns row number of current row
+            // Alain old statement if(dispo>=qte || getRowCount(rs1)==rs1.getRow()) {
+            if(dispo>=qte) {
+                envoye= qte;
+                qte=0;
+            }
+            else {
+                envoye= dispo;
+                qte-=dispo;
+            }
+            query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,envoye) values(annee,annee,'%s','%s','%s','%s',%d)",
+                    rs1.getString("id_article"), rs1.getString("id_asso"), annee + "-01-01", annee + "-12-31",
+                    rs1.getInt("envoye"));
+            query += String.format(" on duplicate key update envoye = %d",
+                    envoye);
+            numrowsEnvoye += stmt1.executeUpdate(query);
+        }
+        System.out.printf("%n%s CalcFead Updated %d envoye rows from  mouvements table for year %s .",
+                LocalDateTime.now().format(formatter),numrowsEnvoye, annee );
+    }
 
 
        private  void majCessions(Connection con,String annee) throws Exception {
             //réinitialisation qte=init
-           Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+           Statement stmt=con.createStatement();
             if(annee.startsWith("20")) {
                 //creation des assos manquantes (destination)
                 String query ="select a.annee_fead as annee,a.annee_fead as campagne,c.id_article,o.birbcode as id_asso,'' as debut ,'' as fin "+
@@ -289,8 +272,8 @@ public class CalcFead {
 
         }
         private  void majUneCessionOrigin(Connection con, String annee,String origin,String destination,String article,int qte) throws Exception {
-            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
-            Statement stmt1=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+            Statement stmt=con.createStatement();
+            Statement stmt1=con.createStatement();
             int ucart= 0;
             String query=String.format("select fead_ucart from articles where id_article=%s", article).trim();
             ResultSet rs=stmt.executeQuery(query);
@@ -306,10 +289,12 @@ public class CalcFead {
                 query=String.format("select * from campagne_fead where annee=%s and id_article=%s and id_asso=%s and campagne<>'CUMUL' and coalesce(init,0)-coalesce(envoye,0)+coalesce(cession,0)>0 ",annee , article,origin);
                 ResultSet rs1=stmt1.executeQuery(query);
                 int numrowsCumul =0;
+
                 while(rs1.next()) {
+                    int intCession = 0;
                     if (intQte > 0) {
                         int intInit = rs1.getInt("init");
-                        int intCession = rs1.getInt("cession");
+                       intCession = rs1.getInt("cession");
                         int intEnvoye = rs1.getInt("envoye");
                         int intDispo = intInit + intCession - intEnvoye;
 
@@ -317,25 +302,22 @@ public class CalcFead {
                             if (intDispo - intQte >= 0f) {
                                 intDispo -= intQte;
                                 intCession += intQte;
-                                rs1.updateInt("cession", intCession);
-                                rs1.updateRow();
                                 majUneCessionsDestination(con, annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intQte);
                                 intQte = 0;
                             } else {
                                 majUneCessionsDestination(con, annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intDispo);
                                 // intQte -= intDispo; not needed cfr original source
                                 intCession -= intDispo;
-                                rs1.updateInt("cession", intCession);
-                                rs1.updateRow();
+
                             }
                         }
                     }
 
                     query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
                             rs1.getString("id_article"), rs1.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                            rs1.getInt("cession"));
+                            intCession);
                     query += String.format(" on duplicate key update cession = %d",
-                            rs1.getInt("cession"));
+                            intCession);
                     numrowsCumul += stmt.executeUpdate(query);
                 }
 
@@ -346,7 +328,7 @@ public class CalcFead {
         }
 
         private  void majUneCessionsDestination(Connection con,String annee, String campagne ,String article,String asso, String debut,String fin, int intQte) throws Exception {
-            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+            Statement stmt=con.createStatement();
             String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne ,article,asso, debut,fin);
             ResultSet rs=stmt.executeQuery(query);
             if(!rs.next()) {
@@ -368,8 +350,8 @@ public class CalcFead {
          * Ajout d'une ligne dans campagne_fead si la ligne de cumul est inconnue
          */
         private  void addCampagneRow(Connection con,String annee, String article,String asso,boolean genCumulRow) throws Exception {
-            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
-            Statement stmt2=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+            Statement stmt=con.createStatement();
+            Statement stmt2=con.createStatement();
             //génération des lignes
 
             ResultSet rs=stmt.executeQuery("select * from campagne_fead where false");
@@ -379,7 +361,16 @@ public class CalcFead {
                addResultSetRow(rs,annee,annee,article,asso,rs2.getString("debut"),rs2.getString("fin"),rs2.getInt("tournee"));               
             }
             rs.beforeFirst();
-            int numrows = updateCampagneFeadWithResultSet(stmt,rs,"TOURNEE",annee);
+            int numrows = 0;
+            while (rs.next()) {
+                query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
+                        rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"), rs.getString("debut"), rs.getString("fin"),
+                        rs.getInt("tournee"));
+                query += String.format(" on duplicate key update tournee = %d",
+                        rs.getInt("tournee"));
+                numrows += stmt.executeUpdate(query);
+            }
+
             System.out.printf("%n%s CalcFead Updated %d tournee values in rows for article %s for year %s .",
                     LocalDateTime.now().format(formatter),numrows, article,annee );
             if(genCumulRow) {
@@ -389,8 +380,14 @@ public class CalcFead {
                 if(rs2.next()) {
                     int tournee = 0;
                     addResultSetRow(rs,annee,"CUMUL",article,asso,rs2.getString("debut"),rs2.getString("fin"),tournee);
-                    rs.beforeFirst();
-                    numrows = updateCampagneFeadWithResultSet(stmt,rs,"TOURNEE",annee);
+
+                    query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
+                            rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"), rs.getString("debut"), rs.getString("fin"),
+                            rs.getInt("tournee"));
+                    query += String.format(" on duplicate key update tournee = %d",
+                            rs.getInt("tournee"));
+                    numrows = stmt.executeUpdate(query);
+
                     System.out.printf("%n%s CalcFead Updated %d tournee values in CUMUL rows for article %s for year %s .",
                             LocalDateTime.now().format(formatter),numrows, article,annee );
                 }
