@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 public class CalcFead {
      private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     public static void main(String[] args) {
@@ -204,7 +205,7 @@ public class CalcFead {
     }
         //Mise à jour des envoyés par les banques
         private  void majEnvoye(Connection con,String annee) throws Exception {
-            Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,  ResultSet.CONCUR_UPDATABLE);
+            Statement stmt=con.createStatement();
 
             String query ="select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot "+
                     " from mouvements m "+
@@ -214,15 +215,21 @@ public class CalcFead {
             query+= String.format(" where a.annee_fead=%s and d.id_depot is null  group by o.birbcode,a.id_article order by o.birbcode,a.id_article ",annee);
             System.out.println(query);
             ResultSet rs=stmt.executeQuery(query);
-           int qte = 0;
-            String article="";
-            String asso="";
+            ArrayList<Integer> qtes = new ArrayList<Integer>();
+            ArrayList<String> articles = new ArrayList<String>();
+            ArrayList<String> assos = new ArrayList<String>();
             while (rs.next()) {
-               qte=rs.getInt("nbunit");
-               article=rs.getString("id_article");
-               asso=rs.getString("birbcode");
-               this.majEnvoyeArticle(con,annee,article,asso,qte);
+               qtes.add(rs.getInt("nbunit"));
+               articles.add(rs.getString("id_article"));
+               assos.add(rs.getString("birbcode"));
             }
+            int count = 0;
+            while (qtes.size() > count) {
+                this.majEnvoyeArticle(con,annee,articles.get(count),assos.get(count),qtes.get(count));
+                count++;
+            }
+            System.out.printf("%n%s CalcFead Processed %d articles from  mouvements table for year %s .",
+                    LocalDateTime.now().format(formatter),count, annee );
         }
 
 
