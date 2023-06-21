@@ -178,16 +178,16 @@ public class CalcFead {
                     " left join depots d on (d.id_depot=m.id_asso) ";
             query+= String.format(" where a.annee_fead=%s and d.id_depot is null  group by o.birbcode,a.id_article order by o.birbcode,a.id_article ",annee);
             System.out.println(query);
-            ResultSet rs=stmt.executeQuery(query);
+            ResultSet rs1=stmt.executeQuery(query);
             ArrayList<Integer> qtes = new ArrayList<Integer>();
             ArrayList<String> articles = new ArrayList<String>();
             ArrayList<String> assos = new ArrayList<String>();
-            while (rs.next()) {
-               qtes.add(rs.getInt("nbunit"));
-               articles.add(rs.getString("id_article"));
-               assos.add(rs.getString("birbcode"));
+            while (rs1.next()) {
+               qtes.add(rs1.getInt("nbunit"));
+               articles.add(rs1.getString("id_article"));
+               assos.add(rs1.getString("birbcode"));
             }
-            rs.close();
+            rs1.close();
             stmt.close();
             int count = 0;
             while (qtes.size() > count) {
@@ -307,6 +307,7 @@ public class CalcFead {
             {
                 ucart =rs.getInt("fead_ucart");
             }
+            rs.close();
 
             if((qte!=0) && (ucart != 0)) {
 
@@ -314,7 +315,7 @@ public class CalcFead {
 
                 String exped="0";
                 query=String.format("select * from campagne_fead where annee=%s and id_article=%s and id_asso=%s and campagne<>'CUMUL' and coalesce(init,0)-coalesce(envoye,0)+coalesce(cession,0)>0 ",annee , article,origin);
-                rs=stmt.executeQuery(query);
+                ResultSet rs1=stmt.executeQuery(query);
                 int numrowsCumul =0;
 
                 while(rs.next()) {
