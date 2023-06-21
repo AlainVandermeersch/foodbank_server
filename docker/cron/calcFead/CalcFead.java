@@ -74,7 +74,7 @@ public class CalcFead {
 
          numrows += stmt.executeUpdate(query);
      }
-    System.out.printf("%n%s CalcFead Reloaded %d CUMUL rows from  campagne_fead table for year %s .",
+     System.out.printf("%n%s CalcFead Reloaded %d CUMUL rows from  campagne_fead table for year %s .",
             LocalDateTime.now().format(formatter),numrows, annee );
     //Maj réceptions par les assos
     query = "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as expedie from mvtasso m join organisations o on (o.id_dis=m.id_asso) " +
@@ -149,6 +149,8 @@ public class CalcFead {
                rs.getInt("refus"));
        numrows += stmt.executeUpdate(query);
    }
+     rs.close();
+     stmt.close();
 
    System.out.printf("%n%s CalcFead Updated %d refus rows from  stoasso_prev table for year %s .",
                 LocalDateTime.now().format(formatter),numrows, annee );
@@ -179,6 +181,8 @@ public class CalcFead {
                articles.add(rs.getString("id_article"));
                assos.add(rs.getString("birbcode"));
             }
+            rs.close();
+            stmt.close();
             int count = 0;
             while (qtes.size() > count) {
                 this.majEnvoyeArticle(con,annee,articles.get(count),assos.get(count),qtes.get(count));
@@ -212,6 +216,8 @@ public class CalcFead {
                     envoye);
             numrowsEnvoye += stmt1.executeUpdate(query);
         }
+        rs1.close();
+        stmt1.close();
         System.out.printf("%n%s CalcFead Updated %d envoye rows from  mouvements table for year %s .",
                 LocalDateTime.now().format(formatter),numrowsEnvoye, annee );
     }
@@ -246,6 +252,7 @@ public class CalcFead {
                 while(rs.next()) {
                    addCampagneRow(con,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
                 }
+                rs.close();
 
             }
 
@@ -260,15 +267,25 @@ public class CalcFead {
             String article="";
             String origin="";
             String destination="";
+           ArrayList<Integer> qtes = new ArrayList<Integer>();
+           ArrayList<String> articles = new ArrayList<String>();
+           ArrayList<String> origins = new ArrayList<String>();
+           ArrayList<String> destinations = new ArrayList<String>();
+           while (rs.next()) {
+               qtes.add(rs.getInt("nbunit"));
+               articles.add(rs.getString("id_article"));
+               origins.add(rs.getString("asso1"));
+               destinations.add(rs.getString("asso2"));
+           }
+           rs.close();
+           stmt.close();
+           int count = 0;
+           while (qtes.size() > count) {
+               this. majUneCessionOrigin(con,annee,origins.get(count),destinations.get(count),articles.get(count),qtes.get(count));
+               count++;
+           }
 
-            while(rs.next()) {
-                article=rs.getString("id_article");
-                qte=rs.getInt("qte");
-                origin=rs.getString("asso1");
-                destination=rs.getString("asso2");
 
-                majUneCessionOrigin(con, annee, origin, destination, article, qte);
-            }
 
         }
         private  void majUneCessionOrigin(Connection con, String annee,String origin,String destination,String article,int qte) throws Exception {
