@@ -12,17 +12,10 @@ public class CalcFead {
     public static void main(String[] args) {
         CalcFead myCalcFeadObj = new CalcFead();
         System.out.printf("%n%s CalcFead Started", LocalDateTime.now().format(formatter));
-        String host = System.getenv("MYSQL_HOST");
-        String user = System.getenv("MYSQL_USER");
-        String password = System.getenv("MYSQL_PASSWORD");
-        String database = System.getenv("MYSQL_DATABASE");
-        String connectionString =  String.format("jdbc:mysql://%s:3306/%s", host, database);
+
         // System.out.println("connection String: " + connectionString + " " + "user: " + user + "password: " + password );
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con=DriverManager.getConnection(connectionString,user,password);
-            myCalcFeadObj.CalcFeadOneYear(con,"2022");
-            con.close();
+            myCalcFeadObj.CalcFeadOneYear("2022");
         }catch(SQLException e){
             System.out.printf("%n%s CalcFead a SQL Error Occurred", LocalDateTime.now().format(formatter));
                     e.printStackTrace();
@@ -34,9 +27,20 @@ public class CalcFead {
             System.out.printf("%n%s CalcFead Ended", LocalDateTime.now().format(formatter));
         }
     }
+    private Connection getDbConnection() throws Exception {
+        String host = System.getenv("MYSQL_HOST");
+        String user = System.getenv("MYSQL_USER");
+        String password = System.getenv("MYSQL_PASSWORD");
+        String database = System.getenv("MYSQL_DATABASE");
+        String connectionString =  String.format("jdbc:mysql://%s:3306/%s", host, database);
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con=DriverManager.getConnection(connectionString,user,password);
+        return con;
+    }
 
 
- private  void CalcFeadOneYear(Connection con, String annee) throws Exception {
+ private  void CalcFeadOneYear( String annee) throws Exception {
+    Connection con = this.getDbConnection();
     Statement stmt=con.createStatement();
     String query= String.format("delete from campagne_fead where campagne='CUMUL' and annee = '%s'", annee );
     int numrows = stmt.executeUpdate(query);
@@ -48,14 +52,14 @@ public class CalcFead {
     System.out.printf("%n%s CalcFead Reinitialized %d rows from  campagne_fead table for year %s .",
             LocalDateTime.now().format(formatter),numrows, annee );
 
-    majCessions(con,annee);
+    majCessions(annee);
 
     query= String.format("update campagne_fead set qte=init+cession where annee= '%s' and campagne<>'cumul'" ,annee);
     numrows = stmt.executeUpdate(query);
     System.out.printf("%n%s CalcFead Updated %d rows with qte = qte=init+cession for non-cumul from  campagne_fead table for year %s .",
             LocalDateTime.now().format(formatter),numrows, annee );
 
-    majEnvoye(con,annee);
+    majEnvoye(annee);
 
     query= String.format("update campagne_fead set qte=init+cession  where annee= '%s'",annee);
     numrows = stmt.executeUpdate(query);
@@ -149,12 +153,13 @@ public class CalcFead {
                rs.getInt("refus"));
        numrows += stmt.executeUpdate(query);
    }
-     rs.close();
-     stmt.close();
+
 
    System.out.printf("%n%s CalcFead Updated %d refus rows from  stoasso_prev table for year %s .",
                 LocalDateTime.now().format(formatter),numrows, annee );
-
+     rs.close();
+     stmt.close();
+     con.close();
 
 
     }
@@ -162,7 +167,8 @@ public class CalcFead {
 
 
         //Mise à jour des envoyés par les banques
-        private  void majEnvoye(Connection con,String annee) throws Exception {
+        private  void majEnvoye(String annee) throws Exception {
+            Connection con = this.getDbConnection();
             Statement stmt=con.createStatement();
 
             String query ="select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot "+
@@ -185,13 +191,14 @@ public class CalcFead {
             stmt.close();
             int count = 0;
             while (qtes.size() > count) {
-                this.majEnvoyeArticle(con,annee,articles.get(count),assos.get(count),qtes.get(count));
+                this.majEnvoyeArticle(annee,articles.get(count),assos.get(count),qtes.get(count));
                 count++;
             }
             System.out.printf("%n%s CalcFead Processed %d articles from  mouvements table for year %s .",
                     LocalDateTime.now().format(formatter),count, annee );
         }
-    private  void majEnvoyeArticle(Connection con,String annee, String article,String asso,int qte) throws Exception {
+    private  void majEnvoyeArticle(String annee, String article,String asso,int qte) throws Exception {
+        Connection con = this.getDbConnection();
         Statement stmt1=con.createStatement();
         String  query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut",annee,annee,asso,article);
         ResultSet rs1=stmt1.executeQuery(query);
@@ -223,7 +230,8 @@ public class CalcFead {
     }
 
 
-       private  void majCessions(Connection con,String annee) throws Exception {
+       private  void majCessions(String annee) throws Exception {
+           Connection con = this.getDbConnection();
             //réinitialisation qte=init
            Statement stmt=con.createStatement();
             if(annee.startsWith("20")) {
@@ -237,7 +245,7 @@ public class CalcFead {
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
                 ResultSet rs=stmt.executeQuery(query);
                 while(rs.next()) {
-                    addCampagneRow(con,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
+                    addCampagneRow(annee, rs.getString("id_article"), rs.getString("id_asso"),false);
                 }
 
                 //creation des assos manquantes (origine)
@@ -250,7 +258,7 @@ public class CalcFead {
                 query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0" ,annee);
                 rs=stmt.executeQuery(query);
                 while(rs.next()) {
-                   addCampagneRow(con,annee, rs.getString("id_article"), rs.getString("id_asso"),false);
+                   addCampagneRow(annee, rs.getString("id_article"), rs.getString("id_asso"),false);
                 }
                 rs.close();
 
@@ -279,16 +287,18 @@ public class CalcFead {
            }
            rs.close();
            stmt.close();
+           con.close();
            int count = 0;
            while (qtes.size() > count) {
-               this. majUneCessionOrigin(con,annee,origins.get(count),destinations.get(count),articles.get(count),qtes.get(count));
+               this. majUneCessionOrigin(annee,origins.get(count),destinations.get(count),articles.get(count),qtes.get(count));
                count++;
            }
 
 
 
         }
-        private  void majUneCessionOrigin(Connection con, String annee,String origin,String destination,String article,int qte) throws Exception {
+        private  void majUneCessionOrigin(String annee,String origin,String destination,String article,int qte) throws Exception {
+            Connection con = this.getDbConnection();
             Statement stmt=con.createStatement();
             Statement stmt1=con.createStatement();
             int ucart= 0;
@@ -298,6 +308,7 @@ public class CalcFead {
             {
                 ucart =rs.getInt("fead_ucart");
             }
+            rs.close();
             if((qte!=0) && (ucart != 0)) {
 
                 int intQte=qte * ucart;
@@ -319,10 +330,10 @@ public class CalcFead {
                             if (intDispo - intQte >= 0f) {
                                 intDispo -= intQte;
                                 intCession += intQte;
-                                majUneCessionsDestination(con, annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intQte);
+                                majUneCessionsDestination(annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intQte);
                                 intQte = 0;
                             } else {
-                                majUneCessionsDestination(con, annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intDispo);
+                                majUneCessionsDestination(annee, rs1.getString("campagne"), article, destination, rs1.getString("debut"), rs1.getString("fin"), intDispo);
                                 // intQte -= intDispo; not needed cfr original source
                                 intCession -= intDispo;
 
@@ -335,8 +346,11 @@ public class CalcFead {
                             intCession);
                     query += String.format(" on duplicate key update cession = %d",
                             intCession);
-                    numrowsCumul += stmt.executeUpdate(query);
+                    numrowsCumul += stmt1.executeUpdate(query);
                 }
+                rs1.close();
+                stmt1.close();
+                con.close();
 
                 System.out.printf("%n%s CalcFead Updated %d cession values in rows for article %s for year %s .",
                         LocalDateTime.now().format(formatter),numrowsCumul, article,annee );
@@ -344,7 +358,8 @@ public class CalcFead {
 
         }
 
-        private  void majUneCessionsDestination(Connection con,String annee, String campagne ,String article,String asso, String debut,String fin, int intQte) throws Exception {
+        private  void majUneCessionsDestination(String annee, String campagne ,String article,String asso, String debut,String fin, int intQte) throws Exception {
+            Connection con = this.getDbConnection();
             Statement stmt=con.createStatement();
             String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne ,article,asso, debut,fin);
             ResultSet rs=stmt.executeQuery(query);
@@ -359,6 +374,9 @@ public class CalcFead {
             query += String.format(" on duplicate key update cession = %d, qte = %d",
                     intCession,intQte);
             int numrows = stmt.executeUpdate(query);
+            rs.close();
+            stmt.close();
+            con.close();
             System.out.printf("%n%s CalcFead Updated %d cessionqte values in rows for article %s for year %s .",
                     LocalDateTime.now().format(formatter),numrows, article,annee );
         }
@@ -366,7 +384,8 @@ public class CalcFead {
         /**
          * Ajout d'une ligne dans campagne_fead si la ligne de cumul est inconnue
          */
-        private  void addCampagneRow(Connection con,String annee, String article,String asso,boolean genCumulRow) throws Exception {
+        private  void addCampagneRow(String annee, String article,String asso,boolean genCumulRow) throws Exception {
+            Connection con = this.getDbConnection();
             Statement stmt=con.createStatement();
             Statement stmt2=con.createStatement();
             //génération des lignes
@@ -409,6 +428,11 @@ public class CalcFead {
                             LocalDateTime.now().format(formatter),numrows, article,annee );
                 }
             }
+            rs.close();
+            stmt.close();
+            rs2.close();
+            stmt2.close();
+            con.close();
         }
         private void addResultSetRow(ResultSet rs,String annee, String campagne,String article,String asso,String debut, String fin, int tournee) throws Exception {
             rs.moveToInsertRow();
