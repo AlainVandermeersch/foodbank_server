@@ -272,7 +272,7 @@ public class CalcFead {
            ArrayList<String> origins = new ArrayList<String>();
            ArrayList<String> destinations = new ArrayList<String>();
            while (rs.next()) {
-               qtes.add(rs.getInt("nbunit"));
+               qtes.add(rs.getInt("qte"));
                articles.add(rs.getString("id_article"));
                origins.add(rs.getString("asso1"));
                destinations.add(rs.getString("asso2"));
