@@ -241,7 +241,7 @@ public class CalcFead {
     }
 
     private int majEnvoyeArticle(String annee, String article, String asso, int qte) throws Exception {
-        AtomicInteger numRowsEnvoye=new AtomicInteger(); // need Class as effectively final to increase value il lambda expression
+        AtomicInteger numRowsEnvoyeArticle=new AtomicInteger(); // need Class as effectively final to increase value il lambda expression
         String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut", annee, annee, asso, article);
         executeQuery(query, rs1 -> {
             try {
@@ -263,14 +263,17 @@ public class CalcFead {
                             rs1.getInt("envoye"));
                     insert += String.format(" on duplicate key update envoye = %d",
                             envoye);
-                    numRowsEnvoye.addAndGet(executeUpdateQuery(insert));
+                    numRowsEnvoyeArticle.addAndGet(executeUpdateQuery(insert));
+                    System.out.printf("%n%s CalcFead Already Processed %d articles from  mouvements table for year %s .",
+                            LocalDateTime.now().format(formatter), numRowsEnvoyeArticle.get(), annee);
+
                 }
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
-        return numRowsEnvoye.get();
+        return numRowsEnvoyeArticle.get();
     }
 
 
