@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CalcFead {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -117,9 +118,9 @@ public class CalcFead {
             try {
                 var rowsnum = 0;
                 while (rs.next()) {
-                    var insertStatement = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,expedie,cession) values(annee,'CUMUL','%s','%s','%s','%s',%s,%d)",
+                    var insertStatement = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,expedie) values(annee,'CUMUL','%s','%s','%s','%s',%s,%d)",
                             rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                            rs.getInt("expedie"), rs.getInt("cession"));
+                            rs.getInt("expedie"));
                     insertStatement += String.format(" on duplicate key update expedie= %d",
                             rs.getInt("expedie"));
                     rowsnum += executeUpdateQuery(insertStatement);
@@ -208,13 +209,13 @@ public class CalcFead {
 
     //Mise à jour des envoyés par les banques
     private void majEnvoye(String annee) throws Exception {
+        AtomicInteger numrowsEnvoye=new AtomicInteger(); // need Class as effectively final to increase value il lambda expression
         String query = "select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot " +
                 " from mouvements m " +
                 " join articles a on (a.id_article=m.id_article) " +
                 " join organisations o on (o.id_dis=m.id_asso) " +
                 " left join depots d on (d.id_depot=m.id_asso) ";
         query += String.format(" where a.annee_fead=%s and d.id_depot is null  group by o.birbcode,a.id_article order by o.birbcode,a.id_article ", annee);
-        System.out.println(query);
         executeQuery(query, rs1 -> {
             try {
                 ArrayList<Integer> qtes = new ArrayList<>();
@@ -228,24 +229,23 @@ public class CalcFead {
 
                 int count = 0;
                 while (qtes.size() > count) {
-                    this.majEnvoyeArticle(annee, articles.get(count), assos.get(count), qtes.get(count));
+                    numrowsEnvoye.addAndGet(this.majEnvoyeArticle(annee, articles.get(count), assos.get(count), qtes.get(count)));
                     count++;
                 }
-                System.out.printf("%n%s CalcFead Processed %d articles from  mouvements table for year %s .",
-                        LocalDateTime.now().format(formatter), count, annee);
+                System.out.printf("%n%s CalcFead Processed %d envoyes for %d articles from  mouvements table for year %s .",
+                        LocalDateTime.now().format(formatter), numrowsEnvoye.get(), count, annee);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private void majEnvoyeArticle(String annee, String article, String asso, int qte) throws Exception {
-
+    private int majEnvoyeArticle(String annee, String article, String asso, int qte) throws Exception {
+        AtomicInteger numRowsEnvoye=new AtomicInteger(); // need Class as effectively final to increase value il lambda expression
         String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut", annee, annee, asso, article);
         executeQuery(query, rs1 -> {
             try {
                 int localQte = qte;
-                int numrowsEnvoye = 0;
                 while (rs1.next() && qte > 0) {
                     int dispo = rs1.getInt("qte");
                     int envoye = rs1.getInt("envoye");
@@ -263,14 +263,14 @@ public class CalcFead {
                             rs1.getInt("envoye"));
                     insert += String.format(" on duplicate key update envoye = %d",
                             envoye);
-                    numrowsEnvoye += executeUpdateQuery(insert);
+                    numRowsEnvoye.addAndGet(executeUpdateQuery(insert));
                 }
-                System.out.printf("%n%s CalcFead Updated %d envoye rows from  mouvements table for year %s .",
-                        LocalDateTime.now().format(formatter), numrowsEnvoye, annee);
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
+        return numRowsEnvoye.get();
     }
 
 
@@ -367,10 +367,10 @@ public class CalcFead {
                     String exped = "0";
                     var secondQuery = String.format("select * from campagne_fead where annee=%s and id_article=%s and id_asso=%s and campagne<>'CUMUL' and coalesce(init,0)-coalesce(envoye,0)+coalesce(cession,0)>0 ", annee, article, origin);
                     int tempIntQte = qte * ucart;
-                    executeQuery(query, rs1 -> {
+                    executeQuery(secondQuery, rs1 -> {
                         try {
                             var intQte = tempIntQte;
-                            var finalQuery = secondQuery;
+                            String finalQuery = "";
 
                             int intInit;
                             int intCessionTemp;
