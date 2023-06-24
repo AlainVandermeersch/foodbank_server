@@ -118,7 +118,7 @@ public class CalcFead {
             try {
                 var rowsnum = 0;
                 while (rs.next()) {
-                    var insertStatement = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,expedie) values(annee,'CUMUL','%s','%s','%s','%s',%s,%d)",
+                    var insertStatement = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,expedie) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
                             rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
                             rs.getInt("expedie"));
                     insertStatement += String.format(" on duplicate key update expedie= %d",
@@ -228,9 +228,15 @@ public class CalcFead {
                 }
 
                 int count = 0;
+                System.out.printf("%n%s Will Processed %d articles from  mouvements table for year %s .",
+                        LocalDateTime.now().format(formatter), qtes.size(), annee);
                 while (qtes.size() > count) {
                     numrowsEnvoye.addAndGet(this.majEnvoyeArticle(annee, articles.get(count), assos.get(count), qtes.get(count)));
                     count++;
+                    if (count % 100 == 0) {
+                        System.out.printf("%n%s Already Processed %d articles from  mouvements table for year %s .",
+                                LocalDateTime.now().format(formatter), count, annee);
+                    }
                 }
                 System.out.printf("%n%s CalcFead Processed %d envoyes for %d articles from  mouvements table for year %s .",
                         LocalDateTime.now().format(formatter), numrowsEnvoye.get(), count, annee);
@@ -264,8 +270,6 @@ public class CalcFead {
                     insert += String.format(" on duplicate key update envoye = %d",
                             envoye);
                     numRowsEnvoyeArticle.addAndGet(executeUpdateQuery(insert));
-                    System.out.printf("%n%s CalcFead Already Processed %d articles from  mouvements table for year %s .",
-                            LocalDateTime.now().format(formatter), numRowsEnvoyeArticle.get(), annee);
 
                 }
 
