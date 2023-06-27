@@ -371,19 +371,20 @@ public class CalcFead {
                             String idArticle;
                             String idAsso;
                             String fin;
-                            intInit = 0; // rs1.getInt("init"); // DOES NOT EXIST
-                            intCessionTemp = rs1.getInt("cession");
-                            intEnvoye = rs1.getInt("envoye");
-                            intDispoTemp = intInit + intCessionTemp - intEnvoye;
-                            campagne = rs1.getString("campagne");
-                            debut = rs1.getString("debut");
-                            fin = rs1.getString("fin");
-                            idArticle = rs1.getString("id_article");
-                            idAsso = rs1.getString("id_asso");
+
 
                             int numRowsUpdated = 0;
 
                             while (rs1.next()) {
+                                intInit = 0; // rs1.getInt("init"); // DOES NOT EXIST
+                                intCessionTemp = rs1.getInt("cession");
+                                intEnvoye = rs1.getInt("envoye");
+                                intDispoTemp = intInit + intCessionTemp - intEnvoye;
+                                campagne = rs1.getString("campagne");
+                                debut = rs1.getString("debut");
+                                fin = rs1.getString("fin");
+                                idArticle = rs1.getString("id_article");
+                                idAsso = rs1.getString("id_asso");
                                 int intCession = intCessionTemp;
                                 int intDispo = intDispoTemp;
                                 if (intQte > 0) {
