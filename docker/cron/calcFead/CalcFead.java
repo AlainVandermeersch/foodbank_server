@@ -218,20 +218,9 @@ public class CalcFead {
         query += String.format(" where a.annee_fead=%s and d.id_depot is null  group by o.birbcode,a.id_article order by o.birbcode,a.id_article ", annee);
         executeQuery(query, rs1 -> {
             try {
-                ArrayList<Integer> qtes = new ArrayList<>();
-                ArrayList<String> articles = new ArrayList<>();
-                ArrayList<String> assos = new ArrayList<>();
-                while (rs1.next()) {
-                    qtes.add(rs1.getInt("nbunit"));
-                    articles.add(rs1.getString("id_article"));
-                    assos.add(rs1.getString("birbcode"));
-                }
-
-                int count = 0;
-                System.out.printf("%n%s CalcFead Will Process %d association articles from  mouvements table for year %s .",
-                        LocalDateTime.now().format(formatter), qtes.size(), annee);
-                while (qtes.size() > count) {
-                    numrowsEnvoye.addAndGet(this.majEnvoyeArticle(annee, articles.get(count), assos.get(count), qtes.get(count)));
+               int count = 0;
+               while (rs1.next()){
+                    numrowsEnvoye.addAndGet(this.majEnvoyeArticle(annee, rs1.getString("id_article"), rs1.getString("birbcode"), rs1.getInt("nbunit")));
                     count++;
                     if (count % 100 == 0) {
                         System.out.printf("%n%s Already Processed %d articles from  mouvements table for year %s .",
@@ -330,26 +319,9 @@ public class CalcFead {
         query += String.format(" where annee=%s order by id_cession ", annee);
         executeQuery(query, rs -> {
             try {
-                int qte = 0;
-                String article = "";
-                String origin = "";
-                String destination = "";
-                ArrayList<Integer> qtes = new ArrayList<Integer>();
-                ArrayList<String> articles = new ArrayList<String>();
-                ArrayList<String> origins = new ArrayList<String>();
-                ArrayList<String> destinations = new ArrayList<String>();
-                while (rs.next()) {
-                    qtes.add(rs.getInt("qte"));
-                    articles.add(rs.getString("id_article"));
-                    origins.add(rs.getString("asso1"));
-                    destinations.add(rs.getString("asso2"));
-                }
                 int count = 0;
-                System.out.printf("%n%s CalcFead Will Process %d association article cessions from  cession_fead table for year %s .",
-                        LocalDateTime.now().format(formatter), qtes.size(), annee);
-
-                while (qtes.size() > count) {
-                    numRowsCession.addAndGet(this.majUneCessionOrigin(annee, origins.get(count), destinations.get(count), articles.get(count), qtes.get(count)));
+                while (rs.next()) {
+                    numRowsCession.addAndGet(this.majUneCessionOrigin(annee, rs.getString("asso1"), rs.getString("asso2"), rs.getString("id_article"), rs.getInt("qte")));
                         count++;
                         if (count % 100 == 0) {
                             System.out.printf("%n%s Already Processed %d association article cessions from  cession_fead table for year %s .",
