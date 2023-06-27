@@ -26,7 +26,7 @@ public class CalcFead {
             System.out.printf("%n%s CalcFead a System Error Occurred", LocalDateTime.now().format(formatter));
             System.out.println(e);
         } finally {
-            System.out.printf("%n%s CalcFead Ended", LocalDateTime.now().format(formatter));
+            System.out.printf("%n%s CalcFead Ended%n", LocalDateTime.now().format(formatter));
         }
     }
 
@@ -209,7 +209,7 @@ public class CalcFead {
 
     //Mise à jour des envoyés par les banques
     private void majEnvoye(String annee) throws Exception {
-        AtomicInteger numrowsEnvoye=new AtomicInteger(); // need Class as effectively final to increase value il lambda expression
+        AtomicInteger numrowsEnvoye=new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
         String query = "select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot " +
                 " from mouvements m " +
                 " join articles a on (a.id_article=m.id_article) " +
@@ -228,7 +228,7 @@ public class CalcFead {
                 }
 
                 int count = 0;
-                System.out.printf("%n%s Will Processed %d articles from  mouvements table for year %s .",
+                System.out.printf("%n%s CalcFead Will Process %d association articles from  mouvements table for year %s .",
                         LocalDateTime.now().format(formatter), qtes.size(), annee);
                 while (qtes.size() > count) {
                     numrowsEnvoye.addAndGet(this.majEnvoyeArticle(annee, articles.get(count), assos.get(count), qtes.get(count)));
@@ -247,7 +247,7 @@ public class CalcFead {
     }
 
     private int majEnvoyeArticle(String annee, String article, String asso, int qte) throws Exception {
-        AtomicInteger numRowsEnvoyeArticle=new AtomicInteger(); // need Class as effectively final to increase value il lambda expression
+        AtomicInteger numRowsEnvoyeArticle=new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
         String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_asso=%s and id_article=%s  order by debut", annee, annee, asso, article);
         executeQuery(query, rs1 -> {
             try {
@@ -284,7 +284,7 @@ public class CalcFead {
     private void majCessions(String annee) throws Exception {
 
         //réinitialisation qte=init
-
+        AtomicInteger numRowsCession =new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
         if (annee.startsWith("20")) {
             //creation des assos manquantes (destination)
             String query = "select a.annee_fead as annee,a.annee_fead as campagne,c.id_article,o.birbcode as id_asso,'' as debut ,'' as fin " +
@@ -345,10 +345,20 @@ public class CalcFead {
                     destinations.add(rs.getString("asso2"));
                 }
                 int count = 0;
+                System.out.printf("%n%s CalcFead Will Process %d association article cessions from  cession_fead table for year %s .",
+                        LocalDateTime.now().format(formatter), qtes.size(), annee);
+
                 while (qtes.size() > count) {
-//            this.majUneCessionOrigin(annee, origins.get(count), destinations.get(count), articles.get(count), qtes.get(count));
-                    count++;
-                }
+                    numRowsCession.addAndGet(this.majUneCessionOrigin(annee, origins.get(count), destinations.get(count), articles.get(count), qtes.get(count)));
+                        count++;
+                        if (count % 100 == 0) {
+                            System.out.printf("%n%s Already Processed %d association article cessions from  cession_fead table for year %s .",
+                                    LocalDateTime.now().format(formatter), count, annee);
+                        }
+                 }
+                 System.out.printf("%n%s CalcFead Processed %d association cessions  for %d association articles from  cession_fead table for year %s .",
+                            LocalDateTime.now().format(formatter), numRowsCession.get(), count, annee);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -356,7 +366,8 @@ public class CalcFead {
 
     }
 
-    private void majUneCessionOrigin(String annee, String origin, String destination, String article, int qte) throws Exception {
+    private int majUneCessionOrigin(String annee, String origin, String destination, String article, int qte) throws Exception {
+        AtomicInteger numRowsCession =new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
         String query = String.format("select fead_ucart from articles where id_article=%s", article).trim();
         executeQuery(query, rs -> {
             try {
@@ -398,7 +409,7 @@ public class CalcFead {
                             idArticle = rs1.getString("id_article");
                             idAsso = rs1.getString("id_asso");
 
-                            int numrowsCumul = 0;
+                            int numRowsUpdated = 0;
 
                             while (rs1.next()) {
                                 int intCession = intCessionTemp;
@@ -408,10 +419,10 @@ public class CalcFead {
                                         if (intDispo - intQte >= 0f) {
                                             intDispo -= intQte;
                                             intCession += intQte;
-                                            majUneCessionsDestination(annee, campagne, article, destination, debut, fin, intQte);
+                                            numRowsUpdated += majUneCessionsDestination(annee, campagne, article, destination, debut, fin, intQte);
                                             intQte = 0;
                                         } else {
-                                            majUneCessionsDestination(annee, campagne, article, destination, debut, fin, intDispo);
+                                            numRowsUpdated += majUneCessionsDestination(annee, campagne, article, destination, debut, fin, intDispo);
                                             // intQte -= intDispo; not needed cfr original source
                                             intCession -= intDispo;
                                         }
@@ -421,24 +432,30 @@ public class CalcFead {
                                 finalQuery = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
                                         idArticle, idAsso, annee + "-01-01", annee + "-12-31", intCession);
                                 finalQuery += String.format(" on duplicate key update cession = %d", intCession);
-                                numrowsCumul += executeUpdateQuery(finalQuery);
+                                numRowsCession.addAndGet(executeUpdateQuery(finalQuery));
                             }
 
                             System.out.printf("%n%s CalcFead Updated %d cession values in rows for article %s for year %s .",
-                                    LocalDateTime.now().format(formatter), numrowsCumul, article, annee);
+                                    LocalDateTime.now().format(formatter), numRowsUpdated, article, annee);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                     });
+
                 }
+               // return numRowsCession.get();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+
         });
+        return numRowsCession.get();
     }
 
-    private void majUneCessionsDestination(String annee, String campagne, String article, String asso, String debut, String fin, int intQte) throws Exception {
+    private int majUneCessionsDestination(String annee, String campagne, String article, String asso, String debut, String fin, int intQte) throws Exception {
+        AtomicInteger numRowsCession =new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
         String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne, article, asso, debut, fin);
         executeQuery(query, rs -> {
             try {
@@ -454,12 +471,13 @@ public class CalcFead {
                         intCession, intQte);
                 int numrows = executeUpdateQuery(insertStatement);
 
-                System.out.printf("%n%s CalcFead Updated %d cessionqte values in rows for article %s for year %s .",
+                System.out.printf("%n%s CalcFead Updated %d cessiondestination values in rows for article %s for year %s .",
                         LocalDateTime.now().format(formatter), numrows, article, annee);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+        return numRowsCession.get();
     }
 
     /**
