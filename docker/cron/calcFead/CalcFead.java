@@ -209,8 +209,7 @@ public class CalcFead {
 
     //Mise à jour des envoyés par les banques
     private void majEnvoye(String annee) throws Exception {
-        AtomicInteger numrowsEnvoye=new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
-        String query = "select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot " +
+       String query = "select m.id_article,m.id_asso,a.fead_pds_unit,o.birbcode,sum(coalesce(m.quantite * -1,0)) as poids,round(sum(coalesce(m.quantite * -1,0)) *1000/a.fead_pds_unit ,0) as nbunit,o.lien_depot " +
                 " from mouvements m " +
                 " join articles a on (a.id_article=m.id_article) " +
                 " join organisations o on (o.id_dis=m.id_asso) " +
@@ -220,15 +219,15 @@ public class CalcFead {
             try {
                int count = 0;
                while (rs1.next()){
-                    numrowsEnvoye.addAndGet(this.majEnvoyeArticle(annee, rs1.getString("id_article"), rs1.getString("birbcode"), rs1.getInt("nbunit")));
+                    this.majEnvoyeArticle(annee, rs1.getString("id_article"), rs1.getString("birbcode"), rs1.getInt("nbunit"));
                     count++;
                     if (count % 100 == 0) {
                         System.out.printf("%n%s Already Processed %d articles from  mouvements table for year %s .",
                                 LocalDateTime.now().format(formatter), count, annee);
                     }
                 }
-                System.out.printf("%n%s CalcFead Processed %d envoyes for %d articles from  mouvements table for year %s .",
-                        LocalDateTime.now().format(formatter), numrowsEnvoye.get(), count, annee);
+                System.out.printf("%n%s CalcFead Processed %d records from  mouvements table for year %s .",
+                        LocalDateTime.now().format(formatter), count, annee);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -272,47 +271,6 @@ public class CalcFead {
 
     private void majCessions(String annee) throws Exception {
 
-        //réinitialisation qte=init
-        AtomicInteger numRowsCession =new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
-        if (annee.startsWith("20")) {
-            //creation des assos manquantes (destination)
-            String query = "select a.annee_fead as annee,a.annee_fead as campagne,c.id_article,o.birbcode as id_asso,'' as debut ,'' as fin " +
-                    ",0 as qte,0 as expedie,0 as stock,0 as attente,0 as refus,1 as tournee,0 as init,0 as envoye " +
-                    " from cession_fead c " +
-                    " join organisations o on (o.id_dis=c.asso_destination) " +
-                    " join articles a on (a.id_article=c.id_article) " +
-                    " left join campagne_fead f on ( f.id_asso=o.birbcode and f.id_article=c.id_article and f.campagne<>'cumul') ";
-            query += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0", annee);
-            executeQuery(query, rs -> {
-                try {
-                    while (rs.next()) {
-                        addCampagneRow(annee, rs.getString("id_article"), rs.getString("id_asso"), false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-
-            //creation des assos manquantes (origine)
-            var query2 = "select a.annee_fead as annee,a.annee_fead as campagne,c.id_article,o.birbcode as id_asso, concat(a.annee_fead,'-01-01') as debut ,concat(a.annee_fead,'-12-31') as fin " +
-                    ",0 as qte,0 as expedie,0 as stock,0 as attente,0 as refus,1 as tournee,0 as init,0 as envoye " +
-                    " from cession_fead c " +
-                    " join organisations o on (o.id_dis=c.asso_origin) " +
-                    " join articles a on (a.id_article=c.id_article) " +
-                    " left join campagne_fead f on ( f.id_asso=o.birbcode and f.id_article=c.id_article and f.campagne<>'CUMUL') ";
-            query2 += String.format(" where c.annee=%s and f.annee is null and o.birbcode>0", annee);
-            executeQuery(query2, rs2 -> {
-                try {
-                    while (rs2.next()) {
-                        addCampagneRow(annee, rs2.getString("id_article"), rs2.getString("id_asso"), false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-
-
         String query = "select asso_origin,o1.birbcode as asso1,asso_destination,o2.birbcode as asso2,a.id_article,  coalesce(quantite,0) as qte " +
                 " from cession_fead f  join organisations o1 on (o1.id_dis=f.asso_origin)  join organisations o2 on (o2.id_dis=f.asso_destination) " +
                 " join articles a on (a.id_article=f.id_article) ";
@@ -321,15 +279,15 @@ public class CalcFead {
             try {
                 int count = 0;
                 while (rs.next()) {
-                    numRowsCession.addAndGet(this.majUneCessionOrigin(annee, rs.getString("asso1"), rs.getString("asso2"), rs.getString("id_article"), rs.getInt("qte")));
+                    this.majUneCessionOrigin(annee, rs.getString("asso1"), rs.getString("asso2"), rs.getString("id_article"), rs.getInt("qte"));
                         count++;
                         if (count % 100 == 0) {
                             System.out.printf("%n%s Already Processed %d association article cessions from  cession_fead table for year %s .",
                                     LocalDateTime.now().format(formatter), count, annee);
                         }
                  }
-                 System.out.printf("%n%s CalcFead Processed %d association cessions  for %d association articles from  cession_fead table for year %s .",
-                            LocalDateTime.now().format(formatter), numRowsCession.get(), count, annee);
+                 System.out.printf("%n%s CalcFead Processed %d association cessions from  cession_fead table for year %s .",
+                            LocalDateTime.now().format(formatter),  count, annee);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -338,7 +296,7 @@ public class CalcFead {
 
     }
 
-    private int majUneCessionOrigin(String annee, String origin, String destination, String article, int qte) throws Exception {
+    private void majUneCessionOrigin(String annee, String origin, String destination, String article, int qte) throws Exception {
         String query = String.format("select fead_ucart from articles where id_article=%s", article).trim();
         executeQuery(query, rs -> {
             try {
@@ -394,6 +352,7 @@ public class CalcFead {
                                     finalQuery = String.format("update campagne_fead set cession = %d  where annee = '%s' and campagne = '%s' and id_article = '%s' and id_asso = '%s' and debut = '%s' and fin = '%s' ",
                                        intCession, annee,annee,article, origin, annee + "-01-01", annee + "-12-31" );
                                     executeUpdateQuery(finalQuery);
+                                    numRowsUpdated++;
 
                                 }
 
@@ -415,102 +374,36 @@ public class CalcFead {
                 e.printStackTrace();
             }
         });
-        return 1;
+
     }
     private void majUneCessionsDestination(String annee, String campagne, String article, String asso, String debut, String fin, int intQte) throws Exception {
         // AtomicInteger numRowsCession =new AtomicInteger(); // need Class as effectively final to increase value in lambda expression
-        String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'", annee, campagne, article, asso, debut, fin);
+        String query = String.format("select * from campagne_fead where annee=%s and campagne=%s and id_article=%s and id_asso=%s and debut='%s' and fin='%s'",
+                annee, campagne, article, asso, debut, fin);
         executeQuery(query, rs -> {
             try {
                 if (!rs.next()) {
-                    int tournee = 1;
-                    addResultSetRow(rs, annee, campagne, article, asso, debut, fin, tournee);
+                    int intCession = intQte;
+                    String insertStatement = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession,qte) values(%s,%s,'%s','%s','%s','%s',%d,%d)",
+                            annee,annee, article, asso, annee + "-01-01", annee + "-12-31",
+                            intCession, intQte);
+                    executeUpdateQuery(insertStatement);
                 }
-                int intCession = rs.getInt("cession");
-                var insertStatement = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,cession,qte) values(%s,%s,'%s','%s','%s','%s',%d,%d)",
-                        annee,annee,  rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                        intCession, intQte);
-                insertStatement += String.format(" on duplicate key update cession = %d, qte = %d",
-                        intCession, intQte);
-                int numrows = executeUpdateQuery(insertStatement);
+                else {
+                    int cession = intQte + rs.getInt("cession");
+                    int qte = intQte + rs.getInt("qte");
 
-              //  System.out.printf("%n%s CalcFead Updated %d cessiondestination values in rows for article %s for year %s .",
-              //          LocalDateTime.now().format(formatter), numrows, article, annee);
+                    String updateStatement = String.format("update campagne_fead set cession = %d , qte = %d  where annee = '%s' and campagne = '%s' and id_article = '%s' and id_asso = '%s' and debut = '%s' and fin = '%s' ",
+                            cession, qte, annee, annee, article, asso, annee + "-01-01", annee + "-12-31");
+                    executeUpdateQuery(updateStatement);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        // return numRowsCession.get();
+
     }
 
-    /**
-     * Ajout d'une ligne dans campagne_fead si la ligne de cumul est inconnue
-     */
-    private void addCampagneRow(String annee, String article, String asso, boolean genCumulRow) throws Exception {
 
-        //génération des lignes
-
-        try (Connection con = this.getDbConnection();
-             Statement stmt = con.createStatement();
-             Statement stmt2 = con.createStatement();
-             Statement stmt3 = con.createStatement();
-             Statement stmt4 = con.createStatement()) {
-            //génération des lignes
-            //ResultSet rs = stmt.executeQuery("select * from campagne_fead where false"
-            ResultSet rs = stmt.executeQuery("select * from campagne_fead where false");
-            String query = String.format("select distinct debut,fin,tournee from campagne_fead where id_article=%s and campagne<>'cumul' and tournee<>0", article);
-            ResultSet rs2 = stmt2.executeQuery(query);
-            while (rs2.next()) {
-                addResultSetRow(rs, annee, annee, article, asso, rs2.getString("debut"), rs2.getString("fin"), rs2.getInt("tournee"));
-            }
-            rs.beforeFirst();
-
-            int numrows = 0;
-            while (rs.next()) {
-                query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
-                        rs.getString("campagne"), rs.getString("id_article"), rs.getString("id_asso"), rs.getString("debut"), rs.getString("fin"),
-                        rs.getInt("tournee"));
-                query += String.format(" on duplicate key update tournee = %d",
-                        rs.getInt("tournee"));
-                numrows += executeUpdateQuery(query);
-            }
-
-            System.out.printf("%n%s CalcFead Updated %d tournee values in rows for article %s for year %s .",
-                    LocalDateTime.now().format(formatter), numrows, article, annee);
-            if (genCumulRow) {
-                var rs3 = stmt3.executeQuery("select * from campagne_fead where false");
-                query = String.format("select debut,fin from campagne_fead where id_article=%s and campagne='CUMUL' AND annee=%s limit 1", article, annee);
-                var rs4 = stmt.executeQuery(query);
-                if (rs4.next()) {
-                    int tournee = 0;
-                    addResultSetRow(rs3, annee, "CUMUL", article, asso, rs4.getString("debut"), rs4.getString("fin"), tournee);
-
-                    query = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,tournee) values(annee,%s,'%s','%s','%s','%s',%d)",
-                            rs3.getString("campagne"), rs3.getString("id_article"), rs3.getString("id_asso"), rs3.getString("debut"), rs3.getString("fin"),
-                            rs3.getInt("tournee"));
-                    query += String.format(" on duplicate key update tournee = %d",
-                            rs3.getInt("tournee"));
-                    numrows = stmt.executeUpdate(query);
-
-                    System.out.printf("%n%s CalcFead Updated %d tournee values in CUMUL rows for article %s for year %s .",
-                            LocalDateTime.now().format(formatter), numrows, article, annee);
-                }
-            }
-        }
-    }
-
-    private void addResultSetRow(ResultSet rs, String annee, String campagne, String article, String asso, String debut, String fin, int tournee) throws Exception {
-        rs.moveToInsertRow();
-        rs.updateString("ANNEE", annee);
-        rs.updateString("CAMPAGNE", campagne);
-        rs.updateString("ID_ARTICLE", article);
-        rs.updateString("ID_ASSO", asso);
-        rs.updateString("DEBUT", debut);
-        rs.updateString("FIN", fin);
-        rs.updateInt("TOURNEE", tournee);
-        rs.updateInt("QTE", 0);
-        rs.insertRow();
-        rs.moveToCurrentRow();
-    }
 
 }
