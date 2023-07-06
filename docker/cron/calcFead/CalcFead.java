@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -71,7 +72,7 @@ public class CalcFead {
     }
 
     private void CalcFeadOneYear(String annee) throws Exception {
-
+        LocalDateTime beginTime= LocalDateTime.now();
         String query = String.format("delete from campagne_fead where campagne='CUMUL' and annee = '%s'", annee);
         int numrows = executeUpdateQuery(con,query);
         System.out.printf("%n%s CalcFead Deleted %d CUMUL rows from  campagne_fead table for year %s .",
@@ -185,16 +186,24 @@ public class CalcFead {
                 " from stoasso_prev m join organisations o on (o.id_dis=m.id_asso) " +
                 " join articles a on (a.id_article=m.id_article) ";
         query += String.format(" where a.annee_fead= '%s' and status= 0 and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ", annee);
+
         executeQuery(con,query, rs -> {
             try {
                 var rowsNum = 0;
+                String insertAttenteQuery = "insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,attente) values(?,?,?,?,?,?,?)" +
+                        " on duplicate key update attente = ?";
+                PreparedStatement insertAttenteStmt =con.prepareStatement(insertAttenteQuery);
                 while (rs.next()) {
-                    var insertStatement = String.format("insert into campagne_fead(annee,campagne,id_article,id_asso,debut,fin,attente) values(annee,'CUMUL','%s','%s','%s','%s',%d)",
-                            rs.getString("id_article"), rs.getString("id_asso"), annee + "-01-01", annee + "-12-31",
-                            rs.getInt("attente"));
-                    insertStatement += String.format(" on duplicate key update attente = %d",
-                            rs.getInt("attente"));
-                    rowsNum += executeUpdateQuery(con,insertStatement);
+                    insertAttenteStmt.setString(1,annee);
+                    insertAttenteStmt.setString(2,"CUMUL");
+                    insertAttenteStmt.setString(3,rs.getString("id_article"));
+                    insertAttenteStmt.setString(4,rs.getString("id_asso"));
+                    insertAttenteStmt.setString(5,annee + "-01-01");
+                    insertAttenteStmt.setString(6,annee + "-12-31");
+                    insertAttenteStmt.setInt(7,rs.getInt("attente"));
+                    insertAttenteStmt.setInt(8,rs.getInt("attente"));
+                    insertAttenteStmt.executeUpdate();
+                    rowsNum ++;
                 }
                 System.out.printf("%n%s CalcFead Updated %d attente rows from  stoasso_prev table for year %s .",
                         LocalDateTime.now().format(formatter), rowsNum, annee);
@@ -226,6 +235,11 @@ public class CalcFead {
                 e.printStackTrace();
             }
         });
+        LocalDateTime endTime= LocalDateTime.now();
+        int elapsedMinutes = (int)ChronoUnit.MINUTES.between(beginTime, endTime);
+        String summaryMessage = String.format("Updated Campagne_fead for year %s in %d minutes", annee,elapsedMinutes);
+        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead',%s,'Update')",summaryMessage);
+        executeUpdateQuery(con,query);
     }
 
 
@@ -306,11 +320,13 @@ public class CalcFead {
         executeQuery(con,query, rs -> {
             try {
                 int count = 0;
+                String queryUpdateSession = "update campagne_fead set cession =?  where annee = ? and campagne = ? and id_article = ? and id_asso = ? and debut = ? and fin = ? ";
+                PreparedStatement updateSessionStmt =con.prepareStatement(queryUpdateSession);
                 while (rs.next()) {
-                    this.majUneCessionOrigin(annee, rs.getString("asso1"), rs.getString("asso2"), rs.getString("id_article"), rs.getInt("qte"));
+                    this.majUneCessionOrigin(updateSessionStmt,annee, rs.getString("asso1"), rs.getString("asso2"), rs.getString("id_article"), rs.getInt("qte"));
                         count++;
                         if (count % 100 == 0) {
-                            System.out.printf("%n%s Already Processed %d association article cessions from  cession_fead table for year %s .",
+                            System.out.printf("%n%s CalcFead Already Processed %d association article cessions from cession_fead table for year %s .",
                                     LocalDateTime.now().format(formatter), count, annee);
                         }
                  }
@@ -324,7 +340,7 @@ public class CalcFead {
 
     }
 
-    private void majUneCessionOrigin(String annee, String origin, String destination, String article, int qte) throws Exception {
+    private void majUneCessionOrigin(PreparedStatement updateSessionStmt,String annee, String origin, String destination, String article, int qte) throws Exception {
         String query = String.format("select fead_ucart from articles where id_article=%s", article).trim();
         executeQuery(con,query, rs -> {
             try {
@@ -377,9 +393,17 @@ public class CalcFead {
                                         // intQte -= intDispo; not needed cfr original source
                                         intCession -= intDispo;
                                     }
-                                    finalQuery = String.format("update campagne_fead set cession = %d  where annee = '%s' and campagne = '%s' and id_article = '%s' and id_asso = '%s' and debut = '%s' and fin = '%s' ",
-                                       intCession, annee,annee,article, origin, annee + "-01-01", annee + "-12-31" );
-                                    executeUpdateQuery(con,finalQuery);
+                                    updateSessionStmt.setInt(1,intCession);
+                                    updateSessionStmt.setString(2,annee);
+                                    updateSessionStmt.setString(3,annee);
+                                    updateSessionStmt.setString(4,article);
+                                    updateSessionStmt.setString(5,origin);
+                                    updateSessionStmt.setString(6,annee + "-01-01");
+                                    updateSessionStmt.setString(7,annee + "-12-31");
+                                    updateSessionStmt.executeUpdate();
+                                   // "update campagne_fead set cession = %d  where annee = '%s' and campagne = '%s' and id_article = '%s' and id_asso = '%s' and debut = '%s' and fin = '%s' ",
+                                   //    intCession, annee,annee,article, origin, annee + "-01-01", annee + "-12-31" );
+
                                     numRowsUpdated++;
 
                                 }
