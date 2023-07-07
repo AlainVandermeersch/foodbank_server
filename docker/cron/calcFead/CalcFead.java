@@ -14,6 +14,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CalcFead {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private Connection con ;
+    private int nbCumulRows;
+    private int nbExpedieRows;
+    private int nbStockRows;
+    private int nbAttenteRows;
+    private int nbRefusRows;
+    private int nbCessionRows;
+    private int nbEnvoyeRows;
+    private boolean success;
     public static void main(String[] args) {
         CalcFead myCalcFeadObj = new CalcFead();
         System.out.printf("%n%s CalcFead Started", LocalDateTime.now().format(formatter));
@@ -73,6 +81,14 @@ public class CalcFead {
 
     private void CalcFeadOneYear(String annee) throws Exception {
         LocalDateTime beginTime= LocalDateTime.now();
+        this.nbCumulRows = 0;
+        this.nbExpedieRows = 0;
+        this.nbStockRows = 0;
+        this.nbAttenteRows = 0;
+        this.nbRefusRows = 0;
+        this.nbCessionRows = 0;
+        this.nbEnvoyeRows = 0;
+        this.success = true;
         String query = String.format("delete from campagne_fead where campagne='CUMUL' and annee = '%s'", annee);
         int numrows = executeUpdateQuery(con,query);
         System.out.printf("%n%s CalcFead Deleted %d CUMUL rows from  campagne_fead table for year %s .",
@@ -129,7 +145,9 @@ public class CalcFead {
                     }
                 }
                 System.out.printf("%n%s CalcFead Reloaded %d CUMUL rows from  campagne_fead table for year %s .", LocalDateTime.now().format(formatter), rowsNum, annee);
+                this.nbCumulRows = rowsNum;
             } catch (SQLException e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -149,7 +167,9 @@ public class CalcFead {
                     rowsnum += executeUpdateQuery(con,insertStatement);
                 }
                 System.out.printf("%n%s CalcFead Updated %d EXPEDIE rows from  mvtasso table for year %s .", LocalDateTime.now().format(formatter), rowsnum, annee);
+                this.nbExpedieRows = rowsnum;
             } catch (SQLException e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -175,7 +195,9 @@ public class CalcFead {
 
                 System.out.printf("%n%s CalcFead Updated %d STOCK rows from  stoasso table for year %s .",
                         LocalDateTime.now().format(formatter), rowsNum, annee);
+                this.nbStockRows = rowsNum;
             } catch (SQLException e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -207,7 +229,9 @@ public class CalcFead {
                 }
                 System.out.printf("%n%s CalcFead Updated %d attente rows from  stoasso_prev table for year %s .",
                         LocalDateTime.now().format(formatter), rowsNum, annee);
+                this.nbAttenteRows = rowsNum;
             } catch (SQLException e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -228,17 +252,30 @@ public class CalcFead {
                             rs.getInt("refus"));
                     rowsNum += executeUpdateQuery(con,insertStatement);
                 }
-
+                this.nbRefusRows = rowsNum;
                 System.out.printf("%n%s CalcFead Updated %d refus rows from  stoasso_prev table for year %s .",
                         LocalDateTime.now().format(formatter), rowsNum, annee);
             } catch (SQLException e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
         LocalDateTime endTime= LocalDateTime.now();
         int elapsedMinutes = (int)ChronoUnit.MINUTES.between(beginTime, endTime);
-        String summaryMessage = String.format("Updated Campagne_fead for year %s in %d minutes", annee,elapsedMinutes);
-        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead',%s,'Update')",summaryMessage);
+        String ok ="OK";
+        if (!success) {
+            ok = "Failed";
+        }
+        String summaryMessage = String.format("%s year %s in %d minutes", ok ,annee,elapsedMinutes);
+        System.out.printf("%n%s CalcFead summary: %s",
+                LocalDateTime.now().format(formatter), summaryMessage);
+        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead','%s','Update')",summaryMessage);
+        executeUpdateQuery(con,query);
+        summaryMessage = String.format("Rows updated: %d Cumul,%d Cessions,%d Receptions,%d Stock %d Attente,%d Refus",
+                nbCumulRows,nbCessionRows,nbExpedieRows,nbStockRows,nbAttenteRows,nbRefusRows);
+        System.out.printf("%n%s CalcFead details: %s",
+                LocalDateTime.now().format(formatter), summaryMessage);
+        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead','%s','Update')",summaryMessage);
         executeUpdateQuery(con,query);
     }
 
@@ -267,7 +304,9 @@ public class CalcFead {
                 }
                 System.out.printf("%n%s CalcFead Processed %d records from  mouvements table for year %s .",
                         LocalDateTime.now().format(formatter), count, annee);
+                this.nbEnvoyeRows = count;
             } catch (Exception e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -304,6 +343,7 @@ public class CalcFead {
                 }
 
             } catch (SQLException e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -332,8 +372,10 @@ public class CalcFead {
                  }
                  System.out.printf("%n%s CalcFead Processed %d association cessions from  cession_fead table for year %s .",
                             LocalDateTime.now().format(formatter),  count, annee);
+                this.nbCessionRows = count;
 
             } catch (Exception e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -415,6 +457,7 @@ public class CalcFead {
                            // System.out.printf("%n%s CalcFead Updated %d cession values in rows for article %s for year %s .",
                            //         LocalDateTime.now().format(formatter),  numRowsCession.get(), article, annee);
                         } catch (Exception e) {
+                            this.success = false;
                             e.printStackTrace();
                         }
 
@@ -423,6 +466,7 @@ public class CalcFead {
                 }
                // return numRowsCession.get();
             } catch (Exception e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
@@ -450,6 +494,7 @@ public class CalcFead {
                     executeUpdateQuery(con,updateStatement);
                 }
             } catch (Exception e) {
+                this.success = false;
                 e.printStackTrace();
             }
         });
