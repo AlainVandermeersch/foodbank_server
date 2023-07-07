@@ -269,13 +269,19 @@ public class CalcFead {
         String summaryMessage = String.format("%s year %s in %d minutes", ok ,annee,elapsedMinutes);
         System.out.printf("%n%s CalcFead summary: %s",
                 LocalDateTime.now().format(formatter), summaryMessage);
-        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead','%s','Update')",summaryMessage);
+        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead','%s','Update') ",summaryMessage);
         executeUpdateQuery(con,query);
-        summaryMessage = String.format("Rows updated: %d Cumul,%d Cessions,%d Receptions,%d Stock %d Attente,%d Refus",
-                nbCumulRows,nbCessionRows,nbExpedieRows,nbStockRows,nbAttenteRows,nbRefusRows);
+        summaryMessage = String.format("Updates: %d Cumul,%d Sent,%d Cessions",
+                nbCumulRows,nbEnvoyeRows,nbCessionRows);
         System.out.printf("%n%s CalcFead details: %s",
                 LocalDateTime.now().format(formatter), summaryMessage);
-        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead','%s','Update')",summaryMessage);
+        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead','%s','Update') ",summaryMessage);
+        executeUpdateQuery(con,query);
+        summaryMessage = String.format("%d Recv,%d Stock %d Attente,%d Refus",
+                nbExpedieRows,nbStockRows,nbAttenteRows,nbRefusRows);
+        System.out.printf("%n%s CalcFead details: %s",
+                LocalDateTime.now().format(formatter), summaryMessage);
+        query = String.format("INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) VALUES ('avdmadmin',10,0,'calcfead','%s','Update') ",summaryMessage);
         executeUpdateQuery(con,query);
     }
 
