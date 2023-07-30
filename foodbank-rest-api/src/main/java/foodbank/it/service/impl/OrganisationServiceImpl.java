@@ -1,9 +1,6 @@
 package foodbank.it.service.impl;
 
-import foodbank.it.persistence.model.Membre;
-import foodbank.it.persistence.model.OrgClientsCount;
-import foodbank.it.persistence.model.OrgProgram;
-import foodbank.it.persistence.model.Organisation;
+import foodbank.it.persistence.model.*;
 import foodbank.it.persistence.repository.ICodePostalRepository;
 import foodbank.it.persistence.repository.IDepotRepository;
 import foodbank.it.persistence.repository.IOrgProgramRepository;
@@ -73,13 +70,26 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			String errorMsg = String.format("There are %d Members in Organisation id %d",countResult, idDis);		
 			throw new Exception(errorMsg);
 		}
-		else {
-			Optional<OrgProgram> orgProgram = this.OrgProgramRepository.findByLienDis(idDis);
-   		    orgProgram.ifPresent( myOrgProg -> {
-   				 this.OrgProgramRepository.deleteByLienDis(idDis);
+		CriteriaQuery<Long> totalMovementCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+		Root<Movement> movement = totalCriteriaQuery.from(Movement.class);
+		List<Predicate> movementPredicates = new ArrayList<>();
+		Predicate lienDisMovementPredicate = criteriaBuilder.equal(criteriaBuilder.trim(movement.get("idAsso")), String.valueOf(idDis));
+		movementPredicates.add(lienDisMovementPredicate);
+		totalMovementCriteriaQuery.where(movementPredicates.stream().toArray(Predicate[]::new));
+		totalMovementCriteriaQuery.select(criteriaBuilder.count(movement));
+		TypedQuery<Long> countMovementQuery = entityManager.createQuery(totalMovementCriteriaQuery);
+		Long countMovementResult = countMovementQuery.getSingleResult();
+		if (countMovementResult > 0) {
+			String errorMsg = String.format("There are %d Movements for Organisation id %d",countMovementResult, idDis);
+			throw new Exception(errorMsg);
+		}
+
+		Optional<OrgProgram> orgProgram = this.OrgProgramRepository.findByLienDis(idDis);
+		orgProgram.ifPresent( myOrgProg -> {
+			 this.OrgProgramRepository.deleteByLienDis(idDis);
    		 });
 			OrganisationRepository.deleteByIdDis(idDis);
-		}
+
         
     }
 	private  List<Predicate> createPredicatesForQuery(CriteriaBuilder criteriaBuilder,Root<Organisation> organisation , SearchOrganisationCriteria searchCriteria) {
