@@ -71,7 +71,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 			throw new Exception(errorMsg);
 		}
 		CriteriaQuery<Long> totalMovementCriteriaQuery = criteriaBuilder.createQuery(Long.class);
-		Root<Movement> movement = totalCriteriaQuery.from(Movement.class);
+		Root<Movement> movement = totalMovementCriteriaQuery.from(Movement.class);
 		List<Predicate> movementPredicates = new ArrayList<>();
 		Predicate lienDisMovementPredicate = criteriaBuilder.equal(criteriaBuilder.trim(movement.get("idAsso")), String.valueOf(idDis));
 		movementPredicates.add(lienDisMovementPredicate);
