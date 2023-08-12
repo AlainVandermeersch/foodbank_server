@@ -66,7 +66,7 @@ public class OrganisationController {
 	  @RequestParam(required = false) String societe, @RequestParam(required = false) String societeOrIdDis,
 	  @RequestParam(required = false) String adresse,
 	  @RequestParam(required = false) String nomDepot,@RequestParam(required = false) String lienDepot,
-	  @RequestParam(required = false) String lienCpas,
+	  @RequestParam(required = false) String lienCpas, @RequestParam(required = false) String langue,
 	  @RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
 	  @RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isFead,
 	  @RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
@@ -79,6 +79,7 @@ public class OrganisationController {
 	  @RequestParam(required = false) String lienBanque,@RequestParam(required = false) String idDis) {
 		List<OrganisationDto> OrganisationDtos = new ArrayList<OrganisationDto>();
 		Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer langueInteger = Optional.ofNullable(langue).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer classeFBBAInteger = Optional.ofNullable(classeFBBA).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDepotInteger = null;
@@ -95,6 +96,7 @@ public class OrganisationController {
 		criteria.setIdDis(idDisInteger);
 		criteria.setLienCpas(lienCpasInteger);
 		criteria.setRegId(regIdInteger);
+		criteria.setLangue(langueInteger);
 		criteria.setClasseFBBA(classeFBBAInteger);
 		criteria.setSociete(societe);
 		criteria.setSocieteOrIdDis(societeOrIdDis);
@@ -135,6 +137,7 @@ public class OrganisationController {
 			@RequestParam(required = false) String nomDepotRamasse,@RequestParam(required = false) String birbCode,
      		@RequestParam(required = false) Boolean isDepot,@RequestParam(required = false) Boolean isFead,
      		@RequestParam(required = false) Boolean agreed,@RequestParam(required = false) String regId,
+		    @RequestParam(required = false) String langue,
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String refint,
      		@RequestParam(required = false) Boolean gestBen,@RequestParam(required = false) Boolean feadN,
 			@RequestParam(required = false) Boolean birbyN,@RequestParam(required = false) Boolean guestHouse,
@@ -158,7 +161,8 @@ public class OrganisationController {
         }
         
         Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
-        Integer classeFBBAInteger = Optional.ofNullable(classeFBBA).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer langueInteger = Optional.ofNullable(langue).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer classeFBBAInteger = Optional.ofNullable(classeFBBA).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = null; 
         if (lienDepot != null && this.isNumeric(lienDepot)) {
@@ -173,6 +177,7 @@ public class OrganisationController {
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
 		criteria.setIdDis(idDisInteger);
 		criteria.setRegId(regIdInteger);
+		criteria.setLangue(langueInteger);
 		criteria.setClasseFBBA(classeFBBAInteger);
 		criteria.setSociete(societe);
 		criteria.setSocieteOrIdDis(societeOrIdDis);
@@ -229,6 +234,7 @@ public class OrganisationController {
 			@RequestParam(required = false)  Boolean depotMissing,
     		@RequestParam(required = false) Boolean cotType,
     		@RequestParam(required = false) String regId,
+			@RequestParam(required = false) String langue,
     		@RequestParam(required = false) Boolean feadN,
 			@RequestParam(required = false) String lienCpas,
 			@RequestParam(required = false) Boolean gestBen,
@@ -242,6 +248,7 @@ public class OrganisationController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);  
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer regIdInteger = Optional.ofNullable(regId).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer langueInteger = Optional.ofNullable(langue).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Boolean isDepotGlobal = isDepot;
 		if (depotMissing != null)
 		{
@@ -250,6 +257,7 @@ public class OrganisationController {
 		Integer lienCpasInteger = Optional.ofNullable(lienCpas).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchOrganisationCriteria criteria = new SearchOrganisationCriteria();
 	    criteria.setRegId(regIdInteger);
+		criteria.setLangue(langueInteger);
 		criteria.setSociete(societe);
 		criteria.setSocieteOrIdDis(societeOrIdDis);
 		criteria.setIsAgreed(agreed);

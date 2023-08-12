@@ -96,6 +96,7 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		List<Predicate> predicates = new ArrayList<>();
 		Integer idDis = searchCriteria.getIdDis();
 		Integer regId = searchCriteria.getRegId();
+		Integer langue = searchCriteria.getLangue();
 		Integer classeFBBA = searchCriteria.getClasseFBBA();
 		String societe = searchCriteria.getSociete();
 		String societeOrIdDis = searchCriteria.getSocieteOrIdDis();
@@ -296,6 +297,10 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		if (regId != null) {
 			Predicate regIdPredicate = criteriaBuilder.equal(organisation.get("region"), regId);
 			predicates.add(regIdPredicate);
+		}
+		if (langue != null) {
+			Predicate languePredicate = criteriaBuilder.equal(organisation.get("langue"), langue);
+			predicates.add(languePredicate);
 		}
 		if (bankShortName != null) {
 			Predicate bankShortNamePredicate = criteriaBuilder.equal(organisation.get("bankShortName"), bankShortName);

@@ -3,6 +3,7 @@ package foodbank.it.service;
 public class SearchOrganisationCriteria {
 	private Integer idDis;
 	private Integer regId;
+	private Integer langue;
 	private Integer classeFBBA;
 	private String societe;
 	private String societeOrIdDis;
@@ -47,7 +48,13 @@ public class SearchOrganisationCriteria {
 		this.regId = regId;
 	}
 
+	public Integer getLangue() {
+		return langue;
+	}
 
+	public void setLangue(Integer langue) {
+		this.langue = langue;
+	}
 
 	public Integer getClasseFBBA() {
 		return classeFBBA;
