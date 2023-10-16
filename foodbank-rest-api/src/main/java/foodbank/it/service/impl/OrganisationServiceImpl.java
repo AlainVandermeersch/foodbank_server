@@ -189,25 +189,15 @@ public class OrganisationServiceImpl implements IOrganisationService{
 		}
 
 		if (isFead != null) {
-			Integer intBirb = 0;
-			if (isFead== true) {
-				intBirb = 1;
-			}
 			if (isFead == false) {
-				Predicate birbCodeBlank = criteriaBuilder.equal(organisation.get("birbCode"), "");
-				Predicate birbCodeZero = criteriaBuilder.equal(organisation.get("birbCode"), "0");
+
 				Predicate birbCodeNull = criteriaBuilder.isNull(organisation.get("birbCode"));
-				Predicate birbCodePredicate = criteriaBuilder.or(birbCodeZero,birbCodeNull,birbCodeBlank);
-				predicates.add(birbCodePredicate);
+				predicates.add(birbCodeNull);
 			}
 			else {
-				Predicate birbCodeNotBlank = criteriaBuilder.notEqual(organisation.get("birbCode"), "");
-				Predicate birbCodeNotZero = criteriaBuilder.notEqual(organisation.get("birbCode"), "0");
-				Predicate birbCodeNotNull = criteriaBuilder.isNotNull(organisation.get("birbCode"));
-				predicates.add(birbCodeNotBlank);
-				predicates.add(birbCodeNotZero);
-				predicates.add(birbCodeNotNull);
 
+				Predicate birbCodeNotNull = criteriaBuilder.isNotNull(organisation.get("birbCode"));
+				predicates.add(birbCodeNotNull);
 			}
 		}
 

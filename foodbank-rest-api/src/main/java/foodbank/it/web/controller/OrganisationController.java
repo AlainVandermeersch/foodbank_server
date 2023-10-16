@@ -235,6 +235,7 @@ public class OrganisationController {
     		@RequestParam(required = false) Boolean cotType,
     		@RequestParam(required = false) String regId,
 			@RequestParam(required = false) String langue,
+			@RequestParam(required = false) Boolean isFead,
     		@RequestParam(required = false) Boolean feadN,
 			@RequestParam(required = false) String lienCpas,
 			@RequestParam(required = false) Boolean gestBen,
@@ -266,6 +267,7 @@ public class OrganisationController {
 		criteria.setlienDepot(lienDepotInteger);
 		criteria.setIsDepot(isDepotGlobal);
 		criteria.setLienCpas(lienCpasInteger);
+		criteria.setIsFead(isFead);
 		criteria.setFeadN(feadN);
 		criteria.setCotType(cotType);
 		criteria.setGestBen(gestBen);
@@ -416,8 +418,8 @@ public class OrganisationController {
 	  String antenneOrgName ="";
 		// birb is the old name for fead - we are retrieving the organisation Fead Code here
 	  String birbCode = entity.getBirbCode();
-	  // the Fead Code 1 has a special meaning: this organisation is a "Antenne" aka a subsidiary of a parent organisation
-	  if ((birbCode != null ) && (birbCode.equals("1")  )) {
+	  // test if this organisation is a "Antenne" aka a subsidiary of a parent organisation
+	  if (birbCode == null )  {
 		  Integer antenne = entity.getAntenne();
 		  // antenne field should contain the Fead code of the parent organisation
 		  if ((antenne != null) && (antenne > 1)) {
