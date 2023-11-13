@@ -152,9 +152,10 @@ public class CalcFead {
             }
         });
         //Maj réceptions par les assos
+     
         query = "select m.id_article,o.birbcode as id_asso,round(sum(coalesce(quantite*1000/POIDS_UNITE,0)),0) as expedie from mvtasso m join organisations o on (o.id_dis=m.id_asso) " +
                 " join articles a on (a.id_article=m.id_article) ";
-        query += String.format(" where a.annee_fead= '%s'  and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ", annee);
+        query += String.format(" where a.annee_fead= '%s' and id_mouv ='REC' and coalesce(o.birbcode,'')<>''  group by id_article,id_asso ", annee);
         executeQuery(con,query, rs -> {
             try {
                 var rowsnum = 0;
