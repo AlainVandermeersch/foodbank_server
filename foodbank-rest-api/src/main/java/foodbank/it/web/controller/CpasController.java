@@ -59,7 +59,7 @@ public class CpasController {
         switch(searchField) {
         	case "cpasName":
                 if (!StringUtils.isEmpty(lienBanque)) {
-                    selectedCpass = this.CpasService.findBylBanqueAndCpasNameContaining(Short.parseShort(lienBanque),searchValue,pageRequest);
+                    selectedCpass = this.CpasService.findByLbanqueAndCpasNameContaining(Short.parseShort(lienBanque),searchValue,pageRequest);
                 }
                 else {
                     selectedCpass = this.CpasService.findByCpasNameContaining(searchValue,pageRequest);
@@ -69,7 +69,7 @@ public class CpasController {
         		break;
         	case "cpasZip":
                 if (!StringUtils.isEmpty(lienBanque)) {
-                    selectedCpass = this.CpasService.findBylBanqueAndCpasZipStartsWith(Short.parseShort(lienBanque),searchValue,pageRequest);
+                    selectedCpass = this.CpasService.findByLbanqueAndCpasZipStartsWith(Short.parseShort(lienBanque),searchValue,pageRequest);
                 }
                 else {
                     selectedCpass = this.CpasService.findByCpasZipStartsWith(searchValue,pageRequest);
@@ -80,7 +80,7 @@ public class CpasController {
         		break;
         	default:
                 if (!StringUtils.isEmpty(lienBanque)) {
-                	selectedCpass = this.CpasService.findBylBanque(Short.parseShort(lienBanque),pageRequest);
+                	selectedCpass = this.CpasService.findByLbanque(Short.parseShort(lienBanque),pageRequest);
                 }
                 else {
                 	selectedCpass = this.CpasService.findAll(pageRequest);
@@ -114,13 +114,13 @@ public class CpasController {
     }
     protected CpasDto convertToDto(Cpas entity,long totalRecords) {
         CpasDto dto = new CpasDto(entity.getCpasId(),entity.getCpasZip(),  entity.getCpasName(), entity.getCpasMail(), entity.getCpasStreet(),  entity.getCpasTel(), entity.getCpasGsm(), entity.getCpasContactName(), entity.getCpasContactSurname(),entity.getCivilite(), 
-        		entity.getRem(), entity.getPassword(), entity.getLBanque(), entity.getLangue(), totalRecords);       
+        		entity.getRem(), entity.getPassword(), entity.getLbanque(), entity.getLangue(), totalRecords);
         return dto;
     }
 
     protected Cpas convertToEntity(CpasDto dto) {
         Cpas cpas = new Cpas( dto.getCpasId(),dto.getCpasZip(), dto.getCpasName(), dto.getCpasMail(), dto.getCpasStreet(), dto.getCpasTel(),  dto.getCpasGsm(), dto.getCpasContactName(),dto.getCpasContactSurname(),  dto.getCivilite(), 
-        		dto.getRem(), dto.getPassword(), dto.getLBanque(), dto.getLangue());       
+        		dto.getRem(), dto.getPassword(), dto.getLbanque(), dto.getLangue());
         if (!StringUtils.isEmpty(dto.getCpasId())) {
             cpas.setCpasId(dto.getCpasId());
         }

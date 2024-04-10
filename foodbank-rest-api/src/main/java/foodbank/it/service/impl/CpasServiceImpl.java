@@ -38,13 +38,13 @@ public class CpasServiceImpl implements ICpasService{
 	}
 
 	@Override
-	public Page<Cpas> findBylBanqueAndCpasNameContaining(short lBanque, String searchValue, Pageable pageRequest) {
-		return this.CpasRepository.findBylBanqueAndCpasNameContaining(lBanque,searchValue,pageRequest);
+	public Page<Cpas> findByLbanqueAndCpasNameContaining(short lbanque, String searchValue, Pageable pageRequest) {
+		return this.CpasRepository.findByLbanqueAndCpasNameContaining(lbanque,searchValue,pageRequest);
 	}
 
 	@Override
-	public Page<Cpas> findBylBanqueAndCpasZipStartsWith(short lBanque, String searchValue, Pageable pageRequest) {
-		return this.CpasRepository.findBylBanqueAndCpasZipStartsWith(lBanque,searchValue,pageRequest);
+	public Page<Cpas> findByLbanqueAndCpasZipStartsWith(short lbanque, String searchValue, Pageable pageRequest) {
+		return this.CpasRepository.findByLbanqueAndCpasZipStartsWith(lbanque,searchValue,pageRequest);
 	}
 
 	@Override
@@ -63,8 +63,8 @@ public class CpasServiceImpl implements ICpasService{
 	}
 
 	@Override
-	public Page<Cpas> findBylBanque(short lBanque, Pageable pageRequest) {
-		return CpasRepository.findBylBanque(lBanque, pageRequest);
+	public Page<Cpas> findByLbanque(short lbanque, Pageable pageRequest) {
+		return CpasRepository.findByLbanque(lbanque, pageRequest);
 	}
 
 }

@@ -27,7 +27,7 @@ public class CpasDto {
 	 
 	 private String password;
 	 
-	 private Short lBanque;
+	 private Short lbanque;
 	 
 	 private Short langue;
 	 
@@ -37,7 +37,7 @@ public class CpasDto {
 
 	public CpasDto(int cpasId, String cpasZip, String cpasName, String cpasMail, String cpasStreet, String cpasTel,
 			String cpasGsm, String cpasContactName, String cpasContactSurname, Short civilite, String rem,
-			String password, Short lBanque, Short langue,Long  totalRecords) {
+			String password, Short lbanque, Short langue,Long  totalRecords) {
 		super();
 		this.cpasId = cpasId;
 		this.cpasZip = cpasZip;
@@ -50,11 +50,11 @@ public class CpasDto {
 		this.cpasContactSurname = cpasContactSurname;	
 		this.rem = rem;
 		this.password = password;
-		if (lBanque != null) {
-			this.lBanque = lBanque;
+		if (lbanque != null) {
+			this.lbanque = lbanque;
 		}
 		else {
-			this.lBanque = 0;
+			this.lbanque = 0;
 		}
 		if (langue != null) {
 			this.langue = langue;
@@ -167,12 +167,12 @@ public class CpasDto {
 		this.password = password;
 	}
 
-	public Short getLBanque() {
-		return lBanque;
+	public Short getLbanque() {
+		return lbanque;
 	}
 
-	public void setlBanque(Short lBanque) {
-		this.lBanque = lBanque;
+	public void setLbanque(Short lbanque) {
+		this.lbanque = lbanque;
 	}
 
 	public Short getLangue() {

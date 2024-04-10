@@ -11,10 +11,10 @@ public interface ICpasRepository extends PagingAndSortingRepository<Cpas, Intege
     Optional<Cpas> findByCpasId(int cpasId);
     Page<Cpas> findByCpasNameContaining(String search, Pageable pageRequest);
     Page<Cpas> findByCpasZipStartsWith(String search, Pageable pageRequest);
-    Page<Cpas> findBylBanqueAndCpasNameContaining(short lBanque, String searchValue, Pageable pageRequest);
+    Page<Cpas> findByLbanqueAndCpasNameContaining(short lbanque, String searchValue, Pageable pageRequest);
 
-    Page<Cpas> findBylBanqueAndCpasZipStartsWith(short lBanque, String searchValue, Pageable pageRequest);
-    Page<Cpas> findBylBanque(short lBanque, Pageable pageRequest);
+    Page<Cpas> findByLbanqueAndCpasZipStartsWith(short lbanque, String searchValue, Pageable pageRequest);
+    Page<Cpas> findByLbanque(short lbanque, Pageable pageRequest);
     void deleteByCpasId(int cpasId);
 
 

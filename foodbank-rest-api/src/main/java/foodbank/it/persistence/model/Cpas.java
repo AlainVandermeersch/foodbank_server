@@ -47,7 +47,7 @@ public class Cpas implements Serializable {
  @Column(nullable=false, length=12)
  private String password;
  @Column(name="l_banque", nullable=false, precision=3)
- private Short lBanque;
+ private Short lbanque;
  @Column(precision=3)
  private Short langue;
 
@@ -57,7 +57,7 @@ public class Cpas implements Serializable {
  }
 
  public Cpas(int cpasId, String cpasZip, String cpasName, String cpasMail, String cpasStreet, String cpasTel, String cpasGsm,
-		String cpasContactName, String cpasContactSurname, Short civilite, String rem, String password, Short lBanque,
+		String cpasContactName, String cpasContactSurname, Short civilite, String rem, String password, Short lbanque,
 		Short langue) {
 	super();
 	this.cpasId = cpasId;
@@ -72,7 +72,7 @@ public class Cpas implements Serializable {
 	this.civilite = civilite;
 	this.rem = rem;
 	this.password = password;
-	this.lBanque = lBanque;
+	this.lbanque = lbanque;
 	this.langue = langue;
 }
 
@@ -293,21 +293,21 @@ public class Cpas implements Serializable {
  }
 
  /**
-  * Access method for lBanque.
+  * Access method for lbanque.
   *
   * @return the current value of lBanque
   */
- public Short getLBanque() {
-     return lBanque;
+ public Short getLbanque() {
+     return lbanque;
  }
 
  /**
-  * Setter method for lBanque.
+  * Setter method for lbanque.
   *
-  * @param aLBanque the new value for lBanque
+  * @param aLbanque the new value for lbanque
   */
- public void setLBanque(Short aLBanque) {
-     lBanque = aLBanque;
+ public void setLbanque(Short aLbanque) {
+     lbanque = aLbanque;
  }
 
  /**
