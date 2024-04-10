@@ -107,7 +107,7 @@ public class CalcFead {
         executeQuery(con, query, rs -> {
             try {
                 int count = 0;
-                String queryUpdateCession = "update campagne_fead set cession = cession + ?  where annee = ? and campagne = ? and id_article = ? and id_asso = ? and Tournee = 0 ";
+                String queryUpdateCession = "update campagne_fead set cession = cession + ?  where annee = ? and campagne = ? and id_article = ? and id_asso = ? and Tournee = 1 ";
                 PreparedStatement updateCessionStmt = con.prepareStatement(queryUpdateCession);
                 while (rs.next()) {
                     updateCessionStmt.setInt(1, -rs.getInt("qte"));
@@ -145,7 +145,7 @@ public class CalcFead {
             try {
                 int count = 0;
                 while (rs.next()){
-                    String queryUpdateEnvoye = "update campagne_fead set envoye = envoye + ?  where annee = ? and campagne = ? and id_article = ? and id_asso = ? and Tournee = 0 ";
+                    String queryUpdateEnvoye = "update campagne_fead set envoye = envoye + ?  where annee = ? and campagne = ? and id_article = ? and id_asso = ? and Tournee = 1 ";
                     PreparedStatement updateEnvoyeStmt =con.prepareStatement(queryUpdateEnvoye);
                     while (rs.next()) {
                         updateEnvoyeStmt.setInt(1,rs.getInt("nbunit"));
