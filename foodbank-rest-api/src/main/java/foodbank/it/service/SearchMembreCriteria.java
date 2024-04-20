@@ -9,6 +9,8 @@ public class SearchMembreCriteria {
 	private Integer lienBanque;
 	private Integer lienDis;
 	private Integer lienDepot;
+	private Integer lDep;
+	// lDep is a specific flag for bank members assigned to a depot
 	private String bankShortName;
 	private Integer fonction;
 	private String batmail;
@@ -16,8 +18,14 @@ public class SearchMembreCriteria {
 	private String telgsm;
 	private String hasAnomalies;
 	private Boolean classicBanks;
-	
 
+	public Integer getlDep() {
+		return lDep;
+	}
+
+	public void setlDep(Integer lDep) {
+		this.lDep = lDep;
+	}
 
 	public String getNom() {
 		return nom;

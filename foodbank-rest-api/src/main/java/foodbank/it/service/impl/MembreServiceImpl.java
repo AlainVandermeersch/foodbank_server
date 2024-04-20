@@ -173,6 +173,8 @@ public class MembreServiceImpl implements IMembreService{
 		Integer lienBanque = searchCriteria.getLienBanque();
 		Integer lienDis = searchCriteria.getLienDis();
 		Integer lienDepot = searchCriteria.getLienDepot();
+		// lDep is a specific flag for bank members assigned to a depot
+		Integer lDep = searchCriteria.getlDep();
 		String bankShortName = searchCriteria.getBankShortName();
 		String telgsm = searchCriteria.getTelgsm();
 		Integer fonction = searchCriteria.getFonction();
@@ -266,6 +268,12 @@ public class MembreServiceImpl implements IMembreService{
 		if (lienDepot != null) {
 			Predicate lienDepotPredicate = criteriaBuilder.equal(membre.get("lienDepot"),lienDepot);
 			predicates.add(lienDepotPredicate);
+
+		}
+		// lDep is a specific flag for bank members assigned to a depot
+		if (lDep != null) {
+			Predicate lDepPredicate = criteriaBuilder.equal(membre.get("lDep"),lDep);
+			predicates.add(lDepPredicate);
 
 		}
 		if (actif != null) {

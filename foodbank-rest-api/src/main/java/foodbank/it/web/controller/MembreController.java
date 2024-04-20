@@ -48,11 +48,13 @@ public class MembreController {
 			@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String bankShortName,
 			@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
 			@RequestParam(required = false) String fonction ,@RequestParam(required = false) String telgsm ,
-			@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis){
+			@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis,
+			@RequestParam(required = false) String lDep	) { // lDep is a specific flag for bank members assigned to a depot)
     	List<Membre> selectedMembres;
 		Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer lienDepInteger = Optional.ofNullable(lDep).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer fonctionInteger = Optional.ofNullable(fonction).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchMembreCriteria  criteria= new SearchMembreCriteria();
 		criteria.setNom(nom);
@@ -64,6 +66,7 @@ public class MembreController {
 		criteria.setLienBanque(lienBanqueInteger);
 		criteria.setLienDis(lienDisInteger);
 		criteria.setLienDepot(lienDepotInteger);
+		criteria.setlDep(lienDepInteger);
 		criteria.setBankShortName(bankShortName);
 		criteria.setTelgsm(telgsm);
 		criteria.setFonction(fonctionInteger);
@@ -86,7 +89,8 @@ public class MembreController {
      		@RequestParam(required = false) Boolean actif,@RequestParam(required = false) String bankShortName,
      		@RequestParam(required = false) String hasAnomalies,@RequestParam(required = false) Boolean classicBanks,
 	        @RequestParam(required = false) String fonction ,@RequestParam(required = false) String telgsm ,
-    		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis) {
+    		@RequestParam(required = false) String lienBanque ,@RequestParam(required = false) String lienDis,
+			@RequestParam(required = false) String lDep	) { // lDep is a specific flag for bank members assigned to a depot
     	int intOffset = Integer.parseInt(offset);
     	int intRows = Integer.parseInt(rows);
     	int pageNumber=intOffset/intRows; // Java throws away remainder of division
@@ -102,6 +106,7 @@ public class MembreController {
         Integer lienBanqueInteger = Optional.ofNullable(lienBanque).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDisInteger = Optional.ofNullable(lienDis).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
         Integer lienDepotInteger = Optional.ofNullable(lienDepot).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
+		Integer lienDepInteger = Optional.ofNullable(lDep).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		Integer fonctionInteger = Optional.ofNullable(fonction).filter(str -> !str.isEmpty()).map(Integer::parseInt).orElse(null);
 		SearchMembreCriteria  criteria= new SearchMembreCriteria();
 		criteria.setNom(nom);
@@ -113,6 +118,7 @@ public class MembreController {
 		criteria.setLienBanque(lienBanqueInteger);
 		criteria.setLienDis(lienDisInteger);
 		criteria.setLienDepot(lienDepotInteger);
+		criteria.setlDep(lienDepInteger);
 		criteria.setBankShortName(bankShortName);
 		criteria.setTelgsm(telgsm);
 		criteria.setFonction(fonctionInteger);
