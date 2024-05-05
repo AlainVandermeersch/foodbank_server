@@ -31,6 +31,7 @@ public class CalcFead {
         try {
             myCalcFeadObj.con = myCalcFeadObj.getDbConnection();
             myCalcFeadObj.CalcFeadOneYear("2022");
+            myCalcFeadObj.CalcFeadOneYear("2024");
         } catch (SQLException e) {
             System.out.printf("%n%s CalcFead a SQL Error Occurred", LocalDateTime.now().format(formatter));
             e.printStackTrace();
