@@ -86,9 +86,7 @@ public class FtpVariofood {
             String ftpUser = System.getenv("FTP_USER");
             String ftpPassword = System.getenv("FTP_PASSWORD");
             String ftpPort = "22";
-            // ftpHost = "91.183.169.176";
-            // ftpUser = "sftpfodmiprod";
-            // ftpPassWord = "Uk7rxZdXCoNU";
+           
             ftpClient.connect(ftpHost, ftpPort);
             if (ftpClient && ftpClient.login(ftpUser, ftpPassword)) {
                 ftpClient.enterLocalPassiveMode();
