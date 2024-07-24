@@ -12,11 +12,11 @@ ARG SMTP_USER
 ARG SMTP_PASSWORD
 
 COPY ./build/realm/*.json /tmp/import/realm/
-RUN sed -i 's@###REDIRECT_URIS###@'"$REDIRECT_URIS"'@' /tmp/import/realm/*.json && \
-    sed -i 's@###REDIRECT_URIS_ISIS###@'"$REDIRECT_URIS_ISIS"'@' /tmp/import/realm/*.json && \
-    sed -i 's@###FRONTEND_URL###@'"$FRONTEND_URL"'@' /tmp/import/realm/*.json && \
-    sed -i 's@###SMTP_PASSWORD###@'"$SMTP_PASSWORD"'@' /tmp/import/realm/*.json && \
-    sed -i 's@###SMTP_USER###@'"$SMTP_USER"'@' /tmp/import/realm/*.json
+RUN sed -i 's|###REDIRECT_URIS###|'"$REDIRECT_URIS"'|' /tmp/import/realm/*.json && \
+    sed -i 's|###REDIRECT_URIS_ISIS###|'"$REDIRECT_URIS_ISIS"'|' /tmp/import/realm/*.json && \
+    sed -i 's|###FRONTEND_URL###|'"$FRONTEND_URL"'|' /tmp/import/realm/*.json && \
+    sed -i 's|###SMTP_PASSWORD###|'"$SMTP_PASSWORD"'|' /tmp/import/realm/*.json && \
+    sed -i 's|###SMTP_USER###|'"$SMTP_USER"'|' /tmp/import/realm/*.json
 
 
 FROM quay.io/keycloak/keycloak:16.1.1
