@@ -185,7 +185,8 @@ public class BanqueController {
         dto.setSsCp(entity.getSsCp());
         dto.setSsCity(entity.getSsCity());
         dto.setSsTel(entity.getSsTel());
-        dto.setRegio(entity.getRegio());
+        int intRegio = (entity.getRegio() == null) ? 0 : entity.getRegio();
+        dto.setRegio(intRegio);
         dto.setWebsite(entity.getWebsite());
         dto.setBank(entity.getBank());
         return dto;
@@ -228,7 +229,8 @@ public class BanqueController {
         banque.setSsCp(dto.getSsCp());
         banque.setSsCity(dto.getSsCity());
         banque.setSsTel(dto.getSsTel());
-        banque.setRegio(dto.getRegio());
+        Integer integerRegio = (dto.getRegio() == 0) ? null : dto.getRegio();
+        banque.setRegio(integerRegio);
         banque.setWebsite(dto.getWebsite());
         banque.setBank(dto.getBank());
         banque.setLastvisit(LocalDateTime.now()); // ignore last visit from dto, we need to update with current time
