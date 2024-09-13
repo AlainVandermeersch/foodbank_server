@@ -95,7 +95,7 @@ public class Banque implements Serializable {
     private String ssCity;
     @Column(name="ss_tel", nullable=false, length=20)
     private String ssTel;
-    @Column(nullable=false, precision=10)
+    @Column(nullable=true)
     private int regio;
     @Column(nullable=false, length=50)
     private String website;
