@@ -96,7 +96,7 @@ public class Banque implements Serializable {
     @Column(name="ss_tel", nullable=false, length=20)
     private String ssTel;
     @Column(nullable=true)
-    private int regio;
+    private Integer regio;
     @Column(nullable=false, length=50)
     private String website;
     @Column(length=20)
@@ -602,22 +602,12 @@ public class Banque implements Serializable {
         ssTel = aSsTel;
     }
 
-    /**
-     * Access method for regio.
-     *
-     * @return the current value of regio
-     */
-    public int getRegio() {
+    public Integer getRegio() {
         return regio;
     }
 
-    /**
-     * Setter method for regio.
-     *
-     * @param aRegio the new value for regio
-     */
-    public void setRegio(int aRegio) {
-        regio = aRegio;
+    public void setRegio(Integer regio) {
+        this.regio = regio;
     }
 
     /**
