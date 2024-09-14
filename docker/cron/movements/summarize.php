@@ -1,6 +1,7 @@
 <?php
 
 $errormsgMonthly = "";
+$errormsgMonthlyDetail = "";
 $errormsgDaily = "";
 echo "Starting movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
 while ( true) {
@@ -9,6 +10,10 @@ while ( true) {
     $password =getenv('MYSQL_PASSWORD');
     $database =getenv('MYSQL_DATABASE');
 
+    $host= '127.0.0.1';
+    $user = 'root';
+    $password = 'fl11tw00d';
+    $database ='banque_alimentaire';
     $connection= mysqli_connect($host,$user,"$password",$database);
     
     if (mysqli_connect_errno())
@@ -18,10 +23,12 @@ while ( true) {
     }
     $arrayMovements_monthly = array();
     $lastMonth = 202001;
+    $lastMonthDetail = 202001;
     $countMonthlyDeleted = 0;
-    $countMonthlyInsertedFEADNONAGREED = 0;
+    $countMonthlyInsertedDetailNONAGREED = 0;
     $countMonthlyInsertedNOFEADNONAGREED = 0;
-    $countMonthlyInsertedFEADAGREED = 0;
+    $countMonthlyInsertedDetailAGREED = 0;
+    $countMonthlyInsertedDetail = 0;
     $countDailyInsertedFEADNONAGREED = 0;
     $countDailyInsertedNOFEADNONAGREED = 0;
     $countDailyInsertedFEADAGREED = 0;
@@ -37,6 +44,21 @@ while ( true) {
         if ($row['lastMonth'] != null)
         {
             $lastMonth = $row['lastMonth'];
+        }
+
+    }
+    $sql_monthly_max_detail = "SELECT MAX(month) as lastMonth FROM `movements_monthly_detail` ";
+    $res_sql_monthly_max_detail = mysqli_query($connection, $sql_monthly_max_detail);
+    if (!$res_sql_monthly_max_detail)
+    {
+        $errormsgMonthlyDetail=  "Error: " . $sql_monthly_max_detail . "<br>" . mysqli_error($connection);
+        break;
+    }
+    if($row = mysqli_fetch_array($res_sql_monthly_max_detail))
+    {
+        if ($row['lastMonth'] != null)
+        {
+            $lastMonthDetail = $row['lastMonth'];
         }
 
     }
@@ -79,7 +101,7 @@ while ( true) {
         unset($data_sql_extract_01_monthly->daten);
         unset($data_sql_extract_01_monthly->Birbcode);
         unset($data_sql_extract_01_monthly->QTE);
-        $countMonthlyInsertedFEADNONAGREED++;
+        $countMonthlyInsertedDetailNONAGREED++;
         $arrayMovements_monthly[] = $data_sql_extract_01_monthly;
     }
     echo "movements summarize.php ended extracting movements monthly FEADNONAGREED " . date("Y-m-d H:i:s") . "\n";
@@ -150,7 +172,7 @@ while ( true) {
             unset($data_sql_extract_03_monthly->daten);
             unset($data_sql_extract_03_monthly->Birbcode);
             unset($data_sql_extract_03_monthly->QTE);
-            $countMonthlyInsertedFEADAGREED++;
+            $countMonthlyInsertedDetailAGREED++;
             $arrayMovements_monthly[] = $data_sql_extract_03_monthly;
         }
     echo "movements summarize.php ended extracting movements monthly FEADAGREED " . date("Y-m-d H:i:s") . "\n";
@@ -169,7 +191,7 @@ while ( true) {
 
     if ($errormsgMonthly == "")
     {
-    $countMonthlyInserted= $countMonthlyInsertedFEADAGREED + $countMonthlyInsertedFEADNONAGREED + $countMonthlyInsertedNOFEADNONAGREED;;
+    $countMonthlyInserted= $countMonthlyInsertedDetailAGREED + $countMonthlyInsertedDetailNONAGREED + $countMonthlyInsertedNOFEADNONAGREED;;
     $messageMonthly = "From $lastMonth Deleted $countMonthlyDeleted & Inserted $countMonthlyInserted records";
     }
     else
@@ -188,9 +210,89 @@ while ( true) {
     }
     // end of monthly movements
 
-    echo "Ending movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
+    echo "Ending monthly movements by organisation summarize.php at " . date("Y-m-d H:i:s") . "\n";
+    // Adding extract for details by Org and articles for FEAD
+    $arrayMovements_monthlyDetail = array();
+    $countMonthlyInsertedDetail = 0;
+    $sql_monthly_detail_del = "DELETE FROM `movements_monthly_detail` where month = '" . $lastMonthDetail . "'";
+    $res_sql_monthly_detail_del = mysqli_query($connection, $sql_monthly_detail_del);
+    if (!$res_sql_monthly_detail_del)
+    {
+        $errormsgMonthly=  "Error: " . $sql_monthly_detail_del . "<br>" . mysqli_error($connection);
+        break;
+    }
+    $countMonthlyDeletedDetail = mysqli_affected_rows($connection);
+    $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
+           m.id_asso, o.societe,o.BirbCode,m.ID_ARTICLE,a.ID_CAT_ARTICLE,a.NOM_FR as article_name_fr, a.NOM_NL as article_name_nl,
+           m.ID_FOURNISSEUR, f.nom as name_supplier,SUM(m.QUANTITE ) as QTE        
+    FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
+        LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
+        LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
+        LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
+       WHERE m.date < CURDATE() AND m.date >= DATE_SUB(CURDATE(), INTERVAL 3 YEAR) 
+        AND   m.id_mouv IN('EXP','EXPCONG')  
+        AND m.ID_COMPANY = b.bank_short_name
+        AND depy_n = 0
+        group by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR 
+        order by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR";
 
-$arrayMovements_daily = array();
+    $res_sql_extract_01_monthlyDetail =mysqli_query($connection,$sql_extract_01_monthlyDetail);
+    if (!$res_sql_extract_01_monthlyDetail)
+    {
+        $errormsgMonthly=  "Failed to execute FEAD BY Org AND Article monthly  query: " . $sql_extract_01_monthlyDetail . " ;". $connection->error;
+        break;
+    }
+    while ($data_sql_extract_01_monthlyDetail=mysqli_fetch_object($res_sql_extract_01_monthlyDetail)) {
+        if ($data_sql_extract_01_monthlyDetail->MONTHMVT < $lastMonthDetail) continue;
+        $data_sql_extract_01_monthlyDetail->Volume = - $data_sql_extract_01_monthlyDetail->QTE; // negative value
+
+        unset($data_sql_extract_01_monthlyDetail->QTE);
+        $countMonthlyInsertedDetail++;
+        $arrayMovements_monthlyDetail[] = $data_sql_extract_01_monthlyDetail;
+    }
+    echo "movements summarize.php ended extracting movements monthly detail by Org AND Article " . date("Y-m-d H:i:s") . "\n";
+    foreach ($arrayMovements_monthlyDetail as $key => $row) {
+        $societeEscaped= mysqli_real_escape_string($connection,$row->societe);
+        $supplierNameEscaped= mysqli_real_escape_string($connection,$row->name_supplier);
+        $articleNameFrEscaped= mysqli_real_escape_string($connection,$row->article_name_fr);
+        $articleNameNlEscaped= mysqli_real_escape_string($connection,$row->article_name_nl);
+        $birbCodeEscaped = mysqli_real_escape_string($connection,$row->BirbCode);
+        $insertQuery_monthly_detail =
+            "INSERT INTO `movements_monthly_detail` (month,bank_short_name,id_org,orgname,esfcode,id_article,id_cat_article,article_name_fr,article_name_nl,id_supplier,name_supplier,quantity) 
+            VALUES ('".$row->MONTHMVT."', '".$row->bank_short_name."', '".$row->id_asso."', '".$societeEscaped."', '"
+            .$birbCodeEscaped."','" .$row->ID_ARTICLE."','".$row->ID_CAT_ARTICLE."','" .$articleNameFrEscaped."','".$articleNameNlEscaped."','"
+            .$row->ID_FOURNISSEUR."', '".$supplierNameEscaped."', '".$row->Volume."');";
+        $sql = $connection->query($insertQuery_monthly_detail);
+
+        if (!$sql)
+        {
+            $errormsgMonthlyDetail=  "Failed to execute insert monthly  query Detail: " . $connection->error;
+            break;
+        }
+    }
+
+    if ($errormsgMonthlyDetail == "")
+    {
+        $messageMonthlyDetail = "From $lastMonthDetail Deleted $countMonthlyDeletedDetail & Inserted $countMonthlyInsertedDetail records";
+    }
+    else
+    {
+        $messageMonthlyDetail = "Error: $errormsgMonthlyDetail";
+    }
+    echo "Ending movements monthly Detail summarize.php at " . date("Y-m-d H:i:s") . " with message:" . $messageMonthlyDetail . "\n";
+
+    $insertQuery_audit_monthly = "INSERT INTO `auditchanges` (user,bank_id,id_dis,entity,entity_key,action) 
+        VALUES ('avdmadmin',10,0,'movements_detail','" . substr($messageMonthlyDetail,0,50) . "','Update')";
+    $sql = $connection->query($insertQuery_audit_monthly);
+    if (!$sql)
+    {
+        $errormsg=  "Failed to execute insert monthly audit  query: " . $connection->error;
+        echo "movements summarize.php failed to insert monthly Detail statistics in auditchanges table:" . $errormsg . "\n";
+    }
+    // end of monthly movements
+
+
+    $arrayMovements_daily = array();
 
 //------------------------------------------------------
 // daily movements
