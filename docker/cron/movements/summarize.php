@@ -19,7 +19,7 @@ while ( true) {
     }
     $arrayMovements_monthly = array();
     $lastMonth = 202001;
-    $lastMonthDetail = 202001;
+    $lastMonthDetail = 202012;
     $countMonthlyDeleted = 0;
     $countMonthlyInsertedDetailNONAGREED = 0;
     $countMonthlyInsertedNOFEADNONAGREED = 0;
@@ -208,16 +208,17 @@ while ( true) {
 
     echo "Ending monthly movements by organisation summarize.php at " . date("Y-m-d H:i:s") . "\n";
     // Adding extract for details by Org and articles for FEAD
-
+    $countMonthlyDeletedDetail = 0;
     $countMonthlyInsertedDetail = 0;
-    $sql_monthly_detail_del = "DELETE FROM `movements_monthly_detail` where month = '" . $lastMonthDetail . "'";
-    $res_sql_monthly_detail_del = mysqli_query($connection, $sql_monthly_detail_del);
-    if (!$res_sql_monthly_detail_del)
-    {
-        $errormsgMonthly=  "Error: " . $sql_monthly_detail_del . "<br>" . mysqli_error($connection);
-        break;
-    }
-    $countMonthlyDeletedDetail = mysqli_affected_rows($connection);
+//    $sql_monthly_detail_del = "DELETE FROM `movements_monthly_detail` where month = '" . $lastMonthDetail . "'";
+ //   $res_sql_monthly_detail_del = mysqli_query($connection, $sql_monthly_detail_del);
+ //   if (!$res_sql_monthly_detail_del)
+ //   {
+  //      $errormsgMonthly=  "Error: " . $sql_monthly_detail_del . "<br>" . mysqli_error($connection);
+ //       break;
+  //  }
+ //   $countMonthlyDeletedDetail = mysqli_affected_rows($connection);
+
     $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
            m.id_asso, o.societe,o.BirbCode,m.ID_ARTICLE,a.ID_CAT_ARTICLE,a.NOM_FR as article_name_fr, a.NOM_NL as article_name_nl,
            m.ID_FOURNISSEUR, f.nom as name_supplier,SUM(m.QUANTITE ) as QTE        
@@ -225,7 +226,7 @@ while ( true) {
         LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
-        WHERE YEAR(m.date) = 2022 
+       WHERE EXTRACT(YEAR_MONTH FROM m.DATE) > " . $lastMonthDetail . "
         AND   m.id_mouv IN('EXP','EXPCONG')  
         AND m.ID_COMPANY = b.bank_short_name
         AND depy_n = 0
@@ -238,8 +239,14 @@ while ( true) {
         $errormsgMonthly=  "Failed to execute FEAD BY Org AND Article monthly  query: " . $sql_extract_01_monthlyDetail . " ;". $connection->error;
         break;
     }
+    $prevMonth = "";
+    $countrecords =0;
     while ($data_sql_extract_01_monthlyDetail=mysqli_fetch_object($res_sql_extract_01_monthlyDetail)) {
-       // if ($data_sql_extract_01_monthlyDetail->MONTHMVT < $lastMonthDetail) continue;
+        $countrecords++;
+        if (($data_sql_extract_01_monthlyDetail->MONTHMVT != $prevMonth) && $countrecords > 50000) break;
+        $prevMonth =  $data_sql_extract_01_monthlyDetail->MONTHMVT;
+
+        // if ($data_sql_extract_01_monthlyDetail->MONTHMVT < $lastMonthDetail) continue;
         $data_sql_extract_01_monthlyDetail->Volume = - $data_sql_extract_01_monthlyDetail->QTE; // negative value
 
         unset($data_sql_extract_01_monthlyDetail->QTE);
