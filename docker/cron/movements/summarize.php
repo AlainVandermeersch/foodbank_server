@@ -225,7 +225,7 @@ while ( true) {
         LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
-       WHERE m.date < CURDATE() AND m.date >= DATE_SUB(CURDATE(), INTERVAL 3 YEAR) 
+        WHERE YEAR(m.date) = 2021 
         AND   m.id_mouv IN('EXP','EXPCONG')  
         AND m.ID_COMPANY = b.bank_short_name
         AND depy_n = 0
