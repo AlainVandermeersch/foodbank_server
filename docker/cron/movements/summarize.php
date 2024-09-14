@@ -19,7 +19,7 @@ while ( true) {
     }
     $arrayMovements_monthly = array();
     $lastMonth = 202001;
-    $lastMonthDetail = 202012;
+    $lastMonthDetail = 202312;
     $countMonthlyDeleted = 0;
     $countMonthlyInsertedDetailNONAGREED = 0;
     $countMonthlyInsertedNOFEADNONAGREED = 0;
@@ -243,7 +243,7 @@ while ( true) {
     $countrecords =0;
     while ($data_sql_extract_01_monthlyDetail=mysqli_fetch_object($res_sql_extract_01_monthlyDetail)) {
         $countrecords++;
-        if (($data_sql_extract_01_monthlyDetail->MONTHMVT != $prevMonth) && $countrecords > 50000) break;
+        if (($data_sql_extract_01_monthlyDetail->MONTHMVT != $prevMonth) && $countrecords > 20000) break;
         $prevMonth =  $data_sql_extract_01_monthlyDetail->MONTHMVT;
 
         // if ($data_sql_extract_01_monthlyDetail->MONTHMVT < $lastMonthDetail) continue;
