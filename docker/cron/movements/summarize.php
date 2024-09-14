@@ -225,7 +225,7 @@ while ( true) {
         LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
-        WHERE YEAR(m.date) = 2021 
+        WHERE YEAR(m.date) = 2022 
         AND   m.id_mouv IN('EXP','EXPCONG')  
         AND m.ID_COMPANY = b.bank_short_name
         AND depy_n = 0
@@ -239,7 +239,7 @@ while ( true) {
         break;
     }
     while ($data_sql_extract_01_monthlyDetail=mysqli_fetch_object($res_sql_extract_01_monthlyDetail)) {
-        if ($data_sql_extract_01_monthlyDetail->MONTHMVT < $lastMonthDetail) continue;
+       // if ($data_sql_extract_01_monthlyDetail->MONTHMVT < $lastMonthDetail) continue;
         $data_sql_extract_01_monthlyDetail->Volume = - $data_sql_extract_01_monthlyDetail->QTE; // negative value
 
         unset($data_sql_extract_01_monthlyDetail->QTE);
