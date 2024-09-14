@@ -208,7 +208,7 @@ while ( true) {
 
     echo "Ending monthly movements by organisation summarize.php at " . date("Y-m-d H:i:s") . "\n";
     // Adding extract for details by Org and articles for FEAD
-    $arrayMovements_monthlyDetail = array();
+
     $countMonthlyInsertedDetail = 0;
     $sql_monthly_detail_del = "DELETE FROM `movements_monthly_detail` where month = '" . $lastMonthDetail . "'";
     $res_sql_monthly_detail_del = mysqli_query($connection, $sql_monthly_detail_del);
@@ -244,20 +244,17 @@ while ( true) {
 
         unset($data_sql_extract_01_monthlyDetail->QTE);
         $countMonthlyInsertedDetail++;
-        $arrayMovements_monthlyDetail[] = $data_sql_extract_01_monthlyDetail;
-    }
-    echo "movements summarize.php ended extracting movements monthly detail by Org AND Article " . date("Y-m-d H:i:s") . "\n";
-    foreach ($arrayMovements_monthlyDetail as $key => $row) {
-        $societeEscaped= mysqli_real_escape_string($connection,$row->societe);
-        $supplierNameEscaped= mysqli_real_escape_string($connection,$row->name_supplier);
-        $articleNameFrEscaped= mysqli_real_escape_string($connection,$row->article_name_fr);
-        $articleNameNlEscaped= mysqli_real_escape_string($connection,$row->article_name_nl);
-        $birbCodeEscaped = mysqli_real_escape_string($connection,$row->BirbCode);
+
+        $societeEscaped= mysqli_real_escape_string($connection,$data_sql_extract_01_monthlyDetail->societe);
+        $supplierNameEscaped= mysqli_real_escape_string($connection,$data_sql_extract_01_monthlyDetail->name_supplier);
+        $articleNameFrEscaped= mysqli_real_escape_string($connection,$data_sql_extract_01_monthlyDetail->article_name_fr);
+        $articleNameNlEscaped= mysqli_real_escape_string($connection,$data_sql_extract_01_monthlyDetail->article_name_nl);
+        $birbCodeEscaped = mysqli_real_escape_string($connection,$data_sql_extract_01_monthlyDetail->BirbCode);
         $insertQuery_monthly_detail =
             "INSERT INTO `movements_monthly_detail` (month,bank_short_name,id_org,orgname,esfcode,id_article,id_cat_article,article_name_fr,article_name_nl,id_supplier,name_supplier,quantity) 
-            VALUES ('".$row->MONTHMVT."', '".$row->bank_short_name."', '".$row->id_asso."', '".$societeEscaped."', '"
-            .$birbCodeEscaped."','" .$row->ID_ARTICLE."','".$row->ID_CAT_ARTICLE."','" .$articleNameFrEscaped."','".$articleNameNlEscaped."','"
-            .$row->ID_FOURNISSEUR."', '".$supplierNameEscaped."', '".$row->Volume."');";
+            VALUES ('".$data_sql_extract_01_monthlyDetail->MONTHMVT."', '".$data_sql_extract_01_monthlyDetail->bank_short_name."', '".$data_sql_extract_01_monthlyDetail->id_asso."', '".$societeEscaped."', '"
+            .$birbCodeEscaped."','" .$data_sql_extract_01_monthlyDetail->ID_ARTICLE."','".$data_sql_extract_01_monthlyDetail->ID_CAT_ARTICLE."','" .$articleNameFrEscaped."','".$articleNameNlEscaped."','"
+            .$data_sql_extract_01_monthlyDetail->ID_FOURNISSEUR."', '".$supplierNameEscaped."', '".$data_sql_extract_01_monthlyDetail->Volume."');";
         $sql = $connection->query($insertQuery_monthly_detail);
 
         if (!$sql)
