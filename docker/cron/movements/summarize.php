@@ -10,10 +10,6 @@ while ( true) {
     $password =getenv('MYSQL_PASSWORD');
     $database =getenv('MYSQL_DATABASE');
 
-    $host= '127.0.0.1';
-    $user = 'root';
-    $password = 'fl11tw00d';
-    $database ='banque_alimentaire';
     $connection= mysqli_connect($host,$user,"$password",$database);
     
     if (mysqli_connect_errno())
