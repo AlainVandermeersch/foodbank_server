@@ -18,8 +18,9 @@ while ( true) {
         break;
     }
     $arrayMovements_monthly = array();
-    $lastMonth = 202001;
-    $lastMonthDetail = 202312;
+    $lastMonthRecorded = 202001;
+    $lastMonthDetailRecorded = 202312;
+    $previousMonth = date('Ym', strtotime("-1 month"));
     $countMonthlyDeleted = 0;
     $countMonthlyInsertedDetailNONAGREED = 0;
     $countMonthlyInsertedNOFEADNONAGREED = 0;
@@ -28,7 +29,7 @@ while ( true) {
     $countDailyInsertedFEADNONAGREED = 0;
     $countDailyInsertedNOFEADNONAGREED = 0;
     $countDailyInsertedFEADAGREED = 0;
-    $sql_monthly_max = "SELECT MAX(month) as lastMonth FROM `movements_monthly` ";
+    $sql_monthly_max = "SELECT MAX(month) as lastMonthRecorded FROM `movements_monthly` ";
     $res_sql_monthly_max = mysqli_query($connection, $sql_monthly_max);
     if (!$res_sql_monthly_max)
     {
@@ -37,29 +38,15 @@ while ( true) {
     }
     if($row = mysqli_fetch_array($res_sql_monthly_max))
     {
-        if ($row['lastMonth'] != null)
+        if ($row['lastMonthRecorded'] != null)
         {
-            $lastMonth = $row['lastMonth'];
-        }
-
-    }
-    $sql_monthly_max_detail = "SELECT MAX(month) as lastMonth FROM `movements_monthly_detail` ";
-    $res_sql_monthly_max_detail = mysqli_query($connection, $sql_monthly_max_detail);
-    if (!$res_sql_monthly_max_detail)
-    {
-        $errormsgMonthlyDetail=  "Error: " . $sql_monthly_max_detail . "<br>" . mysqli_error($connection);
-        break;
-    }
-    if($row = mysqli_fetch_array($res_sql_monthly_max_detail))
-    {
-        if ($row['lastMonth'] != null)
-        {
-            $lastMonthDetail = $row['lastMonth'];
+            $lastMonthRecorded = $row['lastMonthRecorded'];
         }
 
     }
 
-    $sql_monthly_del = "DELETE FROM `movements_monthly` where month = '" . $lastMonth . "'";
+
+    $sql_monthly_del = "DELETE FROM `movements_monthly` where month = '" . $lastMonthRecorded . "'";
     $res_sql_monthly_del = mysqli_query($connection, $sql_monthly_del);
     if (!$res_sql_monthly_del)
     {
@@ -86,7 +73,7 @@ while ( true) {
         break;
     }
     while ($data_sql_extract_01_monthly=mysqli_fetch_object($res_sql_extract_01_monthly)) {
-        if ($data_sql_extract_01_monthly->MONTHMVT < $lastMonth) continue;
+        if ($data_sql_extract_01_monthly->MONTHMVT < $lastMonthRecorded) continue;
         // détermination du volume FEAD livré aux CPAS ou autres organisations non affiliées
         // fead_n = 1 AND daten = 1 AND Birbcode <> 0
         $data_sql_extract_01_monthly->Category = "FEADNONAGREED";
@@ -122,7 +109,7 @@ while ( true) {
         break;
     }
     while ($data_sql_extract_02_monthly=mysqli_fetch_object($res_sql_extract_02_monthly)) {
-        if ($data_sql_extract_02_monthly->MONTHMVT < $lastMonth) continue;
+        if ($data_sql_extract_02_monthly->MONTHMVT < $lastMonthRecorded) continue;
             // détermination du volume de vivres livrés aux CPAS ou autres organisations non affiliées
             // fead_n = 0 AND daten = 1
 
@@ -158,7 +145,7 @@ while ( true) {
             break;
         }
         while ($data_sql_extract_03_monthly=mysqli_fetch_object($res_sql_extract_03_monthly)) {
-            if ($data_sql_extract_03_monthly->MONTHMVT < $lastMonth) continue;
+            if ($data_sql_extract_03_monthly->MONTHMVT < $lastMonthRecorded) continue;
             // détermination des vivres livrés aux associations agréées y compris fead et ramasse
             $data_sql_extract_03_monthly->Category = "AGREEDFEADCOLLECT";
             $data_sql_extract_03_monthly->Volume = - $data_sql_extract_03_monthly->QTE; // negative value
@@ -188,7 +175,7 @@ while ( true) {
     if ($errormsgMonthly == "")
     {
     $countMonthlyInserted= $countMonthlyInsertedDetailAGREED + $countMonthlyInsertedDetailNONAGREED + $countMonthlyInsertedNOFEADNONAGREED;;
-    $messageMonthly = "From $lastMonth Deleted $countMonthlyDeleted & Inserted $countMonthlyInserted records";
+    $messageMonthly = "From $lastMonthRecorded Deleted $countMonthlyDeleted & Inserted $countMonthlyInserted records";
     }
     else
     {
@@ -210,14 +197,30 @@ while ( true) {
     // Adding extract for details by Org and articles for FEAD
     $countMonthlyDeletedDetail = 0;
     $countMonthlyInsertedDetail = 0;
-//    $sql_monthly_detail_del = "DELETE FROM `movements_monthly_detail` where month = '" . $lastMonthDetail . "'";
- //   $res_sql_monthly_detail_del = mysqli_query($connection, $sql_monthly_detail_del);
- //   if (!$res_sql_monthly_detail_del)
- //   {
-  //      $errormsgMonthly=  "Error: " . $sql_monthly_detail_del . "<br>" . mysqli_error($connection);
- //       break;
-  //  }
- //   $countMonthlyDeletedDetail = mysqli_affected_rows($connection);
+    $sql_monthly_detail_del = "DELETE FROM `movements_monthly_detail` where month >= '" . $previousMonth . "'";
+    $res_sql_monthly_detail_del = mysqli_query($connection, $sql_monthly_detail_del);
+   if (!$res_sql_monthly_detail_del)
+   {
+      $errormsgMonthly=  "Error: " . $sql_monthly_detail_del . "<br>" . mysqli_error($connection);
+       break;
+   }
+   $countMonthlyDeletedDetail = mysqli_affected_rows($connection);
+    $sql_monthly_max_detail = "SELECT MAX(month) as lastMonthRecorded FROM `movements_monthly_detail` ";
+    $res_sql_monthly_max_detail = mysqli_query($connection, $sql_monthly_max_detail);
+    if (!$res_sql_monthly_max_detail)
+    {
+        $errormsgMonthlyDetail=  "Error: " . $sql_monthly_max_detail . "<br>" . mysqli_error($connection);
+        break;
+    }
+    if ($row = mysqli_fetch_array($res_sql_monthly_max_detail))
+    {
+        if ($row['lastMonthRecorded'] != null)
+        {
+            $lastMonthDetailRecorded = $row['lastMonthRecorded'];
+        }
+
+    }
+    echo "movements summarize.php deleted " . $countMonthlyDeletedDetail . " monthly Detail records from " . $previousMonth . "\n";
 
     $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
            m.id_asso, o.societe,o.BirbCode,m.ID_ARTICLE,a.ID_CAT_ARTICLE,a.NOM_FR as article_name_fr, a.NOM_NL as article_name_nl,
@@ -226,7 +229,7 @@ while ( true) {
         LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
-       WHERE EXTRACT(YEAR_MONTH FROM m.DATE) > " . $lastMonthDetail . "
+       WHERE EXTRACT(YEAR_MONTH FROM m.DATE) > " . $lastMonthDetailRecorded . "
         AND   m.id_mouv IN('EXP','EXPCONG')  
         AND m.ID_COMPANY = b.bank_short_name
         AND depy_n = 0
@@ -273,7 +276,7 @@ while ( true) {
 
     if ($errormsgMonthlyDetail == "")
     {
-        $messageMonthlyDetail = "From $lastMonthDetail Deleted $countMonthlyDeletedDetail & Inserted $countMonthlyInsertedDetail records";
+        $messageMonthlyDetail = "From $lastMonthDetailRecorded Deleted $countMonthlyDeletedDetail & Inserted $countMonthlyInsertedDetail records";
     }
     else
     {
