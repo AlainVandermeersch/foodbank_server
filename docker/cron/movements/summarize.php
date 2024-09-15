@@ -19,7 +19,7 @@ while ( true) {
     }
     $arrayMovements_monthly = array();
     $lastMonthRecorded = 202001;
-    $lastMonthDetailRecorded = 202012;
+    $lastMonthDetailRecorded = 202312;
     $previousMonth = date('Ym', strtotime("-1 month"));
     $countMonthlyDeleted = 0;
     $countMonthlyInsertedDetailNONAGREED = 0;
