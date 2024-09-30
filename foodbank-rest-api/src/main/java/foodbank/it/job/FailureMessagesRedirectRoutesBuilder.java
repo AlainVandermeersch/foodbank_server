@@ -10,7 +10,6 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 
 import static javax.mail.Message.RecipientType.TO;
 
-@Component
+//@Component // disabled
 public class FailureMessagesRedirectRoutesBuilder extends RouteBuilder {
 
     public static final String X_FOODBANKS_MAIL_ORIGINAL_MESSAGE = "X-Foodbanks-Mail-OriginalMessage";
