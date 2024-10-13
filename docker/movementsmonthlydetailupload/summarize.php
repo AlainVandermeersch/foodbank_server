@@ -11,13 +11,6 @@ echo "Starting movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
     $beginmonth = getenv('MONTH_BEGIN');
     $endmonth = getenv('MONTH_END');
 
-$host = '127.0.0.1';
-$user = 'root';
-$password = 'fl11tw00d';
-$database = 'banque_alimentaire';
-$beginmonth = '202406' ;
-$endmonth = '202407' ;
-   
 while ( true) {
     $connection = mysqli_connect($host, $user, "$password", $database);
 
