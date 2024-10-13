@@ -10,6 +10,13 @@ echo "Starting movements summarize.php at " . date("Y-m-d H:i:s") . "\n";
     $database = getenv('MYSQL_DATABASE');
     $beginmonth = getenv('MONTH_BEGIN');
     $endmonth = getenv('MONTH_END');
+
+$host = '127.0.0.1';
+$user = 'root';
+$password = 'fl11tw00d';
+$database = 'banque_alimentaire';
+$beginmonth = '202406' ;
+$endmonth = '202407' ;
    
 while ( true) {
     $connection = mysqli_connect($host, $user, "$password", $database);
@@ -21,18 +28,19 @@ while ( true) {
 
     $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
            m.id_asso, o.societe,o.BirbCode,m.ID_ARTICLE,a.ID_CAT_ARTICLE,a.NOM_FR as article_name_fr, a.NOM_NL as article_name_nl,
-           m.ID_FOURNISSEUR, f.nom as name_supplier,SUM(m.QUANTITE ) as QTE        
+           ca.NOM_FR as article_category_name_fr, ca.NOM_NL as article_category_name_nl, 
+           m.ID_FOURNISSEUR, f.nom as name_supplier,m.ID_MOUV, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
+        LEFT JOIN cat_article ca on (a.ID_CAT_ARTICLE= ca.ID_CAT_ARTICLE)
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
        WHERE EXTRACT(YEAR_MONTH FROM m.DATE) >= " . $beginmonth . " 
        AND EXTRACT(YEAR_MONTH FROM m.DATE) <= " . $endmonth . "
-        AND   m.id_mouv IN('EXP','EXPCONG')  
-        AND m.ID_COMPANY = b.bank_short_name
+       AND m.ID_COMPANY = b.bank_short_name
         AND depy_n = 0
-        group by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR 
-        order by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR";
+        group by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv
+        order by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv";
 
     $res_sql_extract_01_monthlyDetail = mysqli_query($connection, $sql_extract_01_monthlyDetail);
     if (!$res_sql_extract_01_monthlyDetail) {
@@ -42,20 +50,23 @@ while ( true) {
 
 
     while ($data_sql_extract_01_monthlyDetail = mysqli_fetch_object($res_sql_extract_01_monthlyDetail)) {
-        $data_sql_extract_01_monthlyDetail->Volume = -$data_sql_extract_01_monthlyDetail->QTE; // negative value
-        unset($data_sql_extract_01_monthlyDetail->QTE);
-        $countMonthlyInsertedDetail++;
 
+        $countMonthlyInsertedDetail++;
         $societeEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->societe);
         $supplierNameEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->name_supplier);
         $articleNameFrEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->article_name_fr);
         $articleNameNlEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->article_name_nl);
+        $articleCategoryNameFrEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->article_category_name_fr);
+        $articleCategoryNameNlEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->article_category_name_nl);
         $birbCodeEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->BirbCode);
         $insertQuery_monthly_detail =
-            "INSERT INTO `movements_monthly_detail` (month,bank_short_name,id_org,orgname,esfcode,id_article,id_cat_article,article_name_fr,article_name_nl,id_supplier,name_supplier,quantity) 
+            "INSERT INTO `movements_monthly_detail` (month,bank_short_name,id_org,orgname,esfcode,id_article,id_cat_article,article_name_fr,article_name_nl,
+               article_category_name_fr,article_category_name_nl,id_supplier,name_supplier,id_mouv,quantity) 
             VALUES ('" . $data_sql_extract_01_monthlyDetail->MONTHMVT . "', '" . $data_sql_extract_01_monthlyDetail->bank_short_name . "', '" . $data_sql_extract_01_monthlyDetail->id_asso . "', '" . $societeEscaped . "', '"
-            . $birbCodeEscaped . "','" . $data_sql_extract_01_monthlyDetail->ID_ARTICLE . "','" . $data_sql_extract_01_monthlyDetail->ID_CAT_ARTICLE . "','" . $articleNameFrEscaped . "','" . $articleNameNlEscaped . "','"
-            . $data_sql_extract_01_monthlyDetail->ID_FOURNISSEUR . "', '" . $supplierNameEscaped . "', '" . $data_sql_extract_01_monthlyDetail->Volume . "');";
+            . $birbCodeEscaped . "','" . $data_sql_extract_01_monthlyDetail->ID_ARTICLE . "','" . $data_sql_extract_01_monthlyDetail->ID_CAT_ARTICLE . "','" .
+            $articleNameFrEscaped . "','" . $articleNameNlEscaped . "','"  . $articleCategoryNameFrEscaped . "','" . $articleCategoryNameNlEscaped . "','"
+            . $data_sql_extract_01_monthlyDetail->ID_FOURNISSEUR . "', '" . $supplierNameEscaped .
+            "', '" . $data_sql_extract_01_monthlyDetail->ID_MOUV .  "', '" . $data_sql_extract_01_monthlyDetail->QTE ."');";
         $sql = $connection->query($insertQuery_monthly_detail);
 
         if (!$sql) {
