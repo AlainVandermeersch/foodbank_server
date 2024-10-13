@@ -30,8 +30,6 @@ while ( true) {
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
        WHERE EXTRACT(YEAR_MONTH FROM m.DATE) >= " . $beginmonth . " 
        AND EXTRACT(YEAR_MONTH FROM m.DATE) <= " . $endmonth . "
-       AND m.ID_COMPANY = b.bank_short_name
-        AND depy_n = 0
         group by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv
         order by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv";
 

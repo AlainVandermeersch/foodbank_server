@@ -222,19 +222,18 @@ while ( true) {
     }
     echo "movements summarize.php deleted " . $countMonthlyDeletedDetail . " monthly Detail records from " . $previousMonth . "\n";
 
-    $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
+     $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
            m.id_asso, o.societe,o.BirbCode,m.ID_ARTICLE,a.ID_CAT_ARTICLE,a.NOM_FR as article_name_fr, a.NOM_NL as article_name_nl,
-           m.ID_FOURNISSEUR, f.nom as name_supplier,SUM(m.QUANTITE ) as QTE        
+           ca.NOM_FR as article_category_name_fr, ca.NOM_NL as article_category_name_nl, 
+           m.ID_FOURNISSEUR, f.nom as name_supplier,m.ID_MOUV, SUM(m.QUANTITE ) as QTE        
     FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
         LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
+        LEFT JOIN cat_article ca on (a.ID_CAT_ARTICLE= ca.ID_CAT_ARTICLE)
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
-       WHERE EXTRACT(YEAR_MONTH FROM m.DATE) > " . $lastMonthDetailRecorded . "
-        AND   m.id_mouv IN('EXP','EXPCONG')  
-        AND m.ID_COMPANY = b.bank_short_name
-        AND depy_n = 0
-        group by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR 
-        order by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR";
+       WHERE EXTRACT(YEAR_MONTH FROM m.DATE) > " . $lastMonthDetailRecorded . "       
+        group by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv
+        order by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv";
 
     $res_sql_extract_01_monthlyDetail =mysqli_query($connection,$sql_extract_01_monthlyDetail);
     if (!$res_sql_extract_01_monthlyDetail)
