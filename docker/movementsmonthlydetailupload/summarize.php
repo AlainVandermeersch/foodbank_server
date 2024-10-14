@@ -19,12 +19,12 @@ while ( true) {
         break;
     }
 
-    $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, b.bank_short_name,
+    $sql_extract_01_monthlyDetail = "SELECT EXTRACT(YEAR_MONTH FROM m.DATE) as MONTHMVT, m.ID_COMPANY,
            m.id_asso, o.societe,o.BirbCode,m.ID_ARTICLE,a.ID_CAT_ARTICLE,a.NOM_FR as article_name_fr, a.NOM_NL as article_name_nl,
            ca.NOM_FR as article_category_name_fr, ca.NOM_NL as article_category_name_nl, 
            m.ID_FOURNISSEUR, f.nom as name_supplier,m.ID_MOUV, SUM(m.QUANTITE ) as QTE        
-    FROM mouvements m join organisations o on (o.id_dis=m.id_asso) 
-        LEFT JOIN banques b ON (b.bank_id = o.lien_banque )
+    FROM mouvements m 
+        LEFT join organisations o on (o.id_dis=m.id_asso) 
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
         LEFT JOIN cat_article ca on (a.ID_CAT_ARTICLE= ca.ID_CAT_ARTICLE)
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
@@ -53,7 +53,7 @@ while ( true) {
         $insertQuery_monthly_detail =
             "INSERT INTO `movements_monthly_detail` (month,bank_short_name,id_org,orgname,esfcode,id_article,id_cat_article,article_name_fr,article_name_nl,
                article_category_name_fr,article_category_name_nl,id_supplier,name_supplier,id_mouv,quantity) 
-            VALUES ('" . $data_sql_extract_01_monthlyDetail->MONTHMVT . "', '" . $data_sql_extract_01_monthlyDetail->bank_short_name . "', '" . $data_sql_extract_01_monthlyDetail->id_asso . "', '" . $societeEscaped . "', '"
+            VALUES ('" . $data_sql_extract_01_monthlyDetail->MONTHMVT . "', '" . $data_sql_extract_01_monthlyDetail->ID_COMPANY . "', '" . $data_sql_extract_01_monthlyDetail->id_asso . "', '" . $societeEscaped . "', '"
             . $birbCodeEscaped . "','" . $data_sql_extract_01_monthlyDetail->ID_ARTICLE . "','" . $data_sql_extract_01_monthlyDetail->ID_CAT_ARTICLE . "','" .
             $articleNameFrEscaped . "','" . $articleNameNlEscaped . "','"  . $articleCategoryNameFrEscaped . "','" . $articleCategoryNameNlEscaped . "','"
             . $data_sql_extract_01_monthlyDetail->ID_FOURNISSEUR . "', '" . $supplierNameEscaped .
