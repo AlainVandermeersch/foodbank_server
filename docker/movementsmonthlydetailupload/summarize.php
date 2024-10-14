@@ -30,8 +30,8 @@ while ( true) {
         LEFT JOIN fournisseurs f ON (f.ID_FOURNISSEUR =m.ID_FOURNISSEUR)
        WHERE EXTRACT(YEAR_MONTH FROM m.DATE) >= " . $beginmonth . " 
        AND EXTRACT(YEAR_MONTH FROM m.DATE) <= " . $endmonth . "
-        group by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv
-        order by MONTHMVT,b.bank_id,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv";
+        group by MONTHMVT,m.ID_COMPANY,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv
+        order by MONTHMVT,m.ID_COMPANY,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv";
 
     $res_sql_extract_01_monthlyDetail = mysqli_query($connection, $sql_extract_01_monthlyDetail);
     if (!$res_sql_extract_01_monthlyDetail) {
