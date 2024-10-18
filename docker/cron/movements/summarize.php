@@ -9,7 +9,6 @@ while ( true) {
     $user =getenv('MYSQL_USER');
     $password =getenv('MYSQL_PASSWORD');
     $database =getenv('MYSQL_DATABASE');
-
     $connection= mysqli_connect($host,$user,"$password",$database);
     
     if (mysqli_connect_errno())
@@ -229,7 +228,7 @@ while ( true) {
     FROM mouvements m 
         LEFT join organisations o on (o.id_dis=m.id_asso) 
         LEFT JOIN articles a ON (a.ID_ARTICLE =m.ID_ARTICLE)
-        LEFT JOIN cat_article ca on (m.ID_CAT_ARTICLE= ca.ID_CAT_ARTICLE)
+        LEFT JOIN cat_article ca on (a.ID_CAT_ARTICLE= ca.ID_CAT_ARTICLE)
         LEFT JOIN fournisseurs f ON (m.ID_FOURNISSEUR =f.ID_FOURNISSEUR)
        WHERE EXTRACT(YEAR_MONTH FROM m.DATE) > " . $lastMonthDetailRecorded . "       
         group by MONTHMVT,m.ID_COMPANY,m.id_asso,m.ID_ARTICLE,m.ID_FOURNISSEUR, m.id_mouv
@@ -238,17 +237,13 @@ while ( true) {
     $res_sql_extract_01_monthlyDetail =mysqli_query($connection,$sql_extract_01_monthlyDetail);
     if (!$res_sql_extract_01_monthlyDetail)
     {
-        $errormsgMonthly=  "Failed to execute FEAD BY Org AND Article monthly  query: " . $sql_extract_01_monthlyDetail . " ;". $connection->error;
+        $errormsgMonthly=  "Failed to execute Monthly Detail select  query: " . $sql_extract_01_monthlyDetail . " ;". $connection->error;
         break;
     }
-    $prevMonth = "";
-    $countrecords =0;
-    while ($data_sql_extract_01_monthlyDetail=mysqli_fetch_object($res_sql_extract_01_monthlyDetail)) {
-        $countrecords++;
-        if (($data_sql_extract_01_monthlyDetail->MONTHMVT != $prevMonth) && $countrecords > 20000) break;
-        $prevMonth =  $data_sql_extract_01_monthlyDetail->MONTHMVT;
 
-       
+    $countMonthlyInsertedDetail =0;
+    while ($data_sql_extract_01_monthlyDetail=mysqli_fetch_object($res_sql_extract_01_monthlyDetail)) {
+
         $countMonthlyInsertedDetail++;
         $societeEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->societe);
         $supplierNameEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->name_supplier);
@@ -295,7 +290,7 @@ while ( true) {
         $errormsg=  "Failed to execute insert monthly audit  query: " . $connection->error;
         echo "movements summarize.php failed to insert monthly Detail statistics in auditchanges table:" . $errormsg . "\n";
     }
-    // end of monthly movements
+    // end of monthly detail movements
 
 
     $arrayMovements_daily = array();
