@@ -257,6 +257,9 @@ while ( true) {
         $articleCategoryNameFrEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->article_category_name_fr);
         $articleCategoryNameNlEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->article_category_name_nl);
         $birbCodeEscaped = mysqli_real_escape_string($connection, $data_sql_extract_01_monthlyDetail->BirbCode);
+        if (!$data_sql_extract_01_monthlyDetail->id_asso) {
+            $data_sql_extract_01_monthlyDetail->id_asso = 0;
+        }
         $insertQuery_monthly_detail =
             "INSERT INTO `movements_monthly_detail` (month,bank_short_name,id_org,orgname,esfcode,id_article,id_cat_article,article_name_fr,article_name_nl,
                article_category_name_fr,article_category_name_nl,id_supplier,name_supplier,id_mouv,quantity) 
